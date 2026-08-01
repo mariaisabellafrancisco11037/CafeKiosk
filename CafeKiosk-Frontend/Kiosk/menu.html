@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu</title>
+  <link rel="stylesheet" href="../Assets/css/menu.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../Assets/images/logo.png">
+    </div>
+
+    <button class="nav-btn active" onclick="selectCategory('coffee', this)">
+      <img src="../Assets/images/coffee.png"> Coffee
+    </button>
+    <button class="nav-btn" onclick="selectCategory('non-coffee', this)">
+      <img src="../Assets/images/non-coffee.png"> Non-Coffee
+    </button>
+    <button class="nav-btn" onclick="selectCategory('milktea', this)">
+      <img src="../Assets/images/milktea.png"> Milktea
+    </button>
+    <button class="nav-btn" onclick="selectCategory('food', this)">
+      <img src="../Assets/images/food.png"> Food
+    </button>
+    <button class="nav-btn" onclick="selectCategory('snack', this)">
+      <img src="../Assets/images/snack.png"> Snack
+    </button>
+    <button class="nav-btn" onclick="selectCategory('dessert', this)">
+      <img src="../Assets/images/dessert.png"> Dessert
+    </button>
+  </aside>
+
+  <!-- MENU AREA -->
+  <main class="menu-area">
+    <div class="category-header">
+      <img id="categoryIcon" src="../Assets/images/coffee.png">
+      <h1 id="categoryTitle">Coffee</h1>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- SAMPLE ITEMS -->
+      <div class="menu-card" onclick="addItem('Latte',120)">
+        <img src="../Assets/images/coffee.png">
+        <h3>Latte</h3>
+        <p>₱120</p>
+      </div>
+
+      <div class="menu-card" onclick="addItem('Cappuccino',130)">
+        <img src="../Assets/images/coffee.png">
+        <h3>Cappuccino</h3>
+        <p>₱130</p>
+      </div>
+
+      <div class="menu-card" onclick="addItem('Mocha',140)">
+        <img src="../Assets/images/coffee.png">
+        <h3>Mocha</h3>
+        <p>₱140</p>
+      </div>
+
+      <div class="menu-card" onclick="addItem('Americano',100)">
+        <img src="../Assets/images/coffee.png">
+        <h3>Americano</h3>
+        <p>₱100</p>
+      </div>
+
+      <div class="menu-card" onclick="addItem('Espresso',90)">
+        <img src="../Assets/images/coffee.png">
+        <h3>Espresso</h3>
+        <p>₱90</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ORDER SUMMARY -->
+  <aside class="order-summary">
+    <h2>Order Summary</h2>
+
+    <div id="orderList"></div>
+
+    <button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+  </aside>
+
+</div>
+
+<script src="../Assets/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CafeKiosk</title>
+    <link rel="stylesheet" href="../Assets/css/kiosk.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGO -->
+    <img src="../Assets/images/logo.png" class="logo">
+
+    <!-- TITLE -->
+    <h1 class="title">Welcome to CafeKiosk</h1>
+
+    <!-- SUBTEXT -->
+    <p class="subtitle">Tap below to begin your order</p>
+
+    <!-- START BUTTON -->
+    <button class="start-btn" onclick="startOrder()">
+        START ORDER
+    </button>
+
+</div>
+
+<script>
+function startOrder() {
+    window.location.href = "order-type.html";
+}
+</script>
+
+</body>
+</html>

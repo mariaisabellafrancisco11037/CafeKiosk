@@ -1,0 +1,91 @@
+:root {
+  --primary: #f5ebdd;
+  --secondary: #6f4e37;
+  --accent: #7baa8f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* FULLSCREEN + NO SCROLL */
+body {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--primary);
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CENTER CONTAINER */
+.container {
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+}
+
+/* LOGO */
+.logo {
+  width: 180px;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 130px;
+  }
+}
+
+/* TITLE */
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--secondary);
+  margin-bottom: 10px;
+}
+
+/* SUBTITLE */
+.subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--secondary);
+  opacity: 0.85;
+  margin-bottom: 40px;
+}
+
+/* START BUTTON (ACCENT = ATTENTION) */
+.start-btn {
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+
+  width: 100%;
+  max-width: 400px;
+
+  padding: clamp(16px, 2vw, 22px);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: bold;
+
+  /* Attention animation */
+  animation: pulse 2s infinite;
+}
+
+/* TOUCH FEEDBACK (NOT HOVER) */
+.start-btn:active {
+  transform: scale(0.96);
+}
+
+/* TABLET OPTIMIZATION */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .start-btn {
+    max-width: none;
+  }
+}

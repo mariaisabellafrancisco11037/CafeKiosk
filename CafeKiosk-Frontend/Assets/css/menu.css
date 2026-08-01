@@ -1,0 +1,152 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background: #f5ebdd;
+  overflow: hidden;
+}
+
+/* FULL LAYOUT */
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #f5ebdd;
+  border-right: 3px solid #6f4e37;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #f5ebdd;
+  border: 2px solid #7baa8f;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.nav-btn img {
+  width: 24px;
+}
+
+.nav-btn.active {
+  background: #7baa8f;
+  color: white;
+}
+
+/* MENU AREA */
+.menu-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.category-header img {
+  width: 40px;
+}
+
+.category-header h1 {
+  color: #6f4e37;
+}
+
+/* GRID */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding-bottom: 100px;
+}
+
+.menu-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.menu-card img {
+  width: 80px;
+}
+
+.menu-card:active {
+  transform: scale(0.95);
+  border: 2px solid #7baa8f;
+}
+
+/* ORDER SUMMARY */
+.order-summary {
+  width: 300px;
+  background: #f5ebdd;
+  border-left: 3px solid #6f4e37;
+  padding: 20px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.order-summary h2 {
+  color: #6f4e37;
+  margin-bottom: 15px;
+}
+
+.order-item {
+  background: white;
+  border: 2px solid #7baa8f;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.qty-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.qty-controls button {
+  background: #7baa8f;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* CONFIRM BUTTON */
+.confirm-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 80%;
+  padding: 15px;
+  background: #6f4e37;
+  color: white;
+  border: none;
+  border-radius: 10px;
+}

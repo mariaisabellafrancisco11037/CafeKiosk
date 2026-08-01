@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Type</title>
+
+  <link rel="stylesheet" href="../Assets/css/order-type.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="title">How would you like your order?</h1>
+
+  <div class="options">
+
+    <div class="option-card" onclick="selectCard(this, 'dine-in')">
+      <img src="../Assets/images/dine-in.png" alt="Dine In">
+      <p>Dine In</p>
+    </div>
+
+    <div class="option-card" onclick="selectCard(this, 'take-out')">
+      <img src="../Assets/images/take-out.png" alt="Take Out">
+      <p>Take Out</p>
+    </div>
+
+  </div>
+
+  <!-- CONFIRM BUTTON -->
+  <button class="confirm-btn" onclick="confirmSelection()">
+    Confirm
+  </button>
+</div>
+
+<script src="../Assets/js/order-type.js"></script>
+
+</body>
+</html>
