@@ -1,0 +1,13 @@
+{
+  "sql.lintingEnabled": false,
+  "sql.linter": "none",
+  "[sql]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "sqlfluff.dialect": "mysql",
+  "mssql.lintingEnabled": false,
+  "files.associations": {
+    "*.sql": "sql"
+  }
+}

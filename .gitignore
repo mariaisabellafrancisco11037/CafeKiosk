@@ -1,24 +1,2 @@
-# Node
 node_modules/
-npm-debug.log*
-
-# Environment Variables
 .env
-
-# Logs
-logs
-*.log
-
-# Build folders
-dist/
-build/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# VS Code
-.vscode/
-
-# Coverage
-coverage/

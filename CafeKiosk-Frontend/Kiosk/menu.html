@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menu</title>
   <link rel="stylesheet" href="../Assets/css/menu.css">
 </head>
@@ -45,31 +46,31 @@
     <div class="menu-grid" id="menuGrid">
 
       <!-- SAMPLE ITEMS -->
-      <div class="menu-card" onclick="addItem('Latte',120)">
+      <div class="menu-card" onclick="showItemModal('Latte', 120, 'coffee')">
         <img src="../Assets/images/coffee.png">
         <h3>Latte</h3>
         <p>₱120</p>
       </div>
 
-      <div class="menu-card" onclick="addItem('Cappuccino',130)">
+      <div class="menu-card" onclick="showItemModal('Cappuccino', 130, 'coffee')">
         <img src="../Assets/images/coffee.png">
         <h3>Cappuccino</h3>
         <p>₱130</p>
       </div>
 
-      <div class="menu-card" onclick="addItem('Mocha',140)">
+      <div class="menu-card" onclick="showItemModal('Mocha', 140, 'coffee')">
         <img src="../Assets/images/coffee.png">
         <h3>Mocha</h3>
         <p>₱140</p>
       </div>
 
-      <div class="menu-card" onclick="addItem('Americano',100)">
+      <div class="menu-card" onclick="showItemModal('Americano', 100, 'coffee')">
         <img src="../Assets/images/coffee.png">
         <h3>Americano</h3>
         <p>₱100</p>
       </div>
 
-      <div class="menu-card" onclick="addItem('Espresso',90)">
+      <div class="menu-card" onclick="showItemModal('Espresso', 90, 'coffee')">
         <img src="../Assets/images/coffee.png">
         <h3>Espresso</h3>
         <p>₱90</p>
@@ -82,11 +83,93 @@
   <aside class="order-summary">
     <h2>Order Summary</h2>
 
-    <div id="orderList"></div>
+    <div class="order-list" id="orderList"></div>
 
-    <button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+    <div class="order-bottom">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotalAmount">₱0</span>
+      </div>
+      <div class="summary-row">
+        <span>Total</span>
+        <span id="totalAmount">₱0</span>
+      </div>
+
+      <div class="bottom-fields">
+        <label class="field-label" for="paymentMethod">Payment Type</label>
+        <select id="paymentMethod" class="payment-select" onchange="updatePaymentMethod(this.value)">
+          <option value="Cash">Cash</option>
+          <option value="Card">Card</option>
+          <option value="Online">Online</option>
+        </select>
+      </div>
+
+      <div class="order-actions">
+        <button class="confirm-btn" onclick="showOrderModal()">Confirm Order</button>
+        <button class="cancel-btn" onclick="cancelOrder()">Cancel</button>
+      </div>
+    </div>
   </aside>
 
+  <div id="orderModal" class="modal-overlay" onclick="closeOrderModal(event)">
+    <div id="orderModalBox" class="modal-box category-coffee">
+      <div class="modal-header">
+        <img id="modalIcon" src="../Assets/images/coffee.png" alt="Category icon">
+        <div>
+          <h3 id="modalTitle">Confirm Coffee Order</h3>
+          <p id="modalMessage">This order will be recorded under Coffee.</p>
+        </div>
+      </div>
+      <div class="modal-details">
+        <div><strong>Total:</strong> <span id="modalTotalAmount">₱0</span></div>
+      </div>
+      <div class="modal-orders">
+        <h4>Ordered items</h4>
+        <div id="modalOrderItems" class="modal-order-items"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-btn" onclick="closeOrderModal()">Back</button>
+        <button class="confirm-btn" onclick="confirmOrder()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="itemModal" class="modal-overlay" onclick="closeItemModal(event)">
+    <div id="itemModalBox" class="modal-box category-coffee">
+      <button class="modal-close" onclick="closeItemModal()" aria-label="Close">×</button>
+      <div class="modal-header">
+        <img id="itemModalIcon" src="../Assets/images/coffee.png" alt="Item icon">
+        <div>
+          <h3 id="itemModalTitle">Add Item</h3>
+          <p id="itemModalMessage">Review your selection before adding it to the cart.</p>
+        </div>
+      </div>
+      <div class="modal-details modal-item-meta">
+        <div class="modal-item-info">
+          <div class="modal-item-name"> <span id="itemModalName">Latte</span> </div>
+          <div class="modal-item-category">Category: <strong id="itemModalCategory">Coffee</strong></div>
+        </div>
+        <div class="modal-item-price">
+          <div><strong>Base:</strong> <span id="itemModalPrice">₱120</span></div>
+          <div><strong>Qty:</strong> <span id="itemModalQty">1</span></div>
+        </div>
+      </div>
+      <div id="itemModalOptions" class="modal-options"></div>
+      <div class="modal-quantity">
+        <div class="quantity-label">Quantity</div>
+        <div class="quantity-controls">
+          <button class="qty-decrease" type="button" onclick="updateItemQuantity(-1)">−</button>
+          <span id="itemModalQtyDisplay">1</span>
+          <button class="qty-increase" type="button" onclick="updateItemQuantity(1)">+</button>
+        </div>
+        <div class="modal-total-price">₱<span id="itemModalTotal">120</span></div>
+      </div>
+      <div class="modal-actions modal-actions-landscape">
+        <button class="cancel-btn" onclick="closeItemModal()">Cancel</button>
+        <button class="confirm-btn" onclick="confirmAddItem()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="../Assets/js/menu.js"></script>
