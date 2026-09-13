@@ -1,50 +1,100 @@
+// ============================================================
+// CAFEKIOSK AUTH ROUTES
+// Mounted in server.js as:
+// app.use("/api/auth", require("./routes/auth"));
+// ============================================================
+
 const express =
-    require("express");
+    require(
+        "express"
+    );
 
 const router =
     express.Router();
 
-const {
-    login,
-    me,
-    logout
-} = require(
-    "../controllers/authController"
-);
-
-const {
-    validateLogin
-} = require(
-    "../middleware/validation"
-);
+const controller =
+    require(
+        "../controllers/authController"
+    );
 
 const {
     verifyToken
-} = require(
-    "../middleware/authMiddleware"
+} =
+    require(
+        "../middleware/authMiddleware"
+    );
+
+
+router.get(
+    "/health",
+    controller.health
 );
 
 
-// POST /api/auth/login
 router.post(
     "/login",
-    validateLogin,
-    login
+    controller.login
 );
 
 
-// GET /api/auth/me
+// Optional explicit aliases.
+// The supplied frontend uses /api/auth/login.
+router.post(
+    "/admin-login",
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        req.body = {
+            ...req.body,
+            role:
+                "Admin"
+        };
+
+        return controller.login(
+            req,
+            res,
+            next
+        );
+    }
+);
+
+
+router.post(
+    "/staff-login",
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        req.body = {
+            ...req.body,
+            role:
+                "Staff"
+        };
+
+        return controller.login(
+            req,
+            res,
+            next
+        );
+    }
+);
+
+
 router.get(
     "/me",
     verifyToken,
-    me
+    controller.me
 );
 
 
-// POST /api/auth/logout
 router.post(
     "/logout",
-    logout
+    controller.logout
 );
 
 

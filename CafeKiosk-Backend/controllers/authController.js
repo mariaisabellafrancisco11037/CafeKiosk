@@ -1,166 +1,293 @@
-const jwt =
-    require("jsonwebtoken");
+// ============================================================
+// CAFEKIOSK AUTH CONTROLLER
+// Admin + Staff JWT login
+//
+// This auth layer is intentionally independent from MySQL so it will not
+// interfere with the JSON order/inventory backend.
+//
+// Optional .env overrides:
+// JWT_SECRET=replace-with-a-long-random-secret
+// ADMIN_USER_ID=admin
+// ADMIN_PASSWORD=admin123
+// ADMIN_DISPLAY_NAME=CafeKiosk Administrator
+// STAFF_USER_ID=staff
+// STAFF_PASSWORD=staff123
+// STAFF_DISPLAY_NAME=CafeKiosk Staff
+// ============================================================
 
-const crypto =
-    require("crypto");
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const JWT_SECRET =
     process.env.JWT_SECRET ||
     "cafekiosk-demo-secret";
 
-const CAFE_ID =
-    process.env.CAFE_ID ||
-    "cafe-1";
+const JWT_EXPIRES_IN =
+    process.env.JWT_EXPIRES_IN ||
+    "8h";
 
-const SESSION_SECONDS =
-    8 * 60 * 60;
+const COOKIE_NAME =
+    "cafe_token";
 
+function safeText(value) {
+    return String(value ?? "").trim();
+}
 
-// =====================================================
-// DEVELOPMENT ACCOUNTS
-//
-// For production, replace this with your users table +
-// hashed passwords.
-// =====================================================
+function normalizeRole(value) {
+    const role =
+        safeText(value)
+            .toLowerCase();
+
+    if (role === "admin") {
+        return "Admin";
+    }
+
+    if (role === "staff") {
+        return "Staff";
+    }
+
+    return "";
+}
+
+function constantTimeEquals(left, right) {
+    const leftHash =
+        crypto
+            .createHash("sha256")
+            .update(String(left ?? ""))
+            .digest();
+
+    const rightHash =
+        crypto
+            .createHash("sha256")
+            .update(String(right ?? ""))
+            .digest();
+
+    return crypto.timingSafeEqual(
+        leftHash,
+        rightHash
+    );
+}
 
 function getAccounts() {
     return [
         {
-            id:
+            userId:
                 process.env.ADMIN_USER_ID ||
-                "admin-1",
+                "admin",
 
             username:
-                process.env.ADMIN_USERNAME ||
+                process.env.ADMIN_USER_ID ||
                 "admin",
 
             password:
                 process.env.ADMIN_PASSWORD ||
                 "admin123",
 
+            displayName:
+                process.env.ADMIN_DISPLAY_NAME ||
+                "CafeKiosk Administrator",
+
             role:
                 "Admin",
 
-            displayName:
-                process.env.ADMIN_DISPLAY_NAME ||
-                "Administrator"
+            cafeId:
+                process.env.CAFE_ID ||
+                "cafe-1"
         },
-
         {
-            id:
+            userId:
                 process.env.STAFF_USER_ID ||
-                "staff-1",
+                "staff",
 
             username:
-                process.env.STAFF_USERNAME ||
+                process.env.STAFF_USER_ID ||
                 "staff",
 
             password:
                 process.env.STAFF_PASSWORD ||
                 "staff123",
 
+            displayName:
+                process.env.STAFF_DISPLAY_NAME ||
+                "CafeKiosk Staff",
+
             role:
                 "Staff",
 
-            displayName:
-                process.env.STAFF_DISPLAY_NAME ||
-                "Staff"
+            cafeId:
+                process.env.CAFE_ID ||
+                "cafe-1"
         }
     ];
 }
 
+function findAccount(username) {
+    const wanted =
+        safeText(username)
+            .toLowerCase();
 
-// =====================================================
-// CONSTANT-TIME STRING COMPARISON
-// =====================================================
-
-function safeEqual(a, b) {
-    const left =
-        Buffer.from(
-            String(a)
-        );
-
-    const right =
-        Buffer.from(
-            String(b)
-        );
-
-    if (
-        left.length !==
-        right.length
-    ) {
-        return false;
-    }
-
-    return crypto
-        .timingSafeEqual(
-            left,
-            right
-        );
+    return getAccounts()
+        .find(
+            account =>
+                String(account.username)
+                    .toLowerCase() === wanted ||
+                String(account.userId)
+                    .toLowerCase() === wanted
+        ) ||
+        null;
 }
 
+function signToken(user) {
+    return jwt.sign(
+        {
+            userId:
+                user.userId,
 
-// =====================================================
-// SET AUTH COOKIE
-// =====================================================
+            username:
+                user.username,
+
+            displayName:
+                user.displayName,
+
+            role:
+                user.role,
+
+            cafeId:
+                user.cafeId
+        },
+        JWT_SECRET,
+        {
+            expiresIn:
+                JWT_EXPIRES_IN
+        }
+    );
+}
+
+function publicUser(user) {
+    return {
+        userId:
+            user.userId,
+
+        username:
+            user.username,
+
+        displayName:
+            user.displayName,
+
+        role:
+            user.role,
+
+        cafeId:
+            user.cafeId
+    };
+}
+
+function loginRedirect(role) {
+    if (
+        String(role)
+            .toLowerCase() ===
+        "admin"
+    ) {
+        return "/admin/order-monitor";
+    }
+
+    return "/pos";
+}
 
 function setAuthCookie(
+    req,
     res,
     token
 ) {
-    const secure =
-        process.env.NODE_ENV ===
-        "production"
-            ? "; Secure"
-            : "";
+    res.cookie(
+        COOKIE_NAME,
+        token,
+        {
+            httpOnly:
+                true,
 
-    res.setHeader(
-        "Set-Cookie",
-        [
-            `cafe_token=${encodeURIComponent(token)}`,
-            "HttpOnly",
-            "SameSite=Lax",
-            "Path=/",
-            `Max-Age=${SESSION_SECONDS}`
-        ].join("; ") +
-        secure
+            sameSite:
+                "lax",
+
+            secure:
+                Boolean(
+                    req.secure ||
+                    req.headers["x-forwarded-proto"] ===
+                        "https"
+                ),
+
+            maxAge:
+                8 *
+                60 *
+                60 *
+                1000,
+
+            path:
+                "/"
+        }
     );
 }
 
 
-// =====================================================
-// LOGIN
-// =====================================================
+// ============================================================
+// POST /api/auth/login
+// ============================================================
 
 exports.login =
-    (req, res) => {
+    async (
+        req,
+        res
+    ) => {
 
-        const {
-            username,
-            password,
-            role
-        } = req.body;
+        const username =
+            safeText(
+                req.body?.username ||
+                req.body?.userId
+            );
+
+        const password =
+            String(
+                req.body?.password ||
+                ""
+            );
 
         const requestedRole =
-            String(
-                role ||
-                ""
-            ).toLowerCase();
+            normalizeRole(
+                req.body?.role
+            );
+
+        const requestedCafeId =
+            safeText(
+                req.body?.cafeId
+            ) ||
+            "cafe-1";
+
+
+        if (
+            !username ||
+            !password
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "User ID and password are required."
+                });
+        }
+
 
         const account =
-            getAccounts()
-                .find(
-                    user =>
-                        user.username
-                            .toLowerCase() ===
-                        String(
-                            username
-                        ).toLowerCase()
-                );
+            findAccount(
+                username
+            );
+
 
         if (
             !account ||
-            !safeEqual(
+            !constantTimeEquals(
                 password,
                 account.password
             )
@@ -168,106 +295,162 @@ exports.login =
             return res
                 .status(401)
                 .json({
-                    success: false,
+                    success:
+                        false,
+
                     message:
                         "Invalid User ID or password."
                 });
         }
 
+
         if (
             requestedRole &&
-            account.role
-                .toLowerCase() !==
-            requestedRole
+            requestedRole !==
+                account.role
         ) {
             return res
                 .status(403)
                 .json({
-                    success: false,
+                    success:
+                        false,
+
                     message:
-                        `This account is not a ${role} account.`
+                        `This account is not authorized for ${requestedRole} login.`
                 });
         }
 
+
         const user = {
-            userId:
-                account.id,
-
-            username:
-                account.username,
-
-            displayName:
-                account.displayName,
-
-            role:
-                account.role,
-
+            ...account,
             cafeId:
-                CAFE_ID
+                requestedCafeId ||
+                account.cafeId
         };
 
+
         const token =
-            jwt.sign(
-                user,
-                JWT_SECRET,
-                {
-                    expiresIn:
-                        SESSION_SECONDS
-                }
+            signToken(
+                user
             );
 
+
         setAuthCookie(
+            req,
             res,
             token
         );
 
-        return res
-            .status(200)
-            .json({
-                success: true,
-                message:
-                    "Login successful.",
-                token,
-                user
-            });
+
+        return res.json({
+            success:
+                true,
+
+            message:
+                "Login successful.",
+
+            token,
+
+            user:
+                publicUser(
+                    user
+                ),
+
+            redirect:
+                loginRedirect(
+                    user.role
+                )
+        });
+
     };
 
 
-// =====================================================
-// CURRENT USER
-// =====================================================
+// ============================================================
+// GET /api/auth/me
+// req.user is supplied by verifyToken middleware.
+// ============================================================
 
 exports.me =
-    (req, res) => {
+    (
+        req,
+        res
+    ) => {
 
         return res.json({
-            success: true,
-            user: req.user
+            success:
+                true,
+
+            user:
+                req.user
         });
+
     };
 
 
-// =====================================================
-// LOGOUT
-// =====================================================
+// ============================================================
+// POST /api/auth/logout
+// ============================================================
 
 exports.logout =
-    (req, res) => {
+    (
+        req,
+        res
+    ) => {
 
-        res.setHeader(
-            "Set-Cookie",
-            [
-                "cafe_token=",
-                "HttpOnly",
-                "SameSite=Lax",
-                "Path=/",
-                "Max-Age=0"
-            ].join("; ")
+        res.clearCookie(
+            COOKIE_NAME,
+            {
+                httpOnly:
+                    true,
+
+                sameSite:
+                    "lax",
+
+                secure:
+                    Boolean(
+                        req.secure ||
+                        req.headers["x-forwarded-proto"] ===
+                            "https"
+                    ),
+
+                path:
+                    "/"
+            }
         );
 
+
         return res.json({
-            success: true,
+            success:
+                true,
+
             message:
-                "Logged out."
+                "Logged out successfully."
         });
+
+    };
+
+
+// ============================================================
+// GET /api/auth/health
+// ============================================================
+
+exports.health =
+    (
+        req,
+        res
+    ) => {
+
+        return res.json({
+            success:
+                true,
+
+            service:
+                "CafeKiosk authentication",
+
+            roles: [
+                "Admin",
+                "Staff"
+            ]
+        });
+
     };
