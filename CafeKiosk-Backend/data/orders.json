@@ -1,6 +1,84 @@
 [
   {
     "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-717977-109",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Take Out",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 310,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 310,
+    "status": "Cancelled",
+    "createdAt": "2026-09-13T13:38:37.977Z",
+    "updatedAt": "2026-09-13T13:39:31.130Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Caramel Macchiato",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 140,
+        "unitPrice": 310,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 310,
+        "total": 310,
+        "customizations": [
+          "Temperature: Iced",
+          "Size: Venti",
+          "Milk: Oat",
+          "Add-ons: Extra shot, Vanilla syrup, Caramel syrup, Whipped cream"
+        ]
+      }
+    ],
+    "id": "57f73b9f-597c-4a38-a7ca-f5a9d3726c48"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1004",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "GCash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 165,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 165,
+    "status": "Refunded",
+    "createdAt": "2026-09-13T13:26:18.502Z",
+    "updatedAt": "2026-09-13T13:38:01.800Z",
+    "items": [
+      {
+        "productId": "coffee-2",
+        "name": "Americano",
+        "category": "coffee",
+        "price": 110,
+        "customizationCost": 55,
+        "unitPrice": 165,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 165,
+        "total": 165,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Grande",
+          "Milk: Almond Milk",
+          "Add-Ons: Hazelnut Syrup"
+        ]
+      }
+    ],
+    "id": "f7f8edc2-54ac-4de2-b186-dd83f41eb5bb"
+  },
+  {
+    "cafeId": "cafe-1",
     "source": "POS",
     "orderNumber": "POS-1002",
     "customerName": "Walk-in Customer",

@@ -29,6 +29,63 @@ const orderStore =
     );
 
 
+const recipeInventoryStore =
+    require(
+        "../services/recipeInventoryStore"
+    );
+
+
+function emitInventoryChanged(
+    req,
+    cafeId,
+    reason
+) {
+
+    const io =
+        req.app.get(
+            "io"
+        );
+
+    if (!io) {
+        return;
+    }
+
+    const normalizedCafeId =
+        normalizeCafeId(
+            cafeId
+        );
+
+    const payload = {
+        cafeId:
+            normalizedCafeId,
+
+        reason:
+            reason ||
+            "order-inventory-change",
+
+        changedAt:
+            new Date()
+                .toISOString()
+    };
+
+    [
+        `kiosk-${normalizedCafeId}`,
+        `pos-${normalizedCafeId}`,
+        `admin-${normalizedCafeId}`,
+        `order-queue-${normalizedCafeId}`
+    ].forEach(
+        room => {
+            io.to(
+                room
+            ).emit(
+                "inventory:changed",
+                payload
+            );
+        }
+    );
+}
+
+
 // ============================================================
 // REALTIME BROADCAST
 // ============================================================
@@ -199,15 +256,116 @@ exports.createOrder =
             }
 
 
-            const {
-                order:
-                    savedOrder,
-                created
-            } =
+            // --------------------------------------------------------
+            // RECIPE-BASED INVENTORY RESERVATION
+            // --------------------------------------------------------
+            // Deduct stock only for a genuinely new order. The
+            // consumption store also has duplicate protection, so the
+            // same order number cannot deduct ingredients twice.
+
+            const existingBeforeCreate =
                 await orderStore
-                    .createOrder(
-                        order
+                    .findOrder(
+                        order.orderNumber
                     );
+
+
+            let inventoryReservation =
+                null;
+
+
+            if (
+                !existingBeforeCreate
+            ) {
+
+                inventoryReservation =
+                    await recipeInventoryStore
+                        .consumeOrder(
+                            order
+                        );
+
+
+                if (
+                    !inventoryReservation.success
+                ) {
+
+                    const shortageText =
+                        (
+                            inventoryReservation.shortages ||
+                            []
+                        )
+                            .map(
+                                item =>
+                                    `${item.name}: need ${item.required}${item.unit}, available ${item.available}${item.unit}`
+                            )
+                            .join(
+                                ", "
+                            );
+
+
+                    return res
+                        .status(409)
+                        .json({
+                            success:
+                                false,
+
+                            code:
+                                "INSUFFICIENT_STOCK",
+
+                            message:
+                                shortageText
+                                    ? `Insufficient ingredient stock. ${shortageText}`
+                                    : "Insufficient ingredient stock.",
+
+                            shortages:
+                                inventoryReservation.shortages ||
+                                []
+                        });
+                }
+            }
+
+
+            let savedOrder;
+            let created;
+
+
+            try {
+
+                const result =
+                    await orderStore
+                        .createOrder(
+                            order
+                        );
+
+                savedOrder =
+                    result.order;
+
+                created =
+                    result.created;
+
+
+            } catch (error) {
+
+                // If the order itself could not be stored, restore any
+                // inventory that was reserved immediately beforehand.
+                if (
+                    inventoryReservation?.consumed
+                ) {
+                    await recipeInventoryStore
+                        .restoreOrder(
+                            order
+                        )
+                        .catch(
+                            restoreError =>
+                                console.error(
+                                    "Unable to roll back recipe inventory:",
+                                    restoreError
+                                )
+                        );
+                }
+
+                throw error;
+            }
 
 
             // Emit realtime only for a genuinely new order.
@@ -234,6 +392,13 @@ exports.createOrder =
                     req,
                     savedOrder,
                     "POST"
+                );
+
+
+                emitInventoryChanged(
+                    req,
+                    savedOrder.cafeId,
+                    "order-created"
                 );
             }
 
@@ -447,6 +612,14 @@ exports.updateOrder =
             }
 
 
+            const previousOrder =
+                await orderStore
+                    .findOrder(
+                        req.params
+                            .orderId
+                    );
+
+
             const order =
                 await orderStore
                     .updateOrder(
@@ -471,6 +644,53 @@ exports.updateOrder =
                         message:
                             "Order not found."
                     });
+            }
+
+
+            const previousStatus =
+                previousOrder
+                    ? normalizeStatus(
+                        previousOrder.status
+                    )
+                    : "";
+
+
+            const isInventoryReturnStatus =
+                status === "Cancelled" ||
+                status === "Refunded";
+
+
+            const wasAlreadyReturned =
+                previousStatus === "Cancelled" ||
+                previousStatus === "Refunded";
+
+
+            if (
+                isInventoryReturnStatus &&
+                previousOrder &&
+                !wasAlreadyReturned
+            ) {
+
+                const restored =
+                    await recipeInventoryStore
+                        .restoreOrder(
+                            previousOrder,
+                            status === "Refunded"
+                                ? "Order refunded"
+                                : "Order void/cancelled"
+                        );
+
+                if (
+                    restored.restored
+                ) {
+                    emitInventoryChanged(
+                        req,
+                        order.cafeId,
+                        status === "Refunded"
+                            ? "order-refund-restock"
+                            : "order-void-restock"
+                    );
+                }
             }
 
 
@@ -736,6 +956,56 @@ exports.patchOrder =
             }
 
 
+            let inventoryReconciliation =
+                null;
+
+
+            if (
+                patch.items !==
+                undefined
+            ) {
+
+                const proposedOrder = {
+                    ...existing,
+                    ...patch,
+                    items:
+                        patch.items
+                };
+
+
+                inventoryReconciliation =
+                    await recipeInventoryStore
+                        .reconcileOrder(
+                            proposedOrder
+                        );
+
+
+                if (
+                    inventoryReconciliation &&
+                    inventoryReconciliation.success ===
+                        false
+                ) {
+
+                    return res
+                        .status(409)
+                        .json({
+                            success:
+                                false,
+
+                            code:
+                                "INSUFFICIENT_STOCK",
+
+                            message:
+                                "The edited order requires ingredients that are no longer available.",
+
+                            shortages:
+                                inventoryReconciliation.shortages ||
+                                []
+                        });
+                }
+            }
+
+
             const order =
                 await orderStore
                     .updateOrder(
@@ -743,6 +1013,76 @@ exports.patchOrder =
                             .orderId,
                         patch
                     );
+
+
+            if (
+                inventoryReconciliation?.changed
+            ) {
+
+                emitInventoryChanged(
+                    req,
+                    order.cafeId,
+                    "order-items-reconciled"
+                );
+            }
+
+
+            if (
+                patch.status !==
+                undefined
+            ) {
+
+                const nextStatus =
+                    normalizeStatus(
+                        patch.status
+                    );
+
+
+                const previousStatus =
+                    normalizeStatus(
+                        existing.status
+                    );
+
+
+                const nextReturnsInventory =
+                    nextStatus === "Cancelled" ||
+                    nextStatus === "Refunded";
+
+
+                const previousAlreadyReturned =
+                    previousStatus === "Cancelled" ||
+                    previousStatus === "Refunded";
+
+
+                if (
+                    nextReturnsInventory &&
+                    !previousAlreadyReturned
+                ) {
+
+                    const restored =
+                        await recipeInventoryStore
+                            .restoreOrder(
+                                order,
+                                nextStatus === "Refunded"
+                                    ? "Order refunded"
+                                    : "Order void/cancelled"
+                            );
+
+
+                    if (
+                        restored.restored
+                    ) {
+
+                        emitInventoryChanged(
+                            req,
+                            order.cafeId,
+                            nextStatus === "Refunded"
+                                ? "order-refund-restock"
+                                : "order-void-restock"
+                        );
+                    }
+                }
+            }
 
 
             emitToCafe(

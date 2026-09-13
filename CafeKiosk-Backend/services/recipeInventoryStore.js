@@ -663,6 +663,10323 @@ const SAMPLE_INGREDIENTS = [
     }
 ];
 
+const EXTRA_SAMPLE_INGREDIENTS = [
+    {
+        "name": "Filtered Water",
+        "category": "Beverage",
+        "unit": "ml",
+        "stock": 30000,
+        "lowStockThreshold": 5000
+    },
+    {
+        "name": "Cinnamon Powder",
+        "category": "Spice",
+        "unit": "g",
+        "stock": 800,
+        "lowStockThreshold": 150
+    },
+    {
+        "name": "Mayonnaise",
+        "category": "Food",
+        "unit": "ml",
+        "stock": 3000,
+        "lowStockThreshold": 500
+    },
+    {
+        "name": "Tortilla Wraps",
+        "category": "Food",
+        "unit": "pcs",
+        "stock": 80,
+        "lowStockThreshold": 16
+    },
+    {
+        "name": "Mushrooms",
+        "category": "Food",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Parmesan Cheese",
+        "category": "Dairy",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Garlic",
+        "category": "Food",
+        "unit": "g",
+        "stock": 1500,
+        "lowStockThreshold": 250
+    },
+    {
+        "name": "Cucumber",
+        "category": "Food",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Beef Strips",
+        "category": "Food",
+        "unit": "g",
+        "stock": 6000,
+        "lowStockThreshold": 1000
+    },
+    {
+        "name": "Buffalo Sauce",
+        "category": "Syrup & Sauce",
+        "unit": "ml",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Popcorn Chicken",
+        "category": "Snack",
+        "unit": "g",
+        "stock": 5000,
+        "lowStockThreshold": 800
+    },
+    {
+        "name": "Fish Fillet",
+        "category": "Snack",
+        "unit": "g",
+        "stock": 5000,
+        "lowStockThreshold": 800
+    },
+    {
+        "name": "Potato Croquettes",
+        "category": "Snack",
+        "unit": "pcs",
+        "stock": 100,
+        "lowStockThreshold": 20
+    },
+    {
+        "name": "Pizza Dough",
+        "category": "Baking",
+        "unit": "g",
+        "stock": 5000,
+        "lowStockThreshold": 800
+    },
+    {
+        "name": "Pizza Sauce",
+        "category": "Syrup & Sauce",
+        "unit": "ml",
+        "stock": 3000,
+        "lowStockThreshold": 500
+    },
+    {
+        "name": "Pastry Dough",
+        "category": "Baking",
+        "unit": "g",
+        "stock": 5000,
+        "lowStockThreshold": 800
+    },
+    {
+        "name": "Oats",
+        "category": "Baking",
+        "unit": "g",
+        "stock": 3000,
+        "lowStockThreshold": 500
+    },
+    {
+        "name": "Blueberries",
+        "category": "Fruit",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Carrots",
+        "category": "Food",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Ube Powder",
+        "category": "Baking",
+        "unit": "g",
+        "stock": 1500,
+        "lowStockThreshold": 250
+    },
+    {
+        "name": "Mascarpone Cheese",
+        "category": "Dairy",
+        "unit": "g",
+        "stock": 2500,
+        "lowStockThreshold": 400
+    },
+    {
+        "name": "Ladyfingers",
+        "category": "Baking",
+        "unit": "pcs",
+        "stock": 120,
+        "lowStockThreshold": 24
+    }
+];
+
+// Extend the sample stock catalog with ingredients needed by the
+// existing 180-item Kiosk/POS menu.
+SAMPLE_INGREDIENTS.push(...EXTRA_SAMPLE_INGREDIENTS);
+
+
+// ============================================================
+// SAMPLE RECIPES FOR THE EXISTING 180 MENU ITEMS
+// ============================================================
+// These are testing recipes, not production food-cost standards.
+// Quantities are base/small serving quantities. The existing recipe
+// engine applies size multipliers:
+//   Small/Tall/Single = 1x
+//   Regular/Grande/Bundle = 2x
+//   Large/Venti = 3x
+//
+// ingredientName is resolved to the Inventory ingredient id at seed time,
+// so existing stock rows are reused instead of duplicated.
+// ============================================================
+
+const SAMPLE_MENU_RECIPES = [
+    {
+        "itemName": "Espresso",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Double Espresso",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 36,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Americano",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 220,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cafe Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cappuccino",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 140,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Flat White",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cafe Mocha",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "White Chocolate Mocha",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Chocolate Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Caramel Macchiato",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Vanilla Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Caramel Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Hazelnut Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Hazelnut Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Spanish Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Condensed Milk",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Brown Sugar Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Salted Caramel Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Salted Caramel Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cinnamon Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cinnamon Powder",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Honey Cinnamon Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cinnamon Powder",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Honey",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Pistachio Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pistachio Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Toffee Nut Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Toffee Nut Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Dark Chocolate Mocha",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Black Coffee",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 220,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cafe Au Lait",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Vietnamese Coffee",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Condensed Milk",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Macchiato",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Affogato",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Ice Cream",
+                "amount": 90,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cold Brew",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 260,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Americano",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 220,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Cafe Latte",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Cafe Mocha",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Caramel Macchiato",
+        "category": "coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 170,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 18,
+                "mode": "option",
+                "optionValue": "Extra shot",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Vanilla syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Caramel syrup",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Classic Hot Chocolate",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Dark Hot Chocolate",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "White Hot Chocolate",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Chocolate Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Chocolate",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Milk",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Matcha Latte",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Iced Matcha Latte",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Matcha Latte",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Matcha Latte",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mango Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Vanilla Matcha Latte",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Milk",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 190,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Milk",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 190,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mango Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Banana Milk",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 190,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Banana",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cookies and Cream",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Oreo",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Smoothie",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Smoothie",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mango",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Banana Smoothie",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Banana",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mixed Berry Smoothie",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mixed Berries",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Avocado Smoothie",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 150,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Avocado",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Fresh Lemonade",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Lemon Juice",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 200,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Lemonade",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Lemon Juice",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 200,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Honey Lemon",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Lemon Juice",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Honey",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 200,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Peach Iced Tea",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 230,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Peach Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Lemon Iced Tea",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 230,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lemon Juice",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Lychee Iced Tea",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 230,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lychee Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Passion Fruit Tea",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Filtered Water",
+                "amount": 230,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Passion Fruit Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Green Apple Soda",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Soda Water",
+                "amount": 250,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Green Apple Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Soda",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Soda Water",
+                "amount": 250,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Blueberry Soda",
+        "category": "non-coffee",
+        "ingredients": [
+            {
+                "ingredientName": "Soda Water",
+                "amount": 250,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Blueberry Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Boba",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Classic Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Pearl Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Brown Sugar Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Wintermelon Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Wintermelon Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Okinawa Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Okinawa Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Hokkaido Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Hokkaido Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Thai Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Thai Tea Mix",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Taro Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Taro Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Matcha Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mango Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Honeydew Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Honeydew Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Honey",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Vanilla Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Syrup",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Caramel Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caramel Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Hazelnut Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Hazelnut Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Cookies and Cream Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Cheesecake Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheesecake Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Red Velvet Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Red Velvet Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Dark Chocolate Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Salted Caramel Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Salted Caramel Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Brown Sugar Pearl Milk",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Taro Pearl Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Taro Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Matcha Pearl Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Matcha Powder",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Wintermelon Pearl Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Wintermelon Syrup",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Oreo Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Cream Cheese Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Pudding Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Grass Jelly Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Honey Pearl Milk Tea",
+        "category": "milktea",
+        "ingredients": [
+            {
+                "ingredientName": "Black Tea Leaves",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Fresh Milk",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Non-Dairy Creamer",
+                "amount": 18,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Honey",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Boba Pearls",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pearls",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Grass Jelly",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Grass Jelly",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pudding",
+                "amount": 35,
+                "mode": "option",
+                "optionValue": "Pudding",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Cheese Foam",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Cream Cheese",
+                "scaleWithSize": true
+            }
+        ]
+    },
+    {
+        "itemName": "Classic Club Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 3,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ham",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Ham and Cheese Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ham",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 90,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Tuna Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tuna",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Egg Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Grilled Cheese Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Pesto Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pesto Sauce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "BLT Sandwich",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 55,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Wrap",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Tortilla Wraps",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 90,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Tuna Wrap",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Tortilla Wraps",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tuna",
+                "amount": 85,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Burger",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Burger Buns",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Classic Beef Burger",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Burger Buns",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 130,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cheeseburger",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Burger Buns",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 130,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Bacon Cheeseburger",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Burger Buns",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 130,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mushroom Burger",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Burger Buns",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 130,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mushrooms",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Mayonnaise",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Carbonara",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Pasta",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Sauce",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Spaghetti Bolognese",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Pasta",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bolognese Sauce",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Alfredo Pasta",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Pasta",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cream Sauce",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Pesto Pasta",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Pasta",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pesto Sauce",
+                "amount": 55,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Baked Mac and Cheese",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Pasta",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Rice Bowl",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Rice",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Teriyaki Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Beef Rice Bowl",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Rice",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Beef Strips",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Teriyaki Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Teriyaki Chicken Bowl",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Rice",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Teriyaki Sauce",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Garlic Chicken Rice",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Rice",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Garlic",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Beef Tapa Rice",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Rice",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Beef Strips",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Garlic",
+                "amount": 8,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Caesar Salad",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Lettuce",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chicken Breast",
+                "amount": 90,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caesar Dressing",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Garden Salad",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Lettuce",
+                "amount": 130,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cucumber",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Caesar Dressing",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Breakfast Plate",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Eggs",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Sausage",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Bacon and Egg Breakfast",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Eggs",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Sausage and Egg Breakfast",
+        "category": "food",
+        "ingredients": [
+            {
+                "ingredientName": "Eggs",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Sausage",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bread Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 100,
+                "mode": "option",
+                "optionValue": "Fries",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Lettuce",
+                "amount": 50,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Salad",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Cheese",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "option",
+                "optionValue": "Egg",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 30,
+                "mode": "option",
+                "optionValue": "Bacon",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "French Fries",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cheese Fries",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Loaded Fries",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Bacon",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Potato Wedges",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Potato Wedges",
+                "amount": 180,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Onion Rings",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Onion Rings",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Nachos",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Nacho Chips",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cheesy Nachos",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Nacho Chips",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Loaded Nachos",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Nacho Chips",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ground Beef",
+                "amount": 55,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Tomato",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mozzarella Sticks",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Mozzarella Sticks",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Nuggets",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Chicken Nuggets",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Wings",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Chicken Wings",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Buffalo Wings",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Chicken Wings",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Buffalo Sauce",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Garlic Parmesan Wings",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Chicken Wings",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Garlic",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Parmesan Cheese",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chicken Tenders",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Chicken Tenders",
+                "amount": 3,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Popcorn Chicken",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Popcorn Chicken",
+                "amount": 160,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cheese Sticks",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Mozzarella Sticks",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Spring Rolls",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Spring Rolls",
+                "amount": 6,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Fish and Chips",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Fish Fillet",
+                "amount": 140,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Frozen Fries",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Hash Browns",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Hash Browns",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Potato Croquettes",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Potato Croquettes",
+                "amount": 4,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cooking Oil",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Garlic Bread",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Garlic Bread",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cheesy Garlic Bread",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Garlic Bread",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mini Pizza",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Pizza Dough",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pizza Sauce",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Ham and Cheese Croissant",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Croissants",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ham",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cheese Slices",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Sausage Roll",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "Sausage",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Pastry Dough",
+                "amount": 70,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Chip Cookie",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Chips",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Oatmeal Cookie",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oats",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Muffin",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 70,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Blueberry Muffin",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 70,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Blueberries",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Banana Muffin",
+        "category": "snack",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 70,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Banana",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Dip Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Dip Sauce",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Cheese Sauce",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Extra Cheese",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Classic Cheesecake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Cream Cheese",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Blueberry Cheesecake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Cream Cheese",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Blueberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Cheesecake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Cream Cheese",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Oreo Cheesecake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Cream Cheese",
+                "amount": 100,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Basque Burnt Cheesecake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Cream Cheese",
+                "amount": 120,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Red Velvet Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Red Velvet Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Carrot Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Carrots",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mocha Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 8,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Ube Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ube Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Tiramisu",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Mascarpone Cheese",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Ladyfingers",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Coffee Beans",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Brownie",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Walnut Brownie",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Walnuts",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Lava Cake",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 55,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Chips",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Banana Bread",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 80,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Banana",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Donut",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Glazed Donut",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Donut",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 12,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Eggs",
+                "amount": 0.25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cinnamon Roll",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "All-Purpose Flour",
+                "amount": 70,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Brown Sugar",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Butter",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cinnamon Powder",
+                "amount": 4,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Croissant",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Croissants",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Chips",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Sundae",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Chocolate Ice Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Strawberry Sundae",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Vanilla Ice Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Strawberry Syrup",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 20,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Vanilla Ice Cream",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Vanilla Ice Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Ice Cream",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Chocolate Ice Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Cookies and Cream Ice Cream",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Vanilla Ice Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Oreo Crumbs",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Graham",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Mango",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 40,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 50,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Condensed Milk",
+                "amount": 30,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Mango Float",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Mango",
+                "amount": 1,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Graham Crackers",
+                "amount": 45,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Condensed Milk",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Leche Flan",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Eggs",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Condensed Milk",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Evaporated Milk",
+                "amount": 60,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 25,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Extract",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Chocolate Mousse",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 90,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 35,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Cocoa Powder",
+                "amount": 10,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    },
+    {
+        "itemName": "Panna Cotta",
+        "category": "dessert",
+        "ingredients": [
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 110,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Gelatin",
+                "amount": 5,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "White Sugar",
+                "amount": 15,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Vanilla Extract",
+                "amount": 2,
+                "mode": "required",
+                "optionValue": "",
+                "scaleWithSize": true
+            },
+            {
+                "ingredientName": "Chocolate Sauce",
+                "amount": 15,
+                "mode": "option",
+                "optionValue": "Chocolate Drizzle",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Strawberries",
+                "amount": 40,
+                "mode": "option",
+                "optionValue": "Fruit",
+                "scaleWithSize": false
+            },
+            {
+                "ingredientName": "Whipping Cream",
+                "amount": 25,
+                "mode": "option",
+                "optionValue": "Whipped Cream",
+                "scaleWithSize": false
+            }
+        ]
+    }
+];
+
 function normalizeCafeId(value) {
     const id = String(value || "cafe-1").trim();
     return id || "cafe-1";
@@ -1264,6 +11581,7 @@ async function createIngredient(cafeId, payload) {
 async function seedSampleIngredients(cafeId) {
     return queueMutation(store => {
         const cafe = getCafeContainer(store, cafeId);
+
         cafe.ingredients =
             sanitizeIngredientArray(
                 cafe.ingredients
@@ -1280,9 +11598,13 @@ async function seedSampleIngredients(cafeId) {
         const added = [];
         const now = new Date().toISOString();
 
+        // ----------------------------------------------------
+        // 1) ADD MISSING SAMPLE STOCK INGREDIENTS
+        // ----------------------------------------------------
         for (const sample of SAMPLE_INGREDIENTS) {
             const unit = normalizeUnit(sample.unit);
-            const key = `${String(sample.name).trim().toLowerCase()}|${unit}`;
+            const key =
+                `${String(sample.name).trim().toLowerCase()}|${unit}`;
 
             if (existing.has(key)) {
                 continue;
@@ -1301,7 +11623,8 @@ async function seedSampleIngredients(cafeId) {
                 category: sample.category,
                 unit,
                 stock: Number(sample.stock || 0),
-                lowStockThreshold: Number(sample.lowStockThreshold || 0),
+                lowStockThreshold:
+                    Number(sample.lowStockThreshold || 0),
                 createdAt: now,
                 updatedAt: now
             };
@@ -1312,7 +11635,8 @@ async function seedSampleIngredients(cafeId) {
 
             if (ingredient.stock > 0) {
                 cafe.adjustments.unshift({
-                    id: `adj-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+                    id:
+                        `adj-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
                     ingredientId: ingredient.id,
                     ingredientName: ingredient.name,
                     type: "set",
@@ -1320,7 +11644,8 @@ async function seedSampleIngredients(cafeId) {
                     beforeStock: 0,
                     afterStock: ingredient.stock,
                     reason: "Sample stock",
-                    notes: "Loaded from CafeKiosk sample inventory",
+                    notes:
+                        "Loaded from CafeKiosk sample inventory",
                     date: now.slice(0, 10),
                     source: "sample-seed",
                     createdAt: now
@@ -1328,12 +11653,165 @@ async function seedSampleIngredients(cafeId) {
             }
         }
 
-        cafe.adjustments = cafe.adjustments.slice(0, 500);
+        // ----------------------------------------------------
+        // 2) ATTACH SAMPLE RECIPES TO EXISTING MENU ITEMS
+        // ----------------------------------------------------
+        const ingredientByName =
+            new Map(
+                cafe.ingredients.map(
+                    ingredient => [
+                        String(ingredient.name || "")
+                            .trim()
+                            .toLowerCase(),
+                        ingredient
+                    ]
+                )
+            );
+
+        let recipeAddedCount = 0;
+        let recipeRepairedCount = 0;
+        let recipeSkippedCount = 0;
+        const recipeErrors = [];
+
+        for (const sampleRecipe of SAMPLE_MENU_RECIPES) {
+            const itemName =
+                String(sampleRecipe.itemName || "").trim();
+
+            const category =
+                normalizeCategory(sampleRecipe.category);
+
+            const key =
+                recipeKey(itemName, category);
+
+            const convertedRows = [];
+            let missingIngredient = null;
+
+            for (
+                const definition
+                of (
+                    Array.isArray(sampleRecipe.ingredients)
+                        ? sampleRecipe.ingredients
+                        : []
+                )
+            ) {
+                const ingredient =
+                    ingredientByName.get(
+                        String(definition.ingredientName || "")
+                            .trim()
+                            .toLowerCase()
+                    );
+
+                if (!ingredient) {
+                    missingIngredient =
+                        definition.ingredientName;
+
+                    break;
+                }
+
+                convertedRows.push({
+                    ingredientId:
+                        ingredient.id,
+
+                    amount:
+                        Number(definition.amount || 0),
+
+                    mode:
+                        String(definition.mode || "required")
+                            .toLowerCase() === "option"
+                                ? "option"
+                                : "required",
+
+                    optionValue:
+                        String(definition.optionValue || "")
+                            .trim(),
+
+                    scaleWithSize:
+                        definition.scaleWithSize !== false
+                });
+            }
+
+            if (missingIngredient) {
+                recipeErrors.push({
+                    itemName,
+                    category,
+                    missingIngredient
+                });
+
+                continue;
+            }
+
+            const recipe = {
+                key,
+                itemName,
+                category,
+                ingredients: convertedRows,
+                sizeMultipliers: {
+                    base: 1,
+                    medium: 2,
+                    large: 3
+                },
+                sampleRecipe: true,
+                updatedAt: now
+            };
+
+            const recipeIndex =
+                cafe.recipes.findIndex(
+                    existingRecipe =>
+                        String(existingRecipe?.key || "") === key
+                );
+
+            if (recipeIndex < 0) {
+                cafe.recipes.push(recipe);
+                recipeAddedCount++;
+                continue;
+            }
+
+            const existingRecipe =
+                cafe.recipes[recipeIndex];
+
+            /*
+             * Preserve recipes the owner already configured.
+             * We only repair an existing recipe when it is empty.
+             */
+            if (
+                Array.isArray(existingRecipe?.ingredients) &&
+                existingRecipe.ingredients.length > 0
+            ) {
+                recipeSkippedCount++;
+                continue;
+            }
+
+            cafe.recipes[recipeIndex] = recipe;
+            recipeRepairedCount++;
+        }
+
+        cafe.adjustments =
+            cafe.adjustments.slice(0, 500);
 
         return {
             added,
-            addedCount: added.length,
-            totalIngredients: cafe.ingredients.length
+            addedCount:
+                added.length,
+
+            totalIngredients:
+                cafe.ingredients.length,
+
+            sampleMenuItemCount:
+                SAMPLE_MENU_RECIPES.length,
+
+            recipeAddedCount,
+
+            recipeRepairedCount,
+
+            recipeSkippedCount,
+
+            recipeErrorCount:
+                recipeErrors.length,
+
+            recipeErrors,
+
+            totalRecipes:
+                cafe.recipes.length
         };
     });
 }
