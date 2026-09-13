@@ -1,0 +1,87 @@
+[
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1002",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "refunded",
+    "cashReceived": 500,
+    "change": 245,
+    "subtotal": 255,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 255,
+    "status": "Refunded",
+    "createdAt": "2026-09-13T06:31:22.658Z",
+    "updatedAt": "2026-09-13T06:32:44.318Z",
+    "items": [
+      {
+        "productId": "coffee-7",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 85,
+        "unitPrice": 255,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 255,
+        "total": 255,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Grande",
+          "Milk: Oat Milk",
+          "Add-Ons: Hazelnut Syrup, Extra Shot"
+        ]
+      }
+    ],
+    "id": "5d7d576f-f3de-403d-b7da-c9f6f0932d10",
+    "adjustmentAction": "refund",
+    "adjustmentScope": "entire",
+    "adjustmentReason": "Wrong order",
+    "adjustmentAt": "2026-09-13T06:32:44.965Z"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "#3545",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 170,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 170,
+    "status": "Voided",
+    "createdAt": "2026-09-13T06:30:08.248Z",
+    "updatedAt": "2026-09-13T07:51:26.465Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 0,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole"
+        ]
+      }
+    ],
+    "id": "2c56f1f4-553a-44f1-a67e-f0270f0ed29c",
+    "adjustmentAction": "void",
+    "adjustmentScope": "entire",
+    "adjustmentReason": "Wrong order",
+    "adjustmentAt": "2026-09-13T07:51:26.457Z"
+  }
+]

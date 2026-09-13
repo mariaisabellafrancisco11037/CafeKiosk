@@ -1,0 +1,904 @@
+{
+  "cafe-1": [
+    {
+      "name": "Caramel Macchiato",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Affogato",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Matcha Espresso Fusion",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Spanish Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cappuccino",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Americano",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Espresso",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Mocha",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Flat White",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Vanilla Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Hazelnut Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cafe Mocha",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Americano",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Caramel Macchiato",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cold Brew",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Vanilla Cold Brew",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Salted Caramel Cold Brew",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Brown Sugar Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Honey Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cinnamon Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cafe Au Lait",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Double Espresso",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Espresso Macchiato",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cortado",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Long Black",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Irish Cream Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Coffee Jelly Latte",
+      "category": "coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Chocolate",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Fresh Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Vanilla Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Matcha Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Matcha Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Matcha",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Mango Matcha",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Ube Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Ube Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Taro Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Taro Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Chai Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Iced Chai Latte",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Caramel Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Brown Sugar Milk",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Cookies and Cream",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Oreo",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Cream",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Mango Cream",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Blueberry Cream",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Vanilla Cream",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Peach Tea",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Lemon Tea",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Lychee Tea",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Passion Fruit Tea",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Mango Lemonade",
+      "category": "non-coffee",
+      "availability": "Available"
+    },
+    {
+      "name": "Classic Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Wintermelon Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Okinawa Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Hokkaido Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Taro Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Matcha Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Thai Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Brown Sugar Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Pearl Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Cookies and Cream Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheesecake Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Salted Caramel Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Hazelnut Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Vanilla Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Coffee Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Mango Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Honeydew Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Melon Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Ube Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Red Velvet Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Dark Chocolate Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "White Chocolate Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Blueberry Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Lychee Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Peach Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Passion Fruit Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Caramel Macchiato Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Cream Cheese Milk Tea",
+      "category": "milktea",
+      "availability": "Available"
+    },
+    {
+      "name": "Siomai",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Takoyaki",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Rice Bowl",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Beef Rice Bowl",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Pork Rice Bowl",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Teriyaki",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Beef Teriyaki",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Pork Tonkatsu",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Katsu",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Burger Steak",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Spaghetti",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Carbonara",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Baked Macaroni",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Lasagna",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Sandwich",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Ham and Cheese Sandwich",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Tuna Sandwich",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Clubhouse Sandwich",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheeseburger",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Burger",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Hotdog Sandwich",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Corned Beef Rice",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Tocino Rice",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Longganisa Rice",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Tapsilog",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicksilog",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Hotsilog",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Pork Sisig Rice",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Sisig Rice",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "Garlic Butter Chicken",
+      "category": "food",
+      "availability": "Available"
+    },
+    {
+      "name": "French Fries",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Onion Rings",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Mozzarella Sticks",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Nuggets",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheese Fries",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Bacon Cheese Fries",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Potato Wedges",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Hash Browns",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Nachos",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Loaded Nachos",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheese Sticks",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Dynamite Rolls",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Spring Rolls",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Fish Balls",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Squid Balls",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Kikiam",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Mini Corn Dogs",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Wings",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Chicken Pops",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Popcorn Chicken",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Calamares",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Crispy Tofu",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Fried Dumplings",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Potato Chips",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Garlic Bread",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheesy Garlic Bread",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Mini Pizza Bites",
+      "category": "snack",
+      "availability": "Available"
+    },
+    {
+      "name": "Waffles",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Pancakes",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Cake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Red Velvet Cake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Cheesecake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Blueberry Cheesecake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Cheesecake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Carrot Cake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Banana Cake",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Brownie",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Brownie",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Brownie Sundae",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Oatmeal Cookie",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Double Chocolate Cookie",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Muffin",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Blueberry Muffin",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Banana Muffin",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Cinnamon Roll",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Croissant",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Croissant",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Donut",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Donut",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Glazed Donut",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Ice Cream Sundae",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Chocolate Sundae",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Strawberry Sundae",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Mango Float",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Leche Flan",
+      "category": "dessert",
+      "availability": "Available"
+    },
+    {
+      "name": "Coffee Jelly",
+      "category": "dessert",
+      "availability": "Available"
+    }
+  ]
+}
