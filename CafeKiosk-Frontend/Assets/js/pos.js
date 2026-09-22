@@ -39,7 +39,8 @@ function resolveBackendOrigin() {
   // the exact hostname the browser used (localhost on laptop, LAN IP on tablet).
   // This avoids stale localStorage IP overrides after Wi-Fi/hotspot changes.
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-    if (window.location.port === "5000") return window.location.origin;
+    const port = window.location.port;
+    if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
     return `${window.location.protocol}//${window.location.hostname}:5000`;
   }
 
@@ -3088,7 +3089,7 @@ function setupEvents() {
 // =====================================================
 async function loadMysqlProductCatalog() {
   try {
-    const base = typeof API_URL !== "undefined" ? API_URL : `${location.protocol}//${location.hostname}:5000`;
+    const base = typeof API_URL !== "undefined" ? API_URL : ((!location.port || location.port === "80" || location.port === "443" || location.port === "5000") ? location.origin : `${location.protocol}//${location.hostname}:5000`);
     const response = await authenticatedFetch(`${base}/api/catalog`, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();

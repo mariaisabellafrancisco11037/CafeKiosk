@@ -8,7 +8,7 @@
   function apiOrigin() {
     return window.CafeAuth?.API_ORIGIN ||
       ((location.protocol === 'http:' || location.protocol === 'https:')
-        ? (location.port === '5000' ? location.origin : `${location.protocol}//${location.hostname}:5000`)
+        ? ((!location.port || location.port === '80' || location.port === '443' || location.port === '5000') ? location.origin : `${location.protocol}//${location.hostname}:5000`)
         : 'http://127.0.0.1:5000');
   }
 

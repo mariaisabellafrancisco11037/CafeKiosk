@@ -3,7 +3,7 @@
   const $ = id => document.getElementById(id);
   function origin(){
     if(location.protocol==='http:'||location.protocol==='https:'){
-      return location.port==='5000' ? location.origin : `${location.protocol}//${location.hostname}:5000`;
+      const p=location.port; return (!p||p==='80'||p==='443'||p==='5000') ? location.origin : `${location.protocol}//${location.hostname}:5000`;
     }
     return 'http://127.0.0.1:5000';
   }

@@ -7,7 +7,8 @@
 
   function apiUrl() {
     if (location.protocol === "http:" || location.protocol === "https:") {
-      if (location.port === "5000") return location.origin;
+      const port = location.port;
+      if (!port || port === "80" || port === "443" || port === "5000") return location.origin;
       return `${location.protocol}//${location.hostname}:5000`;
     }
     const saved = String(localStorage.getItem("cafeBackendUrl") || "").trim();

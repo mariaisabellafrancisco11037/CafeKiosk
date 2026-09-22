@@ -6,7 +6,8 @@
     if (window.CafeAuth?.API_ORIGIN) return String(window.CafeAuth.API_ORIGIN).replace(/\/$/, '');
     if (window.CAFEKIOSK_API_ORIGIN) return String(window.CAFEKIOSK_API_ORIGIN).replace(/\/$/, '');
     if (location.protocol === 'http:' || location.protocol === 'https:') {
-      if (location.port === '5000') return location.origin;
+      const port = location.port;
+      if (!port || port === '80' || port === '443' || port === '5000') return location.origin;
       return `${location.protocol}//${location.hostname}:5000`;
     }
     return 'http://127.0.0.1:5000';

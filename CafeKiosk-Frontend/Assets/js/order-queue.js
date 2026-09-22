@@ -21,7 +21,8 @@ function resolveBackendOrigin() {
   // the exact hostname the browser used (localhost on laptop, LAN IP on tablet).
   // This avoids stale localStorage IP overrides after Wi-Fi/hotspot changes.
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-    if (window.location.port === "5000") return window.location.origin;
+    const port = window.location.port;
+    if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
     return `${window.location.protocol}//${window.location.hostname}:5000`;
   }
 

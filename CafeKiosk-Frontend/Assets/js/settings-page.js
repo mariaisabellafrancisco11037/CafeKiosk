@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);let s={};let kioskInfo=null;
-function api(){if(location.protocol==='http:'||location.protocol==='https:')return location.port==='5000'?location.origin:`${location.protocol}//${location.hostname}:5000`;return 'http://localhost:5000';}
+function api(){if(location.protocol==='http:'||location.protocol==='https:'){const p=location.port;if(!p||p==='80'||p==='443'||p==='5000')return location.origin;return `${location.protocol}//${location.hostname}:5000`;}return 'http://localhost:5000';}
 async function af(url,opt={}){if(window.CafeAuth?.apiFetch)return window.CafeAuth.apiFetch(url,opt);const h=new Headers(opt.headers||{});const t=localStorage.getItem('cafeAdminAuthToken')||localStorage.getItem('cafeAuthToken')||sessionStorage.getItem('cafeAuthToken');if(t)h.set('Authorization',`Bearer ${t}`);return fetch(url,{...opt,credentials:'include',headers:h});}
 function attr(v){return String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'})[c]);}
 function field(label,key,type='text'){return `<div class="ck-field"><label>${label}</label><input class="ck-input" data-k="${key}" type="${type}" value="${attr(s[key]??'')}"></div>`;}

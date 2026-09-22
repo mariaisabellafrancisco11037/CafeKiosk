@@ -2170,77 +2170,71 @@ server.listen(
         console.log("");
 
 
-        // LAPTOP
-        console.log(
-            `Login: http://localhost:${PORT}/login`
-        );
+        const railwayDomain = String(process.env.RAILWAY_PUBLIC_DOMAIN || "").trim();
+        const explicitPublicUrl = String(process.env.PUBLIC_APP_URL || process.env.APP_PUBLIC_URL || "").trim().replace(/\/+$/, "");
+        const publicBaseUrl = explicitPublicUrl || (railwayDomain ? `https://${railwayDomain}` : "");
 
-        console.log(
-            `IT Monitor: http://localhost:${PORT}/system-admin-login`
-        );
-
-        console.log(
-            `Admin: http://localhost:${PORT}/admin/order-monitor`
-        );
-        console.log(
-            `Inventory: http://localhost:${PORT}/admin/inventory`
-        );
-        console.log(
-            `Report: http://localhost:${PORT}/admin/report`
-        );
-        console.log(
-            `Audit Logs: http://localhost:${PORT}/admin/audit-logs`
-        );
-
-        console.log(
-            `Kiosk: http://localhost:${PORT}`
-        );
-
-        console.log(
-            `POS:   http://localhost:${PORT}/pos`
-        );
-        console.log(`Manager POS: http://localhost:${PORT}/manager-pos`);
-        console.log(`Manager Queue: http://localhost:${PORT}/manager-order-queue`);
-
-
-        console.log(
-            `Queue: http://localhost:${PORT}/order-queue`
-        );
-
-
-        console.log("");
-
-
-        // LAN / WIFI / MOBILE HOTSPOT
-        // Offline localhost mode intentionally binds only to this laptop.
-        if (BIND_HOST === "127.0.0.1" || BIND_HOST.toLowerCase() === "localhost" || BIND_HOST === "::1") {
-            console.log("Offline localhost mode: this CafeKiosk instance is accessible only on this laptop.");
-            console.log("No Wi-Fi or internet connection is required.");
+        if (publicBaseUrl) {
+            console.log("🌐 Public Railway URLs:");
+            console.log(`  Home/Kiosk: ${publicBaseUrl}/`);
+            console.log(`  Login:      ${publicBaseUrl}/login`);
+            console.log(`  POS:        ${publicBaseUrl}/pos`);
+            console.log(`  Manager:    ${publicBaseUrl}/manager-pos`);
+            console.log(`  Queue:      ${publicBaseUrl}/order-queue`);
+            console.log(`  Admin:      ${publicBaseUrl}/admin/order-monitor`);
+            console.log(`  Inventory:  ${publicBaseUrl}/admin/inventory`);
+            console.log(`  Reports:    ${publicBaseUrl}/admin/report`);
+            console.log(`  Audit Logs: ${publicBaseUrl}/admin/audit-logs`);
+            console.log(`  IT Monitor: ${publicBaseUrl}/system-admin-login`);
+            console.log("");
+            console.log("Railway serves CafeKiosk through the HTTPS domain above.");
+            console.log(`The Node server listens internally on ${BIND_HOST}:${PORT}; that internal address is not the customer URL.`);
             console.log("");
         } else {
-            const lanAddresses = getLanIpv4Addresses();
+            // Local laptop URLs.
+            console.log(`Login: http://localhost:${PORT}/login`);
+            console.log(`IT Monitor: http://localhost:${PORT}/system-admin-login`);
+            console.log(`Admin: http://localhost:${PORT}/admin/order-monitor`);
+            console.log(`Inventory: http://localhost:${PORT}/admin/inventory`);
+            console.log(`Report: http://localhost:${PORT}/admin/report`);
+            console.log(`Audit Logs: http://localhost:${PORT}/admin/audit-logs`);
+            console.log(`Kiosk: http://localhost:${PORT}`);
+            console.log(`POS:   http://localhost:${PORT}/pos`);
+            console.log(`Manager POS: http://localhost:${PORT}/manager-pos`);
+            console.log(`Manager Queue: http://localhost:${PORT}/manager-order-queue`);
+            console.log(`Queue: http://localhost:${PORT}/order-queue`);
+            console.log("");
 
-            if (lanAddresses.length) {
-                console.log("LAN addresses detected:");
-                for (const address of lanAddresses) {
-                    console.log(`  Kiosk:      http://${address}:${PORT}`);
-                    console.log(`  POS:        http://${address}:${PORT}/pos`);
-                    console.log(`  Manager POS:http://${address}:${PORT}/manager-pos`);
-                    console.log(`  Order Queue:http://${address}:${PORT}/order-queue`);
-                    console.log(`  Admin:      http://${address}:${PORT}/Admin/dashboard.php`);
-                    console.log(`  IT Monitor: http://${address}:${PORT}/system-admin-login`);
-                    console.log(`  Health:     http://${address}:${PORT}/health`);
+            // LAN / Wi-Fi / Mobile Hotspot.
+            if (BIND_HOST === "127.0.0.1" || BIND_HOST.toLowerCase() === "localhost" || BIND_HOST === "::1") {
+                console.log("Offline localhost mode: this CafeKiosk instance is accessible only on this laptop.");
+                console.log("No Wi-Fi or internet connection is required.");
+                console.log("");
+            } else {
+                const lanAddresses = getLanIpv4Addresses();
+
+                if (lanAddresses.length) {
+                    console.log("LAN addresses detected:");
+                    for (const address of lanAddresses) {
+                        console.log(`  Kiosk:      http://${address}:${PORT}`);
+                        console.log(`  POS:        http://${address}:${PORT}/pos`);
+                        console.log(`  Manager POS:http://${address}:${PORT}/manager-pos`);
+                        console.log(`  Order Queue:http://${address}:${PORT}/order-queue`);
+                        console.log(`  Admin:      http://${address}:${PORT}/Admin/dashboard.php`);
+                        console.log(`  IT Monitor: http://${address}:${PORT}/system-admin-login`);
+                        console.log(`  Health:     http://${address}:${PORT}/health`);
+                        console.log("");
+                    }
+                } else {
+                    console.log("No LAN IPv4 address detected yet.");
+                    console.log("Localhost still works on this laptop: http://127.0.0.1:" + PORT);
                     console.log("");
                 }
-            } else {
-                console.log("No LAN IPv4 address detected yet.");
-                console.log("Localhost still works on this laptop: http://127.0.0.1:" + PORT);
+
+                console.log("For a tablet/phone, localhost will NOT work because it points to that device itself.");
+                console.log("Use a LAN address above or connect the device to the laptop's Mobile Hotspot (internet is not required).");
                 console.log("");
             }
-
-            console.log("For a tablet/phone, localhost will NOT work because it points to that device itself.");
-            console.log("Use a LAN address above or connect the device to the laptop's Mobile Hotspot (internet is not required).");
-            console.log("");
         }
 
         console.log(

@@ -48,7 +48,8 @@ function resolveBackendOrigin() {
   // the exact hostname the browser used (localhost on laptop, LAN IP on tablet).
   // This avoids stale localStorage IP overrides after Wi-Fi/hotspot changes.
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-    if (window.location.port === "5000") return window.location.origin;
+    const port = window.location.port;
+    if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
     return `${window.location.protocol}//${window.location.hostname}:5000`;
   }
 
@@ -3370,7 +3371,7 @@ async function loadMysqlProductCatalog() {
       try { await window.CafeKioskTenant.ready; } catch (_) {}
     }
 
-    const base = typeof API_URL !== "undefined" ? API_URL : `${location.protocol}//${location.hostname}:5000`;
+    const base = typeof API_URL !== "undefined" ? API_URL : ((!location.port || location.port === "80" || location.port === "443" || location.port === "5000") ? location.origin : `${location.protocol}//${location.hostname}:5000`);
     const tenantSlug = String(window.CafeKioskTenant?.slug || sessionStorage.getItem("kioskSlug") || "").trim();
     const cafeId = String(window.CafeKioskTenant?.info?.cafeId || localStorage.getItem("cafeId") || "cafe-1");
     CAFE_ID = cafeId;

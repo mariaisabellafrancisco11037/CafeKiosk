@@ -71,7 +71,8 @@ const CAFE_ID =
 
 function getBackendOrigin() {
     if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-        if (window.location.port === "5000") return window.location.origin;
+        const port = window.location.port;
+        if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
         return `${window.location.protocol}//${window.location.hostname}:5000`;
     }
     const saved = String(localStorage.getItem("cafeBackendUrl") || "").trim();
