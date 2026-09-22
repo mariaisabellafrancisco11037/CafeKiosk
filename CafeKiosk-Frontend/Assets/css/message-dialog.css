@@ -1,0 +1,65 @@
+.ck-message-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(34, 24, 18, 0.48);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .18s ease, visibility .18s ease;
+}
+.ck-message-dialog-overlay.open { opacity: 1; visibility: visible; }
+.ck-message-dialog {
+  width: min(430px, 100%);
+  border-radius: 18px;
+  background: #fffdf9;
+  border: 1px solid rgba(91, 65, 44, .16);
+  box-shadow: 0 24px 70px rgba(33, 22, 14, .28);
+  padding: 26px;
+  text-align: center;
+  transform: translateY(10px) scale(.98);
+  transition: transform .18s ease;
+  color: #3b2a20;
+  font-family: inherit;
+}
+.ck-message-dialog-overlay.open .ck-message-dialog { transform: translateY(0) scale(1); }
+.ck-message-dialog-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  font-weight: 900;
+  background: #f3ede6;
+  color: #6c4c34;
+}
+.ck-message-dialog.success .ck-message-dialog-icon { background: #e9f5e8; color: #3f7145; }
+.ck-message-dialog.error .ck-message-dialog-icon { background: #fbe9e7; color: #a33d35; }
+.ck-message-dialog.warning .ck-message-dialog-icon { background: #fff3d6; color: #8a6417; }
+.ck-message-dialog h2 { margin: 0 0 9px; font-size: 22px; line-height: 1.25; color: #3b2a20; }
+.ck-message-dialog p { margin: 0; color: #6f6259; font-size: 14px; line-height: 1.6; white-space: pre-line; word-break: break-word; }
+.ck-message-dialog-actions { display: flex; justify-content: center; margin-top: 22px; }
+.ck-message-dialog-ok {
+  min-width: 116px;
+  border: 0;
+  border-radius: 11px;
+  padding: 11px 20px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  color: #fff;
+  background: #5d7355;
+  box-shadow: 0 7px 18px rgba(93,115,85,.20);
+}
+.ck-message-dialog-ok:hover { filter: brightness(.96); }
+.ck-message-dialog-ok:focus-visible { outline: 3px solid rgba(93,115,85,.28); outline-offset: 3px; }
+@media (max-width: 520px) {
+  .ck-message-dialog-overlay { align-items: flex-end; padding: 14px; }
+  .ck-message-dialog { border-radius: 18px 18px 14px 14px; padding: 24px 20px 20px; }
+}

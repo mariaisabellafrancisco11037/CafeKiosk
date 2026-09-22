@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>CafeKiosk - Digital Receipt</title>
+
+    <link rel="stylesheet" href="/Assets/css/checkout.css">
+<link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
+  <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=30">
+  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+</head>
+
+<body class="uniform-kiosk kiosk-receipt">
+
+    <main class="receipt-page">
+
+        <!-- HEADER -->
+        <header class="receipt-header">
+            <div class="logo-circle">☕</div>
+
+            <div>
+                <h1>CafeKiosk</h1>
+                <p>Digital Receipt</p>
+            </div>
+        </header>
+
+
+        <!-- ORDER INFORMATION -->
+        <section class="order-info">
+
+            <div class="info-box">
+                <span>Order Number</span>
+                <strong id="orderNumber">#0001</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Service Type</span>
+                <strong id="serviceType">Dine In</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Date</span>
+                <strong id="orderDate">--</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Time</span>
+                <strong id="orderTime">--</strong>
+            </div>
+
+        </section>
+
+
+        <!-- RECEIPT CARD -->
+        <section class="receipt-card">
+
+            <div class="receipt-title">
+                <h2>Order Summary</h2>
+                <span id="itemCount">0 Items</span>
+            </div>
+
+
+            <!-- ITEMS -->
+            <div class="receipt-items" id="receiptItems">
+
+                <!-- Javascript will insert items here -->
+
+            </div>
+
+
+            <!-- TOTALS -->
+            <div class="receipt-totals">
+
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">₱0.00</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Discount</span>
+                    <strong id="discount">₱0.00</strong>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <strong id="total">₱0.00</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PAYMENT -->
+        <section class="payment-section">
+
+            <div class="payment-card">
+
+                <span>Payment Method</span>
+
+                <strong id="paymentMethod">
+                    Cash
+                </strong>
+
+            </div>
+
+            <div class="payment-card cash-receipt-card" id="cashReceivedCard">
+                <span>Cash Received</span>
+                <strong id="receiptCashReceived">₱0.00</strong>
+            </div>
+
+            <div class="payment-card cash-receipt-card" id="changeCard">
+                <span>Change</span>
+                <strong id="receiptChange">₱0.00</strong>
+            </div>
+
+            <div class="payment-message">
+                <span class="check-icon">✓</span>
+
+                <div>
+                    <strong>Order Received!</strong>
+                    <p>Your order has been sent to the staff.</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- FINISH BUTTON -->
+        <section class="finish-section">
+
+            <button
+                type="button"
+                id="finishButton"
+                class="finish-button">
+
+                <span>Finish</span>
+                <span class="arrow">→</span>
+
+            </button>
+
+            <p class="finish-note">
+                Tap Finish to start a new order
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- RESET OVERLAY -->
+    <div class="reset-overlay" id="resetOverlay">
+
+        <div class="reset-message">
+
+            <div class="loading-circle"></div>
+
+            <h2>Thank You!</h2>
+
+            <p>
+                Preparing the kiosk for the next customer...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
+<script src="/Assets/js/checkout.js"></script>
+
+<script src="/Assets/js/checkout-discount.js"></script>
+  <script src="/Assets/js/uniform-theme.js"></script>
+  <script src="/Assets/js/live-presence.js?v=3"></script>
+  <script src="/Assets/js/message-dialog.js?v=1"></script>
+</body>
+</html>
+

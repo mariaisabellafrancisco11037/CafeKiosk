@@ -1,0 +1,28 @@
+{
+  "name": "cafekiosk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CafeKiosk POS, kiosk and administration system",
+  "main": "railway-start.js",
+  "scripts": {
+    "start": "node railway-start.js",
+    "start:server": "node CafeKiosk-Backend/server.js",
+    "railway:init": "node railway-init.js",
+    "test": "node --check railway-start.js && node --check railway-init.js && node --check CafeKiosk-Backend/server.js"
+  },
+  "engines": {
+    "node": ">=20 <25"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.22.6",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
+  }
+}

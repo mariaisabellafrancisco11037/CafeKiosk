@@ -1,0 +1,706 @@
+[
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-101198-675",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 460,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 460,
+    "status": "Completed",
+    "createdAt": "2026-09-15T07:08:21.199Z",
+    "updatedAt": "2026-09-15T07:10:39.528Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 0,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "Pearl Milk Tea",
+        "category": "milktea",
+        "price": 120,
+        "customizationCost": 0,
+        "unitPrice": 120,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 120,
+        "total": 120,
+        "customizations": [
+          "Size: Regular",
+          "Sweetness: 100%",
+          "Ice Level: Regular"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "BLT Sandwich",
+        "category": "food",
+        "price": 170,
+        "customizationCost": 0,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Side: No Side",
+          "Serving: Hot"
+        ]
+      }
+    ],
+    "id": "c797e464-d777-4613-ad62-ed115741869e"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1008",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 500,
+    "change": 268,
+    "subtotal": 290,
+    "discountAmount": 58,
+    "discount": 58,
+    "total": 232,
+    "status": "Pending",
+    "createdAt": "2026-09-15T07:04:07.200Z",
+    "updatedAt": "2026-09-15T07:04:07.251Z",
+    "items": [
+      {
+        "productId": "coffee-3",
+        "name": "Cafe Latte",
+        "category": "coffee",
+        "price": 140,
+        "customizationCost": 0,
+        "unitPrice": 140,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 140,
+        "total": 140,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole Milk"
+        ]
+      },
+      {
+        "productId": "coffee-5",
+        "name": "Flat White",
+        "category": "coffee",
+        "price": 150,
+        "customizationCost": 0,
+        "unitPrice": 150,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 150,
+        "total": 150,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole Milk"
+        ]
+      }
+    ],
+    "id": "1753e52e-141b-49d5-b930-27c1cdb0dd6b"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1001",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "GCash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 270,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 270,
+    "status": "Pending",
+    "createdAt": "2026-09-15T05:39:29.320Z",
+    "updatedAt": "2026-09-15T05:39:28.521Z",
+    "items": [
+      {
+        "productId": "coffee-4",
+        "name": "Cappuccino",
+        "category": "coffee",
+        "price": 130,
+        "customizationCost": 140,
+        "unitPrice": 270,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 270,
+        "total": 270,
+        "customizations": [
+          "Temperature: Iced",
+          "Size: Venti",
+          "Milk: Almond Milk",
+          "Add-Ons: Vanilla Syrup, Hazelnut Syrup, Extra Shot, Caramel Drizzle"
+        ]
+      }
+    ],
+    "id": "ee43004a-4a13-449d-aa4b-f5ca19082b7e"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1007",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 300,
+    "change": 70,
+    "subtotal": 230,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 230,
+    "status": "Pending",
+    "createdAt": "2026-09-15T03:14:00.538Z",
+    "updatedAt": "2026-09-15T03:14:00.561Z",
+    "items": [
+      {
+        "productId": "coffee-6",
+        "name": "Cafe Mocha",
+        "category": "coffee",
+        "price": 150,
+        "customizationCost": 80,
+        "unitPrice": 230,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 230,
+        "total": 230,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Grande",
+          "Milk: Almond Milk",
+          "Add-Ons: Hazelnut Syrup, Extra Shot"
+        ]
+      }
+    ],
+    "id": "50cdf6c4-ed4d-4167-a874-e6d13dcd25ac"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-988288-806",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 180,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 180,
+    "status": "Pending",
+    "createdAt": "2026-09-15T03:13:08.288Z",
+    "updatedAt": "2026-09-15T03:13:08.311Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Americano",
+        "category": "coffee",
+        "price": 110,
+        "customizationCost": 70,
+        "unitPrice": 180,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 180,
+        "total": 180,
+        "customizations": [
+          "Temperature: Iced",
+          "Size: Tall",
+          "Milk: Almond",
+          "Add-ons: Vanilla syrup, Caramel syrup, Whipped cream"
+        ]
+      }
+    ],
+    "id": "ac0694c9-6a3d-4cca-9154-c9e6db4079b7"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1006",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 200,
+    "change": 10,
+    "subtotal": 190,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 190,
+    "status": "Refunded",
+    "createdAt": "2026-09-15T02:43:53.553Z",
+    "updatedAt": "2026-09-15T03:09:58.431Z",
+    "items": [
+      {
+        "productId": "coffee-2",
+        "name": "Americano",
+        "category": "coffee",
+        "price": 110,
+        "customizationCost": 80,
+        "unitPrice": 190,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 190,
+        "total": 190,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Venti",
+          "Milk: Oat Milk",
+          "Add-Ons: Hazelnut Syrup"
+        ]
+      }
+    ],
+    "id": "f3a01233-c9d2-4dc2-8c9f-14aef060b3af"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-934727-236",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 185,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 185,
+    "status": "Cancelled",
+    "createdAt": "2026-09-14T02:45:34.727Z",
+    "updatedAt": "2026-09-15T03:10:08.181Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Caramel Macchiato",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 15,
+        "unitPrice": 185,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 185,
+        "total": 185,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole",
+          "Add-ons: Whipped cream"
+        ]
+      }
+    ],
+    "id": "010fd4b8-904a-4e06-a4c0-d62bb9d9d3cc"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-034871-868",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 670,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 670,
+    "status": "Cancelled",
+    "createdAt": "2026-09-14T01:07:14.871Z",
+    "updatedAt": "2026-09-15T03:10:16.098Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Cafe Latte",
+        "category": "coffee",
+        "price": 140,
+        "customizationCost": 60,
+        "unitPrice": 200,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 200,
+        "total": 200,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Venti",
+          "Milk: Oat"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "Matcha Milk Tea",
+        "category": "milktea",
+        "price": 140,
+        "customizationCost": 0,
+        "unitPrice": 140,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 140,
+        "total": 140,
+        "customizations": [
+          "Size: Regular",
+          "Sweetness: 25%",
+          "Ice Level: Less Ice"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "Chicken Sandwich",
+        "category": "food",
+        "price": 160,
+        "customizationCost": 0,
+        "unitPrice": 160,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 160,
+        "total": 160,
+        "customizations": [
+          "Side: No Side",
+          "Serving: Hot"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "Blueberry Cheesecake",
+        "category": "dessert",
+        "price": 160,
+        "customizationCost": 10,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Serve Style: Plated"
+        ]
+      }
+    ],
+    "id": "e787940d-87e5-4a38-820a-fce9dabe0781"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-601319-424",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Card",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 300,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 300,
+    "status": "Cancelled",
+    "createdAt": "2026-09-14T01:00:01.319Z",
+    "updatedAt": "2026-09-14T01:01:22.253Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Espresso",
+        "category": "coffee",
+        "price": 90,
+        "customizationCost": 45,
+        "unitPrice": 135,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 135,
+        "total": 135,
+        "customizations": [
+          "Temperature: Iced",
+          "Size: Grande",
+          "Milk: Skim",
+          "Add-ons: Extra shot"
+        ]
+      },
+      {
+        "productId": "",
+        "name": "Honeydew Milk Tea",
+        "category": "milktea",
+        "price": 130,
+        "customizationCost": 35,
+        "unitPrice": 165,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 165,
+        "total": 165,
+        "customizations": [
+          "Size: Regular",
+          "Sweetness: 100%",
+          "Ice Level: Regular",
+          "Toppings: Pearls, Pudding"
+        ]
+      }
+    ],
+    "id": "049fad6f-5029-4f13-9cf3-8b4e23e3425e"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-714877-491",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 170,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 170,
+    "status": "Cancelled",
+    "createdAt": "2026-09-13T23:38:34.877Z",
+    "updatedAt": "2026-09-13T23:39:12.036Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 0,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole"
+        ]
+      }
+    ],
+    "id": "18b2d8a2-98c4-4ccf-b3f4-2b4c0a326b4e"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1005",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 500,
+    "change": 370,
+    "subtotal": 130,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 130,
+    "status": "Voided",
+    "createdAt": "2026-09-13T23:38:05.917Z",
+    "updatedAt": "2026-09-13T23:38:21.281Z",
+    "items": [
+      {
+        "productId": "coffee-2",
+        "name": "Americano",
+        "category": "coffee",
+        "price": 110,
+        "customizationCost": 20,
+        "unitPrice": 130,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 130,
+        "total": 130,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole Milk",
+          "Add-Ons: Hazelnut Syrup"
+        ]
+      }
+    ],
+    "id": "4419def4-5e29-4351-9e97-cd13694cb097"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "cafe-1-717977-109",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Take Out",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 310,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 310,
+    "status": "Cancelled",
+    "createdAt": "2026-09-13T13:38:37.977Z",
+    "updatedAt": "2026-09-13T13:39:31.130Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "Caramel Macchiato",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 140,
+        "unitPrice": 310,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 310,
+        "total": 310,
+        "customizations": [
+          "Temperature: Iced",
+          "Size: Venti",
+          "Milk: Oat",
+          "Add-ons: Extra shot, Vanilla syrup, Caramel syrup, Whipped cream"
+        ]
+      }
+    ],
+    "id": "57f73b9f-597c-4a38-a7ca-f5a9d3726c48"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1004",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "GCash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 165,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 165,
+    "status": "Refunded",
+    "createdAt": "2026-09-13T13:26:18.502Z",
+    "updatedAt": "2026-09-13T13:38:01.800Z",
+    "items": [
+      {
+        "productId": "coffee-2",
+        "name": "Americano",
+        "category": "coffee",
+        "price": 110,
+        "customizationCost": 55,
+        "unitPrice": 165,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 165,
+        "total": 165,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Grande",
+          "Milk: Almond Milk",
+          "Add-Ons: Hazelnut Syrup"
+        ]
+      }
+    ],
+    "id": "f7f8edc2-54ac-4de2-b186-dd83f41eb5bb"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "POS",
+    "orderNumber": "POS-1002",
+    "customerName": "Walk-in Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "refunded",
+    "cashReceived": 500,
+    "change": 245,
+    "subtotal": 255,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 255,
+    "status": "Refunded",
+    "createdAt": "2026-09-13T06:31:22.658Z",
+    "updatedAt": "2026-09-13T06:32:44.318Z",
+    "items": [
+      {
+        "productId": "coffee-7",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 85,
+        "unitPrice": 255,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 255,
+        "total": 255,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Grande",
+          "Milk: Oat Milk",
+          "Add-Ons: Hazelnut Syrup, Extra Shot"
+        ]
+      }
+    ],
+    "id": "5d7d576f-f3de-403d-b7da-c9f6f0932d10",
+    "adjustmentAction": "refund",
+    "adjustmentScope": "entire",
+    "adjustmentReason": "Wrong order",
+    "adjustmentAt": "2026-09-13T06:32:44.965Z"
+  },
+  {
+    "cafeId": "cafe-1",
+    "source": "Kiosk",
+    "orderNumber": "#3545",
+    "customerName": "Kiosk Customer",
+    "serviceType": "Dine In",
+    "paymentMethod": "Cash",
+    "paymentStatus": "",
+    "cashReceived": 0,
+    "change": 0,
+    "subtotal": 170,
+    "discountAmount": 0,
+    "discount": 0,
+    "total": 170,
+    "status": "Voided",
+    "createdAt": "2026-09-13T06:30:08.248Z",
+    "updatedAt": "2026-09-13T07:51:26.465Z",
+    "items": [
+      {
+        "productId": "",
+        "name": "White Chocolate Mocha",
+        "category": "coffee",
+        "price": 170,
+        "customizationCost": 0,
+        "unitPrice": 170,
+        "qty": 1,
+        "quantity": 1,
+        "subtotal": 170,
+        "total": 170,
+        "customizations": [
+          "Temperature: Hot",
+          "Size: Tall",
+          "Milk: Whole"
+        ]
+      }
+    ],
+    "id": "2c56f1f4-553a-44f1-a67e-f0270f0ed29c",
+    "adjustmentAction": "void",
+    "adjustmentScope": "entire",
+    "adjustmentReason": "Wrong order",
+    "adjustmentAt": "2026-09-13T07:51:26.457Z"
+  }
+]

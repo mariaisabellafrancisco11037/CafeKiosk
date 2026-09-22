@@ -1,0 +1,6 @@
+(()=>{"use strict";
+function num(v,fallback=0){const x=Number(v);return Number.isFinite(x)?x:fallback;}
+function peso(v){return `₱${num(v).toFixed(2)}`;}
+function render(){let o=null;try{o=JSON.parse(sessionStorage.getItem('backendOrder')||'null');}catch{}if(!o)return;const subtotal=num(o.subtotal),discount=Math.max(0,num(o.discountAmount??o.discount)),total=Math.max(0,num(o.total,Math.max(0,subtotal-discount)));const s=document.getElementById('subtotal'),d=document.getElementById('discount'),t=document.getElementById('total');if(s)s.textContent=peso(subtotal);if(d)d.textContent=discount?`-${peso(discount)}`:peso(0);if(t)t.textContent=peso(total);let note=document.getElementById('ckReceiptPromo');if(o.promotionName){if(!note){note=document.createElement('div');note.id='ckReceiptPromo';note.style.cssText='font-size:12px;color:#4c956f;margin:6px 0;font-weight:700';(d?.parentElement||t?.parentElement||document.body).appendChild(note);}note.textContent=`Promotion applied: ${o.promotionName}`;}else if(note){note.remove();}}
+function schedule(){render();setTimeout(render,100);setTimeout(render,500);}
+document.addEventListener('DOMContentLoaded',schedule);window.addEventListener('pageshow',schedule);})();

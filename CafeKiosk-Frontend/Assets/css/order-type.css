@@ -1,0 +1,168 @@
+:root {
+  --primary: #f5ebdd;
+  --secondary: #6f4e37;
+  --accent: #7baa8f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--primary);
+  overflow: hidden;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-back-btn {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 50;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 18px;
+  border: 2px solid rgba(111, 78, 55, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--secondary);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(111, 78, 55, 0.08);
+}
+
+.page-back-btn:hover {
+  background: #fff;
+}
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  text-align: center;
+}
+
+/* TITLE */
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--secondary);
+  margin-bottom: 40px;
+}
+
+/* OPTIONS SIDE-BY-SIDE ALWAYS */
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* CARD */
+.option-card {
+  flex: 1;
+  max-width: 300px;
+
+  background: transparent;
+  border: 3px solid transparent;
+  border-radius: 20px;
+
+  padding: 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+/* IMAGE */
+.option-card img {
+  width: clamp(120px, 15vw, 170px);
+  margin-bottom: 15px;
+}
+
+/* TEXT */
+.option-card p {
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  font-weight: bold;
+  color: var(--secondary);
+}
+
+/* SELECTED STATE */
+.option-card.selected {
+  border-color: var(--accent);
+}
+
+/* TOUCH FEEDBACK */
+.option-card:active {
+  transform: scale(0.96);
+}
+
+/* SMOOTH TRANSITIONS */
+.option-card {
+  transition: 
+    transform 0.15s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* TAP (finger press effect) */
+.option-card:active {
+  transform: scale(0.92);
+}
+
+/* SELECTED STATE ANIMATION */
+.option-card.selected {
+  border-color: var(--accent);
+
+  /* soft glow */
+  box-shadow: 0 0 0 4px rgba(123, 170, 143, 0.2),
+              0 8px 20px rgba(0,0,0,0.12);
+
+  transform: scale(1.05);
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
+.option-card.animate {
+  animation: pop 0.25s ease;
+}
+
+/* CONFIRM BUTTON */
+.confirm-btn {
+  margin-top: 40px;
+
+  padding: 18px 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+
+  border: none;
+  border-radius: 12px;
+
+  background-color: var(--accent);
+  color: white;
+
+  width: 100%;
+  max-width: 300px;
+}
+
+/* DISABLED LOOK */
+.confirm-btn.disabled {
+  opacity: 0.5;
+}
