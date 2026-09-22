@@ -1,0 +1,1651 @@
+{
+  "cafeId": "cafe-1",
+  "cafeName": "CafeKiosk Demo Cafe",
+  "categories": [
+    {
+      "key": "coffee",
+      "name": "Coffee",
+      "configKey": "coffee",
+      "image": "/Assets/images/coffee.png",
+      "sizes": [
+        {
+          "label": "Tall",
+          "priceAdd": 0,
+          "multiplier": 1
+        },
+        {
+          "label": "Grande",
+          "priceAdd": 20,
+          "multiplier": 2
+        },
+        {
+          "label": "Venti",
+          "priceAdd": 40,
+          "multiplier": 3
+        }
+      ],
+      "addons": [
+        {
+          "label": "Extra shot",
+          "price": 25
+        },
+        {
+          "label": "Vanilla syrup",
+          "price": 20
+        },
+        {
+          "label": "Caramel syrup",
+          "price": 20
+        },
+        {
+          "label": "Whipped cream",
+          "price": 15
+        }
+      ]
+    },
+    {
+      "key": "non-coffee",
+      "name": "Non-Coffee",
+      "configKey": "non-coffee",
+      "image": "/Assets/images/non-coffee.png",
+      "sizes": [
+        {
+          "label": "Small",
+          "priceAdd": 0,
+          "multiplier": 1
+        },
+        {
+          "label": "Regular",
+          "priceAdd": 15,
+          "multiplier": 2
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25,
+          "multiplier": 3
+        }
+      ],
+      "addons": [
+        {
+          "label": "Boba",
+          "price": 25
+        },
+        {
+          "label": "Pearls",
+          "price": 15
+        },
+        {
+          "label": "Whipped Cream",
+          "price": 15
+        }
+      ]
+    },
+    {
+      "key": "milktea",
+      "name": "Milktea",
+      "configKey": "milk-tea",
+      "image": "/Assets/images/milktea.png",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0,
+          "multiplier": 2
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25,
+          "multiplier": 3
+        }
+      ],
+      "addons": [
+        {
+          "label": "Pearls",
+          "price": 15
+        },
+        {
+          "label": "Grass Jelly",
+          "price": 15
+        },
+        {
+          "label": "Pudding",
+          "price": 20
+        },
+        {
+          "label": "Cream Cheese",
+          "price": 25
+        }
+      ]
+    },
+    {
+      "key": "food",
+      "name": "Food",
+      "configKey": "foods",
+      "image": "/Assets/images/food.png",
+      "sizes": [],
+      "addons": [
+        {
+          "label": "Fries",
+          "price": 35
+        },
+        {
+          "label": "Salad",
+          "price": 35
+        },
+        {
+          "label": "Cheese",
+          "price": 20
+        },
+        {
+          "label": "Egg",
+          "price": 15
+        },
+        {
+          "label": "Bacon",
+          "price": 30
+        }
+      ]
+    },
+    {
+      "key": "snack",
+      "name": "Snack",
+      "configKey": "snacks",
+      "image": "/Assets/images/snack.png",
+      "sizes": [
+        {
+          "label": "Single",
+          "priceAdd": 0,
+          "multiplier": 1
+        },
+        {
+          "label": "Bundle",
+          "priceAdd": 20,
+          "multiplier": 2
+        }
+      ],
+      "addons": [
+        {
+          "label": "Dip Sauce",
+          "price": 10
+        },
+        {
+          "label": "Extra Cheese",
+          "price": 20
+        }
+      ]
+    },
+    {
+      "key": "dessert",
+      "name": "Dessert",
+      "configKey": "dessert",
+      "image": "/Assets/images/dessert.png",
+      "sizes": [
+        {
+          "label": "Single",
+          "priceAdd": 0,
+          "multiplier": 1
+        },
+        {
+          "label": "Plated",
+          "priceAdd": 10,
+          "multiplier": 1
+        }
+      ],
+      "addons": [
+        {
+          "label": "Chocolate Drizzle",
+          "price": 15
+        },
+        {
+          "label": "Fruit",
+          "price": 20
+        },
+        {
+          "label": "Whipped Cream",
+          "price": 15
+        }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "name": "Espresso",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 0
+    },
+    {
+      "name": "Double Espresso",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 1
+    },
+    {
+      "name": "Americano",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 2
+    },
+    {
+      "name": "Cafe Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 3
+    },
+    {
+      "name": "Cappuccino",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 4
+    },
+    {
+      "name": "Flat White",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 5
+    },
+    {
+      "name": "Cafe Mocha",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 6
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 7
+    },
+    {
+      "name": "Caramel Macchiato",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 8
+    },
+    {
+      "name": "Vanilla Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 9
+    },
+    {
+      "name": "Caramel Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 10
+    },
+    {
+      "name": "Hazelnut Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 11
+    },
+    {
+      "name": "Spanish Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 12
+    },
+    {
+      "name": "Brown Sugar Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 13
+    },
+    {
+      "name": "Salted Caramel Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 14
+    },
+    {
+      "name": "Cinnamon Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 15
+    },
+    {
+      "name": "Honey Cinnamon Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 16
+    },
+    {
+      "name": "Pistachio Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 17
+    },
+    {
+      "name": "Toffee Nut Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 18
+    },
+    {
+      "name": "Dark Chocolate Mocha",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 19
+    },
+    {
+      "name": "Black Coffee",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 20
+    },
+    {
+      "name": "Cafe Au Lait",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 21
+    },
+    {
+      "name": "Vietnamese Coffee",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 22
+    },
+    {
+      "name": "Macchiato",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 23
+    },
+    {
+      "name": "Affogato",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 24
+    },
+    {
+      "name": "Cold Brew",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 25
+    },
+    {
+      "name": "Iced Americano",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 26
+    },
+    {
+      "name": "Iced Cafe Latte",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 27
+    },
+    {
+      "name": "Iced Cafe Mocha",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 28
+    },
+    {
+      "name": "Iced Caramel Macchiato",
+      "categoryKey": "coffee",
+      "category": "Coffee",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 29
+    },
+    {
+      "name": "Classic Hot Chocolate",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 30
+    },
+    {
+      "name": "Dark Hot Chocolate",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 31
+    },
+    {
+      "name": "White Hot Chocolate",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 32
+    },
+    {
+      "name": "Iced Chocolate",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 33
+    },
+    {
+      "name": "Chocolate Milk",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 34
+    },
+    {
+      "name": "Matcha Latte",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 35
+    },
+    {
+      "name": "Iced Matcha Latte",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 36
+    },
+    {
+      "name": "Strawberry Matcha Latte",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 37
+    },
+    {
+      "name": "Mango Matcha Latte",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 38
+    },
+    {
+      "name": "Vanilla Matcha Latte",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 39
+    },
+    {
+      "name": "Strawberry Milk",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 40
+    },
+    {
+      "name": "Mango Milk",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 41
+    },
+    {
+      "name": "Banana Milk",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 42
+    },
+    {
+      "name": "Cookies and Cream",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 43
+    },
+    {
+      "name": "Chocolate Oreo",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 44
+    },
+    {
+      "name": "Strawberry Smoothie",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 45
+    },
+    {
+      "name": "Mango Smoothie",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 46
+    },
+    {
+      "name": "Banana Smoothie",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 47
+    },
+    {
+      "name": "Mixed Berry Smoothie",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 48
+    },
+    {
+      "name": "Avocado Smoothie",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 49
+    },
+    {
+      "name": "Fresh Lemonade",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 50
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 51
+    },
+    {
+      "name": "Honey Lemon",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 52
+    },
+    {
+      "name": "Peach Iced Tea",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 53
+    },
+    {
+      "name": "Lemon Iced Tea",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 54
+    },
+    {
+      "name": "Lychee Iced Tea",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 55
+    },
+    {
+      "name": "Passion Fruit Tea",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 56
+    },
+    {
+      "name": "Green Apple Soda",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 57
+    },
+    {
+      "name": "Strawberry Soda",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 58
+    },
+    {
+      "name": "Blueberry Soda",
+      "categoryKey": "non-coffee",
+      "category": "Non-Coffee",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 59
+    },
+    {
+      "name": "Classic Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 60
+    },
+    {
+      "name": "Pearl Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 61
+    },
+    {
+      "name": "Brown Sugar Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 62
+    },
+    {
+      "name": "Wintermelon Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 63
+    },
+    {
+      "name": "Okinawa Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 64
+    },
+    {
+      "name": "Hokkaido Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 65
+    },
+    {
+      "name": "Thai Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 66
+    },
+    {
+      "name": "Taro Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 67
+    },
+    {
+      "name": "Matcha Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 68
+    },
+    {
+      "name": "Chocolate Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 69
+    },
+    {
+      "name": "Strawberry Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 70
+    },
+    {
+      "name": "Mango Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 71
+    },
+    {
+      "name": "Honeydew Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 72
+    },
+    {
+      "name": "Vanilla Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 73
+    },
+    {
+      "name": "Caramel Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 74
+    },
+    {
+      "name": "Hazelnut Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 75
+    },
+    {
+      "name": "Cookies and Cream Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 76
+    },
+    {
+      "name": "Cheesecake Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 77
+    },
+    {
+      "name": "Red Velvet Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 78
+    },
+    {
+      "name": "Dark Chocolate Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 79
+    },
+    {
+      "name": "Salted Caramel Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 80
+    },
+    {
+      "name": "Brown Sugar Pearl Milk",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 81
+    },
+    {
+      "name": "Taro Pearl Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 82
+    },
+    {
+      "name": "Matcha Pearl Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 83
+    },
+    {
+      "name": "Wintermelon Pearl Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 84
+    },
+    {
+      "name": "Oreo Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 85
+    },
+    {
+      "name": "Cream Cheese Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 86
+    },
+    {
+      "name": "Pudding Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 87
+    },
+    {
+      "name": "Grass Jelly Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 88
+    },
+    {
+      "name": "Honey Pearl Milk Tea",
+      "categoryKey": "milktea",
+      "category": "Milktea",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 89
+    },
+    {
+      "name": "Classic Club Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 90
+    },
+    {
+      "name": "Ham and Cheese Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 91
+    },
+    {
+      "name": "Chicken Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 92
+    },
+    {
+      "name": "Tuna Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 93
+    },
+    {
+      "name": "Egg Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 94
+    },
+    {
+      "name": "Grilled Cheese Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 95
+    },
+    {
+      "name": "Chicken Pesto Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 96
+    },
+    {
+      "name": "BLT Sandwich",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 97
+    },
+    {
+      "name": "Chicken Wrap",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 98
+    },
+    {
+      "name": "Tuna Wrap",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 99
+    },
+    {
+      "name": "Chicken Burger",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 100
+    },
+    {
+      "name": "Classic Beef Burger",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 101
+    },
+    {
+      "name": "Cheeseburger",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 210,
+      "availability": "Available",
+      "sortOrder": 102
+    },
+    {
+      "name": "Bacon Cheeseburger",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 230,
+      "availability": "Available",
+      "sortOrder": 103
+    },
+    {
+      "name": "Mushroom Burger",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 220,
+      "availability": "Available",
+      "sortOrder": 104
+    },
+    {
+      "name": "Carbonara",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 105
+    },
+    {
+      "name": "Spaghetti Bolognese",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 106
+    },
+    {
+      "name": "Chicken Alfredo Pasta",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 210,
+      "availability": "Available",
+      "sortOrder": 107
+    },
+    {
+      "name": "Pesto Pasta",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 108
+    },
+    {
+      "name": "Baked Mac and Cheese",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 109
+    },
+    {
+      "name": "Chicken Rice Bowl",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 110
+    },
+    {
+      "name": "Beef Rice Bowl",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 200,
+      "availability": "Available",
+      "sortOrder": 111
+    },
+    {
+      "name": "Teriyaki Chicken Bowl",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 112
+    },
+    {
+      "name": "Garlic Chicken Rice",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 113
+    },
+    {
+      "name": "Beef Tapa Rice",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 114
+    },
+    {
+      "name": "Chicken Caesar Salad",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 115
+    },
+    {
+      "name": "Garden Salad",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 116
+    },
+    {
+      "name": "Breakfast Plate",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 117
+    },
+    {
+      "name": "Bacon and Egg Breakfast",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 118
+    },
+    {
+      "name": "Sausage and Egg Breakfast",
+      "categoryKey": "food",
+      "category": "Food",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 119
+    },
+    {
+      "name": "French Fries",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 120
+    },
+    {
+      "name": "Cheese Fries",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 121
+    },
+    {
+      "name": "Loaded Fries",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 122
+    },
+    {
+      "name": "Potato Wedges",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 123
+    },
+    {
+      "name": "Onion Rings",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 124
+    },
+    {
+      "name": "Nachos",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 125
+    },
+    {
+      "name": "Cheesy Nachos",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 126
+    },
+    {
+      "name": "Loaded Nachos",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 127
+    },
+    {
+      "name": "Mozzarella Sticks",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 128
+    },
+    {
+      "name": "Chicken Nuggets",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 129
+    },
+    {
+      "name": "Chicken Wings",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 130
+    },
+    {
+      "name": "Buffalo Wings",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 131
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 190,
+      "availability": "Available",
+      "sortOrder": 132
+    },
+    {
+      "name": "Chicken Tenders",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 133
+    },
+    {
+      "name": "Popcorn Chicken",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 134
+    },
+    {
+      "name": "Cheese Sticks",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 135
+    },
+    {
+      "name": "Spring Rolls",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 136
+    },
+    {
+      "name": "Fish and Chips",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 137
+    },
+    {
+      "name": "Hash Browns",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 138
+    },
+    {
+      "name": "Potato Croquettes",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 139
+    },
+    {
+      "name": "Garlic Bread",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 140
+    },
+    {
+      "name": "Cheesy Garlic Bread",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 141
+    },
+    {
+      "name": "Mini Pizza",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 142
+    },
+    {
+      "name": "Ham and Cheese Croissant",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 143
+    },
+    {
+      "name": "Sausage Roll",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 144
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 70,
+      "availability": "Available",
+      "sortOrder": 145
+    },
+    {
+      "name": "Oatmeal Cookie",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 70,
+      "availability": "Available",
+      "sortOrder": 146
+    },
+    {
+      "name": "Chocolate Muffin",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 147
+    },
+    {
+      "name": "Blueberry Muffin",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 148
+    },
+    {
+      "name": "Banana Muffin",
+      "categoryKey": "snack",
+      "category": "Snack",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 149
+    },
+    {
+      "name": "Classic Cheesecake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 150
+    },
+    {
+      "name": "Blueberry Cheesecake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 151
+    },
+    {
+      "name": "Strawberry Cheesecake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 152
+    },
+    {
+      "name": "Oreo Cheesecake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 153
+    },
+    {
+      "name": "Basque Burnt Cheesecake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 154
+    },
+    {
+      "name": "Chocolate Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 155
+    },
+    {
+      "name": "Red Velvet Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 156
+    },
+    {
+      "name": "Carrot Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 157
+    },
+    {
+      "name": "Mocha Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 158
+    },
+    {
+      "name": "Ube Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 160,
+      "availability": "Available",
+      "sortOrder": 159
+    },
+    {
+      "name": "Tiramisu",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 180,
+      "availability": "Available",
+      "sortOrder": 160
+    },
+    {
+      "name": "Chocolate Brownie",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 161
+    },
+    {
+      "name": "Walnut Brownie",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 162
+    },
+    {
+      "name": "Chocolate Lava Cake",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 170,
+      "availability": "Available",
+      "sortOrder": 163
+    },
+    {
+      "name": "Banana Bread",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 164
+    },
+    {
+      "name": "Chocolate Donut",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 165
+    },
+    {
+      "name": "Glazed Donut",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 80,
+      "availability": "Available",
+      "sortOrder": 166
+    },
+    {
+      "name": "Strawberry Donut",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 90,
+      "availability": "Available",
+      "sortOrder": 167
+    },
+    {
+      "name": "Cinnamon Roll",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 168
+    },
+    {
+      "name": "Chocolate Croissant",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 169
+    },
+    {
+      "name": "Chocolate Sundae",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 170
+    },
+    {
+      "name": "Strawberry Sundae",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 171
+    },
+    {
+      "name": "Vanilla Ice Cream",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 172
+    },
+    {
+      "name": "Chocolate Ice Cream",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 100,
+      "availability": "Available",
+      "sortOrder": 173
+    },
+    {
+      "name": "Cookies and Cream Ice Cream",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 110,
+      "availability": "Available",
+      "sortOrder": 174
+    },
+    {
+      "name": "Mango Graham",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 175
+    },
+    {
+      "name": "Mango Float",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 130,
+      "availability": "Available",
+      "sortOrder": 176
+    },
+    {
+      "name": "Leche Flan",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 120,
+      "availability": "Available",
+      "sortOrder": 177
+    },
+    {
+      "name": "Chocolate Mousse",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 140,
+      "availability": "Available",
+      "sortOrder": 178
+    },
+    {
+      "name": "Panna Cotta",
+      "categoryKey": "dessert",
+      "category": "Dessert",
+      "price": 150,
+      "availability": "Available",
+      "sortOrder": 179
+    }
+  ]
+}

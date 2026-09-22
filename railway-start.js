@@ -30,6 +30,22 @@ async function start() {
     try {
       await require('./railway-init')();
       console.log('🟢 Railway database check completed.');
+
+      try {
+        const demoSeed = await require('./CafeKiosk-Backend/seed-demo-cafe')();
+        if (demoSeed?.skipped) {
+          console.log(`ℹ️  Demo Cafe seed skipped: ${demoSeed.reason || 'disabled'}`);
+        } else {
+          console.log(
+            `🟢 Demo Cafe ready: ${demoSeed?.catalog?.activeProducts || 0} products, ` +
+            `${demoSeed?.ingredients || 0} ingredients, ${demoSeed?.recipes || 0} recipes, ` +
+            `${demoSeed?.menuConfig?.totalProductConfigs || 0} size/add-on configs.`
+          );
+        }
+      } catch (seedError) {
+        console.error(`⚠️  Demo Cafe seed failed: ${seedError.code || 'SEED_ERROR'} - ${seedError.message}`);
+        console.error('   CafeKiosk will still start, but cafe-1 demo menu/customizations may be incomplete.');
+      }
     } catch (error) {
       console.error(`⚠️  Database initialization/check failed: ${error.code || 'DB_ERROR'} - ${error.message}`);
       console.error('   CafeKiosk will still start. Check the Railway MySQL reference if database pages fail.');

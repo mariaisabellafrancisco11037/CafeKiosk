@@ -8,7 +8,8 @@
     "start": "node railway-start.js",
     "start:server": "node CafeKiosk-Backend/server.js",
     "railway:init": "node railway-init.js",
-    "test": "node --check railway-start.js && node --check railway-init.js && node --check CafeKiosk-Backend/server.js"
+    "test": "node --check railway-start.js && node --check railway-init.js && node --check CafeKiosk-Backend/seed-demo-cafe.js && node --check CafeKiosk-Backend/server.js",
+    "seed:demo": "node CafeKiosk-Backend/seed-demo-cafe.js"
   },
   "engines": {
     "node": ">=20 <25"
