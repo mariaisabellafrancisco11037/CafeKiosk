@@ -134,7 +134,7 @@
 </div>
 
 <script src="/Assets/js/user-page.js?v=16"></script>
-<script src="/Assets/js/staff-invite.js?v=2"></script>
+<script src="/Assets/js/staff-invite.js?v=3-copy-fix"></script>
 <script src="/Assets/js/uniform-theme.js?v=33"></script>
 <script src="/Assets/js/profile-menu.js?v=31"></script>
   <script src="/Assets/js/message-dialog.js?v=1"></script>

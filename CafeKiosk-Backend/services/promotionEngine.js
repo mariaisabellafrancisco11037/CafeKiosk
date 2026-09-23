@@ -80,4 +80,50 @@ function applyBestPromotion(order, promotions, now=new Date()){
     promotionId:result.promotion.id, promotionName:result.promotion.name, promotionType:result.promotion.type,
     customerEligibility:text(order.customerEligibility||order.eligibility||"all").toLowerCase()||"all"};
 }
-module.exports={activeNow,bestPromotion,applyBestPromotion};
+
+function applySelectedPromotion(order, promotions, now=new Date()){
+  const items=Array.isArray(order.items)?order.items:[];
+  const subtotal=n(order.subtotal)>0?n(order.subtotal):items.reduce((s,i)=>s+itemLine(i),0);
+  const promotionId=text(order.promotionId);
+
+  // POS uses an explicit Admin-created discount choice. No selected promotion
+  // means no discount; never silently substitute another promotion.
+  if(!promotionId){
+    return {...order, subtotal, discountAmount:0, discount:0, total:subtotal,
+      customerEligibility:"all", promotionId:undefined, promotionName:undefined, promotionType:undefined};
+  }
+
+  const promo=(promotions||[]).find(p=>
+    String(p.id)===promotionId &&
+    String(p.cafeId||"cafe-1")===String(order.cafeId||"cafe-1") &&
+    activeNow(p,now)
+  );
+
+  if(!promo){
+    return {...order, subtotal, discountAmount:0, discount:0, total:subtotal,
+      customerEligibility:"all", promotionId:undefined, promotionName:undefined, promotionType:undefined};
+  }
+
+  const result=calculatePromotion(promo,{...order,subtotal,items});
+  if(!result){
+    return {...order, subtotal, discountAmount:0, discount:0, total:subtotal,
+      customerEligibility:"all", promotionId:undefined, promotionName:undefined, promotionType:undefined};
+  }
+
+  const eligibility=(Array.isArray(promo.eligibility)?promo.eligibility:[])
+    .map(x=>String(x).toLowerCase())
+    .find(x=>x&&x!=="all") || "all";
+
+  return {...order, subtotal:result.subtotal, discountAmount:result.discount, discount:result.discount,
+    total:result.total, promotionId:promo.id, promotionName:promo.name, promotionType:promo.type,
+    customerEligibility:eligibility};
+}
+
+function applyPromotionForOrder(order, promotions, now=new Date()){
+  const source=text(order.source).toLowerCase();
+  return source==="pos"
+    ? applySelectedPromotion(order,promotions,now)
+    : applyBestPromotion(order,promotions,now);
+}
+
+module.exports={activeNow,bestPromotion,applyBestPromotion,applySelectedPromotion,applyPromotionForOrder};

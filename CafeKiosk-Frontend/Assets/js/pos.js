@@ -2869,12 +2869,15 @@ async function confirmPOSOrder() {
         $("cashReceived").value =
             "";
 
-        // Reset customer eligibility for the next order.
+        // Reset the Admin-created discount selection for the next order.
         if (window.CafePromotionClient) {
+            window.CafePromotionClient.selectedPromotionId = "";
+            window.CafePromotionClient.applied = null;
             window.CafePromotionClient.eligibility = "all";
+            sessionStorage.removeItem("cafeSelectedPromotionId");
             sessionStorage.setItem("cafeCustomerEligibility", "all");
-            const eligibilitySelect = document.getElementById("ckEligibility");
-            if (eligibilitySelect) eligibilitySelect.value = "all";
+            const discountSelect = document.getElementById("ckDiscountSelect");
+            if (discountSelect) discountSelect.value = "";
         }
 
 

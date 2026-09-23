@@ -246,12 +246,9 @@
             <div class="bottom-fields pos-checkout-grid">
 
                 <div class="checkout-control">
-                    <label class="field-label" for="ckEligibility">Discount</label>
-                    <select id="ckEligibility" class="checkout-field">
-                        <option value="all">No Discount</option>
-                        <option value="student">Student Discount</option>
-                        <option value="senior">Senior Citizen Discount</option>
-                        <option value="pwd">PWD Discount</option>
+                    <label class="field-label" for="ckDiscountSelect">Discount</label>
+                    <select id="ckDiscountSelect" class="checkout-field">
+                        <option value="">No Discount</option>
                     </select>
                 </div>
 
@@ -456,7 +453,7 @@
 <script src="/Assets/js/pos.js?v=payment-amount-v3"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
-<script src="../Assets/js/discount-client.js?v=discount-dropdown-v3"></script>
+<script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=31"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>

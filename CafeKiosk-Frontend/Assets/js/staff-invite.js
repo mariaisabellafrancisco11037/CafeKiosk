@@ -98,16 +98,81 @@
     }
   }
 
-  async function copyInvite() {
-    const link = $('inviteLink')?.value || '';
-    if (!link) return;
-    try {
-      await navigator.clipboard.writeText(link);
-    } catch (_) {
-      $('inviteLink')?.select();
-      document.execCommand('copy');
+  async function copyTextReliable(text) {
+    const value = String(text || '').trim();
+    if (!value) return false;
+
+    // Preferred path on HTTPS/localhost.
+    if (window.isSecureContext && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return true;
+      } catch (_) {
+        // Fall through to the compatibility method below.
+      }
     }
-    dialog('Backup invitation link copied.', 'success', 'Copied');
+
+    // Compatibility path for browsers/webviews that block navigator.clipboard.
+    const helper = document.createElement('textarea');
+    helper.value = value;
+    helper.setAttribute('readonly', '');
+    helper.setAttribute('aria-hidden', 'true');
+    helper.style.position = 'fixed';
+    helper.style.left = '-9999px';
+    helper.style.top = '0';
+    helper.style.opacity = '0';
+    helper.style.pointerEvents = 'none';
+    document.body.appendChild(helper);
+    helper.focus();
+    helper.select();
+    helper.setSelectionRange(0, helper.value.length);
+
+    let copied = false;
+    try {
+      copied = document.execCommand('copy') === true;
+    } catch (_) {
+      copied = false;
+    } finally {
+      helper.remove();
+    }
+    return copied;
+  }
+
+  async function copyInvite() {
+    const input = $('inviteLink');
+    const openLink = $('openInvite');
+    const link = String(input?.value || openLink?.href || '').trim();
+    if (!link || link === '#' || link.endsWith('/#')) {
+      return dialog('Create an invitation first so there is a secure signup link to copy.', 'warning', 'No Invitation Link');
+    }
+
+    const button = $('copyInvite');
+    const originalText = button?.textContent || 'Copy Link';
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Copying...';
+    }
+
+    const copied = await copyTextReliable(link);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = copied ? 'Copied!' : originalText;
+      if (copied) setTimeout(() => { if (button) button.textContent = originalText; }, 1400);
+    }
+
+    if (copied) {
+      dialog('Backup invitation link copied to your clipboard.', 'success', 'Copied');
+      return;
+    }
+
+    // Last-resort UX: select the real field so Ctrl+C / long-press copy works immediately.
+    if (input) {
+      input.focus();
+      input.select();
+      input.setSelectionRange?.(0, input.value.length);
+    }
+    dialog('Your browser blocked automatic clipboard access. The invitation link is selected now; press Ctrl+C (or long-press Copy on mobile).', 'warning', 'Copy Manually');
   }
 
   function boot() {
