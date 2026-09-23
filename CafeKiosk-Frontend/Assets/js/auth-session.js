@@ -333,100 +333,11 @@
             : null;
 
 
-    function getLoginUrl(
-        role =
-            activeRole
-    ) {
-
-        const rolePath =
-            role ===
-            "admin"
-                ? "admin-login"
-                : role ===
-                    "manager"
-                    ? "manager-login"
-                    : role ===
-                        "staff"
-                        ? "staff-login"
-                        : "login";
-
-
-        if (
-            window.location.port ===
-            "5000"
-        ) {
-            return (
-                `${API_ORIGIN}/${rolePath}`
-            );
-        }
-
-
-        const marker =
-            "/CafeKiosk-Frontend/";
-
-        const path =
-            window.location.pathname ||
-            "";
-
-        const markerIndex =
-            path.indexOf(
-                marker
-            );
-
-
-        if (
-            markerIndex !== -1
-        ) {
-
-            const prefix =
-                path.slice(
-                    0,
-                    markerIndex
-                );
-
-            const fileName =
-                role ===
-                "admin"
-                    ? "admin-login.php"
-                    : role ===
-                        "manager"
-                        ? "manager-login.php"
-                        : role ===
-                            "staff"
-                            ? "staff-login.php"
-                            : "login.php";
-
-
-            return (
-                `${prefix}/CafeKiosk-Frontend/Auth/${fileName}`
-            );
-        }
-
-
-        if (
-            role ===
-            "admin"
-        ) {
-            return "/Auth/admin-login.php";
-        }
-
-
-        if (
-            role ===
-            "manager"
-        ) {
-            return "/Auth/manager-login.php";
-        }
-
-        if (
-            role ===
-            "staff"
-        ) {
-            return "/Auth/staff-login.php";
-        }
-
-
-        return "/Auth/login.php";
+    function getLoginUrl(role = activeRole) {
+        if (role === "admin") return "/admin-login";
+        if (role === "manager") return "/manager-login";
+        if (role === "staff") return "/staff-login";
+        return "/login";
     }
 
 

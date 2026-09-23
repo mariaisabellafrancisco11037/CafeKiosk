@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 
 <body class="uniform-admin">
@@ -42,7 +44,7 @@
       >
 
         <a
-          href="../Admin/dashboard.php"
+          href="/admin/dashboard"
           class="staff-nav-button"
         >
           <span
@@ -95,7 +97,7 @@
 
 
         <a
-          href="../Admin/menu-management.php"
+          href="/admin/menu-management"
           class="staff-nav-button"
         >
           <span
@@ -120,7 +122,7 @@
 
 
         <a
-          href="../Admin/promotions-discount.php"
+          href="/admin/promotions"
           class="staff-nav-button"
         >
           <span
@@ -146,7 +148,7 @@
 
 
         <a
-          href="../Admin/inventory.php"
+          href="/admin/inventory"
           class="staff-nav-button"
         >
           <span
@@ -171,7 +173,7 @@
 
 
         <a
-          href="../Admin/report.php"
+          href="/admin/report"
           class="staff-nav-button"
         >
           <span
@@ -196,7 +198,7 @@
 
 
         <a
-          href="../Admin/audit-logs.php"
+          href="/admin/audit-logs"
           class="staff-nav-button"
         >
           <span
@@ -222,7 +224,7 @@
 
 
         <a
-          href="../Admin/user.php"
+          href="/admin/users"
           class="staff-nav-button"
         >
           <span
@@ -247,7 +249,7 @@
 
 
         <a
-          href="../Admin/settings.php"
+          href="/admin/settings"
           class="staff-nav-button"
         >
           <span

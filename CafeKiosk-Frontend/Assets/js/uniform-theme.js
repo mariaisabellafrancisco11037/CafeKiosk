@@ -229,7 +229,18 @@
   }
 
   function pageNameV2() {
-    const raw = String(location.pathname || '').split('/').filter(Boolean).pop() || '';
+    const path = String(location.pathname || '').replace(/\/+$/, '').toLowerCase();
+    const cleanMap = {
+      '/admin/dashboard':'dashboard.php', '/admin/order-monitor':'order-monitor.php',
+      '/admin/menu-management':'menu-management.php', '/admin/promotions':'promotions-discount.php',
+      '/admin/inventory':'inventory.php', '/admin/report':'report.php',
+      '/admin/audit-logs':'audit-logs.php', '/admin/users':'user.php', '/admin/settings':'settings.php',
+      '/staff-dashboard':'staff-dashboard', '/pos':'pos.php', '/order-queue':'order-queue.php',
+      '/manager-dashboard':'dashboard.php', '/manager-pos':'pos.php', '/manager-order-queue':'order-queue.php',
+      '/menu':'menu.php'
+    };
+    if (cleanMap[path]) return cleanMap[path];
+    const raw = path.split('/').filter(Boolean).pop() || '';
     return raw.toLowerCase();
   }
 

@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="../Assets/css/signup.css?v=3">
   <link rel="stylesheet" href="../Assets/css/kiosk-access.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body>
   <main class="signup-page">

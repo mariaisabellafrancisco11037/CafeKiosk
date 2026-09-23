@@ -564,10 +564,7 @@ function removeLocalOrderSnapshot(
 }
 
 
-function goToKioskPage(
-  liveServerFile,
-  backendRoute
-) {
+function goToKioskPage(liveServerFile, backendRoute) {
 
   const pageName = String(backendRoute || "")
     .replace(/^\//, "")
@@ -578,19 +575,16 @@ function goToKioskPage(
     return;
   }
 
-  if (
-    window.location.port ===
-    "5000"
-  ) {
-
-    window.location.href =
-      backendRoute;
-
+  // When CafeKiosk is being served through HTTP/HTTPS (Railway, localhost,
+  // or laptop hotspot), always use the clean Express route. The physical
+  // template filename stays internal and never appears in the browser URL.
+  if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+    window.location.href = backendRoute;
     return;
   }
 
-  window.location.href =
-    liveServerFile;
+  // Direct file preview fallback for development only.
+  window.location.href = liveServerFile;
 }
 
 

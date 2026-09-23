@@ -9,19 +9,21 @@
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body class="uniform-admin">
   <div class="inventory-shell">
     <!-- ADMIN SIDEBAR - SAME AS MENU MANAGEMENT -->
     <aside class="staff-sidebar">
-      <a class="brand" href="../Admin/dashboard.php" aria-label="CafeKiosk Admin">
+      <a class="brand" href="/admin/dashboard" aria-label="CafeKiosk Admin">
         <img src="../Assets/images/logo.png" alt="CafeKiosk Logo">
       </a>
 
       <div class="staff-label">ADMIN</div>
 
       <nav class="staff-nav" aria-label="Admin navigation">
-        <a class="staff-nav-link" href="../Admin/dashboard.php">
+        <a class="staff-nav-link" href="/admin/dashboard">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -44,7 +46,7 @@
           <span>Order</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/menu-management.php">
+        <a class="staff-nav-link" href="/admin/menu-management">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M3 3h11l5 5v13H3z"/>
@@ -55,7 +57,7 @@
           <span>Menu Management</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/promotions-discount.php">
+        <a class="staff-nav-link" href="/admin/promotions">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M19 5 5 19"/>
@@ -66,7 +68,7 @@
           <span>Promotions &amp; Discount</span>
         </a>
 
-        <a class="staff-nav-link active" href="../Admin/inventory.php" aria-current="page">
+        <a class="staff-nav-link active" href="/admin/inventory" aria-current="page">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
@@ -76,7 +78,7 @@
           <span>Inventory</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/report.php">
+        <a class="staff-nav-link" href="/admin/report">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M3 3v18h18"/>
@@ -86,7 +88,7 @@
           <span>Report</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/audit-logs.php">
+        <a class="staff-nav-link" href="/admin/audit-logs">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M9 2h6a2 2 0 0 1 2 2v1H7V4a2 2 0 0 1 2-2z"/>
@@ -97,7 +99,7 @@
           <span>Audit Logs</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/user.php">
+        <a class="staff-nav-link" href="/admin/users">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <circle cx="12" cy="8" r="4"/>
@@ -107,7 +109,7 @@
           <span>User</span>
         </a>
 
-        <a class="staff-nav-link" href="../Admin/settings.php">
+        <a class="staff-nav-link" href="/admin/settings">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <circle cx="12" cy="12" r="3"/>

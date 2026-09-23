@@ -231,6 +231,12 @@ const ADMIN_AUDIT_LOGS_FILE = path.join(
     "audit-logs.php"
 );
 
+const ADMIN_DASHBOARD_FILE = path.join(ADMIN_FOLDER, "dashboard.php");
+const ADMIN_MENU_MANAGEMENT_FILE = path.join(ADMIN_FOLDER, "menu-management.php");
+const ADMIN_PROMOTIONS_FILE = path.join(ADMIN_FOLDER, "promotions-discount.php");
+const ADMIN_USERS_FILE = path.join(ADMIN_FOLDER, "user.php");
+const ADMIN_SETTINGS_FILE = path.join(ADMIN_FOLDER, "settings.php");
+
 
 // =====================================================
 // DEBUG PATHS
@@ -1079,6 +1085,47 @@ io.on(
     }
 );
 
+
+// =====================================================
+// CLEAN PAGE URLS + LEGACY .PHP REDIRECTS
+// Physical frontend files keep their historical .php filenames, but visitors
+// use extensionless URLs. Old bookmarks are redirected so existing links do
+// not break after this upgrade.
+// =====================================================
+
+const LEGACY_PAGE_REDIRECTS = new Map([
+    ['/auth/login.php', '/login'], ['/auth/admin-login.php', '/admin-login'],
+    ['/auth/staff-login.php', '/staff-login'], ['/auth/manager-login.php', '/manager-login'],
+    ['/auth/owner-signup.php', '/owner-signup'], ['/auth/staff-signup.php', '/staff-signup'],
+    ['/auth/system-admin-login.php', '/system-admin-login'],
+    ['/admin/dashboard.php', '/admin/dashboard'], ['/admin/order-monitor.php', '/admin/order-monitor'],
+    ['/admin/menu-management.php', '/admin/menu-management'], ['/admin/promotions-discount.php', '/admin/promotions'],
+    ['/admin/inventory.php', '/admin/inventory'], ['/admin/report.php', '/admin/report'],
+    ['/admin/audit-logs.php', '/admin/audit-logs'], ['/admin/user.php', '/admin/users'],
+    ['/admin/settings.php', '/admin/settings'],
+    ['/systemadmin/dashboard.php', '/system-monitor'],
+    ['/manager/dashboard.php', '/manager-dashboard'], ['/manager/pos.php', '/manager-pos'],
+    ['/manager/order-queue.php', '/manager-order-queue'],
+    ['/pos/pos.php', '/pos'], ['/pos/order-queue.php', '/order-queue'], ['/pos/staff-dashboard.php', '/staff-dashboard'],
+    ['/kiosk/kiosk.php', '/kiosk'], ['/kiosk/order-type.php', '/order-type'], ['/kiosk/menu.php', '/menu'], ['/kiosk/checkout.php', '/checkout']
+]);
+
+app.use((req, res, next) => {
+    if (!['GET', 'HEAD'].includes(req.method)) return next();
+    const clean = LEGACY_PAGE_REDIRECTS.get(String(req.path || '').toLowerCase());
+    if (!clean) return next();
+    const qIndex = String(req.originalUrl || '').indexOf('?');
+    const query = qIndex >= 0 ? String(req.originalUrl).slice(qIndex) : '';
+    return res.redirect(302, `${clean}${query}`);
+});
+
+app.get('/admin/dashboard', requirePageRole('Admin'), (req, res) => res.sendFile(ADMIN_DASHBOARD_FILE));
+app.get('/admin/menu-management', requirePageRole('Admin'), (req, res) => res.sendFile(ADMIN_MENU_MANAGEMENT_FILE));
+app.get('/admin/promotions', requirePageRole('Admin'), (req, res) => res.sendFile(ADMIN_PROMOTIONS_FILE));
+app.get('/admin/users', requirePageRole('Admin'), (req, res) => res.sendFile(ADMIN_USERS_FILE));
+app.get('/admin/settings', requirePageRole('Admin'), (req, res) => res.sendFile(ADMIN_SETTINGS_FILE));
+
+app.get('/favicon.ico', (req, res) => res.sendFile(path.join(ASSETS_FOLDER, 'images', 'favicon.ico')));
 
 // =====================================================
 // ASSETS
@@ -2220,7 +2267,7 @@ server.listen(
                         console.log(`  POS:        http://${address}:${PORT}/pos`);
                         console.log(`  Manager POS:http://${address}:${PORT}/manager-pos`);
                         console.log(`  Order Queue:http://${address}:${PORT}/order-queue`);
-                        console.log(`  Admin:      http://${address}:${PORT}/Admin/dashboard.php`);
+                        console.log(`  Admin:      http://${address}:${PORT}/admin/dashboard`);
                         console.log(`  IT Monitor: http://${address}:${PORT}/system-admin-login`);
                         console.log(`  Health:     http://${address}:${PORT}/health`);
                         console.log("");

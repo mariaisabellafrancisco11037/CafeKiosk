@@ -8,11 +8,13 @@
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=30">
   <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body class="auth-body uniform-auth">
   <main class="login-page">
     <section class="login-card system-admin-login-card">
-      <a href="../Auth/login.php" class="back-link" aria-label="Back to login selection">←</a>
+      <a href="/login" class="back-link" aria-label="Back to login selection">←</a>
       <img src="../Assets/images/logo.png" alt="CafeKiosk Logo" class="auth-logo">
       <h1>System Monitor</h1>
       <div class="role-title">System Administrator Login</div>

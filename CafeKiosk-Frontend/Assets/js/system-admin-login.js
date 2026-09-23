@@ -49,7 +49,7 @@
       if (!response.ok) throw new Error(data.message || 'Unable to log in.');
 
       showMessage('Login successful.', true);
-      window.location.href = data.redirect || '/SystemAdmin/dashboard.php';
+      window.location.href = data.redirect || '/system-monitor';
     } catch (error) {
       showMessage(error.message || 'Unable to log in.');
     } finally {

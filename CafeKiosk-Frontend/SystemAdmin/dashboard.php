@@ -8,11 +8,13 @@
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=3">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body class="uniform-admin system-monitor-body">
   <div class="queue-shell">
     <aside class="staff-sidebar">
-      <a class="brand" href="dashboard.php" aria-label="CafeKiosk System Monitor">
+      <a class="brand" href="/system-monitor" aria-label="CafeKiosk System Monitor">
         <img src="../Assets/images/logo.png" alt="CafeKiosk Logo">
       </a>
       <div class="staff-label">SYSTEM ADMIN</div>

@@ -133,24 +133,11 @@
     return `${hours}h ${mins}m session`;
   }
 
-  function pathToAdminSettings() {
-    if (location.port === '5000') return '/Admin/settings.php';
-    return 'settings.php';
-  }
+  function pathToAdminSettings() { return '/admin/settings'; }
 
-  function pathToStaffDashboard() {
-    if (location.port === '5000') return '/staff-dashboard';
-    return 'staff-dashboard.php';
-  }
+  function pathToStaffDashboard() { return '/staff-dashboard'; }
 
-  function pathToOrderQueue() {
-    if (area() === 'manager') {
-      if (location.port === '5000') return '/manager-order-queue';
-      return '../Manager/order-queue.php';
-    }
-    if (location.port === '5000') return '/order-queue';
-    return 'order-queue.php';
-  }
+  function pathToOrderQueue() { return area() === 'manager' ? '/manager-order-queue' : '/order-queue'; }
 
   function closeMenu() {
     if (!menuShell) return;
@@ -521,7 +508,7 @@
       if (action === 'profile') openProfileModal();
       if (action === 'password') openPasswordModal();
       if (action === 'approval-pin') openPinModal();
-      if (action === 'staff-dashboard') location.href = area() === 'manager' ? (location.port === '5000' ? '/manager-dashboard' : '../Manager/dashboard.php') : pathToStaffDashboard();
+      if (action === 'staff-dashboard') location.href = area() === 'manager' ? (location.port === '5000' ? '/manager-dashboard' : '/manager-dashboard') : pathToStaffDashboard();
       if (action === 'workspace') location.href = area() === 'admin' ? pathToAdminSettings() : area() === 'manager' ? pathToOrderQueue() : pathToOrderQueue();
       if (action === 'logout') logout();
     });

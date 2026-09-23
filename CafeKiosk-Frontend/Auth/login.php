@@ -12,6 +12,8 @@
   >
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 
 <body class="auth-body uniform-auth">
@@ -37,7 +39,7 @@
 
         <a
           class="role-button"
-          href="../Auth/admin-login.php"
+          href="/admin-login"
           data-login-role="admin"
         >
           Admin
@@ -45,7 +47,7 @@
 
         <a
           class="role-button"
-          href="../Auth/manager-login.php"
+          href="/manager-login"
           data-login-role="manager"
         >
           Manager
@@ -53,7 +55,7 @@
 
         <a
           class="role-button"
-          href="../Auth/staff-login.php"
+          href="/staff-login"
           data-login-role="staff"
         >
           Staff

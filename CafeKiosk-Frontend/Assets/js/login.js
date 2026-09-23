@@ -18,7 +18,7 @@ const LOGIN_CONFIG = {
             "Admin",
 
         redirect:
-            "/Admin/dashboard.php",
+            "/admin/dashboard",
 
         tokenKey:
             "cafeAdminAuthToken",
@@ -123,47 +123,11 @@ function getFrontendBasePath() {
 }
 
 
-function getRoleRedirect(
-    formRole,
-    backendRedirect
-) {
-
-    if (
-        window.location.port ===
-        "5000"
-    ) {
-        return (
-            `${API_ORIGIN}${backendRedirect}`
-        );
-    }
-
-
-    const frontendBase =
-        getFrontendBasePath();
-
-
-    if (
-        formRole ===
-        "admin"
-    ) {
-        return (
-            `${frontendBase}/Admin/dashboard.php`
-        );
-    }
-
-    if (
-        formRole ===
-        "manager"
-    ) {
-        return (
-            `${frontendBase}/Manager/dashboard.php`
-        );
-    }
-
-
-    return (
-        `${frontendBase}/POS/staff-dashboard.php`
-    );
+function getRoleRedirect(formRole, backendRedirect) {
+    if (backendRedirect && /^\//.test(String(backendRedirect))) return backendRedirect;
+    if (formRole === "admin") return "/admin/dashboard";
+    if (formRole === "manager") return "/manager-dashboard";
+    return "/staff-dashboard";
 }
 
 

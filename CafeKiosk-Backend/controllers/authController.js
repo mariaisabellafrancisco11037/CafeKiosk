@@ -314,7 +314,7 @@ function publicUser(user) {
 
 function loginRedirect(role) {
   const key = roleKey(role);
-  if (key === 'admin') return '/Admin/dashboard.php';
+  if (key === 'admin') return '/admin/dashboard';
   if (key === 'manager') return '/manager-dashboard';
   return '/staff-dashboard';
 }
@@ -631,7 +631,9 @@ async function ensureDatabaseActor(req, res) {
 }
 
 exports.createUser = async (req, res) => {
-  try { await ensureDatabaseActor(req, res); } catch (_) {}
+  let actorId = null;
+  try { actorId = await ensureDatabaseActor(req, res); } catch (error) { console.error('Resolve admin actor error:', error); }
+  if (!actorId) return res.status(403).json({ success: false, message: 'A database-backed cafe Admin account is required to add employees.' });
   const cafeId = safeText(req.user?.cafeId) || 'cafe-1';
   const fullName = safeText(req.body?.name || req.body?.fullName);
   const username = safeText(req.body?.username || req.body?.userId);
@@ -640,6 +642,10 @@ exports.createUser = async (req, res) => {
   const role = normalizeRole(req.body?.role) || 'Staff';
   const status = String(req.body?.status || 'Active') === 'Inactive' ? 'Inactive' : 'Active';
   const password = String(req.body?.password || '');
+
+  if (!['Staff', 'Manager'].includes(role)) {
+    return res.status(400).json({ success: false, message: 'Direct employee creation supports Staff or Manager accounts only.' });
+  }
 
   if (!fullName || !username || !email || !password) {
     return res.status(400).json({ success: false, message: 'Name, User ID, email, and temporary password are required.' });
@@ -1104,6 +1110,14 @@ exports.createInvite = async (req, res) => {
     const cafeId = safeText(admin.cafe_id || req.user?.cafeId) || 'cafe-1';
     const invitedBy = Number(admin.user_id);
     const expiresHours = Math.max(1, Math.min(168, Number(req.body?.expiresHours) || 48));
+
+    const [existingUserRows] = await pool.execute(
+      `SELECT user_id, full_name, role, status FROM users WHERE cafe_id=? AND LOWER(email)=LOWER(?) LIMIT 1`,
+      [cafeId, invitedEmail]
+    );
+    if (existingUserRows.length && String(existingUserRows[0].status || '').toLowerCase() !== 'inactive') {
+      return res.status(409).json({ success: false, message: `${invitedEmail} is already registered to this cafe as ${existingUserRows[0].role || 'an employee'}.` });
+    }
 
     const [cafeRows] = await pool.execute(
       'SELECT cafe_name FROM cafes WHERE cafe_id=? LIMIT 1',

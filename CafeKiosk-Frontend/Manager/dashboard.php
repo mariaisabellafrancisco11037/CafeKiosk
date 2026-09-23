@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body class="uniform-pos staff-dashboard-page manager-dashboard-page">
   <div class="queue-app staff-dashboard-shell manager-dashboard-shell">

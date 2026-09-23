@@ -41,6 +41,14 @@
     el.style.color = error ? '#a84d47' : '';
   }
 
+  function showDialog(message, type = 'info', title = 'User Management') {
+    if (window.CafeMessageDialog?.show) {
+      window.CafeMessageDialog.show(message, { type, title });
+    } else {
+      alert(message);
+    }
+  }
+
   function currentUserId() {
     const fromSession = window.CafeAuth?.session?.userId;
     if (fromSession != null && String(fromSession).trim()) return String(fromSession);
@@ -153,9 +161,14 @@
     $('userId').value = user?.username || '';
     $('userEmail').value = user?.email || '';
     $('userPhone').value = user?.phone || '';
+    const adminOption = $('adminRoleOption');
+    if (adminOption) {
+      adminOption.hidden = !user || user.role !== 'Admin';
+      adminOption.disabled = !user || user.role !== 'Admin';
+    }
     $('userRole').value = user?.role || 'Staff';
     $('userPassword').value = '';
-    $('userModalTitle').textContent = user ? 'Edit User Account' : 'Add User Account';
+    $('userModalTitle').textContent = user ? 'Edit Employee Account' : 'Add Staff / Manager';
     $('passwordLabel').textContent = user ? 'Reset Password (optional)' : 'Temporary Password';
     $('passwordHelp').textContent = user
       ? 'Leave blank to keep the current password. If entered, the user will be required to change it.'
@@ -212,7 +225,7 @@
       password: $('userPassword').value
     };
     if (!payload.name || !payload.username || !payload.email || (!dbId && !payload.password)) {
-      alert('Please complete all required fields.');
+      showDialog('Please complete all required fields.', 'warning', 'Missing Information');
       return;
     }
 
@@ -231,10 +244,11 @@
       if (!response.ok) throw new Error(data.message || 'Unable to save user.');
       if (data.authToken && window.CafeAuth?.replaceToken) window.CafeAuth.replaceToken(data.authToken);
       closeUser();
-      setMessage(data.message || 'User saved.');
+      setMessage(data.message || 'Employee account saved.');
+      showDialog(data.message || 'Employee account saved successfully.', 'success', dbId ? 'Employee Updated' : 'Employee Added');
       await loadUsers();
     } catch (error) {
-      alert(error.message);
+      showDialog(error.message, 'error', 'Unable to Save Employee');
     } finally {
       busy = false;
       button.disabled = false;

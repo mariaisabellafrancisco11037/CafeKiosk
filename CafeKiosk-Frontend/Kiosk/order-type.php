@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="/Assets/css/order-type.css">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 <body class="uniform-kiosk kiosk-order-type">
 

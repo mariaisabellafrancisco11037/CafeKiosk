@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
+  <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
 
 <body class="uniform-admin">
@@ -19,14 +21,14 @@
          Styled to match the current Order Monitor page.
     ====================================================== -->
     <aside class="staff-sidebar">
-      <a class="brand" href="dashboard.php" aria-label="CafeKiosk Dashboard">
+      <a class="brand" href="/admin/dashboard" aria-label="CafeKiosk Dashboard">
         <img src="../Assets/images/logo.png" alt="CafeKiosk Logo">
       </a>
 
       <div class="staff-label">ADMIN</div>
 
       <nav class="staff-nav" aria-label="Admin navigation">
-        <a class="staff-nav-link active" href="dashboard.php" aria-current="page">
+        <a class="staff-nav-link active" href="/admin/dashboard" aria-current="page">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -38,7 +40,7 @@
           <span>Dashboard</span>
         </a>
 
-        <a class="staff-nav-link" href="order-monitor.php">
+        <a class="staff-nav-link" href="/admin/order-monitor">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -49,7 +51,7 @@
           <span>Order</span>
         </a>
 
-        <a class="staff-nav-link" href="menu-management.php">
+        <a class="staff-nav-link" href="/admin/menu-management">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M3 3h11l5 5v13H3z"/>
@@ -60,7 +62,7 @@
           <span>Menu Management</span>
         </a>
 
-        <a class="staff-nav-link" href="promotions-discount.php">
+        <a class="staff-nav-link" href="/admin/promotions">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M19 5 5 19"/>
@@ -71,7 +73,7 @@
           <span>Promotions &amp; Discount</span>
         </a>
 
-        <a class="staff-nav-link" href="inventory.php">
+        <a class="staff-nav-link" href="/admin/inventory">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M3 8h18v12H3z"/>
@@ -82,7 +84,7 @@
           <span>Inventory</span>
         </a>
 
-        <a class="staff-nav-link" href="report.php">
+        <a class="staff-nav-link" href="/admin/report">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M5 3h14v18H5z"/>
@@ -93,7 +95,7 @@
           <span>Report</span>
         </a>
 
-        <a class="staff-nav-link" href="audit-logs.php">
+        <a class="staff-nav-link" href="/admin/audit-logs">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M8 3h8l2 3v15H6V6z"/>
@@ -103,7 +105,7 @@
           <span>Audit Logs</span>
         </a>
 
-        <a class="staff-nav-link" href="user.php">
+        <a class="staff-nav-link" href="/admin/users">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <circle cx="12" cy="8" r="4"/>
@@ -113,7 +115,7 @@
           <span>User</span>
         </a>
 
-        <a class="staff-nav-link" href="settings.php">
+        <a class="staff-nav-link" href="/admin/settings">
           <span class="staff-nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <circle cx="12" cy="12" r="3"/>
@@ -239,7 +241,7 @@
               <h2>Recent Orders</h2>
             </div>
 
-            <a class="view-all-btn" href="order-monitor.php">
+            <a class="view-all-btn" href="/admin/order-monitor">
               View All
             </a>
           </div>

@@ -1,111 +1,123 @@
-(function(){
+(() => {
   'use strict';
   const $ = id => document.getElementById(id);
 
-  function origin(){
-    if(location.protocol==='http:'||location.protocol==='https:'){
-      const p=location.port;
-      return (!p||p==='80'||p==='443'||p==='5000') ? location.origin : `${location.protocol}//${location.hostname}:5000`;
-    }
-    return 'http://127.0.0.1:5000';
+  function apiOrigin() {
+    return window.CafeAuth?.API_ORIGIN || ((location.protocol === 'http:' || location.protocol === 'https:')
+      ? ((!location.port || ['80','443','5000'].includes(location.port)) ? location.origin : `${location.protocol}//${location.hostname}:5000`)
+      : 'http://127.0.0.1:5000');
   }
 
-  function authHeaders(){
+  async function apiFetch(url, options = {}) {
+    if (window.CafeAuth?.apiFetch) return window.CafeAuth.apiFetch(url, options);
+    const headers = new Headers(options.headers || {});
     const token = localStorage.getItem('cafeAdminAuthToken') || sessionStorage.getItem('cafeAuthToken') || '';
-    return token ? {Authorization:`Bearer ${token}`} : {};
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+    return fetch(url, { ...options, headers, credentials: 'include' });
   }
 
-  function setDelivery(text, type='info'){
-    const el=$('inviteDeliveryStatus');
-    if(!el) return;
-    el.textContent=text||'';
-    el.dataset.type=type;
-    el.style.display=text?'block':'none';
+  function dialog(message, type = 'info', title = 'Staff Invitation') {
+    if (window.CafeMessageDialog?.show) return window.CafeMessageDialog.show(message, { type, title });
+    alert(message);
   }
 
-  document.addEventListener('DOMContentLoaded',()=>{
-    const modal=$('inviteModal'), form=$('inviteForm');
+  function setDelivery(text, type = 'info') {
+    const el = $('inviteDeliveryStatus');
+    if (!el) return;
+    el.textContent = text || '';
+    el.dataset.type = type;
+    el.style.display = text ? 'block' : 'none';
+  }
 
-    $('inviteUser')?.addEventListener('click',()=>{
-      if(modal) modal.classList.add('open');
-      if($('inviteResult')) $('inviteResult').style.display='none';
-      if($('inviteMessage')) $('inviteMessage').textContent='';
-      if($('inviteEmailInput')) $('inviteEmailInput').value='';
-      if($('inviteRoleInput')) $('inviteRoleInput').value='Staff';
-      setDelivery('');
-      setTimeout(()=>$('inviteEmailInput')?.focus(),80);
-    });
+  function openInvite() {
+    const modal = $('inviteModal');
+    if (!modal) return dialog('Invitation dialog could not be opened. Refresh the page and try again.', 'error', 'Invitation Error');
+    $('inviteForm')?.reset();
+    if ($('inviteRoleInput')) $('inviteRoleInput').value = 'Staff';
+    if ($('inviteResult')) $('inviteResult').style.display = 'none';
+    if ($('inviteMessage')) $('inviteMessage').textContent = '';
+    setDelivery('');
+    modal.classList.add('open');
+    setTimeout(() => $('inviteEmailInput')?.focus(), 80);
+  }
 
-    $('closeInvite')?.addEventListener('click',()=>modal?.classList.remove('open'));
+  function closeInvite() { $('inviteModal')?.classList.remove('open'); }
 
-    form?.addEventListener('submit',async e=>{
-      e.preventDefault();
-      const button=form.querySelector('button[type="submit"]');
-      const email=$('inviteEmailInput').value.trim();
-      const role=$('inviteRoleInput').value;
-      button.disabled=true;
-      button.textContent='Sending...';
-      $('inviteMessage').textContent='Creating a secure invitation and sending email...';
-      setDelivery('');
+  async function submitInvite(event) {
+    event.preventDefault();
+    const form = $('inviteForm');
+    const emailInput = $('inviteEmailInput');
+    const roleInput = $('inviteRoleInput');
+    if (!form || !emailInput || !roleInput) return;
 
-      try{
-        const response=await fetch(`${origin()}/api/auth/invites`,{
-          method:'POST',
-          credentials:'include',
-          headers:{'Content-Type':'application/json',...authHeaders()},
-          body:JSON.stringify({email,role,expiresHours:48})
-        });
-        const data=await response.json().catch(()=>({}));
-        if(!response.ok) throw new Error(data.message||'Unable to send invitation.');
+    const email = String(emailInput.value || '').trim().toLowerCase();
+    const role = roleInput.value === 'Manager' ? 'Manager' : 'Staff';
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      emailInput.focus();
+      return dialog('Enter a valid employee email address first.', 'warning', 'Invalid Email');
+    }
 
-        if(data.authToken){
-          if(window.CafeAuth?.replaceToken) window.CafeAuth.replaceToken(data.authToken);
-          else {
-            localStorage.setItem('cafeAdminAuthToken', data.authToken);
-            sessionStorage.setItem('cafeAuthToken', data.authToken);
-          }
-        }
+    const button = form.querySelector('button[type="submit"]');
+    const original = button?.textContent || 'Send Email Invitation';
+    if (button) { button.disabled = true; button.textContent = 'Sending...'; }
+    if ($('inviteMessage')) $('inviteMessage').textContent = 'Creating a secure invitation and sending email...';
+    if ($('inviteResult')) $('inviteResult').style.display = 'none';
+    setDelivery('');
 
-        const link=data.inviteUrl || new URL(data.signupPath, origin()).href;
-        $('inviteLink').value=link;
-        $('openInvite').href=link;
-        $('inviteResult').style.display='block';
-        $('inviteMessage').textContent='';
+    try {
+      const response = await apiFetch(`${apiOrigin()}/api/auth/invites`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, role, expiresHours: 48 })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || `Invitation request failed (HTTP ${response.status}).`);
 
-        if(data.emailSent){
-          setDelivery(`Email sent to ${data.invitedEmail || email}. The invitation expires in ${data.expiresHours || 48} hours.`, 'success');
-          window.CafeMessageDialog?.show(
-            `${data.role || role} invitation sent to ${data.invitedEmail || email} for ${data.cafeName || 'this cafe'}.`,
-            {type:'success',title:'Invitation Email Sent'}
-          );
-        }else{
-          const detail=data.emailError ? ` ${data.emailError}` : '';
-          setDelivery(`The secure invitation was created, but email delivery did not complete.${detail} Use the backup link below.`, 'warning');
-          window.CafeMessageDialog?.show(
-            `Invitation created, but the email was not sent.${detail} You can copy the backup signup link.`,
-            {type:'warning',title:'Email Not Sent'}
-          );
-        }
-      }catch(error){
-        $('inviteMessage').textContent='';
-        window.CafeMessageDialog?.show(error.message, {type:'error',title:'Invitation Error'});
-      }finally{
-        button.disabled=false;
-        button.textContent='Send Email Invitation';
+      if (data.authToken && window.CafeAuth?.replaceToken) window.CafeAuth.replaceToken(data.authToken);
+
+      const signupPath = data.signupPath || '/staff-signup';
+      const link = data.inviteUrl || new URL(signupPath, location.origin).href;
+      if ($('inviteLink')) $('inviteLink').value = link;
+      if ($('openInvite')) $('openInvite').href = link;
+      if ($('inviteResult')) $('inviteResult').style.display = 'block';
+      if ($('inviteMessage')) $('inviteMessage').textContent = '';
+
+      if (data.emailSent) {
+        setDelivery(`Invitation email sent to ${data.invitedEmail || email}. It expires in ${data.expiresHours || 48} hours.`, 'success');
+        dialog(`${role} invitation sent to ${data.invitedEmail || email} for ${data.cafeName || 'this cafe'}.`, 'success', 'Invitation Sent');
+      } else {
+        const detail = data.emailError ? ` ${data.emailError}` : '';
+        setDelivery(`The invitation was created, but email delivery did not complete.${detail} Use the backup link below.`, 'warning');
+        dialog(`The secure invitation was created, but the email was not sent.${detail} The backup signup link is ready below.`, 'warning', 'Email Not Sent');
       }
-    });
+    } catch (error) {
+      if ($('inviteMessage')) $('inviteMessage').textContent = '';
+      dialog(error.message || 'Unable to create the invitation.', 'error', 'Invitation Error');
+    } finally {
+      if (button) { button.disabled = false; button.textContent = original; }
+    }
+  }
 
-    $('copyInvite')?.addEventListener('click',async()=>{
-      const link=$('inviteLink')?.value||'';
-      if(!link) return;
-      try{
-        await navigator.clipboard.writeText(link);
-        window.CafeMessageDialog?.show('Backup invitation link copied.', {type:'success',title:'Copied'});
-      }catch{
-        $('inviteLink')?.select();
-        document.execCommand('copy');
-        window.CafeMessageDialog?.show('Backup invitation link copied.', {type:'success',title:'Copied'});
-      }
-    });
-  });
+  async function copyInvite() {
+    const link = $('inviteLink')?.value || '';
+    if (!link) return;
+    try {
+      await navigator.clipboard.writeText(link);
+    } catch (_) {
+      $('inviteLink')?.select();
+      document.execCommand('copy');
+    }
+    dialog('Backup invitation link copied.', 'success', 'Copied');
+  }
+
+  function boot() {
+    $('inviteUser')?.addEventListener('click', openInvite);
+    $('closeInvite')?.addEventListener('click', closeInvite);
+    $('inviteForm')?.addEventListener('submit', submitInvite);
+    $('copyInvite')?.addEventListener('click', copyInvite);
+    $('inviteModal')?.addEventListener('click', event => { if (event.target === $('inviteModal')) closeInvite(); });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
