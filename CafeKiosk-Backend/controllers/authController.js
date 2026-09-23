@@ -480,8 +480,8 @@ async function ensureAccountStatusHistory(connection) {
 
 function auditUserStatusChange(req, target, oldStatus, newStatus, reason) {
   const actorName = safeText(req.user?.displayName || req.user?.username || 'Administrator');
-  const action = newStatus === 'Inactive' ? 'Deactivate User' : 'Activate User';
-  const verb = newStatus === 'Inactive' ? 'deactivated' : 'activated';
+  const action = newStatus === 'Inactive' ? 'Archive Employee' : 'Restore Employee';
+  const verb = newStatus === 'Inactive' ? 'fired and archived' : 'restored';
   return addAuditLog({
     cafeId: req.user?.cafeId || target.cafe_id || 'cafe-1',
     user: actorName,
@@ -509,8 +509,8 @@ function emitForcedLogout(req, target) {
   const room = `user-${target.user_id}`;
   io.to(room).emit('auth:force-logout', {
     role: clientRole,
-    reason: 'account-deactivated',
-    message: 'Your CafeKiosk account was deactivated by an administrator.'
+    reason: 'account-archived',
+    message: 'Your CafeKiosk employment account was archived by the cafe administrator.'
   });
 
   // Give the browser enough time to process the logout event, then close any
@@ -549,13 +549,25 @@ exports.listUsers = async (req, res) => {
 
     const connection = await pool.getConnection();
     try {
-      await ensureAuthSignupSchema(connection);
+      await ensureAccountStatusHistory(connection);
       const [rows] = await connection.execute(
-        `SELECT user_id, full_name, username, email, phone, role, is_owner,
-                status, last_login, created_at, updated_at
-           FROM users
-          WHERE cafe_id = ?
-          ORDER BY is_owner DESC, FIELD(role,'Admin','Manager','Staff'), full_name ASC`,
+        `SELECT u.user_id, u.full_name, u.username, u.email, u.phone, u.role, u.is_owner,
+                u.status, u.last_login, u.created_at, u.updated_at,
+                (SELECT h.reason
+                   FROM account_status_history h
+                  WHERE h.cafe_id=u.cafe_id AND h.user_id=u.user_id AND h.new_status='Inactive'
+                  ORDER BY h.created_at DESC LIMIT 1) AS archive_reason,
+                (SELECT h.changed_by_name
+                   FROM account_status_history h
+                  WHERE h.cafe_id=u.cafe_id AND h.user_id=u.user_id AND h.new_status='Inactive'
+                  ORDER BY h.created_at DESC LIMIT 1) AS archived_by,
+                (SELECT h.created_at
+                   FROM account_status_history h
+                  WHERE h.cafe_id=u.cafe_id AND h.user_id=u.user_id AND h.new_status='Inactive'
+                  ORDER BY h.created_at DESC LIMIT 1) AS archived_at
+           FROM users u
+          WHERE u.cafe_id = ?
+          ORDER BY u.is_owner DESC, FIELD(u.role,'Admin','Manager','Staff'), u.full_name ASC`,
         [cafeId]
       );
       return res.json({
@@ -573,6 +585,9 @@ exports.listUsers = async (req, res) => {
           lastLogin: row.last_login,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
+          archiveReason: row.archive_reason || '',
+          archivedBy: row.archived_by || '',
+          archivedAt: row.archived_at || null,
           isCurrentUser: Number(row.user_id) === Number(effectiveUserId)
         })),
         authToken: refreshedAuthToken || undefined,
@@ -855,7 +870,9 @@ exports.updateUserStatus = async (req, res) => {
 
     return res.json({
       success: true,
-      message: `${target.full_name}'s account is now ${newStatus.toLowerCase()}.`,
+      message: newStatus === 'Inactive'
+        ? `${target.full_name} was fired and moved to Former Employee Archives.`
+        : `${target.full_name} was restored to the active employee list.`,
       user: { id: String(target.user_id), status: newStatus },
       kickedOut: newStatus === 'Inactive',
       authToken: res.locals.refreshedAuthToken || undefined

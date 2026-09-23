@@ -52,6 +52,7 @@
 
   function render() {
     const table = $('usersTable');
+    const archiveTable = $('archivedUsersTable');
     if (!table) return;
 
     const q = String($('userSearch')?.value || '').trim().toLowerCase();
@@ -59,43 +60,72 @@
     const status = $('statusFilter')?.value || '';
     const me = currentUserId();
 
-    const rows = users.filter(user => {
+    const matchesCommon = user => {
       const haystack = `${user.name || ''} ${user.username || ''} ${user.email || ''}`.toLowerCase();
-      return (!q || haystack.includes(q)) && (!role || user.role === role) && (!status || user.status === status);
-    });
+      return (!q || haystack.includes(q)) && (!role || user.role === role);
+    };
 
-    if (!rows.length) {
-      table.innerHTML = '<div class="ck-empty">No user accounts match the current filters.</div>';
-      return;
+    const currentRows = users.filter(user => user.status !== 'Inactive' && matchesCommon(user) && (!status || user.status === status));
+    const archivedRows = users.filter(user => user.status === 'Inactive' && matchesCommon(user));
+
+    if (!currentRows.length) {
+      table.innerHTML = '<div class="ck-empty">No current employee accounts match the current filters.</div>';
+    } else {
+      table.innerHTML = `
+        <div class="ck-table-wrap">
+          <table class="ck-table users-table">
+            <thead><tr><th>User</th><th>User ID</th><th>Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+            <tbody>${currentRows.map(user => {
+              const isSelf = user.isCurrentUser || (me && String(user.id) === me);
+              const active = user.status === 'Active';
+              const canArchive = !isSelf && !user.isOwner && (user.role === 'Staff' || user.role === 'Manager' || user.role === 'Admin');
+              return `<tr>
+                <td><div class="user-name-cell"><div class="user-name-line"><strong>${esc(user.name)}</strong>${user.isOwner ? '<span class="user-owner-pill">OWNER</span>' : ''}${isSelf ? '<span class="user-self-pill">YOU</span>' : ''}</div><span class="ck-muted">${esc(user.phone || 'No phone number')}</span></div></td>
+                <td>${esc(user.username)}</td>
+                <td>${esc(user.email || '—')}</td>
+                <td>${esc(user.role)}</td>
+                <td><span class="ck-pill ${active ? '' : 'off'}">${esc(user.status)}</span></td>
+                <td>${esc(fmtDate(user.lastLogin))}</td>
+                <td><div class="ck-actions">
+                  <button class="ck-btn" data-edit="${esc(user.id)}">Edit</button>
+                  ${canArchive
+                    ? `<button class="ck-btn danger status-action-btn fire-btn" data-status="${esc(user.id)}" data-new-status="Inactive">Fire &amp; Archive</button>`
+                    : (!active && !user.isOwner ? `<button class="ck-btn primary status-action-btn" data-status="${esc(user.id)}" data-new-status="Active">Activate</button>` : '')}
+                </div></td>
+              </tr>`;
+            }).join('')}</tbody>
+          </table>
+        </div>`;
     }
 
-    table.innerHTML = `
-      <div class="ck-table-wrap">
-        <table class="ck-table users-table">
-          <thead><tr><th>User</th><th>User ID</th><th>Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
-          <tbody>${rows.map(user => {
-            const isSelf = user.isCurrentUser || (me && String(user.id) === me);
-            const active = user.status === 'Active';
-            return `<tr>
-              <td><div class="user-name-cell"><div class="user-name-line"><strong>${esc(user.name)}</strong>${user.isOwner ? '<span class="user-owner-pill">OWNER</span>' : ''}${isSelf ? '<span class="user-self-pill">YOU</span>' : ''}</div><span class="ck-muted">${esc(user.phone || 'No phone number')}</span></div></td>
-              <td>${esc(user.username)}</td>
-              <td>${esc(user.email || '—')}</td>
-              <td>${esc(user.role)}</td>
-              <td><span class="ck-pill ${active ? '' : 'off'}">${esc(user.status)}</span></td>
-              <td>${esc(fmtDate(user.lastLogin))}</td>
-              <td><div class="ck-actions">
-                <button class="ck-btn" data-edit="${esc(user.id)}">Edit</button>
-                <button class="ck-btn status-action-btn ${active ? 'danger' : 'primary'}" data-status="${esc(user.id)}" data-new-status="${active ? 'Inactive' : 'Active'}" ${isSelf && active ? 'disabled title="You cannot deactivate the account you are currently using."' : ''}>${active ? 'Deactivate' : 'Activate'}</button>
-              </div></td>
-            </tr>`;
-          }).join('')}</tbody>
-        </table>
-      </div>`;
+    if ($('archiveCount')) $('archiveCount').textContent = String(archivedRows.length);
+    if (archiveTable) {
+      if (!archivedRows.length) {
+        archiveTable.innerHTML = '<div class="ck-empty">No former employees are currently archived.</div>';
+      } else {
+        archiveTable.innerHTML = `
+          <div class="ck-table-wrap">
+            <table class="ck-table archives-table">
+              <thead><tr><th>Former Employee</th><th>User ID</th><th>Email</th><th>Role</th><th>Archived</th><th>Reason</th><th>Archived By</th><th>Action</th></tr></thead>
+              <tbody>${archivedRows.map(user => `<tr>
+                <td><div class="user-name-cell"><strong>${esc(user.name)}</strong><span class="ck-muted">${esc(user.phone || 'No phone number')}</span></div></td>
+                <td>${esc(user.username)}</td>
+                <td>${esc(user.email || '—')}</td>
+                <td>${esc(user.role)}</td>
+                <td><div class="archive-meta"><span>${esc(fmtDate(user.archivedAt || user.updatedAt))}</span><small>Account inactive</small></div></td>
+                <td class="archive-reason">${esc(user.archiveReason || 'No archive reason recorded.')}</td>
+                <td>${esc(user.archivedBy || 'Administrator')}</td>
+                <td><button class="ck-btn primary status-action-btn" data-status="${esc(user.id)}" data-new-status="Active">Restore</button></td>
+              </tr>`).join('')}</tbody>
+            </table>
+          </div>`;
+      }
+    }
 
-    table.querySelectorAll('[data-edit]').forEach(button => {
+    document.querySelectorAll('[data-edit]').forEach(button => {
       button.addEventListener('click', () => openUser(users.find(user => String(user.id) === String(button.dataset.edit))));
     });
-    table.querySelectorAll('[data-status]:not([disabled])').forEach(button => {
+    document.querySelectorAll('[data-status]:not([disabled])').forEach(button => {
       button.addEventListener('click', () => openStatus(users.find(user => String(user.id) === String(button.dataset.status)), button.dataset.newStatus));
     });
   }
@@ -138,31 +168,31 @@
 
   function openStatus(user, newStatus) {
     if (!user) return;
-    const deactivate = newStatus === 'Inactive';
+    const archive = newStatus === 'Inactive';
     $('statusUserId').value = user.id;
     $('statusNewValue').value = newStatus;
     $('statusAccountName').textContent = user.name;
     $('statusAccountMeta').textContent = `${user.role} • ${user.username} • ${user.email || 'No email'}`;
-    $('statusModalTitle').textContent = deactivate ? 'Deactivate Account' : 'Activate Account';
-    $('statusReasonLabel').textContent = deactivate ? 'Deactivation Note' : 'Activation Note';
-    $('statusReason').placeholder = deactivate
-      ? 'Example: Employee is no longer assigned to the cafe.'
-      : 'Example: Employee returned to active duty.';
+    $('statusModalTitle').textContent = archive ? 'Fire & Archive Employee' : 'Restore Employee';
+    $('statusReasonLabel').textContent = archive ? 'Archive / Firing Reason' : 'Restore Note';
+    $('statusReason').placeholder = archive
+      ? 'Example: Employment ended on September 23, 2026.'
+      : 'Example: Employee was rehired and returned to active duty.';
     if ($('statusNoteHelp')) {
-      $('statusNoteHelp').textContent = deactivate
-        ? 'Add a short administrative note explaining why this account is being deactivated. The note will appear in the Audit Logs.'
-        : 'Add a short administrative note explaining why this account is being activated again. The note will appear in the Audit Logs.';
+      $('statusNoteHelp').textContent = archive
+        ? 'This reason will be kept in Former Employee Archives and recorded in the Audit Logs.'
+        : 'This note explains why the former employee account is being restored. It will be recorded in the Audit Logs.';
     }
     $('statusReason').value = '';
     $('reasonCount').textContent = '0';
-    $('statusWarning').classList.toggle('activate', !deactivate);
-    $('statusWarning').textContent = deactivate
-      ? 'This account will be disabled immediately. If the user is currently signed in on POS or Admin, CafeKiosk will kick them out automatically.'
-      : 'This account will be allowed to sign in again. The admin note will be saved in the Audit Logs.';
+    $('statusWarning').classList.toggle('activate', !archive);
+    $('statusWarning').textContent = archive
+      ? 'The employee will be signed out immediately and moved to Former Employee Archives. They will no longer be able to log in.'
+      : 'The employee account will return to the current employee list and will be allowed to sign in again.';
     const confirm = $('confirmStatus');
-    confirm.textContent = deactivate ? 'Deactivate Account' : 'Activate Account';
-    confirm.classList.toggle('danger', deactivate);
-    confirm.classList.toggle('primary', !deactivate);
+    confirm.textContent = archive ? 'Fire & Archive' : 'Restore Employee';
+    confirm.classList.toggle('danger', archive);
+    confirm.classList.toggle('primary', !archive);
     $('statusModal').classList.add('open');
     setTimeout(() => $('statusReason')?.focus(), 50);
   }
@@ -219,7 +249,7 @@
     const status = $('statusNewValue').value;
     const reason = $('statusReason').value.trim();
     if (reason.length < 3) {
-      alert(`Please write a short admin note before ${status === 'Inactive' ? 'deactivating' : 'activating'} this account.`);
+      alert(`Please write a short admin note before ${status === 'Inactive' ? 'archiving' : 'restoring'} this employee.`);
       $('statusReason').focus();
       return;
     }
@@ -228,7 +258,7 @@
     const button = $('confirmStatus');
     const original = button.textContent;
     button.disabled = true;
-    button.textContent = status === 'Inactive' ? 'Deactivating...' : 'Activating...';
+    button.textContent = status === 'Inactive' ? 'Archiving...' : 'Restoring...';
     try {
       const response = await af(`${apiOrigin()}/api/auth/users/${encodeURIComponent(userId)}/status`, {
         method: 'PATCH',
@@ -239,7 +269,7 @@
       if (!response.ok) throw new Error(data.message || 'Unable to change account status.');
       if (data.authToken && window.CafeAuth?.replaceToken) window.CafeAuth.replaceToken(data.authToken);
       closeStatus();
-      setMessage(data.message || `Account is now ${status.toLowerCase()}.`);
+      setMessage(data.message || (status === 'Inactive' ? 'Employee moved to archives.' : 'Employee restored.'));
       await loadUsers();
     } catch (error) {
       alert(error.message);

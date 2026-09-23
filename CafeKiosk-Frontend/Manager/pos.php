@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
+  <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
 </head>
 
@@ -29,7 +30,7 @@
          SIDEBAR
     ====================================================== -->
 
-    <aside class="sidebar">
+    <aside class="sidebar manager-sidebar manager-sidebar-icons">
 
         <div class="logo">
             <img
@@ -38,14 +39,12 @@
             >
         </div>
 
-        <div class="staff-label manager-label">
-            MANAGER
-        </div>
+<div class="manager-sidebar-cafe-name" data-cafe-identity>Current Cafe</div>
 
         <nav class="staff-navigation" aria-label="Manager navigation">
-<a href="/manager-dashboard" class="staff-nav-button"><span class="staff-nav-icon" aria-hidden="true">▦</span><span>Dashboard</span></a>
-<a href="/manager-pos" class="staff-nav-button active" aria-current="page"><span class="staff-nav-icon" aria-hidden="true">☕</span><span>Manager POS</span></a>
-<a href="/manager-order-queue" class="staff-nav-button"><span class="staff-nav-icon" aria-hidden="true">☷</span><span>Order Queue</span></a>
+<a href="/manager-dashboard" class="staff-nav-button" aria-label="Dashboard" title="Dashboard"><span class="staff-nav-icon" aria-hidden="true">▦</span></a>
+<a href="/manager-pos" class="staff-nav-button active" aria-current="page" aria-label="POS" title="POS"><span class="staff-nav-icon" aria-hidden="true">☕</span></a>
+<a href="/manager-order-queue" class="staff-nav-button" aria-label="Order Queue" title="Order Queue"><span class="staff-nav-icon" aria-hidden="true">☷</span></a>
 </nav>
 
     </aside>

@@ -1,0 +1,38 @@
+/* CafeKiosk Manager sidebar: icon-only navigation with cafe name preserved. */
+.manager-sidebar-icons .manager-sidebar-cafe-name{
+  display:block;
+  margin:0 6px 14px;
+  color:#5f4938;
+  font-size:.72rem;
+  font-weight:900;
+  line-height:1.25;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.manager-sidebar-icons .staff-label,
+.manager-sidebar-icons .manager-access-note{display:none!important}
+.manager-sidebar-icons .staff-navigation{align-items:center}
+.manager-sidebar-icons .staff-nav-button{
+  width:52px!important;
+  min-width:52px;
+  min-height:52px;
+  padding:0!important;
+  justify-content:center!important;
+  gap:0!important;
+  border-radius:15px;
+}
+.manager-sidebar-icons .staff-nav-icon{
+  width:auto!important;
+  min-width:0!important;
+  font-size:1.18rem;
+}
+.manager-sidebar-icons .staff-nav-button > span:not(.staff-nav-icon){display:none!important}
+.manager-sidebar-icons .logo{margin-bottom:10px}
+.manager-sidebar-icons .logo img{width:72px;height:72px}
+.manager-dashboard-page .cafekiosk-cafe-identity,
+.manager-pos-page .cafekiosk-cafe-identity,
+.manager-order-queue-page .cafekiosk-cafe-identity{display:none!important}
+@media(max-width:900px){
+  .manager-sidebar-icons .manager-sidebar-cafe-name{max-width:130px;margin:0 4px;text-align:left}
+  .manager-sidebar-icons .staff-navigation{align-items:center}
+}
