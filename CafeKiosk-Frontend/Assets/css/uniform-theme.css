@@ -3322,3 +3322,81 @@ body.uniform-manager.cku-v2 .manager-role-strip {
   }
 }
 \n\n/* =========================================================\n   CAFEKIOSK V11 — MOBILE DRAWER PROPORTION REFINEMENT\n   Keeps the hamburger drawer compact and aligned with the\n   icon/text scale used by the desktop sidebar.\n========================================================= */\n@media (max-width: 760px) {\n  body.uniform-admin.cku-v2 .cku-sidebar {\n    width: min(78vw, 250px) !important;\n    max-width: 250px !important;\n    padding: 12px 10px 16px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .brand,\n  body.uniform-admin.cku-v2 .cku-sidebar .logo,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand {\n    height: 86px !important;\n    min-height: 86px !important;\n    align-items: flex-start !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .brand img,\n  body.uniform-admin.cku-v2 .cku-sidebar .logo img,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand img {\n    width: 66px !important;\n    height: 66px !important;\n    max-width: 66px !important;\n    max-height: 66px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-label,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-side-label,\n  body.uniform-admin.cku-v2 .cku-sidebar .cku-kiosk-label {\n    margin: 0 7px 7px !important;\n    font-size: 9.5px !important;\n    letter-spacing: .13em !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav,\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-navigation,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav {\n    gap: 3px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link,\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a {\n    min-height: 38px !important;\n    padding: 6px 8px !important;\n    gap: 9px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    line-height: 1.1 !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-icon,\n  body.uniform-admin.cku-v2 .cku-sidebar .ico {\n    width: 18px !important;\n    height: 18px !important;\n    min-width: 18px !important;\n    flex-basis: 18px !important;\n  }\n}\n
+
+/* =========================================================
+   POS CHECKOUT COMPACT LAYOUT V3
+   Keep the discount selector compact and reserve vertical
+   space for the Order Summary item list.
+========================================================= */
+body.uniform-pos.cku-v2 .cart-panel.cku-right {
+  gap: 6px !important;
+  overflow: hidden !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .cart-list {
+  flex: 1 1 auto !important;
+  min-height: 180px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .order-bottom {
+  margin-top: 0 !important;
+  padding-top: 5px !important;
+  gap: 4px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .bottom-fields.pos-checkout-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px 8px !important;
+  align-items: start !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .checkout-control {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .checkout-field {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 5px 8px !important;
+  font-size: 11px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .change-row {
+  min-height: 28px !important;
+  margin-top: 1px !important;
+  padding: 4px 7px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .summary-row {
+  min-height: 28px !important;
+  padding: 4px 7px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .total-row {
+  min-height: 31px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .order-actions {
+  margin-top: 1px !important;
+  gap: 6px !important;
+}
+
+body.uniform-pos.cku-v2 .cart-panel.cku-right .confirm-btn,
+body.uniform-pos.cku-v2 .cart-panel.cku-right .cancel-btn {
+  min-height: 40px !important;
+  padding: 6px 8px !important;
+}
+
+body.uniform-pos.cku-v2 .bottom-fields .ck-promo-client {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  body.uniform-pos.cku-v2 .cart-panel.cku-right .bottom-fields.pos-checkout-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

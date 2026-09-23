@@ -430,7 +430,30 @@
       : null;
   }
 
+  function bindDiscountSelect(select) {
+    if (!select || select.dataset.ckDiscountBound === "1") {
+      return;
+    }
+
+    select.dataset.ckDiscountBound = "1";
+    select.value = window.CafePromotionClient.eligibility || "all";
+
+    select.addEventListener("change", () => {
+      window.CafePromotionClient.eligibility = select.value;
+      sessionStorage.setItem("cafeCustomerEligibility", select.value);
+      refresh();
+    });
+  }
+
   function addEligibilityUI() {
+    // POS/Manager POS now provide a compact native Discount dropdown in the
+    // checkout grid. Reuse it instead of injecting the old eligibility card.
+    const existingSelect = document.getElementById("ckEligibility");
+    if (existingSelect) {
+      bindDiscountSelect(existingSelect);
+      return;
+    }
+
     if (
       document.getElementById(
         "ckPromoClient"
@@ -476,23 +499,7 @@
     const select =
       box.querySelector("select");
 
-    select.value =
-      window.CafePromotionClient.eligibility;
-
-    select.addEventListener(
-      "change",
-      () => {
-        window.CafePromotionClient.eligibility =
-          select.value;
-
-        sessionStorage.setItem(
-          "cafeCustomerEligibility",
-          select.value
-        );
-
-        refresh();
-      }
-    );
+    bindDiscountSelect(select);
   }
 
   function ensureKioskDiscountRow() {

@@ -2558,3 +2558,93 @@ button {
     white-space: normal;
   }
 }
+
+
+/* Reliable payment-method field state */
+.change-row[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   POS CHECKOUT COMPACT LAYOUT V3
+   Discount is a normal dropdown (not an eligibility card).
+   Two-column controls reserve more height for Order Summary.
+========================================================= */
+.pos-checkout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 8px;
+    align-items: start;
+}
+
+.pos-checkout-grid .checkout-control {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pos-checkout-grid .field-label {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pos-checkout-grid .checkout-field {
+    height: 36px;
+    min-height: 36px;
+    padding: 5px 8px;
+    font-size: 0.68rem;
+}
+
+.pos-checkout-grid .payment-entry-group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.pos-checkout-grid .change-row {
+    min-height: 28px;
+    margin-top: 1px;
+    padding: 4px 7px;
+    font-size: 0.66rem;
+}
+
+.cart-panel .order-bottom {
+    gap: 4px;
+    padding-top: 5px;
+}
+
+.cart-panel .summary-row {
+    min-height: 28px;
+    padding: 4px 7px;
+}
+
+.cart-panel .total-row {
+    min-height: 31px;
+}
+
+.cart-panel .order-actions {
+    margin-top: 1px;
+    gap: 6px;
+}
+
+.cart-panel .confirm-btn,
+.cart-panel .cancel-btn {
+    min-height: 40px;
+    padding: 6px 8px;
+}
+
+/* Never show the legacy promotion/eligibility card on POS. */
+body.uniform-pos .bottom-fields .ck-promo-client {
+    display: none !important;
+}
+
+@media (max-width: 760px) {
+    .pos-checkout-grid {
+        grid-template-columns: 1fr;
+    }
+}

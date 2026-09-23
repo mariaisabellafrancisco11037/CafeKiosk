@@ -13,10 +13,10 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=6"
+        href="../Assets/css/pos.css?v=7"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=34">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -244,63 +244,37 @@
             </div>
 
 
-            <div class="bottom-fields">
+            <div class="bottom-fields pos-checkout-grid">
 
+                <div class="checkout-control">
+                    <label class="field-label" for="ckEligibility">Discount</label>
+                    <select id="ckEligibility" class="checkout-field">
+                        <option value="all">No Discount</option>
+                        <option value="student">Student Discount</option>
+                        <option value="senior">Senior Citizen Discount</option>
+                        <option value="pwd">PWD Discount</option>
+                    </select>
+                </div>
 
-                <label
-                    class="field-label"
-                    for="serviceType"
-                >
-                    Order Type
-                </label>
+                <div class="checkout-control">
+                    <label class="field-label" for="serviceType">Order Type</label>
+                    <select id="serviceType" class="checkout-field">
+                        <option value="Dine In">Dine In</option>
+                        <option value="Takeout">Takeout</option>
+                    </select>
+                </div>
 
-                <select
-                    id="serviceType"
-                    class="checkout-field"
-                >
-                    <option value="Dine In">
-                        Dine In
-                    </option>
+                <div class="checkout-control">
+                    <label class="field-label" for="paymentMethod">Payment Type</label>
+                    <select id="paymentMethod" class="checkout-field">
+                        <option value="Cash">Cash</option>
+                        <option value="GCash">GCash / Online Payment</option>
+                        <option value="Card">Card</option>
+                    </select>
+                </div>
 
-                    <option value="Takeout">
-                        Takeout
-                    </option>
-                </select>
-
-
-                <label
-                    class="field-label"
-                    for="paymentMethod"
-                >
-                    Payment Type
-                </label>
-
-                <select
-                    id="paymentMethod"
-                    class="checkout-field"
-                >
-                    <option value="Cash">
-                        Cash
-                    </option>
-
-                    <option value="GCash">
-                        GCash / Online Payment
-                    </option>
-
-                    <option value="Card">
-                        Card
-                    </option>
-                </select>
-
-
-                <div id="cashPaymentFields" class="payment-entry-group">
-                    <label
-                        class="field-label"
-                        for="cashReceived"
-                    >
-                        Cash Received
-                    </label>
-
+                <div id="paymentEntryFields" class="checkout-control payment-entry-group">
+                    <label class="field-label" for="cashReceived" id="paymentAmountLabel">Cash Received</label>
                     <input
                         type="number"
                         id="cashReceived"
@@ -311,37 +285,9 @@
                         inputmode="decimal"
                         autocomplete="off"
                     >
-
-                    <div class="change-row">
+                    <div class="change-row" id="changeRow">
                         <span>Change</span>
-                        <strong id="changeAmount">
-                            ₱0.00
-                        </strong>
-                    </div>
-                </div>
-
-                <div id="nonCashPaymentFields" class="payment-entry-group" hidden>
-                    <label
-                        class="field-label"
-                        for="paymentAmount"
-                        id="paymentAmountLabel"
-                    >
-                        Amount Paid
-                    </label>
-
-                    <input
-                        type="number"
-                        id="paymentAmount"
-                        class="checkout-field"
-                        placeholder="₱0.00"
-                        min="0"
-                        step="0.01"
-                        inputmode="decimal"
-                        autocomplete="off"
-                    >
-
-                    <div class="payment-record-note" id="paymentRecordNote">
-                        Enter the amount received through the selected payment method.
+                        <strong id="changeAmount">₱0.00</strong>
                     </div>
                 </div>
 
@@ -508,10 +454,10 @@
 
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="../Assets/js/pos.js"></script>
+<script src="/Assets/js/pos.js?v=payment-amount-v3"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
-<script src="../Assets/js/discount-client.js"></script>
+<script src="../Assets/js/discount-client.js?v=discount-dropdown-v3"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=31"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>

@@ -2409,17 +2409,8 @@ function updatePaymentFields() {
     const payment =
         $("paymentMethod").value;
 
-    const cashInput =
+    const amountInput =
         $("cashReceived");
-
-    const paymentAmountInput =
-        $("paymentAmount");
-
-    const cashFields =
-        $("cashPaymentFields");
-
-    const nonCashFields =
-        $("nonCashPaymentFields");
 
     const amountLabel =
         $("paymentAmountLabel");
@@ -2427,48 +2418,37 @@ function updatePaymentFields() {
     const paymentNote =
         $("paymentRecordNote");
 
-    const isCash =
-        payment === "Cash";
+    const changeRow =
+        $("changeRow");
 
-    if (cashFields) {
-        cashFields.hidden = !isCash;
+    if (amountLabel) {
+        amountLabel.textContent =
+            payment === "Card"
+                ? "Amount Paid by Card"
+                : payment === "GCash"
+                    ? "Amount Paid Online / GCash"
+                    : "Cash Received";
     }
 
-    if (nonCashFields) {
-        nonCashFields.hidden = isCash;
+    if (paymentNote) {
+        paymentNote.textContent =
+            payment === "Card"
+                ? "Enter the exact amount charged to the customer's card."
+                : payment === "GCash"
+                    ? "Enter the exact amount received through GCash or online payment."
+                    : "Enter the cash amount received from the customer.";
     }
 
-    cashInput.disabled = !isCash;
-
-    if (paymentAmountInput) {
-        paymentAmountInput.disabled = isCash;
+    if (changeRow) {
+        changeRow.hidden = payment !== "Cash";
     }
 
-    if (!isCash) {
-        cashInput.value = "";
-
-        if (amountLabel) {
-            amountLabel.textContent =
-                payment === "Card"
-                    ? "Amount Paid by Card"
-                    : payment === "GCash"
-                        ? "Amount Paid Online / GCash"
-                        : "Amount Paid";
-        }
-
-        if (paymentNote) {
-            paymentNote.textContent =
-                payment === "Card"
-                    ? "Enter the amount charged to the customer's card."
-                    : payment === "GCash"
-                        ? "Enter the amount received through GCash or the online payment."
-                        : "Enter the amount received through the selected payment method.";
-        }
-    } else {
-        if (paymentAmountInput) {
-            paymentAmountInput.value = "";
-        }
-        cashInput.placeholder = "₱0.00";
+    if (amountInput) {
+        // Clear the previous tender whenever the payment method changes so a
+        // Cash value cannot accidentally be reused as a GCash/Card payment.
+        amountInput.value = "";
+        amountInput.placeholder = "₱0.00";
+        amountInput.disabled = false;
     }
 
     updateChange();
@@ -2532,22 +2512,21 @@ async function confirmPOSOrder() {
         $("paymentMethod").value;
 
 
-    const cashReceived =
+    const tenderedAmount =
         Number(
             $("cashReceived").value ||
             0
         );
 
-    const nonCashAmount =
-        Number(
-            $("paymentAmount")?.value ||
-            0
-        );
-
+    // The single visible payment field records the actual amount tendered for
+    // Cash, GCash/online, and Card. cashReceived remains Cash-only in storage.
     const paymentAmount =
+        tenderedAmount;
+
+    const cashReceived =
         paymentMethod === "Cash"
-            ? cashReceived
-            : nonCashAmount;
+            ? tenderedAmount
+            : 0;
 
     if (
         paymentAmount < totals.total
@@ -2559,9 +2538,7 @@ async function confirmPOSOrder() {
                 : `Amount paid through ${paymentMethod} must be at least ${money(totals.total)}.`
         );
 
-        if (paymentMethod !== "Cash") {
-            $("paymentAmount")?.focus();
-        }
+        $("cashReceived")?.focus();
 
         return;
 
@@ -2892,10 +2869,6 @@ async function confirmPOSOrder() {
         $("cashReceived").value =
             "";
 
-        if ($("paymentAmount")) {
-            $("paymentAmount").value = "";
-        }
-
         // Reset customer eligibility for the next order.
         if (window.CafePromotionClient) {
             window.CafePromotionClient.eligibility = "all";
@@ -3089,18 +3062,6 @@ function setupEvents() {
             "input",
             updateChange
         );
-
-    if ($("paymentAmount")) {
-        $("paymentAmount").addEventListener(
-            "input",
-            () => {
-                const value = Number($("paymentAmount").value || 0);
-                if (!Number.isFinite(value) || value < 0) {
-                    $("paymentAmount").value = "";
-                }
-            }
-        );
-    }
 
     $("paymentMethod")
         .addEventListener(
