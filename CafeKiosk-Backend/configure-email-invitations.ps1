@@ -23,58 +23,41 @@ function Set-EnvValue([string]$Key, [string]$Value) {
             $line
         }
     }
-    if (-not $found) {
-        $updated += "$Key=$Value"
-    }
+    if (-not $found) { $updated += "$Key=$Value" }
     Set-Content -Path $envFile -Value $updated -Encoding UTF8
 }
 
 Write-Host ''
 Write-Host '======================================================' -ForegroundColor Cyan
-Write-Host ' CafeKiosk - Configure Staff Invitation Email' -ForegroundColor Cyan
+Write-Host ' CafeKiosk - Configure Resend Invitations' -ForegroundColor Cyan
 Write-Host '======================================================' -ForegroundColor Cyan
 Write-Host ''
-Write-Host 'The invitation link must NOT use localhost.' -ForegroundColor Yellow
-Write-Host 'For same Wi-Fi/hotspot, use your laptop IPv4, e.g. http://192.168.137.1:5000'
-Write-Host 'For invitations usable from anywhere, enter your HTTPS deployed/tunnel URL.'
-Write-Host 'Leave Public URL blank only if you want CafeKiosk to auto-detect your LAN IPv4.'
+Write-Host 'This helper is for LOCAL testing only.' -ForegroundColor Yellow
+Write-Host 'For Railway, put the same values in CafeKiosk > Variables instead.' -ForegroundColor Yellow
 Write-Host ''
 
-$publicUrl = (Read-Host 'Public CafeKiosk URL').Trim()
-$smtpHost = (Read-Host 'SMTP Host [smtp.gmail.com]').Trim()
-if (-not $smtpHost) { $smtpHost = 'smtp.gmail.com' }
-$smtpPort = (Read-Host 'SMTP Port [465]').Trim()
-if (-not $smtpPort) { $smtpPort = '465' }
-$smtpSecure = (Read-Host 'Use secure TLS? [true]').Trim()
-if (-not $smtpSecure) { $smtpSecure = 'true' }
-$smtpUser = (Read-Host 'Sender email address').Trim()
-if (-not $smtpUser) { throw 'Sender email is required.' }
+$publicUrl = (Read-Host 'Public CafeKiosk URL (optional for local testing)').Trim()
+$fromEmail = (Read-Host 'Verified Resend sender email, e.g. invites@yourdomain.com').Trim()
+if (-not $fromEmail) { throw 'RESEND_FROM_EMAIL is required.' }
+$fromName = (Read-Host 'Default sender name [CafeKiosk]').Trim()
+if (-not $fromName) { $fromName = 'CafeKiosk' }
 
-$securePassword = Read-Host 'SMTP/App Password (input hidden)' -AsSecureString
-$ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
+$secureApiKey = Read-Host 'Resend API key (input hidden)' -AsSecureString
+$ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureApiKey)
 try {
-    $smtpPass = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
+    $apiKey = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
 } finally {
     [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
 }
-if (-not $smtpPass) { throw 'SMTP/App Password is required.' }
-
-$fromEmail = (Read-Host "From email [$smtpUser]").Trim()
-if (-not $fromEmail) { $fromEmail = $smtpUser }
-$fromName = (Read-Host 'From name [CafeKiosk]').Trim()
-if (-not $fromName) { $fromName = 'CafeKiosk' }
+if (-not $apiKey) { throw 'RESEND_API_KEY is required.' }
 
 Set-EnvValue 'PUBLIC_APP_URL' $publicUrl
-Set-EnvValue 'SMTP_HOST' $smtpHost
-Set-EnvValue 'SMTP_PORT' $smtpPort
-Set-EnvValue 'SMTP_SECURE' $smtpSecure
-Set-EnvValue 'SMTP_USER' $smtpUser
-Set-EnvValue 'SMTP_PASS' $smtpPass
-Set-EnvValue 'SMTP_FROM_EMAIL' $fromEmail
-Set-EnvValue 'SMTP_FROM_NAME' $fromName
+Set-EnvValue 'RESEND_API_KEY' $apiKey
+Set-EnvValue 'RESEND_FROM_EMAIL' $fromEmail
+Set-EnvValue 'RESEND_FROM_NAME' $fromName
 
 Write-Host ''
-Write-Host 'Email invitation settings saved to .env.' -ForegroundColor Green
+Write-Host 'Resend invitation settings saved to .env.' -ForegroundColor Green
 Write-Host 'Restart CafeKiosk before sending an invitation.' -ForegroundColor Green
-Write-Host '.env is ignored by Git, so these credentials should not be pushed to GitHub.' -ForegroundColor DarkGray
+Write-Host '.env is ignored by Git. Never commit the Resend API key.' -ForegroundColor DarkGray
 Write-Host ''

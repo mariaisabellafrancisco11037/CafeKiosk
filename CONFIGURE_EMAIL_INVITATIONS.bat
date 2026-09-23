@@ -8,7 +8,7 @@ if errorlevel 1 (
   echo Configuration FAILED. Read the message above.
 ) else (
   echo.
-  echo Configuration complete. Restart CafeKiosk before testing an invitation.
+  echo Resend configuration complete. Restart CafeKiosk before testing an invitation.
 )
 echo.
 pause

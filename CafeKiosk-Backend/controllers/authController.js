@@ -1164,7 +1164,8 @@ exports.createInvite = async (req, res) => {
       role,
       inviteUrl,
       expiresHours,
-      inviterName
+      inviterName,
+      inviterEmail: safeText(admin.email)
     });
 
     await pool.execute(
