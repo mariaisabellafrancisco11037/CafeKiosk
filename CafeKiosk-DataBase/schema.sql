@@ -103,8 +103,8 @@ CREATE TABLE users (
 -- role='Admin' and is_owner=1 inside the same backend transaction. Both remain
 -- inactive/pending until the System Administrator approves the cafe.
 --
--- Staff should NOT be allowed to freely type a cafe_id or select Admin.
--- An owner/admin generates an invitation; the signup page validates the token.
+-- Staff should NOT be allowed to freely type a cafe_id.
+-- An owner/admin generates an invitation for Staff or Manager; the signup page validates the token.
 
 CREATE TABLE registration_invites (
     invite_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -124,6 +124,12 @@ CREATE TABLE registration_invites (
 
     expires_at DATETIME NOT NULL,
     accepted_at DATETIME NULL,
+
+    -- Delivery details for the invitation email. The raw invitation token is
+    -- never stored; only token_hash is persisted.
+    email_sent_at DATETIME NULL,
+    email_delivery_status VARCHAR(30) NOT NULL DEFAULT 'NotSent',
+    email_delivery_error VARCHAR(1000) NULL,
 
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP

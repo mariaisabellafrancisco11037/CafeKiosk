@@ -6,7 +6,7 @@
   <title>CafeKiosk - System Monitor</title>
   <link rel="stylesheet" href="../Assets/css/dashboard.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
-  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=2">
+  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=3">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
 </head>
 <body class="uniform-admin system-monitor-body">
@@ -82,7 +82,7 @@
           <div><span class="eyebrow">NEW ACCOUNT CONTROL</span><h2>Cafe Registration Approval</h2><p>New cafe-owner registrations cannot sign in until the System Administrator approves them.</p></div>
           <span class="approval-count-pill" id="approvalCountPill">0 pending</span>
         </div>
-        <div class="monitor-table-wrap">
+        <div class="monitor-table-wrap monitor-scroll-area" aria-label="Scrollable cafe registration approvals">
           <table class="system-monitor-table approval-table">
             <thead><tr><th>Cafe</th><th>Owner</th><th>Contact</th><th>Requested</th><th>Status</th><th>Action</th></tr></thead>
             <tbody id="approvalBody"><tr><td colspan="6" class="monitor-empty">Loading pending registrations...</td></tr></tbody>
@@ -95,7 +95,7 @@
           <div><span class="eyebrow">CAFE MONITORING</span><h2>Registered Cafe Status</h2><p>Technical indicators only. Sales totals, customer details and private cafe records are not shown here.</p></div>
           <div class="table-tools"><label class="monitor-search"><span class="sr-only">Search cafes</span><input id="cafeSearchInput" type="search" placeholder="Search cafe or owner"></label><span class="last-updated" id="lastUpdated">Not updated yet</span></div>
         </div>
-        <div class="monitor-table-wrap">
+        <div class="monitor-table-wrap monitor-scroll-area cafe-status-scroll" aria-label="Scrollable registered cafe status">
           <table class="system-monitor-table">
             <thead><tr><th>Cafe</th><th>Owner</th><th>Overall</th><th>POS</th><th>Kiosk</th><th>Connections</th><th>Last Activity</th><th>Issue</th><th></th></tr></thead>
             <tbody id="cafeStatusBody"><tr><td colspan="9" class="monitor-empty">Loading cafe status...</td></tr></tbody>
@@ -106,7 +106,7 @@
 
       <section class="monitor-panel deletion-log-panel" id="deletedAccounts">
         <div class="monitor-panel-header"><div><span class="eyebrow">ACCOUNT AUDIT</span><h2>Deleted Cafe Accounts</h2><p>Permanent account deletions are recorded here with the required reason.</p></div></div>
-        <div class="monitor-table-wrap">
+        <div class="monitor-table-wrap monitor-scroll-area" aria-label="Scrollable deleted cafe accounts">
           <table class="system-monitor-table deletion-log-table">
             <thead><tr><th>Cafe</th><th>Deleted Owner</th><th>Reason</th><th>Deleted By</th><th>Date</th></tr></thead>
             <tbody id="deletionLogBody"><tr><td colspan="5" class="monitor-empty">Loading deletion history...</td></tr></tbody>

@@ -123,3 +123,76 @@ html { scroll-behavior: smooth; }
 .confirm-approval-btn:disabled { opacity:.6;cursor:wait; }
 @media(max-width:1100px){.system-summary-cards{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:700px){.system-summary-cards{grid-template-columns:1fr 1fr;}}
+
+
+/* =========================================================
+   SYSTEM MONITOR SCROLL / SLIDE AREAS
+   Keeps long cafe lists compact and allows wide tables to be
+   dragged horizontally without taking over the whole page.
+========================================================= */
+.system-monitor-body .monitor-main {
+  min-width: 0;
+}
+
+.monitor-scroll-area {
+  width: 100%;
+  max-height: 360px;
+  overflow-x: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
+.cafe-status-scroll {
+  max-height: 480px;
+}
+
+.monitor-scroll-area .system-monitor-table {
+  margin: 0;
+}
+
+.monitor-scroll-area .system-monitor-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  box-shadow: 0 1px 0 #eadcca;
+}
+
+/* Keep the horizontal/vertical slider clearly visible on desktop. */
+.monitor-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: #a98765 #f3eadc;
+}
+
+.monitor-scroll-area::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+.monitor-scroll-area::-webkit-scrollbar-track {
+  background: #f3eadc;
+  border-radius: 999px;
+}
+
+.monitor-scroll-area::-webkit-scrollbar-thumb {
+  background: #a98765;
+  border: 2px solid #f3eadc;
+  border-radius: 999px;
+}
+
+.monitor-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #7d5d40;
+}
+
+.monitor-scroll-area::-webkit-scrollbar-corner {
+  background: #f3eadc;
+}
+
+@media (max-width: 760px) {
+  .monitor-scroll-area,
+  .cafe-status-scroll {
+    max-height: 390px;
+  }
+}

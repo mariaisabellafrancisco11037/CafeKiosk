@@ -8,7 +8,7 @@
     "start": "node railway-start.js",
     "start:server": "node CafeKiosk-Backend/server.js",
     "railway:init": "node railway-init.js",
-    "test": "node --check railway-start.js && node --check railway-init.js && node --check CafeKiosk-Backend/ensure-panelist-upgrades.js && node --check CafeKiosk-Backend/seed-demo-cafe.js && node --check CafeKiosk-Backend/server.js && node --check CafeKiosk-Backend/controllers/authController.js && node --check CafeKiosk-Backend/middleware/authMiddleware.js && node --check CafeKiosk-Backend/routes/systemAdmin.js && node --check CafeKiosk-Frontend/Assets/js/auth-session.js && node --check CafeKiosk-Frontend/Assets/js/signup.js && node --check CafeKiosk-Frontend/Assets/js/system-monitor.js && node --check CafeKiosk-Frontend/Assets/js/menu-management.js",
+    "test": "node --check railway-start.js && node --check railway-init.js && node --check CafeKiosk-Backend/ensure-panelist-upgrades.js && node --check CafeKiosk-Backend/seed-demo-cafe.js && node --check CafeKiosk-Backend/server.js && node --check CafeKiosk-Backend/controllers/authController.js && node --check CafeKiosk-Backend/middleware/authMiddleware.js && node --check CafeKiosk-Backend/routes/systemAdmin.js && node --check CafeKiosk-Frontend/Assets/js/auth-session.js && node --check CafeKiosk-Frontend/Assets/js/signup.js && node --check CafeKiosk-Frontend/Assets/js/system-monitor.js && node --check CafeKiosk-Frontend/Assets/js/menu-management.js && node --check CafeKiosk-Backend/services/emailService.js && node --check CafeKiosk-Frontend/Assets/js/staff-invite.js",
     "seed:demo": "node CafeKiosk-Backend/seed-demo-cafe.js"
   },
   "engines": {
@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.22.6",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "nodemailer": "^10.0.10"
   }
 }

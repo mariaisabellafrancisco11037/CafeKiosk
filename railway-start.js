@@ -72,6 +72,17 @@ async function start() {
     }
   }
 
+  const emailVarsReady = Boolean(
+    process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS &&
+    (process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER)
+  );
+  if (emailVarsReady) {
+    console.log('✉️  Staff/Manager invitation email is configured.');
+  } else {
+    console.warn('⚠️  Invitation email is not configured. Add SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS and SMTP_FROM_EMAIL to Railway Variables.');
+    console.warn('   Secure invitation links will still be created and shown as a manual fallback.');
+  }
+
   // Railway supplies PORT. Express must bind to all interfaces inside the container.
   process.env.BIND_HOST = '0.0.0.0';
   require('./CafeKiosk-Backend/server');

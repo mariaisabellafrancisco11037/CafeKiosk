@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
+const { sendStaffInvitation } = require('../services/emailService');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
@@ -177,6 +178,10 @@ async function ensureAuthSignupSchema(connection) {
     ) ENGINE=InnoDB
   `);
 
+  await addColumnIfMissing(connection, 'registration_invites', 'email_sent_at', 'DATETIME NULL');
+  await addColumnIfMissing(connection, 'registration_invites', 'email_delivery_status', "VARCHAR(30) NOT NULL DEFAULT 'NotSent'");
+  await addColumnIfMissing(connection, 'registration_invites', 'email_delivery_error', 'VARCHAR(1000) NULL');
+
   await connection.query(`
     CREATE TABLE IF NOT EXISTS email_verification_tokens (
       verification_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -216,7 +221,7 @@ async function resolveDatabaseAdmin(req) {
     const numericUserId = Number(req.user?.userId);
     if (Number.isFinite(numericUserId) && numericUserId > 0) {
       const [rows] = await connection.execute(
-        `SELECT user_id, cafe_id, username, role, is_owner
+        `SELECT user_id, cafe_id, full_name, username, email, role, is_owner
            FROM users
           WHERE user_id = ? AND cafe_id = ?
           LIMIT 1`,
@@ -230,7 +235,7 @@ async function resolveDatabaseAdmin(req) {
     // The session may come from the built-in demo Admin account. If an Admin
     // with the same username already exists in MySQL, bind the invitation to it.
     const [existing] = await connection.execute(
-      `SELECT user_id, cafe_id, username, role, is_owner
+      `SELECT user_id, cafe_id, full_name, username, email, role, is_owner
          FROM users
         WHERE cafe_id = ? AND LOWER(username) = LOWER(?) AND role = 'Admin'
         LIMIT 1`,
@@ -1064,26 +1069,34 @@ exports.ownerSignup = async (req, res) => {
 exports.createInvite = async (req, res) => {
   const invitedEmail = safeText(req.body?.email).toLowerCase();
   const requestedRole = normalizeRole(req.body?.role) || 'Staff';
-  const role = requestedRole === 'Admin' ? 'Admin' : requestedRole === 'Manager' ? 'Manager' : 'Staff';
+  const role = requestedRole === 'Manager' ? 'Manager' : 'Staff';
 
   if (!invitedEmail) {
-    return res.status(400).json({ success: false, message: 'Staff email address is required.' });
+    return res.status(400).json({ success: false, message: 'Staff or Manager email address is required.' });
   }
   if (!/^\S+@\S+\.\S+$/.test(invitedEmail)) {
-    return res.status(400).json({ success: false, message: 'Please enter a valid staff email address.' });
+    return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
   }
 
   try {
     const admin = await resolveDatabaseAdmin(req);
     if (!admin?.user_id) {
-      return res.status(403).json({ success: false, message: 'Admin access is required to create staff invitations.' });
+      return res.status(403).json({ success: false, message: 'Cafe owner/Admin access is required to send staff invitations.' });
     }
 
     const cafeId = safeText(admin.cafe_id || req.user?.cafeId) || 'cafe-1';
     const invitedBy = Number(admin.user_id);
+    const expiresHours = Math.max(1, Math.min(168, Number(req.body?.expiresHours) || 48));
 
-    // Avoid issuing several active links to the same email/role/cafe. Revoke
-    // old pending links first so the newest link is the one staff should use.
+    const [cafeRows] = await pool.execute(
+      'SELECT cafe_name FROM cafes WHERE cafe_id=? LIMIT 1',
+      [cafeId]
+    );
+    const cafeName = safeText(cafeRows?.[0]?.cafe_name || req.user?.cafeName) || 'CafeKiosk Cafe';
+    const inviterName = safeText(admin.full_name || req.user?.displayName || admin.username) || 'Cafe Owner';
+
+    // Revoke older pending links for the same email/cafe/role so the newest
+    // email is always the only usable invitation.
     await pool.execute(
       `UPDATE registration_invites
           SET status = 'Revoked'
@@ -1096,37 +1109,89 @@ exports.createInvite = async (req, res) => {
 
     const token = crypto.randomBytes(24).toString('hex');
     const tokenHash = sha256(token);
-    const expiresHours = Math.max(1, Math.min(168, Number(req.body?.expiresHours) || 48));
 
-    await pool.execute(
+    const [inviteResult] = await pool.execute(
       `INSERT INTO registration_invites
-       (cafe_id, invited_email, invited_role, token_hash, status, invited_by_user_id, expires_at)
-       VALUES (?, ?, ?, ?, 'Pending', ?, DATE_ADD(NOW(), INTERVAL ? HOUR))`,
+       (cafe_id, invited_email, invited_role, token_hash, status, invited_by_user_id, expires_at,
+        email_delivery_status, email_delivery_error)
+       VALUES (?, ?, ?, ?, 'Pending', ?, DATE_ADD(NOW(), INTERVAL ? HOUR), 'NotSent', NULL)`,
       [cafeId, invitedEmail, role, tokenHash, invitedBy, expiresHours]
     );
 
+    const signupPath = `/staff-signup?token=${encodeURIComponent(token)}`;
+    const configuredBaseUrl = safeText(process.env.PUBLIC_APP_URL).replace(/\/$/, '');
+    const railwayDomain = safeText(process.env.RAILWAY_PUBLIC_DOMAIN);
+    const forwardedProto = safeText(req.headers?.['x-forwarded-proto']).split(',')[0] || req.protocol || 'http';
+    const forwardedHost = safeText(req.headers?.['x-forwarded-host']).split(',')[0] || safeText(req.get?.('host'));
+    const detectedBaseUrl = forwardedHost ? `${forwardedProto}://${forwardedHost}` : '';
+    const publicBaseUrl = configuredBaseUrl || (railwayDomain ? `https://${railwayDomain}` : detectedBaseUrl);
+    const inviteUrl = `${String(publicBaseUrl || '').replace(/\/$/, '')}${signupPath}`;
+
+    const delivery = await sendStaffInvitation({
+      to: invitedEmail,
+      cafeName,
+      role,
+      inviteUrl,
+      expiresHours,
+      inviterName
+    });
+
+    await pool.execute(
+      `UPDATE registration_invites
+          SET email_sent_at = ?,
+              email_delivery_status = ?,
+              email_delivery_error = ?
+        WHERE invite_id = ?`,
+      [
+        delivery.sent ? new Date() : null,
+        delivery.sent ? 'Sent' : (delivery.configured ? 'Failed' : 'NotConfigured'),
+        delivery.sent ? null : safeText(delivery.error).slice(0, 1000) || null,
+        inviteResult.insertId
+      ]
+    );
+
     // If this request came from the built-in fallback Admin, immediately issue
-    // a new database-backed Admin session so profile/password features also work
-    // without requiring the owner to log out first.
+    // a database-backed Admin session so later Admin actions use the real row.
     let refreshedAuthToken = '';
     if (!Number.isFinite(Number(req.user?.userId)) || Number(req.user?.userId) <= 0) {
       const linkedAccount = {
         userId: invitedBy,
         username: admin.username || req.user?.username || 'admin',
-        displayName: req.user?.displayName || process.env.ADMIN_DISPLAY_NAME || 'CafeKiosk Administrator',
+        displayName: inviterName,
         role: 'Admin',
         cafeId,
+        cafeName,
         isOwner: Boolean(admin.is_owner ?? true)
       };
       refreshedAuthToken = signToken(linkedAccount);
       setRoleCookie(req, res, refreshedAuthToken, 'Admin');
     }
 
+    addAuditLog({
+      cafeId,
+      user: inviterName,
+      userId: invitedBy,
+      action: delivery.sent ? 'Staff Invitation Email Sent' : 'Staff Invitation Created',
+      category: 'Users',
+      role: 'Admin',
+      source: 'Admin UI',
+      details: `${role} invitation for ${invitedEmail}${delivery.sent ? ' sent by email' : ' created with manual-link fallback'}`,
+      req
+    });
+
     return res.status(201).json({
       success: true,
-      message: 'Staff invitation created.',
-      token,
-      signupPath: `/staff-signup?token=${encodeURIComponent(token)}`,
+      emailSent: Boolean(delivery.sent),
+      emailConfigured: Boolean(delivery.configured),
+      message: delivery.sent
+        ? `Invitation email sent to ${invitedEmail}.`
+        : `Invitation created, but the email could not be sent. Use the backup invitation link.`,
+      emailError: delivery.sent ? undefined : delivery.error,
+      invitedEmail,
+      role,
+      cafeName,
+      signupPath,
+      inviteUrl,
       expiresHours,
       databaseBackedAdmin: true,
       authToken: refreshedAuthToken || undefined
@@ -1136,7 +1201,7 @@ exports.createInvite = async (req, res) => {
     if (error?.code === 'ECONNREFUSED' || error?.code === 'PROTOCOL_CONNECTION_LOST') {
       return res.status(503).json({
         success: false,
-        message: 'MySQL is not reachable. Start MySQL in XAMPP, then try creating the invitation again.'
+        message: 'MySQL is not reachable. Check the CafeKiosk database connection and try again.'
       });
     }
     if (error?.code === 'CAFEKIOSK_SCHEMA_MISSING') {
