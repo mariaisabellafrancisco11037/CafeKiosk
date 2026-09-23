@@ -9,7 +9,7 @@ const express =
 const router =
     express.Router();
 
-const { optionalAuth } = require("../middleware/authMiddleware");
+const { optionalAuth, requireRole } = require("../middleware/authMiddleware");
 
 
 const {
@@ -42,6 +42,7 @@ router.get(
 
 router.get(
     "/",
+    requireRole("Admin", "Manager", "Staff"),
     listOrders
 );
 
@@ -65,6 +66,7 @@ router.post(
 
 router.get(
     "/:orderId",
+    requireRole("Admin", "Manager", "Staff"),
     getOrder
 );
 
@@ -76,7 +78,7 @@ router.get(
 
 router.patch(
     "/:orderId/status",
-    optionalAuth,
+    requireRole("Admin", "Manager", "Staff"),
     updateOrder
 );
 
@@ -88,7 +90,7 @@ router.patch(
 
 router.patch(
     "/:orderId",
-    optionalAuth,
+    requireRole("Admin", "Manager", "Staff"),
     patchOrder
 );
 

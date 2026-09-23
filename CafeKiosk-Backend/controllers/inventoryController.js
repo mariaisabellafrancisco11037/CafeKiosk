@@ -27,7 +27,7 @@ function sendKnownError(res, error) {
 
 exports.getDashboard = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.query.cafeId);
         const dashboard = await store.getDashboard(cafeId);
         return res.json({ success: true, ...dashboard });
     } catch (error) { next(error); }
@@ -60,6 +60,7 @@ exports.getLiveDashboard = async (req, res, next) => {
 exports.seedSampleIngredients = async (req, res, next) => {
     try {
         const cafeId = store.normalizeCafeId(
+            req.user?.cafeId ||
             req.body?.cafeId ||
             req.query?.cafeId
         );
@@ -90,7 +91,7 @@ exports.getStatus = async (req, res, next) => {
 
 exports.createIngredient = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId);
         const ingredient = await store.createIngredient(cafeId, req.body || {});
         emitInventoryChanged(req, cafeId, "ingredient-created");
         return res.status(201).json({ success: true, cafeId, ingredient });
@@ -102,7 +103,7 @@ exports.createIngredient = async (req, res, next) => {
 
 exports.updateIngredient = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId || req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId || req.query.cafeId);
         const ingredient = await store.updateIngredient(cafeId, req.params.ingredientId, req.body || {});
         emitInventoryChanged(req, cafeId, "ingredient-updated");
         return res.json({ success: true, cafeId, ingredient });
@@ -114,7 +115,7 @@ exports.updateIngredient = async (req, res, next) => {
 
 exports.deleteIngredient = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.query.cafeId || req.body?.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.query.cafeId || req.body?.cafeId);
         const ingredient = await store.deleteIngredient(cafeId, req.params.ingredientId);
         emitInventoryChanged(req, cafeId, "ingredient-deleted");
         return res.json({ success: true, cafeId, ingredient });
@@ -126,7 +127,7 @@ exports.deleteIngredient = async (req, res, next) => {
 
 exports.adjustIngredient = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId || req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId || req.query.cafeId);
         const result = await store.adjustIngredient(cafeId, req.params.ingredientId, req.body || {});
         emitInventoryChanged(req, cafeId, "stock-adjusted");
         return res.json({ success: true, cafeId, ...result });
@@ -138,7 +139,7 @@ exports.adjustIngredient = async (req, res, next) => {
 
 exports.getRecipe = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.query.cafeId);
         const itemName = String(req.query.name || "").trim();
         const category = String(req.query.category || "").trim();
         if (!itemName || !category) {
@@ -152,7 +153,7 @@ exports.getRecipe = async (req, res, next) => {
 
 exports.putRecipe = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId);
         const result = await store.saveRecipe(cafeId, req.body || {});
         emitInventoryChanged(req, cafeId, "recipe-saved");
         return res.json({ success: true, message: "Recipe saved.", cafeId, ...result });

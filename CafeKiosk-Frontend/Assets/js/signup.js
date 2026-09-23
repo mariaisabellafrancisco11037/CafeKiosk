@@ -195,6 +195,21 @@
         });
         localStorage.setItem('cafeId', data.cafeId);
         sessionStorage.setItem('cafeSelectedLoginRole', 'admin');
+
+        if (data.pendingApproval) {
+          ownerForm.hidden = true;
+          const pendingPanel = $('ownerApprovalPending');
+          if ($('pendingCafeName')) $('pendingCafeName').textContent = $('cafeName')?.value?.trim() || 'Your Cafe';
+          if ($('pendingCafeId')) $('pendingCafeId').textContent = data.cafeId || '—';
+          if (pendingPanel) pendingPanel.hidden = false;
+          message('ownerSignupMessage', '', true);
+          if (window.CafeMessageDialog) {
+            window.CafeMessageDialog.show(data.message || 'Registration submitted for System Administrator approval.', { type: 'success', title: 'Registration Submitted' });
+          }
+          pendingPanel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+
         ownerKiosk = {
           cafeId: data.cafeId,
           kioskSlug: data.kioskSlug,

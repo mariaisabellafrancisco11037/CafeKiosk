@@ -1,6 +1,7 @@
 (function () {
   const state = {
     cafes: [],
+    approvals: [],
     issues: [],
     loading: false,
     autoRefreshId: null
@@ -74,6 +75,7 @@
 
   function renderSummary(data) {
     el('totalCafes').textContent = Number(data.summary?.totalCafes || 0);
+    if (el('pendingApprovals')) el('pendingApprovals').textContent = Number(data.summary?.pendingApprovals || 0);
     el('onlineCafes').textContent = Number(data.summary?.onlineCafes || 0);
     el('needsAttention').textContent = Number(data.summary?.needsAttention || 0);
     el('activeConnections').textContent = Number(data.summary?.activeConnections || 0);
@@ -107,6 +109,102 @@
     const important = (cafe.issues || []).find((issue) => issue.severity === 'high' || issue.severity === 'medium');
     const first = important || (cafe.issues || [])[0];
     return first?.message || 'No technical issue detected.';
+  }
+
+  function renderApprovals() {
+    const body = el('approvalBody');
+    if (!body) return;
+    const approvals = Array.isArray(state.approvals) ? state.approvals : [];
+    if (el('approvalCountPill')) el('approvalCountPill').textContent = `${approvals.length} pending`;
+    if (!approvals.length) {
+      body.innerHTML = '<tr><td colspan="6" class="monitor-empty">No cafe registrations are waiting for approval.</td></tr>';
+      return;
+    }
+    body.innerHTML = approvals.map((row) => `
+      <tr>
+        <td class="cafe-name-cell"><strong>${escapeHtml(row.cafeName)}</strong><span>${escapeHtml(row.cafeId)}</span></td>
+        <td class="owner-cell"><strong>${escapeHtml(row.ownerName || '—')}</strong><span>@${escapeHtml(row.ownerUsername || 'owner')}</span></td>
+        <td class="owner-cell"><strong>${escapeHtml(row.ownerEmail || row.cafeEmail || '—')}</strong><span>${escapeHtml(row.ownerPhone || '')}</span></td>
+        <td>${escapeHtml(formatDate(row.requestedAt || row.createdAt))}</td>
+        <td><span class="approval-state">Pending Review</span></td>
+        <td><div class="approval-actions"><button class="approve-account-btn" type="button" data-approve-cafe="${escapeHtml(row.cafeId)}">Approve</button><button class="reject-account-btn" type="button" data-reject-cafe="${escapeHtml(row.cafeId)}">Reject</button></div></td>
+      </tr>`).join('');
+  }
+
+  async function loadApprovals() {
+    try {
+      const response = await fetch(backendUrl('/api/system-admin/approvals'), { credentials: 'include', cache: 'no-store' });
+      if (response.status === 401) return goToSystemLogin();
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || 'Unable to load registrations.');
+      state.approvals = Array.isArray(data.approvals) ? data.approvals : [];
+      renderApprovals();
+      if (el('pendingApprovals')) el('pendingApprovals').textContent = state.approvals.length;
+    } catch (error) {
+      if (el('approvalBody')) el('approvalBody').innerHTML = `<tr><td colspan="6" class="monitor-empty">${escapeHtml(error.message || 'Unable to load registrations.')}</td></tr>`;
+    }
+  }
+
+  function openApprovalDecision(cafeId, action) {
+    const row = state.approvals.find(item => String(item.cafeId) === String(cafeId));
+    if (!row) return;
+    const approving = action === 'approve';
+    el('approvalCafeId').value = row.cafeId;
+    el('approvalAction').value = action;
+    el('approvalCafeName').textContent = row.cafeName || row.cafeId;
+    el('approvalOwnerName').textContent = row.ownerName || 'Cafe owner';
+    el('approvalOwnerEmail').textContent = row.ownerEmail || row.cafeEmail || '—';
+    el('approvalDecisionTitle').textContent = approving ? 'Approve Cafe Account' : 'Reject Cafe Account';
+    el('approvalDecisionMessage').textContent = approving
+      ? 'Approving this registration activates the cafe owner account. The owner can then log in and invite staff or managers.'
+      : 'Rejecting this registration keeps the cafe and owner account inactive. Provide a reason so the owner knows why access was not approved.';
+    el('approvalReasonWrap').hidden = approving;
+    el('approvalReason').value = '';
+    el('approvalError').textContent = '';
+    const button = el('confirmApprovalBtn');
+    button.textContent = approving ? 'Approve Account' : 'Reject Account';
+    button.classList.toggle('reject-mode', !approving);
+    const modal = el('approvalDecisionModal');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => approving ? button.focus() : el('approvalReason')?.focus(), 50);
+  }
+
+  function closeApprovalDecision() {
+    const modal = el('approvalDecisionModal');
+    modal?.classList.remove('open');
+    modal?.setAttribute('aria-hidden', 'true');
+  }
+
+  async function confirmApprovalDecision() {
+    const cafeId = String(el('approvalCafeId')?.value || '').trim();
+    const action = String(el('approvalAction')?.value || '').trim();
+    const reason = String(el('approvalReason')?.value || '').trim();
+    const errorBox = el('approvalError');
+    const button = el('confirmApprovalBtn');
+    if (!cafeId || !['approve','reject'].includes(action)) return;
+    if (action === 'reject' && reason.length < 5) {
+      errorBox.textContent = 'Please enter a short reason for rejection.';
+      return;
+    }
+    button.disabled = true;
+    button.textContent = action === 'approve' ? 'Approving...' : 'Rejecting...';
+    errorBox.textContent = '';
+    try {
+      const response = await fetch(backendUrl(`/api/system-admin/approvals/${encodeURIComponent(cafeId)}/${action}`), {
+        method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || 'Unable to update registration.');
+      closeApprovalDecision();
+      alert(data.message || 'Cafe registration updated.');
+      await Promise.all([loadApprovals(), refreshOverview()]);
+    } catch (error) {
+      errorBox.textContent = error.message || 'Unable to update registration.';
+    } finally {
+      button.disabled = false;
+      button.textContent = action === 'approve' ? 'Approve Account' : 'Reject Account';
+    }
   }
 
   function renderCafeRows() {
@@ -175,6 +273,7 @@
       <div class="status-detail-grid">
         <div class="status-detail-card"><span>Overall Status</span><strong>${escapeHtml(cafe.overallStatus)}</strong></div>
         <div class="status-detail-card"><span>Account Status</span><strong>${escapeHtml(cafe.accountStatus)}</strong></div>
+        <div class="status-detail-card"><span>Registration Approval</span><strong>${escapeHtml(cafe.approvalStatus || 'Approved')}</strong></div>
         <div class="status-detail-card"><span>POS Connections</span><strong>${Number(cafe.connections?.pos || 0)}</strong></div>
         <div class="status-detail-card"><span>Kiosk Service</span><strong>${cafe.kioskOnline ? 'Online' : 'Offline'}</strong></div>
         <div class="status-detail-card"><span>Live Kiosk Devices</span><strong>${Number(cafe.connections?.kiosk || 0)}</strong></div>
@@ -249,6 +348,7 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.message || 'Unable to delete account.');
       closeDeleteModal();
+      closeApprovalDecision();
       alert(data.message || 'Cafe account deleted.');
       await refreshOverview();
       loadDeletionLog();
@@ -390,6 +490,12 @@
     const deleteButton = event.target.closest('[data-delete-cafe]');
     if (deleteButton) openDeleteModal(deleteButton.dataset.deleteCafe);
 
+    const approveButton = event.target.closest('[data-approve-cafe]');
+    if (approveButton) openApprovalDecision(approveButton.dataset.approveCafe, 'approve');
+
+    const rejectButton = event.target.closest('[data-reject-cafe]');
+    if (rejectButton) openApprovalDecision(rejectButton.dataset.rejectCafe, 'reject');
+
     const scrollButton = event.target.closest('[data-scroll-target]');
     if (scrollButton) {
       document.getElementById(scrollButton.dataset.scrollTarget)?.scrollIntoView({ behavior: 'smooth' });
@@ -411,9 +517,14 @@
   el('cancelDeleteAccountBtn')?.addEventListener('click', closeDeleteModal);
   el('confirmDeleteAccountBtn')?.addEventListener('click', confirmDeleteAccount);
   el('deleteAccountModal')?.addEventListener('click', (event) => { if (event.target === el('deleteAccountModal')) closeDeleteModal(); });
+  el('approvalDecisionClose')?.addEventListener('click', closeApprovalDecision);
+  el('cancelApprovalBtn')?.addEventListener('click', closeApprovalDecision);
+  el('confirmApprovalBtn')?.addEventListener('click', confirmApprovalDecision);
+  el('approvalDecisionModal')?.addEventListener('click', (event) => { if (event.target === el('approvalDecisionModal')) closeApprovalDecision(); });
 
   loadProfile();
   refreshOverview();
+  loadApprovals();
   loadDeletionLog();
-  state.autoRefreshId = window.setInterval(refreshOverview, 15000);
+  state.autoRefreshId = window.setInterval(() => { refreshOverview(); loadApprovals(); }, 15000);
 })();

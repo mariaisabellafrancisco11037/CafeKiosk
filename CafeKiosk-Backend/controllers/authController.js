@@ -103,6 +103,32 @@ async function ensureAuthSignupSchema(connection) {
     ) ENGINE=InnoDB
   `);
 
+  // Platform approval is separate from the cafe's normal Active/Inactive switch.
+  // Existing cafes default to Approved; new public owner registrations are Pending.
+  await addColumnIfMissing(connection, 'cafes', 'approval_status', "ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Approved'");
+  await addColumnIfMissing(connection, 'cafes', 'approval_requested_at', 'DATETIME NULL');
+  await addColumnIfMissing(connection, 'cafes', 'approved_at', 'DATETIME NULL');
+  await addColumnIfMissing(connection, 'cafes', 'approved_by', 'VARCHAR(150) NULL');
+  await addColumnIfMissing(connection, 'cafes', 'rejection_reason', 'VARCHAR(1000) NULL');
+
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS cafe_approval_history (
+      approval_history_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      cafe_id VARCHAR(50) NOT NULL,
+      cafe_name_snapshot VARCHAR(150) NOT NULL,
+      owner_name_snapshot VARCHAR(150) NULL,
+      owner_email_snapshot VARCHAR(190) NULL,
+      old_status VARCHAR(30) NOT NULL,
+      new_status VARCHAR(30) NOT NULL,
+      reason VARCHAR(1000) NULL,
+      changed_by VARCHAR(150) NOT NULL,
+      changed_from_ip VARCHAR(45) NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      KEY idx_cafe_approval_history_cafe (cafe_id, created_at),
+      KEY idx_cafe_approval_history_time (created_at)
+    ) ENGINE=InnoDB
+  `);
+
   // Columns required by the current login/profile/signup controllers.
   await addColumnIfMissing(connection, 'users', 'cafe_id', "VARCHAR(50) NOT NULL DEFAULT 'cafe-1'");
   await addColumnIfMissing(connection, 'users', 'email', 'VARCHAR(190) NULL');
@@ -264,6 +290,7 @@ function signToken(user) {
     displayName: user.displayName,
     role: user.role,
     cafeId: user.cafeId,
+    cafeName: user.cafeName || '',
     isOwner: Boolean(user.isOwner)
   }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
@@ -311,7 +338,17 @@ function clearRoleCookie(req, res, role) {
   res.clearCookie(cookieName, options);
 }
 
+function allowFallbackDemoAccounts() {
+  const explicit = String(process.env.ALLOW_FALLBACK_DEMO_ACCOUNTS || '').toLowerCase();
+  if (['1', 'true', 'yes'].includes(explicit)) return true;
+  // Never allow the hard-coded demo passwords on Railway/production unless
+  // the deployer explicitly opts in. Local classroom/offline builds keep them.
+  if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID || process.env.NODE_ENV === 'production') return false;
+  return true;
+}
+
 function getFallbackAccounts() {
+  if (!allowFallbackDemoAccounts()) return [];
   return [
     {
       userId: process.env.ADMIN_USER_ID || 'admin',
@@ -338,31 +375,37 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole) {
   const id = safeText(identifier).toLowerCase();
   if (!id) return null;
 
+  const selectFields = `
+    SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email,
+           u.password_hash, u.role, u.is_owner, u.status,
+           c.cafe_name, c.status AS cafe_status,
+           COALESCE(c.approval_status, 'Approved') AS approval_status,
+           c.rejection_reason
+      FROM users u
+      JOIN cafes c ON c.cafe_id = u.cafe_id`;
+
   let rows;
   if (id.includes('@')) {
     [rows] = await pool.execute(
-      `SELECT user_id, cafe_id, full_name, username, email, password_hash, role, is_owner, status
-       FROM users
-       WHERE LOWER(email)=?
+      `${selectFields}
+       WHERE LOWER(u.email)=?
        LIMIT 2`,
       [id]
     );
   } else {
-    const roleFilter = requestedRole ? ' AND role=?' : '';
+    const roleFilter = requestedRole ? ' AND u.role=?' : '';
     const params = requestedRole ? [id, requestedCafeId, requestedRole] : [id, requestedCafeId];
     [rows] = await pool.execute(
-      `SELECT user_id, cafe_id, full_name, username, email, password_hash, role, is_owner, status
-       FROM users
-       WHERE LOWER(username)=? AND cafe_id=?${roleFilter}
+      `${selectFields}
+       WHERE LOWER(u.username)=? AND u.cafe_id=?${roleFilter}
        LIMIT 2`,
       params
     );
 
     if (!rows.length) {
       [rows] = await pool.execute(
-        `SELECT user_id, cafe_id, full_name, username, email, password_hash, role, is_owner, status
-         FROM users
-         WHERE LOWER(username)=?${requestedRole ? ' AND role=?' : ''}
+        `${selectFields}
+         WHERE LOWER(u.username)=?${requestedRole ? ' AND u.role=?' : ''}
          LIMIT 3`,
         requestedRole ? [id, requestedRole] : [id]
       );
@@ -384,8 +427,12 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole) {
     displayName: row.full_name,
     role: row.role,
     cafeId: row.cafe_id,
+    cafeName: row.cafe_name || row.cafe_id,
     isOwner: Boolean(row.is_owner),
-    status: row.status
+    status: row.status,
+    cafeStatus: row.cafe_status,
+    approvalStatus: row.approval_status || 'Approved',
+    rejectionReason: row.rejection_reason || ''
   };
 }
 
@@ -847,6 +894,25 @@ exports.login = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid User ID/email or password.' });
     }
 
+    if (String(account.approvalStatus || 'Approved').toLowerCase() === 'pending') {
+      return res.status(403).json({
+        success: false,
+        code: 'CAFE_APPROVAL_PENDING',
+        message: `${account.cafeName || 'This cafe'} is awaiting System Administrator approval. You can sign in after the registration is approved.`
+      });
+    }
+    if (String(account.approvalStatus || 'Approved').toLowerCase() === 'rejected') {
+      return res.status(403).json({
+        success: false,
+        code: 'CAFE_APPROVAL_REJECTED',
+        message: account.rejectionReason
+          ? `Cafe registration was not approved: ${account.rejectionReason}`
+          : 'This cafe registration was not approved. Please contact the System Administrator.'
+      });
+    }
+    if (String(account.cafeStatus || 'Active').toLowerCase() !== 'active') {
+      return res.status(403).json({ success: false, message: 'This cafe account is inactive. Please contact the System Administrator.' });
+    }
     if (account.status !== 'Active') {
       return res.status(403).json({ success: false, message: `This account is ${String(account.status).toLowerCase()}. Please contact the cafe owner.` });
     }
@@ -913,6 +979,7 @@ exports.ownerSignup = async (req, res) => {
   }
 
   try {
+    await ensureAuthSignupSchema(connection);
     await connection.beginTransaction();
 
     const [emailRows] = await connection.execute('SELECT user_id FROM users WHERE LOWER(email)=? LIMIT 1', [email]);
@@ -932,8 +999,9 @@ exports.ownerSignup = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     await connection.execute(
-      `INSERT INTO cafes (cafe_id, cafe_name, email, timezone, status)
-       VALUES (?, ?, ?, 'Asia/Manila', 'Active')`,
+      `INSERT INTO cafes
+       (cafe_id, cafe_name, email, timezone, status, approval_status, approval_requested_at, approved_at, approved_by, rejection_reason)
+       VALUES (?, ?, ?, 'Asia/Manila', 'Inactive', 'Pending', NOW(), NULL, NULL, NULL)`,
       [cafeId, cafeName, email]
     );
 
@@ -944,7 +1012,7 @@ exports.ownerSignup = async (req, res) => {
     const [userResult] = await connection.execute(
       `INSERT INTO users
        (cafe_id, full_name, username, email, phone, password_hash, role, is_owner, status, email_verified_at)
-       VALUES (?, ?, ?, ?, ?, ?, 'Admin', 1, 'Active', NOW())`,
+       VALUES (?, ?, ?, ?, ?, ?, 'Admin', 1, 'Pending', NOW())`,
       [cafeId, fullName, username, email, phone || null, passwordHash]
     );
 
@@ -970,21 +1038,15 @@ exports.ownerSignup = async (req, res) => {
 
     await connection.commit();
 
-    const kioskSetupToken = jwt.sign(
-      { scope: 'kiosk-setup', cafeId, userId: userResult.insertId },
-      JWT_SECRET,
-      { expiresIn: '20m' }
-    );
-
     return res.status(201).json({
       success: true,
-      message: 'Cafe owner account created successfully.',
+      pendingApproval: true,
+      message: 'Registration submitted. A System Administrator must approve this cafe account before the owner can sign in.',
       cafeId,
       userId: userResult.insertId,
       kioskSlug,
       kioskUrl: kioskAccessStore.buildKioskUrl(kioskSlug),
-      kioskEnabled: true,
-      kioskSetupToken,
+      kioskEnabled: false,
       loginUrl: '/admin-login'
     });
   } catch (error) {
@@ -1233,7 +1295,10 @@ exports.me = async (req, res) => {
          u.last_login,
          u.created_at,
          u.cafe_id,
-         c.cafe_name
+         c.cafe_name,
+         c.status AS cafe_status,
+         COALESCE(c.approval_status, 'Approved') AS approval_status,
+         c.rejection_reason
        FROM users u
        LEFT JOIN cafes c ON c.cafe_id = u.cafe_id
        WHERE u.user_id = ? AND u.cafe_id = ?
@@ -1246,6 +1311,19 @@ exports.me = async (req, res) => {
     }
 
     const row = rows[0];
+    const approvalStatus = String(row.approval_status || 'Approved').toLowerCase();
+    if (approvalStatus !== 'approved' || String(row.cafe_status || 'Active').toLowerCase() !== 'active') {
+      clearRoleCookie(req, res, row.role || req.user?.role || '');
+      return res.status(401).json({
+        success: false,
+        code: approvalStatus === 'pending' ? 'CAFE_APPROVAL_PENDING' : 'CAFE_NOT_ACTIVE',
+        message: approvalStatus === 'pending'
+          ? `${row.cafe_name || 'This cafe'} is awaiting System Administrator approval.`
+          : row.rejection_reason
+            ? `Cafe account is unavailable: ${row.rejection_reason}`
+            : 'This cafe account is not active. Please contact the System Administrator.'
+      });
+    }
     if (String(row.status || '').toLowerCase() !== 'active') {
       clearRoleCookie(req, res, row.role || req.user?.role || '');
       return res.status(401).json({

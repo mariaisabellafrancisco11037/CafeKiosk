@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
+const ensurePanelistUpgrades = require('../ensure-panelist-upgrades');
 const {
   SYSTEM_ADMIN_COOKIE,
   requireSystemAdminApi
@@ -142,6 +143,12 @@ function latestDate(...values) {
 function buildIssueList(cafe) {
   const issues = [];
 
+  if (String(cafe.approvalStatus || 'Approved').toLowerCase() === 'pending') {
+    issues.push({ severity: 'medium', message: 'Cafe registration is waiting for System Administrator approval.' });
+  } else if (String(cafe.approvalStatus || 'Approved').toLowerCase() === 'rejected') {
+    issues.push({ severity: 'medium', message: 'Cafe registration was rejected.' });
+  }
+
   if (String(cafe.accountStatus).toLowerCase() !== 'active') {
     issues.push({ severity: 'medium', message: 'Cafe account is inactive.' });
   }
@@ -231,7 +238,8 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
   let cafes = [];
 
   try {
-    // Ensure older databases have the Kiosk access columns before the monitor reads them.
+    // Keep older Railway/local databases compatible with the current approval and kiosk schema.
+    await ensurePanelistUpgrades();
     await kioskAccessStore.ensureSchema();
     const [dbRows] = await dbPool.query('SELECT DATABASE() AS databaseName, VERSION() AS version, NOW() AS serverTime');
     databaseInfo = dbRows[0] || null;
@@ -241,6 +249,11 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
         c.cafe_id,
         c.cafe_name,
         c.status,
+        c.approval_status,
+        c.approval_requested_at,
+        c.approved_at,
+        c.approved_by,
+        c.rejection_reason,
         c.kiosk_slug,
         c.kiosk_enabled,
         c.kiosk_slug_updated_at,
@@ -315,6 +328,11 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
         ownerName: row.owner_name || '—',
         ownerUsername: row.owner_username || '',
         accountStatus: row.status || 'Active',
+        approvalStatus: row.approval_status || 'Approved',
+        approvalRequestedAt: row.approval_requested_at || null,
+        approvedAt: row.approved_at || null,
+        approvedBy: row.approved_by || '',
+        rejectionReason: row.rejection_reason || '',
         registeredAt: row.created_at || null,
         lastActivity: latestDate(
           userActivity.get(cafeId),
@@ -325,7 +343,7 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
         delayedOrders: Number(delayedOrders.get(cafeId) || 0),
         kioskSlug: row.kiosk_slug || '',
         kioskEnabled: Boolean(row.kiosk_enabled),
-        kioskOnline: String(row.status || 'Active').toLowerCase() === 'active' && Boolean(row.kiosk_enabled) && Boolean(row.kiosk_slug),
+        kioskOnline: String(row.status || 'Active').toLowerCase() === 'active' && String(row.approval_status || 'Approved').toLowerCase() === 'approved' && Boolean(row.kiosk_enabled) && Boolean(row.kiosk_slug),
         kioskConfiguredAt: row.kiosk_slug_updated_at || null,
         kioskDeviceOnline: Number(connections.kiosk || 0) > 0,
         connections
@@ -369,6 +387,7 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
   const onlineCafes = cafes.filter((cafe) => cafe.overallStatus === 'Online' || cafe.overallStatus === 'Warning').length;
   const needsAttention = cafes.filter((cafe) => cafe.overallStatus === 'Warning' || cafe.overallStatus === 'Offline' || cafe.overallStatus === 'Inactive').length;
   const activeConnections = cafes.reduce((sum, cafe) => sum + cafe.connections.total, 0);
+  const pendingApprovals = cafes.filter((cafe) => String(cafe.approvalStatus || '').toLowerCase() === 'pending').length;
 
   return res.json({
     success: true,
@@ -386,6 +405,7 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
       totalCafes: cafes.length,
       onlineCafes,
       needsAttention,
+      pendingApprovals,
       activeConnections
     },
     cafes,
@@ -393,6 +413,152 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
   });
 });
 
+
+
+// ============================================================
+// NEW CAFE ACCOUNT APPROVAL
+// Public owner registration stays Pending until the System Administrator
+// reviews it. This prevents an unknown visitor from creating an immediately
+// usable Admin account.
+// ============================================================
+
+router.get('/approvals', requireSystemAdminApi, async (req, res) => {
+  try {
+    await ensurePanelistUpgrades();
+    const [rows] = await dbPool.execute(`
+      SELECT c.cafe_id AS cafeId,
+             c.cafe_name AS cafeName,
+             c.email AS cafeEmail,
+             c.approval_status AS approvalStatus,
+             c.approval_requested_at AS requestedAt,
+             c.rejection_reason AS rejectionReason,
+             c.created_at AS createdAt,
+             u.user_id AS ownerUserId,
+             u.full_name AS ownerName,
+             u.username AS ownerUsername,
+             u.email AS ownerEmail,
+             u.phone AS ownerPhone,
+             u.status AS ownerStatus
+        FROM cafes c
+        LEFT JOIN users u ON u.cafe_id = c.cafe_id AND u.is_owner = 1
+       WHERE c.approval_status = 'Pending'
+       ORDER BY COALESCE(c.approval_requested_at, c.created_at) ASC, u.user_id ASC
+    `);
+    return res.json({ success: true, count: rows.length, approvals: rows });
+  } catch (error) {
+    console.error('Load cafe approvals error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to load pending cafe registrations.' });
+  }
+});
+
+async function changeCafeApproval(req, res, nextStatus) {
+  const cafeId = text(req.params.cafeId);
+  const reason = text(req.body?.reason);
+  const isApproved = nextStatus === 'Approved';
+  if (!cafeId) return res.status(400).json({ success: false, message: 'Cafe account is required.' });
+  if (!isApproved && reason.length < 5) {
+    return res.status(400).json({ success: false, message: 'Please provide a short reason for rejecting this registration.' });
+  }
+
+  await ensurePanelistUpgrades();
+  const connection = await dbPool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const [rows] = await connection.execute(`
+      SELECT c.cafe_id, c.cafe_name, c.approval_status,
+             u.user_id, u.full_name, u.email
+        FROM cafes c
+        LEFT JOIN users u ON u.cafe_id=c.cafe_id AND u.is_owner=1
+       WHERE c.cafe_id=?
+       ORDER BY u.user_id ASC
+       LIMIT 1
+       FOR UPDATE`, [cafeId]);
+
+    if (!rows.length) {
+      await connection.rollback();
+      return res.status(404).json({ success: false, message: 'Cafe registration was not found.' });
+    }
+
+    const cafe = rows[0];
+    const oldStatus = cafe.approval_status || 'Approved';
+    const actor = req.systemAdmin?.displayName || req.systemAdmin?.username || 'System Administrator';
+
+    await connection.execute(`
+      UPDATE cafes
+         SET approval_status=?,
+             status=?,
+             approved_at=?,
+             approved_by=?,
+             rejection_reason=?
+       WHERE cafe_id=?`, [
+      nextStatus,
+      isApproved ? 'Active' : 'Inactive',
+      isApproved ? new Date() : null,
+      isApproved ? actor : null,
+      isApproved ? null : reason,
+      cafeId
+    ]);
+
+    await connection.execute(
+      `UPDATE users SET status=? WHERE cafe_id=? AND is_owner=1`,
+      [isApproved ? 'Active' : 'Inactive', cafeId]
+    );
+
+    await connection.execute(`
+      INSERT INTO cafe_approval_history
+        (cafe_id, cafe_name_snapshot, owner_name_snapshot, owner_email_snapshot,
+         old_status, new_status, reason, changed_by, changed_from_ip)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+      cafeId,
+      cafe.cafe_name,
+      cafe.full_name || null,
+      cafe.email || null,
+      oldStatus,
+      nextStatus,
+      reason || null,
+      actor,
+      String(req.ip || req.socket?.remoteAddress || '').slice(0, 45) || null
+    ]);
+
+    await connection.commit();
+    if (!isApproved) await disconnectCafeSockets(req.app.get('io'), cafeId);
+
+    return res.json({
+      success: true,
+      cafeId,
+      approvalStatus: nextStatus,
+      message: isApproved
+        ? `${cafe.cafe_name} was approved. The cafe owner can now sign in.`
+        : `${cafe.cafe_name} was rejected and cannot sign in.`
+    });
+  } catch (error) {
+    try { await connection.rollback(); } catch (_) {}
+    console.error('Cafe approval update error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to update this cafe registration.' });
+  } finally {
+    connection.release();
+  }
+}
+
+router.post('/approvals/:cafeId/approve', requireSystemAdminApi, (req, res) => changeCafeApproval(req, res, 'Approved'));
+router.post('/approvals/:cafeId/reject', requireSystemAdminApi, (req, res) => changeCafeApproval(req, res, 'Rejected'));
+
+router.get('/approval-history', requireSystemAdminApi, async (req, res) => {
+  try {
+    await ensurePanelistUpgrades();
+    const [rows] = await dbPool.execute(`
+      SELECT approval_history_id AS id, cafe_id AS cafeId, cafe_name_snapshot AS cafeName,
+             owner_name_snapshot AS ownerName, owner_email_snapshot AS ownerEmail,
+             old_status AS oldStatus, new_status AS newStatus, reason,
+             changed_by AS changedBy, created_at AS changedAt
+        FROM cafe_approval_history
+       ORDER BY created_at DESC
+       LIMIT 100`);
+    return res.json({ success: true, history: rows });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Unable to load approval history.' });
+  }
+});
 
 router.delete('/cafes/:cafeId', requireSystemAdminApi, async (req, res) => {
   const cafeId = text(req.params.cafeId);

@@ -42,7 +42,7 @@ exports.getStatus = async (req, res, next) => {
 
 exports.getConfig = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.query.cafeId);
         const config = await store.getAdminConfig(cafeId);
 
         return res.json({
@@ -56,7 +56,7 @@ exports.getConfig = async (req, res, next) => {
 
 exports.getRecipe = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.query.cafeId);
         const itemName = String(req.query.name || "").trim();
         const category = String(req.query.category || "").trim();
 
@@ -83,7 +83,7 @@ exports.getRecipe = async (req, res, next) => {
 
 exports.putRecipe = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId);
         const result = await store.saveRecipe(cafeId, req.body || {});
 
         emitInventoryChanged(req, cafeId, "recipe-saved");
@@ -107,7 +107,7 @@ exports.putRecipe = async (req, res, next) => {
 
 exports.patchIngredient = async (req, res, next) => {
     try {
-        const cafeId = store.normalizeCafeId(req.body?.cafeId || req.query.cafeId);
+        const cafeId = store.normalizeCafeId(req.user?.cafeId || req.body?.cafeId || req.query.cafeId);
         const ingredient = await store.updateIngredient(
             cafeId,
             req.params.ingredientId,

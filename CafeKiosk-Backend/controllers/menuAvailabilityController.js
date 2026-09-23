@@ -47,7 +47,7 @@ exports.putAvailability =
         try {
             const cafeId =
                 store.normalizeCafeId(
-                    req.body?.cafeId
+                    req.user?.cafeId || req.body?.cafeId
                 );
 
             if (

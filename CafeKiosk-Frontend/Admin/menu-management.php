@@ -178,7 +178,9 @@
             </div>
           </div>
 
-          <div class="category-tabs" id="categoryTabs" aria-label="Product categories"></div>
+          <div class="category-scroll-area" aria-label="Scrollable product categories">
+            <div class="category-tabs" id="categoryTabs" aria-label="Product categories"></div>
+          </div>
         </section>
 
         <section class="product-panel">

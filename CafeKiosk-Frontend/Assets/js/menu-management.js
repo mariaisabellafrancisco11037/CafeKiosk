@@ -3358,3 +3358,17 @@ async function initializeMenuManagement() {
 
 
 initializeMenuManagement();
+
+// PANELIST UX: keep an unlimited number of categories in one horizontal row.
+// A normal mouse wheel over the category strip moves it on the X axis, while
+// touchpads/touch screens retain native horizontal swiping.
+(function categoryTabsHorizontalWheel() {
+  const tabs = document.getElementById('categoryTabs');
+  if (!tabs) return;
+  tabs.addEventListener('wheel', (event) => {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX) || !event.deltaY) return;
+    if (tabs.scrollWidth <= tabs.clientWidth) return;
+    event.preventDefault();
+    tabs.scrollLeft += event.deltaY;
+  }, { passive: false });
+})();

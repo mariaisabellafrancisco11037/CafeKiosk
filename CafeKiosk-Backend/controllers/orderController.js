@@ -531,11 +531,9 @@ exports.listOrders =
         try {
 
             const cafeId =
-                req.query.cafeId
-                    ? normalizeCafeId(
-                        req.query.cafeId
-                    )
-                    : undefined;
+                normalizeCafeId(
+                    req.user?.cafeId || req.query.cafeId || 'cafe-1'
+                );
 
 
             const source =
@@ -614,7 +612,8 @@ exports.getOrder =
 
 
             if (
-                !order
+                !order ||
+                String(order.cafeId || order.cafe_id || '') !== String(req.user?.cafeId || '')
             ) {
 
                 return res
@@ -690,6 +689,11 @@ exports.updateOrder =
                         req.params
                             .orderId
                     );
+
+
+            if (!previousOrder || String(previousOrder.cafeId || previousOrder.cafe_id || '') !== String(req.user?.cafeId || '')) {
+                return res.status(404).json({ success: false, message: 'Order not found.' });
+            }
 
 
             const order =
@@ -849,7 +853,8 @@ exports.patchOrder =
 
 
             if (
-                !existing
+                !existing ||
+                String(existing.cafeId || existing.cafe_id || '') !== String(req.user?.cafeId || '')
             ) {
 
                 return res

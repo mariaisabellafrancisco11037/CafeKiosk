@@ -14,6 +14,8 @@ const jwt =
         "jsonwebtoken"
     );
 
+const dbPool = require("../config/dbPool");
+
 const JWT_SECRET =
     process.env.JWT_SECRET ||
     "cafekiosk-demo-secret";
@@ -343,42 +345,120 @@ function apiForbidden(
 
 
 // ============================================================
+// DATABASE-BACKED ACCOUNT AUTHENTICATION
+// ============================================================
+
+function fallbackDemoAllowed() {
+    const explicit = String(process.env.ALLOW_FALLBACK_DEMO_ACCOUNTS || "").toLowerCase();
+    if (["1", "true", "yes"].includes(explicit)) return true;
+    if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID || process.env.NODE_ENV === "production") return false;
+    return true;
+}
+
+async function activeDatabaseAccount(user) {
+    const numericUserId = Number(user?.userId);
+    const cafeId = String(user?.cafeId || "").trim();
+
+    // Local demo fallback accounts use string ids. They are disabled on Railway
+    // unless explicitly opted in.
+    if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
+        return fallbackDemoAllowed()
+            ? { ok: true, fallback: true }
+            : { ok: false, status: 401, message: "This session is not backed by an approved CafeKiosk account." };
+    }
+
+    try {
+        const [rows] = await dbPool.execute(
+            `SELECT u.status AS user_status,
+                    c.status AS cafe_status,
+                    COALESCE(c.approval_status, 'Approved') AS approval_status,
+                    c.cafe_name,
+                    c.rejection_reason
+               FROM users u
+               JOIN cafes c ON c.cafe_id = u.cafe_id
+              WHERE u.user_id = ? AND u.cafe_id = ?
+              LIMIT 1`,
+            [numericUserId, cafeId]
+        );
+
+        if (!rows.length) {
+            return { ok: false, status: 401, message: "Your CafeKiosk account no longer exists." };
+        }
+
+        const row = rows[0];
+        const approval = String(row.approval_status || "Approved").toLowerCase();
+        if (approval === "pending") {
+            return { ok: false, status: 403, message: `${row.cafe_name || "This cafe"} is awaiting System Administrator approval.` };
+        }
+        if (approval === "rejected") {
+            return { ok: false, status: 403, message: row.rejection_reason ? `Cafe registration was not approved: ${row.rejection_reason}` : "This cafe registration was not approved." };
+        }
+        if (String(row.cafe_status || "").toLowerCase() !== "active") {
+            return { ok: false, status: 403, message: "This cafe account is inactive." };
+        }
+        if (String(row.user_status || "").toLowerCase() !== "active") {
+            return { ok: false, status: 401, message: "Your CafeKiosk user account is not active." };
+        }
+        return { ok: true, row };
+    } catch (error) {
+        // Compatibility for an older local database before the approval column
+        // is migrated. Authentication still checks the user and cafe statuses.
+        if (error?.code === "ER_BAD_FIELD_ERROR") {
+            const [rows] = await dbPool.execute(
+                `SELECT u.status AS user_status, c.status AS cafe_status, c.cafe_name
+                   FROM users u JOIN cafes c ON c.cafe_id=u.cafe_id
+                  WHERE u.user_id=? AND u.cafe_id=? LIMIT 1`,
+                [numericUserId, cafeId]
+            );
+            if (!rows.length) return { ok: false, status: 401, message: "Your CafeKiosk account no longer exists." };
+            const row = rows[0];
+            return String(row.user_status).toLowerCase() === "active" && String(row.cafe_status).toLowerCase() === "active"
+                ? { ok: true, row }
+                : { ok: false, status: 401, message: "Your CafeKiosk account is not active." };
+        }
+        console.error("Authentication database verification failed:", error.message);
+        return { ok: false, status: 503, message: "Authentication service is temporarily unavailable." };
+    }
+}
+
+async function authenticateRequest(req, preferredRoles = []) {
+    const user = decodeRequestUser(req, preferredRoles);
+    if (!user) return { ok: false, status: 401, message: "Please log in first." };
+    const account = await activeDatabaseAccount(user);
+    if (!account.ok) return account;
+    return { ok: true, user, account };
+}
+
+// ============================================================
 // API AUTH
 // ============================================================
 
-function verifyToken(
+async function verifyToken(
     req,
     res,
     next
 ) {
-    const user =
-        decodeRequestUser(
-            req
-        );
+    const auth = await authenticateRequest(req);
 
-
-    if (!user) {
-
-        return apiUnauthorized(
-            res,
-            "Please log in first."
-        );
-
+    if (!auth.ok) {
+        return res.status(auth.status || 401).json({ success: false, message: auth.message || "Authentication required." });
     }
 
-
-    req.user =
-        user;
-
+    req.user = auth.user;
     return next();
 }
-
 
 const requireAuth =
     verifyToken;
 
-function optionalAuth(req, res, next) {
-    req.user = decodeRequestUser(req) || null;
+async function optionalAuth(req, res, next) {
+    const user = decodeRequestUser(req) || null;
+    if (!user) {
+        req.user = null;
+        return next();
+    }
+    const account = await activeDatabaseAccount(user);
+    req.user = account.ok ? user : null;
     return next();
 }
 
@@ -464,46 +544,22 @@ function isStaffOrAdmin(
 function requireRole(
     ...allowedRoles
 ) {
-    return (
+    return async (
         req,
         res,
         next
     ) => {
+        const auth = await authenticateRequest(req, allowedRoles);
 
-        const user =
-            decodeRequestUser(
-                req,
-                allowedRoles
-            );
-
-
-        if (!user) {
-
-            return apiUnauthorized(
-                res,
-                "Please log in first."
-            );
-
+        if (!auth.ok) {
+            return res.status(auth.status || 401).json({ success: false, message: auth.message || "Authentication required." });
         }
 
+        req.user = auth.user;
 
-        req.user =
-            user;
-
-
-        if (
-            !roleAllowed(
-                user,
-                allowedRoles
-            )
-        ) {
-
-            return apiForbidden(
-                res
-            );
-
+        if (!roleAllowed(auth.user, allowedRoles)) {
+            return apiForbidden(res);
         }
-
 
         return next();
     };
@@ -525,115 +581,37 @@ function requireRole(
 function requirePageRole(
     ...allowedRoles
 ) {
-    return (
+    return async (
         req,
         res,
         next
     ) => {
-
-        const user =
-            decodeRequestUser(
-                req,
-                allowedRoles
-            );
-
+        const user = decodeRequestUser(req, allowedRoles);
 
         if (!user) {
-
-            const normalized =
-                allowedRoles
-                    .map(
-                        normalizeRole
-                    );
-
-
-            if (
-                normalized.length === 1 &&
-                normalized[0] ===
-                    "admin"
-            ) {
-
-                return res.redirect(
-                    "/admin-login"
-                );
-
-            }
-
-
-            if (
-                normalized.length === 1 &&
-                normalized[0] ===
-                    "manager"
-            ) {
-
-                return res.redirect(
-                    "/manager-login"
-                );
-
-            }
-
-
-            if (
-                normalized.length === 1 &&
-                normalized[0] ===
-                    "staff"
-            ) {
-
-                return res.redirect(
-                    "/staff-login"
-                );
-
-            }
-
-
-            return res.redirect(
-                "/login"
-            );
-
+            const normalized = allowedRoles.map(normalizeRole);
+            if (normalized.length === 1 && normalized[0] === "admin") return res.redirect("/admin-login");
+            if (normalized.length === 1 && normalized[0] === "manager") return res.redirect("/manager-login");
+            if (normalized.length === 1 && normalized[0] === "staff") return res.redirect("/staff-login");
+            return res.redirect("/login");
         }
 
-
-        req.user =
-            user;
-
-
-        if (
-            !roleAllowed(
-                user,
-                allowedRoles
-            )
-        ) {
-
-            return res
-                .status(403)
-                .send(`
-                    <!doctype html>
-                    <html>
-                    <head>
-                        <meta charset="utf-8">
-                        <meta name="viewport" content="width=device-width,initial-scale=1">
-                        <title>Access Denied</title>
-                        <style>
-                            body{font-family:Segoe UI,Arial,sans-serif;background:#f4ead9;color:#493321;margin:0;min-height:100vh;display:grid;place-items:center}
-                            .card{background:#fffaf1;padding:32px;border-radius:18px;max-width:460px;text-align:center;box-shadow:0 18px 45px rgba(81,56,36,.10)}
-                            a{display:inline-block;margin-top:16px;color:#5f9274;font-weight:700;text-decoration:none}
-                        </style>
-                    </head>
-                    <body>
-                        <div class="card">
-                            <h1>Access denied</h1>
-                            <p>Your ${String(user.role || "account")} account cannot open this page.</p>
-                            <a href="/login">Return to login</a>
-                        </div>
-                    </body>
-                    </html>
-                `);
-
+        if (!roleAllowed(user, allowedRoles)) {
+            return res.status(403).send(`
+                <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+                <title>Access Denied</title><style>body{font-family:Segoe UI,Arial,sans-serif;background:#f4ead9;color:#493321;margin:0;min-height:100vh;display:grid;place-items:center}.card{background:#fffaf1;padding:32px;border-radius:18px;max-width:460px;text-align:center;box-shadow:0 18px 45px rgba(81,56,36,.10)}a{display:inline-block;margin-top:16px;color:#5f9274;font-weight:700;text-decoration:none}</style></head>
+                <body><div class="card"><h1>Access denied</h1><p>Your ${String(user.role || "account")} account cannot open this page.</p><a href="/login">Return to login</a></div></body></html>`);
         }
 
+        const account = await activeDatabaseAccount(user);
+        if (!account.ok) {
+            const normalized = allowedRoles.map(normalizeRole);
+            const target = normalized[0] === "admin" ? "/admin-login" : normalized[0] === "manager" ? "/manager-login" : normalized[0] === "staff" ? "/staff-login" : "/login";
+            return res.redirect(`${target}?auth=${encodeURIComponent(account.message || "Account approval required")}`);
+        }
 
+        req.user = user;
         return next();
-
     };
 }
 
@@ -655,5 +633,6 @@ module.exports = {
     isStaffOrAdmin,
 
     requireRole,
-    requirePageRole
+    requirePageRole,
+    activeDatabaseAccount
 };

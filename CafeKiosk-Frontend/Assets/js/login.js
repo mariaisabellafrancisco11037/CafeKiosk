@@ -314,6 +314,10 @@ function saveSession(
             user.cafeId ||
             CAFE_ID,
 
+        cafeName:
+            user.cafeName ||
+            '',
+
         loginAt:
             new Date()
                 .toISOString()
@@ -342,6 +346,10 @@ function saveSession(
         user.cafeId ||
         CAFE_ID
     );
+
+    if (user.cafeName) {
+        localStorage.setItem("cafeName", user.cafeName);
+    }
 
 
     // Tab-specific active session.

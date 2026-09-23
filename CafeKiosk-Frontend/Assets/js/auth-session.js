@@ -623,6 +623,88 @@
     }
 
 
+    // ============================================================
+    // TENANT / CAFE IDENTITY
+    // Every authenticated Admin, Manager and Staff page gets a persistent
+    // cafe-name badge so users can immediately see which cafe account they
+    // are working in. The browser title also includes the registered cafe.
+    // ============================================================
+
+    function saveResolvedProfile(user) {
+        if (!user || !activeConfig) return;
+        const current = parseSession(activeConfig.sessionKey) || {};
+        const merged = { ...current, ...user, loggedIn: true, token: token || current.token || '' };
+        localStorage.setItem(activeConfig.sessionKey, JSON.stringify(merged));
+        sessionStorage.setItem('cafeSession', JSON.stringify(merged));
+        if (user.cafeId) localStorage.setItem('cafeId', user.cafeId);
+        if (user.cafeName) localStorage.setItem('cafeName', user.cafeName);
+    }
+
+    function installCafeIdentityStyles() {
+        if (document.getElementById('cafekioskCafeIdentityStyles')) return;
+        const style = document.createElement('style');
+        style.id = 'cafekioskCafeIdentityStyles';
+        style.textContent = `
+          .cafekiosk-cafe-identity{position:fixed;left:18px;bottom:16px;z-index:1100;display:flex;align-items:center;gap:8px;max-width:min(320px,calc(100vw - 36px));padding:8px 11px;border:1px solid rgba(82,119,94,.24);border-radius:999px;background:rgba(255,252,246,.96);box-shadow:0 8px 24px rgba(66,48,34,.12);backdrop-filter:blur(8px);color:#4a392d;font:700 11px/1.2 "Segoe UI",Arial,sans-serif}
+          .cafekiosk-cafe-identity .ck-cafe-dot{width:8px;height:8px;border-radius:50%;background:#4f9872;box-shadow:0 0 0 3px rgba(79,152,114,.12);flex:0 0 auto}
+          .cafekiosk-cafe-identity .ck-cafe-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+          .cafekiosk-cafe-identity .ck-cafe-role{color:#8a7562;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+          @media(max-width:700px){.cafekiosk-cafe-identity{left:10px;bottom:10px;max-width:calc(100vw - 20px);padding:7px 10px}.cafekiosk-cafe-identity .ck-cafe-role{display:none}}
+        `;
+        document.head.appendChild(style);
+    }
+
+    function renderCafeIdentity(user) {
+        const cafeName = String(user?.cafeName || session?.cafeName || localStorage.getItem('cafeName') || '').trim();
+        if (!cafeName) return;
+        const role = String(user?.role || session?.role || activeRole || '').trim();
+
+        const doRender = () => {
+            if (!document.body) return;
+            installCafeIdentityStyles();
+            let badge = document.getElementById('cafekioskCafeIdentity');
+            if (!badge) {
+                badge = document.createElement('div');
+                badge.id = 'cafekioskCafeIdentity';
+                badge.className = 'cafekiosk-cafe-identity';
+                badge.setAttribute('aria-label', 'Current cafe account');
+                document.body.appendChild(badge);
+            }
+            badge.innerHTML = `<span class="ck-cafe-dot" aria-hidden="true"></span><span class="ck-cafe-name"></span><span class="ck-cafe-role"></span>`;
+            badge.querySelector('.ck-cafe-name').textContent = cafeName;
+            badge.querySelector('.ck-cafe-role').textContent = role || 'Account';
+            document.querySelectorAll('[data-cafe-identity]').forEach(el => { el.textContent = cafeName; });
+
+            const pageTitle = String(document.title || 'CafeKiosk').replace(/^.*?\s[•|-]\sCafeKiosk\s[•|-]\s/i, '');
+            if (!document.title.includes(cafeName)) {
+                document.title = `${cafeName} • ${pageTitle || 'CafeKiosk'}`;
+            }
+        };
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', doRender, { once: true });
+        else doRender();
+    }
+
+    async function refreshCafeIdentity() {
+        if (!activeRole) return null;
+        try {
+            const headers = {};
+            if (token) headers.Authorization = `Bearer ${token}`;
+            const response = await fetch(`${API_ORIGIN}/api/auth/me`, { credentials: 'include', headers, cache: 'no-store' });
+            if (!response.ok) return null;
+            const data = await response.json().catch(() => ({}));
+            if (data?.user) {
+                saveResolvedProfile(data.user);
+                renderCafeIdentity(data.user);
+                window.dispatchEvent(new CustomEvent('cafekiosk:identity', { detail: data.user }));
+                return data.user;
+            }
+        } catch (error) {
+            console.warn('Cafe identity could not be refreshed:', error.message);
+        }
+        return null;
+    }
+
     async function verifySession() {
 
         if (
@@ -942,10 +1024,15 @@
 
         replaceToken,
 
+        refreshCafeIdentity,
+        renderCafeIdentity,
+
         API_ORIGIN
 
     };
 
+    renderCafeIdentity(session);
+    refreshCafeIdentity();
     startSocket();
     setTimeout(checkAccountStatus, 1200);
     setInterval(checkAccountStatus, 10000);

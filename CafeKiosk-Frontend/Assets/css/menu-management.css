@@ -464,28 +464,51 @@ svg {
    CATEGORY TABS - STRONG ACTIVE STATE
 ========================================================= */
 
+.category-scroll-area {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .category-tabs {
+  width: 100%;
   min-width: 0;
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: hidden;
-  padding: 1px 1px 4px;
-  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding: 1px 1px 9px;
+  scrollbar-width: auto;
+  scrollbar-color: rgba(79, 128, 95, .72) #efe2d0;
 }
 
 .category-tabs::-webkit-scrollbar {
-  height: 5px;
+  height: 10px;
 }
 
-.category-tabs::-webkit-scrollbar-thumb {
-  background: rgba(93, 66, 42, .18);
+.category-tabs::-webkit-scrollbar-track {
+  background: #efe2d0;
   border-radius: 999px;
 }
 
+.category-tabs::-webkit-scrollbar-thumb {
+  background: rgba(79, 128, 95, .72);
+  border: 2px solid #efe2d0;
+  border-radius: 999px;
+}
+
+.category-tabs::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 109, 81, .9);
+}
+
 .category-tab {
-  min-width: 118px;
+  flex: 0 0 132px;
+  min-width: 132px;
+  scroll-snap-align: start;
   height: 44px;
   padding: 0 10px;
   position: relative;

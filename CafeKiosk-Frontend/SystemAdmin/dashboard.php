@@ -6,7 +6,7 @@
   <title>CafeKiosk - System Monitor</title>
   <link rel="stylesheet" href="../Assets/css/dashboard.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
-  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=1">
+  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=2">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
 </head>
 <body class="uniform-admin system-monitor-body">
@@ -21,6 +21,10 @@
           <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
           <span>Dashboard</span>
         </a>
+        <a class="staff-nav-link" href="#approvals">
+          <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+          <span>Account Approval</span>
+        </a>
         <a class="staff-nav-link" href="#cafes">
           <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V8l8-5 8 5v12"/><path d="M8 20v-6h8v6M3 20h18"/></svg></span>
           <span>Cafe Status</span>
@@ -30,7 +34,7 @@
           <span>System Issues</span>
         </a>
       </nav>
-      <div class="monitor-readonly-note"><strong>Platform monitor</strong><span>Technical status is visible. Permanent cafe deletion requires a recorded reason.</span></div>
+      <div class="monitor-readonly-note"><strong>Platform control</strong><span>Review new cafe registrations, monitor technical status, and record reasons for rejected/deleted accounts.</span></div>
     </aside>
 
     <main class="monitor-main" id="overview">
@@ -38,7 +42,7 @@
         <div>
           <span class="eyebrow">PLATFORM HEALTH</span>
           <h1>System Monitoring</h1>
-          <p>Monitor registered cafes, live POS/Kiosk activity and technical issues, with controlled account deletion when required.</p>
+          <p>Review new cafe registrations, monitor live POS/Kiosk activity and technical issues, with controlled account access and deletion.</p>
         </div>
         <div class="header-actions">
           <div class="connection-pill" id="serverPill"><span class="connection-dot syncing" id="serverDot"></span><span id="serverLabel">Checking System...</span></div>
@@ -61,6 +65,7 @@
 
       <section class="status-cards dashboard-status-cards system-summary-cards" aria-label="System summary">
         <article class="status-card"><div><span class="card-kicker">REGISTERED</span><span class="card-label">Total Cafes</span></div><strong id="totalCafes">—</strong></article>
+        <article class="status-card"><div><span class="card-kicker">APPROVAL</span><span class="card-label">Pending Accounts</span></div><strong id="pendingApprovals">—</strong></article>
         <article class="status-card"><div><span class="card-kicker">LIVE NOW</span><span class="card-label">Online Cafes</span></div><strong id="onlineCafes">—</strong></article>
         <article class="status-card"><div><span class="card-kicker">CHECK</span><span class="card-label">Needs Attention</span></div><strong id="needsAttention">—</strong></article>
         <article class="status-card"><div><span class="card-kicker">REALTIME</span><span class="card-label">Active Connections</span></div><strong id="activeConnections">—</strong></article>
@@ -70,6 +75,19 @@
         <article class="monitor-panel compact-health-card"><span class="eyebrow">BACKEND</span><div class="health-line"><span class="health-indicator" id="backendIndicator"></span><strong id="backendStatus">Checking...</strong></div><span class="health-meta" id="uptimeText">Uptime —</span></article>
         <article class="monitor-panel compact-health-card"><span class="eyebrow">DATABASE</span><div class="health-line"><span class="health-indicator" id="databaseIndicator"></span><strong id="databaseStatus">Checking...</strong></div><span class="health-meta" id="databaseMeta">MySQL —</span></article>
         <article class="monitor-panel compact-health-card"><span class="eyebrow">WEBSOCKET</span><div class="health-line"><span class="health-indicator" id="websocketIndicator"></span><strong id="websocketStatus">Checking...</strong></div><span class="health-meta">POS / Kiosk realtime connection</span></article>
+      </section>
+
+      <section class="monitor-panel approval-panel" id="approvals">
+        <div class="monitor-panel-header">
+          <div><span class="eyebrow">NEW ACCOUNT CONTROL</span><h2>Cafe Registration Approval</h2><p>New cafe-owner registrations cannot sign in until the System Administrator approves them.</p></div>
+          <span class="approval-count-pill" id="approvalCountPill">0 pending</span>
+        </div>
+        <div class="monitor-table-wrap">
+          <table class="system-monitor-table approval-table">
+            <thead><tr><th>Cafe</th><th>Owner</th><th>Contact</th><th>Requested</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="approvalBody"><tr><td colspan="6" class="monitor-empty">Loading pending registrations...</td></tr></tbody>
+          </table>
+        </div>
       </section>
 
       <section class="monitor-panel cafe-monitor-panel" id="cafes">
@@ -113,6 +131,25 @@
   </div>
 
 
+  <div class="status-modal-backdrop" id="approvalDecisionModal" aria-hidden="true">
+    <section class="status-modal-card approval-decision-card" role="dialog" aria-modal="true" aria-labelledby="approvalDecisionTitle">
+      <button class="status-modal-close" id="approvalDecisionClose" type="button" aria-label="Close">×</button>
+      <span class="eyebrow">NEW CAFE REGISTRATION</span>
+      <h2 id="approvalDecisionTitle">Review Cafe Account</h2>
+      <div class="delete-account-summary"><span>Cafe</span><strong id="approvalCafeName">—</strong><span>Owner</span><strong id="approvalOwnerName">—</strong><span>Email</span><strong id="approvalOwnerEmail">—</strong></div>
+      <input type="hidden" id="approvalCafeId">
+      <input type="hidden" id="approvalAction">
+      <p class="approval-decision-message" id="approvalDecisionMessage"></p>
+      <div id="approvalReasonWrap" hidden>
+        <label class="delete-reason-label" for="approvalReason">Reason for rejection <strong>*</strong></label>
+        <textarea id="approvalReason" rows="4" maxlength="1000" placeholder="Example: Registration details could not be verified."></textarea>
+        <p class="delete-reason-help">This reason is shown if the cafe owner attempts to sign in.</p>
+      </div>
+      <div class="delete-error" id="approvalError" role="alert"></div>
+      <div class="delete-modal-actions"><button type="button" class="cancel-delete-btn" id="cancelApprovalBtn">Cancel</button><button type="button" class="confirm-approval-btn" id="confirmApprovalBtn">Approve Account</button></div>
+    </section>
+  </div>
+
   <div class="status-modal-backdrop" id="deleteAccountModal" aria-hidden="true">
     <section class="status-modal-card delete-account-modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteAccountModalTitle">
       <button class="status-modal-close" id="deleteAccountModalClose" type="button" aria-label="Close">×</button>
@@ -130,7 +167,7 @@
   </div>
 
 
-  <script src="../Assets/js/system-monitor.js?v=4"></script>
+  <script src="../Assets/js/system-monitor.js?v=5"></script>
   <script src="/Assets/js/message-dialog.js?v=1"></script>
 </body>
 </html>

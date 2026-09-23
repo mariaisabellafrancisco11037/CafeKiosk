@@ -8,8 +8,9 @@
 -- 3) Orders, discounts, cash received/change, audit logs, inventory movements,
 --    suppliers, purchase orders, settings, authentication, owner signup,
 --    staff invitations, email verification, and password reset are included.
--- 4) New cafe owners may self-register. Staff accounts should be created through
---    an owner/admin invitation instead of freely choosing a cafe or role.
+-- 4) New cafe owners may submit a registration, but the cafe/owner remains
+--    Pending until the System Administrator approves it. Staff accounts are
+--    created through an owner/admin invitation after approval.
 -- 5) Inventory deduction/restoration should be done by the backend in ONE
 --    transaction, because selected size + optional customizations affect usage.
 -- ============================================================
@@ -39,6 +40,11 @@ CREATE TABLE cafes (
     closing_time TIME NULL,
     timezone VARCHAR(80) NOT NULL DEFAULT 'Asia/Manila',
     status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active',
+    approval_status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Approved',
+    approval_requested_at DATETIME NULL,
+    approved_at DATETIME NULL,
+    approved_by VARCHAR(150) NULL,
+    rejection_reason VARCHAR(1000) NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_cafes_kiosk_slug (kiosk_slug)
@@ -94,7 +100,8 @@ CREATE TABLE users (
 -- ============================================================
 
 -- Public owner signup creates a cafe first, then creates the first user as
--- role='Admin' and is_owner=1 inside the same backend transaction.
+-- role='Admin' and is_owner=1 inside the same backend transaction. Both remain
+-- inactive/pending until the System Administrator approves the cafe.
 --
 -- Staff should NOT be allowed to freely type a cafe_id or select Admin.
 -- An owner/admin generates an invitation; the signup page validates the token.
@@ -137,6 +144,23 @@ CREATE TABLE registration_invites (
     CONSTRAINT fk_registration_invites_accepted_user
       FOREIGN KEY (accepted_by_user_id) REFERENCES users(user_id)
       ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+
+CREATE TABLE cafe_approval_history (
+    approval_history_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cafe_id VARCHAR(50) NOT NULL,
+    cafe_name_snapshot VARCHAR(150) NOT NULL,
+    owner_name_snapshot VARCHAR(150) NULL,
+    owner_email_snapshot VARCHAR(190) NULL,
+    old_status VARCHAR(30) NOT NULL,
+    new_status VARCHAR(30) NOT NULL,
+    reason VARCHAR(1000) NULL,
+    changed_by VARCHAR(150) NOT NULL,
+    changed_from_ip VARCHAR(45) NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_cafe_approval_history_cafe (cafe_id, created_at),
+    KEY idx_cafe_approval_history_time (created_at)
 ) ENGINE=InnoDB;
 
 
@@ -937,9 +961,9 @@ DELIMITER ;
 -- 15. DEFAULT DATA
 -- ============================================================
 INSERT INTO cafes (
-    cafe_id, cafe_name, kiosk_slug, kiosk_enabled, kiosk_slug_updated_at, timezone, status
+    cafe_id, cafe_name, kiosk_slug, kiosk_enabled, kiosk_slug_updated_at, timezone, status, approval_status, approved_at, approved_by
 ) VALUES (
-    'cafe-1', 'CafeKiosk Demo Cafe', 'cafekiosk-demo', 1, CURRENT_TIMESTAMP, 'Asia/Manila', 'Active'
+    'cafe-1', 'CafeKiosk Demo Cafe', 'cafekiosk-demo', 1, CURRENT_TIMESTAMP, 'Asia/Manila', 'Active', 'Approved', CURRENT_TIMESTAMP, 'CafeKiosk Demo Seed'
 );
 
 -- Default accounts.

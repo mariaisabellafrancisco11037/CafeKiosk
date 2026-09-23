@@ -197,3 +197,15 @@ body {
   background: #4f9a70;
   box-shadow: 0 0 0 4px rgba(79,154,112,.12);
 }
+
+
+/* PANELIST UPGRADE: System Administrator approval state */
+.owner-approval-pending{margin-top:8px;padding:26px 22px;border:1px solid #d8c8b2;border-radius:18px;background:#fffaf1;text-align:center;box-shadow:0 16px 36px rgba(77,54,36,.08)}
+.owner-approval-pending[hidden]{display:none!important}
+.approval-pending-icon{width:52px;height:52px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;background:#e0efe5;color:#397656;font-size:24px;font-weight:900}
+.approval-pending-kicker{display:block;color:#63816d;font-size:10px;font-weight:900;letter-spacing:.1em}
+.owner-approval-pending h2{margin:7px 0 8px;color:#513824;font-size:22px}
+.owner-approval-pending p{margin:0 auto 14px;max-width:560px;color:#796651;font-size:12px;line-height:1.65}
+.approval-pending-details{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 12px;margin:16px auto;padding:13px;max-width:500px;border:1px solid #eadcca;border-radius:11px;background:#fffdf9;text-align:left}
+.approval-pending-details span{color:#907a65;font-size:10px}.approval-pending-details strong{color:#4d3827;font-size:11px;word-break:break-word}
+.approval-pending-help{font-size:10.5px!important}.approval-login-link{display:flex!important;align-items:center;justify-content:center;text-decoration:none;margin-top:10px}
