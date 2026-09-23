@@ -456,15 +456,15 @@
       "ck-promo-client";
 
     box.innerHTML = `
-      <label for="ckEligibility">Discount Eligibility</label>
+      <label for="ckEligibility">Discount</label>
       <select id="ckEligibility">
-        <option value="all">General / None</option>
-        <option value="student">Student</option>
-        <option value="senior">Senior Citizen</option>
-        <option value="pwd">PWD</option>
+        <option value="all">No Discount</option>
+        <option value="student">Student Discount</option>
+        <option value="senior">Senior Citizen Discount</option>
+        <option value="pwd">PWD Discount</option>
       </select>
       <div id="ckPromoNote" class="ck-promo-note">
-        Active promotions will be applied automatically.
+        The matching active discount rule will be applied automatically.
       </div>
     `;
 
@@ -656,8 +656,8 @@
 
       note.textContent =
         active.length
-          ? `${active.length} active promotion${active.length > 1 ? "s" : ""} available. Best eligible discount is applied.`
-          : "No active promotion for the selected eligibility.";
+          ? `${active.length} active discount rule${active.length > 1 ? "s" : ""} available. Best applicable discount is applied.`
+          : "No active discount is available for the selected option.";
     }
   }
 

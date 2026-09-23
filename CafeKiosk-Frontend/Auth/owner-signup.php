@@ -106,8 +106,6 @@
             </div>
           </div>
 
-          <div class="kiosk-localhost-note"><strong>LAN Kiosk:</strong> CafeKiosk automatically uses your laptop's reachable LAN address for the Kiosk link and QR. Connect the tablet to the same Wi-Fi/hotspot, then scan the QR. Railway can replace this base address later without changing your custom kiosk name.</div>
-
           <button type="button" class="signup-submit" id="signupContinueLogin">CONTINUE TO ADMIN LOGIN</button>
         </div>
       </section>

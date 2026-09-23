@@ -2283,8 +2283,8 @@ function calculateCart() {
         );
 
 
-    // Manual discount selection was removed from POS. Discounts are now
-    // determined by the Discount Eligibility + active promotions layer.
+    // Discount choices are handled by the shared discount client. The selected
+    // discount type is matched against the active promotion rules.
     const discountRate =
         Number(
             $("discount")?.value ||
@@ -2409,34 +2409,67 @@ function updatePaymentFields() {
     const payment =
         $("paymentMethod").value;
 
-
     const cashInput =
         $("cashReceived");
 
+    const paymentAmountInput =
+        $("paymentAmount");
+
+    const cashFields =
+        $("cashPaymentFields");
+
+    const nonCashFields =
+        $("nonCashPaymentFields");
+
+    const amountLabel =
+        $("paymentAmountLabel");
+
+    const paymentNote =
+        $("paymentRecordNote");
 
     const isCash =
         payment === "Cash";
 
-
-    cashInput.disabled =
-        !isCash;
-
-
-    if (!isCash) {
-
-        cashInput.value =
-            "";
-
-        cashInput.placeholder =
-            "Not required";
-
-    } else {
-
-        cashInput.placeholder =
-            "₱0.00";
-
+    if (cashFields) {
+        cashFields.hidden = !isCash;
     }
 
+    if (nonCashFields) {
+        nonCashFields.hidden = isCash;
+    }
+
+    cashInput.disabled = !isCash;
+
+    if (paymentAmountInput) {
+        paymentAmountInput.disabled = isCash;
+    }
+
+    if (!isCash) {
+        cashInput.value = "";
+
+        if (amountLabel) {
+            amountLabel.textContent =
+                payment === "Card"
+                    ? "Amount Paid by Card"
+                    : payment === "GCash"
+                        ? "Amount Paid Online / GCash"
+                        : "Amount Paid";
+        }
+
+        if (paymentNote) {
+            paymentNote.textContent =
+                payment === "Card"
+                    ? "Enter the amount charged to the customer's card."
+                    : payment === "GCash"
+                        ? "Enter the amount received through GCash or the online payment."
+                        : "Enter the amount received through the selected payment method.";
+        }
+    } else {
+        if (paymentAmountInput) {
+            paymentAmountInput.value = "";
+        }
+        cashInput.placeholder = "₱0.00";
+    }
 
     updateChange();
 
@@ -2505,22 +2538,34 @@ async function confirmPOSOrder() {
             0
         );
 
+    const nonCashAmount =
+        Number(
+            $("paymentAmount")?.value ||
+            0
+        );
+
+    const paymentAmount =
+        paymentMethod === "Cash"
+            ? cashReceived
+            : nonCashAmount;
 
     if (
-        paymentMethod ===
-            "Cash" &&
-        cashReceived <
-            totals.total
+        paymentAmount < totals.total
     ) {
 
         alert(
-            "Cash received is not enough."
+            paymentMethod === "Cash"
+                ? "Cash received is not enough."
+                : `Amount paid through ${paymentMethod} must be at least ${money(totals.total)}.`
         );
+
+        if (paymentMethod !== "Cash") {
+            $("paymentAmount")?.focus();
+        }
 
         return;
 
     }
-
 
     const change =
         paymentMethod ===
@@ -2548,6 +2593,12 @@ async function confirmPOSOrder() {
             $("serviceType").value,
 
         paymentMethod,
+
+        paymentAmount:
+            Number(paymentAmount.toFixed(2)),
+
+        paymentStatus:
+            "Paid",
 
         cashReceived,
 
@@ -2841,6 +2892,9 @@ async function confirmPOSOrder() {
         $("cashReceived").value =
             "";
 
+        if ($("paymentAmount")) {
+            $("paymentAmount").value = "";
+        }
 
         // Reset customer eligibility for the next order.
         if (window.CafePromotionClient) {
@@ -2918,6 +2972,10 @@ function clearPOSCart() {
 
     $("cashReceived").value =
         "";
+
+    if ($("paymentAmount")) {
+        $("paymentAmount").value = "";
+    }
 
     renderCart();
 
@@ -3032,6 +3090,17 @@ function setupEvents() {
             updateChange
         );
 
+    if ($("paymentAmount")) {
+        $("paymentAmount").addEventListener(
+            "input",
+            () => {
+                const value = Number($("paymentAmount").value || 0);
+                if (!Number.isFinite(value) || value < 0) {
+                    $("paymentAmount").value = "";
+                }
+            }
+        );
+    }
 
     $("paymentMethod")
         .addEventListener(

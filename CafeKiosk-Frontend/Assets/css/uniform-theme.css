@@ -1499,7 +1499,7 @@ body.uniform-pos.cku-v2 .cart-list::-webkit-scrollbar-thumb {
   border-radius: 999px;
 }
 
-/* Discount eligibility belongs with the checkout fields, directly
+/* Discount selection belongs with the checkout fields, directly
    before Payment Type instead of at the top of the summary. */
 body.cku-v2 .bottom-fields .ck-promo-client,
 body.uniform-kiosk.kiosk-menu .bottom-fields .ck-promo-client {

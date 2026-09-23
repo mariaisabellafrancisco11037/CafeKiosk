@@ -2038,7 +2038,9 @@ function openVoidRefundModal(id) {
   $("modalItemCount").textContent = `${order.items.length} ${order.items.length === 1 ? "Item" : "Items"}`;
   $("modalSubtotal").textContent = peso(order.subtotal);
   $("modalDiscount").textContent = `-${peso(order.discount)}`;
-  $("modalTotalPaid").textContent = peso(order.total);
+  $("modalTotalPaid").textContent = peso(
+    Number(order.paymentAmount ?? order.payment_amount ?? order.cashReceived ?? order.total) || order.total
+  );
   $("reasonSelect").value = "";
   $("managerPin").value = "";
 

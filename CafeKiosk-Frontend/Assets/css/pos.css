@@ -2401,6 +2401,27 @@ button {
 }
 
 /* =========================================================
+   PAYMENT ENTRY GROUPS
+========================================================= */
+.payment-entry-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.payment-entry-group[hidden] {
+    display: none !important;
+}
+
+.payment-record-note {
+    margin-top: 3px;
+    color: #7A6858;
+    font-size: 0.62rem;
+    line-height: 1.35;
+}
+
+/* =========================================================
    PAYMENT FIELD STATE
 ========================================================= */
 .checkout-field:disabled {

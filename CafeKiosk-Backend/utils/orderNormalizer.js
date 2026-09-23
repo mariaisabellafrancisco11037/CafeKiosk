@@ -585,6 +585,12 @@ function normalizeOrderPayload(
             )
         );
 
+    const paymentMethod =
+        normalizePaymentMethod(
+            payload.paymentMethod ??
+            payload.payment
+        );
+
     const cashReceived =
         roundMoney(
             payload.cashReceived ??
@@ -592,13 +598,20 @@ function normalizeOrderPayload(
             0
         );
 
+    const paymentAmount =
+        roundMoney(
+            payload.paymentAmount ??
+            payload.payment_amount ??
+            (paymentMethod === "Cash"
+                ? cashReceived
+                : 0)
+        );
+
     const change =
         roundMoney(
             payload.change ??
             (
-                normalizePaymentMethod(
-                    payload.paymentMethod
-                ) ===
+                paymentMethod ===
                 "Cash"
                     ? Math.max(
                         0,
@@ -657,11 +670,7 @@ function normalizeOrderPayload(
                 payload.serving
             ),
 
-        paymentMethod:
-            normalizePaymentMethod(
-                payload.paymentMethod ??
-                payload.payment
-            ),
+        paymentMethod,
 
         paymentStatus:
             asText(
@@ -669,6 +678,8 @@ function normalizeOrderPayload(
                 payload.payment_status,
                 ""
             ),
+
+        paymentAmount,
 
         cashReceived,
 
@@ -744,6 +755,15 @@ function validateNewOrder(
     ) {
         errors.push(
             "Order total cannot be negative."
+        );
+    }
+
+    if (
+        order.source === "POS" &&
+        order.paymentAmount < order.total
+    ) {
+        errors.push(
+            `${order.paymentMethod} amount paid must be at least the final order total.`
         );
     }
 

@@ -131,6 +131,7 @@
       items,
       total: orderTotal(order, items),
       paymentMethod: order?.paymentMethod ?? order?.payment?.method ?? "Not recorded",
+      paymentAmount: Number(order?.paymentAmount ?? order?.payment_amount ?? order?.cashReceived ?? 0),
       customer:
         order?.customerName ??
         order?.customer ??
@@ -265,6 +266,7 @@
               <b>Customer:</b><span>${esc(order.customer)}</span>
               <b>Amount:</b><span>${esc(money(order.total))}</span>
               <b>Payment:</b><span>${esc(order.paymentMethod)}</span>
+              <b>Amount Paid:</b><span>${money(order.paymentAmount || order.total)}</span>
               <b>Status:</b><span>${esc(order.status)}</span>
             </div>
           </article>
@@ -446,7 +448,7 @@
   }
 
   function exportCsv() {
-    const rows = [["Order ID", "Date", "Source", "Customer", "Status", "Payment Method", "Total"]];
+    const rows = [["Order ID", "Date", "Source", "Customer", "Status", "Payment Method", "Amount Paid", "Total"]];
 
     filteredOrders.forEach(order => {
       rows.push([

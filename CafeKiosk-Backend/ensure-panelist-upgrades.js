@@ -40,6 +40,20 @@ async function ensurePanelistUpgrades() {
     if (await addColumn(connection, 'cafes', 'approved_by', 'VARCHAR(150) NULL AFTER approved_at')) added.push('cafes.approved_by');
     if (await addColumn(connection, 'cafes', 'rejection_reason', 'VARCHAR(1000) NULL AFTER approved_by')) added.push('cafes.rejection_reason');
 
+    if (await tableExists(connection, 'orders')) {
+      if (await addColumn(connection, 'orders', 'payment_amount', 'DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER payment_status')) added.push('orders.payment_amount');
+      await connection.execute(`
+        UPDATE orders
+           SET payment_amount = CASE
+             WHEN payment_method = 'Cash' THEN cash_received
+             WHEN payment_method IN ('GCash','Card','Other') THEN total_amount
+             ELSE payment_amount
+           END
+         WHERE payment_amount = 0
+           AND (cash_received > 0 OR total_amount > 0)
+      `);
+    }
+
     await connection.query(`
       CREATE TABLE IF NOT EXISTS cafe_approval_history (
         approval_history_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

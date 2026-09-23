@@ -499,6 +499,7 @@ CREATE TABLE orders (
     total_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     payment_method ENUM('Cash','GCash','Card','Other') NOT NULL DEFAULT 'Cash',
     payment_status ENUM('Pending','Paid','Failed','Refunded','Partially Refunded') NOT NULL DEFAULT 'Pending',
+    payment_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     cash_received DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     change_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

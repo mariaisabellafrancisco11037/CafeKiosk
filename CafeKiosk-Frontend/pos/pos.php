@@ -284,7 +284,7 @@
                     </option>
 
                     <option value="GCash">
-                        GCash
+                        GCash / Online Payment
                     </option>
 
                     <option value="Card">
@@ -293,29 +293,56 @@
                 </select>
 
 
-                <label
-                    class="field-label"
-                    for="cashReceived"
-                >
-                    Cash Received
-                </label>
+                <div id="cashPaymentFields" class="payment-entry-group">
+                    <label
+                        class="field-label"
+                        for="cashReceived"
+                    >
+                        Cash Received
+                    </label>
 
-                <input
-                    type="number"
-                    id="cashReceived"
-                    class="checkout-field"
-                    placeholder="₱0.00"
-                    min="0"
-                    step="0.01"
-                    inputmode="decimal"
-                    autocomplete="off"
-                >
+                    <input
+                        type="number"
+                        id="cashReceived"
+                        class="checkout-field"
+                        placeholder="₱0.00"
+                        min="0"
+                        step="0.01"
+                        inputmode="decimal"
+                        autocomplete="off"
+                    >
 
-                <div class="change-row">
-                    <span>Change</span>
-                    <strong id="changeAmount">
-                        ₱0.00
-                    </strong>
+                    <div class="change-row">
+                        <span>Change</span>
+                        <strong id="changeAmount">
+                            ₱0.00
+                        </strong>
+                    </div>
+                </div>
+
+                <div id="nonCashPaymentFields" class="payment-entry-group" hidden>
+                    <label
+                        class="field-label"
+                        for="paymentAmount"
+                        id="paymentAmountLabel"
+                    >
+                        Amount Paid
+                    </label>
+
+                    <input
+                        type="number"
+                        id="paymentAmount"
+                        class="checkout-field"
+                        placeholder="₱0.00"
+                        min="0"
+                        step="0.01"
+                        inputmode="decimal"
+                        autocomplete="off"
+                    >
+
+                    <div class="payment-record-note" id="paymentRecordNote">
+                        Enter the amount received through the selected payment method.
+                    </div>
                 </div>
 
             </div>
