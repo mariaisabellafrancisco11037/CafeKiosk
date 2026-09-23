@@ -13,12 +13,12 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=7"
+        href="../Assets/css/pos.css?v=8"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=34">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
-  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
@@ -63,12 +63,12 @@
 
             <img
                 id="categoryIcon"
-                src="../Assets/images/coffee.png"
+                src="../Assets/images/logo.png"
                 alt=""
             >
 
             <h1 id="categoryTitle">
-                Coffees
+                All Menu Items
             </h1>
 
         </div>
@@ -80,6 +80,15 @@
             <button
                 type="button"
                 class="category-button active"
+                data-category="all"
+            >
+                <img src="../Assets/images/logo.png" alt="">
+                <span>All Menu Items</span>
+            </button>
+
+            <button
+                type="button"
+                class="category-button"
                 data-category="coffee"
             >
                 <img src="../Assets/images/coffee.png" alt="">
@@ -451,14 +460,14 @@
 
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=payment-amount-v3"></script>
+<script src="/Assets/js/pos.js?v=pos-categories-v4"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
-  <script src="../Assets/js/profile-menu.js?v=31"></script>
+  <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
-  <script src="/Assets/js/message-dialog.js?v=1"></script>
+  <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>

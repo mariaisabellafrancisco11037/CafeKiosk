@@ -440,6 +440,20 @@
   }
 
   async function logout() {
+    const confirmed = window.CafeMessageDialog?.confirm
+      ? await window.CafeMessageDialog.confirm(
+          'Are you sure you want to log out of the System Administrator account?',
+          {
+            title: 'Confirm Log Out',
+            type: 'warning',
+            cancelText: 'Cancel',
+            confirmText: 'Log Out',
+            danger: true
+          }
+        )
+      : window.confirm('Are you sure you want to log out of the System Administrator account?');
+    if (!confirmed) return;
+
     try {
       await fetch(backendUrl('/api/system-admin/logout'), {
         method: 'POST',

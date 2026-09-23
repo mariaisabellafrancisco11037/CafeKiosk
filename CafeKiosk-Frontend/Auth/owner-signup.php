@@ -6,7 +6,7 @@
   <title>CafeKiosk - Create Cafe Account</title>
   <link rel="stylesheet" href="../Assets/css/signup.css?v=3">
   <link rel="stylesheet" href="../Assets/css/kiosk-access.css?v=1">
-  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
@@ -116,6 +116,6 @@
   <script src="../Assets/js/kiosk-qr.js?v=1"></script>
   <script src="../Assets/js/signup.js?v=4"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
-  <script src="/Assets/js/message-dialog.js?v=1"></script>
+  <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>

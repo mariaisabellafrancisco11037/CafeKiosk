@@ -547,7 +547,7 @@ async function refreshRecipeInventoryStatus(
 
 
 let currentCategory =
-    "coffee";
+    "all";
 
 let cart =
     [];
@@ -589,6 +589,11 @@ function escapeHTML(value) {
 // =========================================================
 
 const categoryConfig = {
+
+    all: {
+        title: "All Menu Items",
+        image: "/Assets/images/logo.png"
+    },
 
     coffee: {
         title: "Coffees",
@@ -632,12 +637,33 @@ function categoryMeta(category) {
 function rebuildPosCategories(categories) {
     const nav = document.querySelector(".category-navigation");
     if (!nav) return;
+
     nav.innerHTML = "";
     const list = Array.isArray(categories) ? categories : [];
 
-    list.forEach((category, index) => {
+    // Always keep an "All Menu Items" option at the beginning so the
+    // cashier can return to the complete menu even when many custom
+    // categories are created by the cafe owner.
+    const allButton = document.createElement("button");
+    allButton.type = "button";
+    allButton.className = "category-button active";
+    allButton.dataset.category = "all";
+
+    const allImg = document.createElement("img");
+    allImg.src = categoryConfig.all.image;
+    allImg.alt = "";
+
+    const allLabel = document.createElement("span");
+    allLabel.textContent = categoryConfig.all.title;
+
+    allButton.append(allImg, allLabel);
+    allButton.addEventListener("click", () => selectCategory("all", allButton));
+    nav.appendChild(allButton);
+
+    list.forEach((category) => {
         const key = String(category.canonicalKey || category.key || category.name || "").trim();
-        if (!key) return;
+        if (!key || key === "all") return;
+
         categoryConfig[key] = {
             title: String(category.name || key),
             image: category.image || category.imagePath || categoryMeta(key).image
@@ -646,21 +672,23 @@ function rebuildPosCategories(categories) {
 
         const button = document.createElement("button");
         button.type = "button";
-        button.className = `category-button${index === 0 ? " active" : ""}`;
+        button.className = "category-button";
         button.dataset.category = key;
+
         const img = document.createElement("img");
         img.src = categoryConfig[key].image;
         img.alt = "";
+
         const label = document.createElement("span");
         label.textContent = categoryConfig[key].title;
+
         button.append(img, label);
         button.addEventListener("click", () => selectCategory(key, button));
         nav.appendChild(button);
     });
 
-    currentCategory = list.length
-        ? String(list[0].canonicalKey || list[0].key || list[0].name || "").trim()
-        : "";
+    currentCategory = "all";
+    nav.scrollLeft = 0;
 }
 
 
@@ -1094,6 +1122,21 @@ const customizationConfig = {
 
 function getCategoryItems(category) {
 
+    if (category === "all") {
+        return Object.entries(menuData)
+            .filter(([key, products]) => key !== "all" && Array.isArray(products))
+            .flatMap(([key, products]) =>
+                products.map((product, index) => ({
+                    id: `${key}-${index}`,
+                    category: key,
+                    name: product.name,
+                    price: Number(product.price),
+                    image: product.image || categoryMeta(key).image,
+                    available: isMenuItemAvailable(product.name, key)
+                }))
+            );
+    }
+
     return (
         menuData[category] ||
         []
@@ -1103,7 +1146,7 @@ function getCategoryItems(category) {
             category,
             name: product.name,
             price: Number(product.price),
-            image: categoryMeta(category).image,
+            image: product.image || categoryMeta(category).image,
             available:
                 isMenuItemAvailable(
                     product.name,
@@ -1143,6 +1186,12 @@ function selectCategory(category, button = null) {
     activeButton
         ?.classList
         .add("active");
+
+    activeButton?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center"
+    });
 
 
     $("categoryTitle").textContent =
@@ -2985,6 +3034,21 @@ function setupEvents() {
 
             }
         );
+
+
+    const categoryNavigation = document.querySelector(".category-navigation");
+    if (categoryNavigation) {
+        categoryNavigation.addEventListener(
+            "wheel",
+            event => {
+                if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                    categoryNavigation.scrollLeft += event.deltaY;
+                    event.preventDefault();
+                }
+            },
+            { passive: false }
+        );
+    }
 
 
     $("menuSearch")

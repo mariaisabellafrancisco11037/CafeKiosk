@@ -44,8 +44,9 @@
 .ck-message-dialog.warning .ck-message-dialog-icon { background: #fff3d6; color: #8a6417; }
 .ck-message-dialog h2 { margin: 0 0 9px; font-size: 22px; line-height: 1.25; color: #3b2a20; }
 .ck-message-dialog p { margin: 0; color: #6f6259; font-size: 14px; line-height: 1.6; white-space: pre-line; word-break: break-word; }
-.ck-message-dialog-actions { display: flex; justify-content: center; margin-top: 22px; }
-.ck-message-dialog-ok {
+.ck-message-dialog-actions { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+.ck-message-dialog-ok,
+.ck-message-dialog-cancel {
   min-width: 116px;
   border: 0;
   border-radius: 11px;
@@ -57,8 +58,15 @@
   background: #5d7355;
   box-shadow: 0 7px 18px rgba(93,115,85,.20);
 }
-.ck-message-dialog-ok:hover { filter: brightness(.96); }
-.ck-message-dialog-ok:focus-visible { outline: 3px solid rgba(93,115,85,.28); outline-offset: 3px; }
+.ck-message-dialog-cancel {
+  color: #4d3a2d;
+  background: #f4eee8;
+  border: 1px solid rgba(91, 65, 44, .18);
+  box-shadow: none;
+}
+.ck-message-dialog-ok.danger { background: #a94a42; box-shadow: 0 7px 18px rgba(169,74,66,.20); }
+.ck-message-dialog-ok:hover, .ck-message-dialog-cancel:hover { filter: brightness(.96); }
+.ck-message-dialog-ok:focus-visible, .ck-message-dialog-cancel:focus-visible { outline: 3px solid rgba(93,115,85,.28); outline-offset: 3px; }
 @media (max-width: 520px) {
   .ck-message-dialog-overlay { align-items: flex-end; padding: 14px; }
   .ck-message-dialog { border-radius: 18px 18px 14px 14px; padding: 24px 20px 20px; }

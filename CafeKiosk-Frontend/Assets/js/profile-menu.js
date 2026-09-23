@@ -423,7 +423,19 @@
 
   async function logout() {
     closeMenu();
-    const confirmed = window.confirm('Log out of CafeKiosk?');
+    const roleName = area() === 'admin' ? 'Administrator' : area() === 'manager' ? 'Manager' : 'Staff';
+    const confirmed = window.CafeMessageDialog?.confirm
+      ? await window.CafeMessageDialog.confirm(
+          `Are you sure you want to log out of your ${roleName} account?`,
+          {
+            title: 'Confirm Log Out',
+            type: 'warning',
+            cancelText: 'Cancel',
+            confirmText: 'Log Out',
+            danger: true
+          }
+        )
+      : window.confirm('Are you sure you want to log out of CafeKiosk?');
     if (!confirmed) return;
 
     if (window.CafeAuth?.logout) {

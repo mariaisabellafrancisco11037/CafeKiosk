@@ -250,18 +250,51 @@ button {
 
 .category-navigation {
     width: 100%;
+    max-width: 100%;
 
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    display: flex;
+    align-items: stretch;
     gap: 8px;
 
-    margin-bottom: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 2px 8px;
+    margin-bottom: 8px;
+
+    scrollbar-width: auto;
+    scrollbar-color: rgba(92, 65, 42, 0.55) rgba(92, 65, 42, 0.10);
+    scrollbar-gutter: stable;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.category-navigation::-webkit-scrollbar {
+    height: 9px;
+}
+
+.category-navigation::-webkit-scrollbar-track {
+    background: rgba(92, 65, 42, 0.10);
+    border-radius: 999px;
+}
+
+.category-navigation::-webkit-scrollbar-thumb {
+    background: rgba(92, 65, 42, 0.55);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.category-navigation::-webkit-scrollbar-thumb:hover {
+    background: rgba(92, 65, 42, 0.75);
+    background-clip: padding-box;
 }
 
 
 .category-button {
-    width: 100%;
-    min-width: 0;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 122px;
     min-height: 46px;
 
     padding: 8px 7px;
@@ -288,6 +321,10 @@ button {
         border-color 0.2s ease,
         box-shadow 0.2s ease,
         transform 0.15s ease;
+}
+
+.category-button[data-category="all"] {
+    min-width: 150px;
 }
 
 

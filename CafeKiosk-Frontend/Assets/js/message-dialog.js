@@ -8,7 +8,9 @@
   let iconEl = null;
   let panel = null;
   let okButton = null;
+  let cancelButton = null;
   let resolver = null;
+  let activeMode = 'message';
 
   function ensure() {
     if (overlay) return;
@@ -20,7 +22,10 @@
         <div class="ck-message-dialog-icon" aria-hidden="true">i</div>
         <h2 id="ckMessageDialogTitle">CafeKiosk</h2>
         <p id="ckMessageDialogText"></p>
-        <div class="ck-message-dialog-actions"><button type="button" class="ck-message-dialog-ok">OK</button></div>
+        <div class="ck-message-dialog-actions">
+          <button type="button" class="ck-message-dialog-cancel" hidden>Cancel</button>
+          <button type="button" class="ck-message-dialog-ok">OK</button>
+        </div>
       </section>`;
     document.body.appendChild(overlay);
     panel = overlay.querySelector('.ck-message-dialog');
@@ -28,11 +33,17 @@
     textEl = overlay.querySelector('p');
     iconEl = overlay.querySelector('.ck-message-dialog-icon');
     okButton = overlay.querySelector('.ck-message-dialog-ok');
+    cancelButton = overlay.querySelector('.ck-message-dialog-cancel');
 
-    okButton.addEventListener('click', close);
-    overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+    okButton.addEventListener('click', () => close(activeMode === 'confirm' ? true : undefined));
+    cancelButton.addEventListener('click', () => close(false));
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) close(activeMode === 'confirm' ? false : undefined);
+    });
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && overlay.classList.contains('open')) close();
+      if (event.key === 'Escape' && overlay.classList.contains('open')) {
+        close(activeMode === 'confirm' ? false : undefined);
+      }
     });
   }
 
@@ -40,16 +51,22 @@
     return ['success', 'error', 'warning', 'info'].includes(type) ? type : 'info';
   }
 
-  function close() {
+  function finishPending(value) {
+    const done = resolver;
+    resolver = null;
+    if (done) done(value);
+  }
+
+  function close(value) {
     if (!overlay) return;
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     const done = resolver;
     resolver = null;
-    if (done) done();
+    if (done) setTimeout(() => done(value), 0);
   }
 
-  function show(message, options) {
+  function prepare(message, options) {
     ensure();
     const opts = options || {};
     const type = normalizeType(opts.type || 'info');
@@ -57,14 +74,41 @@
     titleEl.textContent = opts.title || (type === 'success' ? 'Success' : type === 'error' ? 'Unable to Continue' : type === 'warning' ? 'Please Check' : 'CafeKiosk');
     textEl.textContent = String(message || '');
     iconEl.textContent = type === 'success' ? '✓' : type === 'error' ? '!' : type === 'warning' ? '!' : 'i';
+    return opts;
+  }
+
+  function show(message, options) {
+    const opts = prepare(message, options);
+    activeMode = 'message';
+    cancelButton.hidden = true;
     okButton.textContent = opts.buttonText || 'OK';
+    okButton.classList.remove('danger');
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     setTimeout(() => okButton.focus(), 10);
-    return new Promise(resolve => { resolver = resolve; });
+    return new Promise(resolve => {
+      finishPending();
+      resolver = resolve;
+    });
   }
 
-  window.CafeMessageDialog = { show, close };
+  function confirm(message, options) {
+    const opts = prepare(message, { type: 'warning', ...(options || {}) });
+    activeMode = 'confirm';
+    cancelButton.hidden = false;
+    cancelButton.textContent = opts.cancelText || 'Cancel';
+    okButton.textContent = opts.confirmText || 'Continue';
+    okButton.classList.toggle('danger', opts.danger !== false);
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    setTimeout(() => cancelButton.focus(), 10);
+    return new Promise(resolve => {
+      finishPending(false);
+      resolver = resolve;
+    });
+  }
+
+  window.CafeMessageDialog = { show, confirm, close };
 
   // Replace browser alert boxes with the CafeKiosk-styled dialog. Existing
   // calls across Admin, POS, Manager and Kiosk pages therefore get the same UI.

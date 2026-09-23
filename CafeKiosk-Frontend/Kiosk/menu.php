@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/Assets/css/menu.css?v=8">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=30">
-  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=1">
+  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 </head>
@@ -658,6 +658,6 @@
 <script src="/Assets/js/discount-client.js"></script>
   <script src="/Assets/js/uniform-theme.js"></script>
   <script src="/Assets/js/live-presence.js?v=3"></script>
-  <script src="/Assets/js/message-dialog.js?v=1"></script>
+  <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>
