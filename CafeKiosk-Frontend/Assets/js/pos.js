@@ -1194,12 +1194,15 @@ function selectCategory(category, button = null) {
     });
 
 
-    $("categoryTitle").textContent =
-        categoryMeta(category).title;
+    const categoryTitleEl = $("categoryTitle");
+    if (categoryTitleEl) {
+        categoryTitleEl.textContent = categoryMeta(category).title;
+    }
 
-
-    $("categoryIcon").src =
-        categoryMeta(category).image;
+    const categoryIconEl = $("categoryIcon");
+    if (categoryIconEl) {
+        categoryIconEl.src = categoryMeta(category).image;
+    }
 
 
     $("menuSearch").value =
@@ -3285,8 +3288,12 @@ document.addEventListener(
                 currentCategory
             );
         } else {
-            $("categoryTitle").textContent = "Menu";
-            $("categoryIcon").src = "/Assets/images/logo.png";
+            const categoryTitleEl = $("categoryTitle");
+            if (categoryTitleEl) categoryTitleEl.textContent = "Menu";
+
+            const categoryIconEl = $("categoryIcon");
+            if (categoryIconEl) categoryIconEl.src = "/Assets/images/logo.png";
+
             renderMenu();
         }
 

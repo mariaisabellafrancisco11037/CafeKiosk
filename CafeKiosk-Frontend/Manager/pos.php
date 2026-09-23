@@ -58,20 +58,7 @@
 
     <main class="menu-area">
 
-        <div class="category-header">
-
-            <img
-                id="categoryIcon"
-                src="../Assets/images/logo.png"
-                alt=""
-            >
-
-            <h1 id="categoryTitle">
-                All Menu Items
-            </h1>
-
-        </div>
-
+        <!-- Category title/header removed to maximize menu item space. -->
 
         <!-- CATEGORY NAVIGATION -->
         <nav class="category-navigation" aria-label="Menu categories">
@@ -459,7 +446,7 @@
 
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=pos-categories-v4"></script>
+<script src="/Assets/js/pos.js?v=pos-no-category-title-v5"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
