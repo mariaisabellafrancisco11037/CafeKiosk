@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v2">
 </head>
 
 <body class="uniform-pos manager-pos-page">
@@ -44,9 +45,9 @@
 <div class="manager-sidebar-cafe-name" data-cafe-identity>Current Cafe</div>
 
         <nav class="staff-navigation" aria-label="Manager navigation">
-<a href="/manager-dashboard" class="staff-nav-button" aria-label="Dashboard" title="Dashboard"><span class="staff-nav-icon" aria-hidden="true">▦</span></a>
-<a href="/manager-pos" class="staff-nav-button active" aria-current="page" aria-label="POS" title="POS"><span class="staff-nav-icon" aria-hidden="true">☕</span></a>
-<a href="/manager-order-queue" class="staff-nav-button" aria-label="Order Queue" title="Order Queue"><span class="staff-nav-icon" aria-hidden="true">☷</span></a>
+<a href="/manager-dashboard" class="staff-nav-button" aria-label="Dashboard" title="Dashboard"><span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span></a>
+<a href="/manager-pos" class="staff-nav-button active" aria-current="page" aria-label="POS" title="POS"><span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span></a>
+<a href="/manager-order-queue" class="staff-nav-button" aria-label="Order Queue" title="Order Queue"><span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h14M5 12h14M5 19h14"/><circle cx="3" cy="5" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="19" r="1"/></svg></span></a>
 </nav>
 
     </aside>
@@ -450,7 +451,7 @@
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=pos-navbar-v2"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>

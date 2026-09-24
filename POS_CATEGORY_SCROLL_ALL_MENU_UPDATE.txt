@@ -1,8 +1,0 @@
-CafeKiosk POS Category Navigation Update
-
-- Staff POS and Manager POS category navigation now scrolls horizontally on the X axis.
-- A visible horizontal scrollbar is provided when categories exceed the available width.
-- Mouse wheel / trackpad vertical scrolling over the category bar also moves it horizontally.
-- "All Menu Items" is always the first category and displays products from every active category.
-- Dynamic categories created by the Admin continue to appear after All Menu Items.
-- Selecting a category scrolls its tab into view.

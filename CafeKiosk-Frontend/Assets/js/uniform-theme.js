@@ -158,14 +158,26 @@
 
   function normalizeNavIcons() {
     document.querySelectorAll('.staff-nav-link, .staff-nav-button, .ck-nav > a').forEach(link => {
-      const labelElement = link.querySelector('.label') || link.querySelector('span:last-child');
-      const label = String(labelElement?.textContent || link.textContent || '').trim().toLowerCase();
-      const normalized = label.replace(/\s+/g, ' ');
+      const iconElementExisting = link.querySelector('.staff-nav-icon, .ico');
+      const textCandidates = Array.from(link.querySelectorAll('.label, span'))
+        .filter(el => el !== iconElementExisting && !el.classList.contains('staff-nav-icon') && !el.classList.contains('ico'))
+        .map(el => String(el.textContent || '').trim())
+        .filter(Boolean);
+
+      // Icon-only Manager navigation has no visible label. In that case use the
+      // accessible aria-label/title so the correct shared SVG can still be chosen.
+      const rawLabel =
+        textCandidates[0] ||
+        String(link.getAttribute('aria-label') || '').trim() ||
+        String(link.getAttribute('title') || '').trim() ||
+        String(link.textContent || '').trim();
+
+      const normalized = rawLabel.toLowerCase().replace(/\s+/g, ' ');
       const key = (normalized === 'pos' || normalized === 'manager pos') ? 'menu' : normalized;
       const icon = ICONS[key];
       if (!icon) return;
 
-      let iconElement = link.querySelector('.staff-nav-icon, .ico');
+      let iconElement = iconElementExisting;
       if (!iconElement) {
         iconElement = document.createElement('span');
         iconElement.className = 'staff-nav-icon';

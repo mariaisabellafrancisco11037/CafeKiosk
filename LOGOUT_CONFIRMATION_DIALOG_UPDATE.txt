@@ -1,7 +1,0 @@
-CafeKiosk logout confirmation update
-
-- Admin, Staff, Manager and System Administrator explicit logout actions now require confirmation.
-- Uses the shared CafeKiosk message dialog instead of the browser confirm box.
-- Confirmation offers Cancel and Log Out.
-- Session-expired and security-forced logout paths remain automatic so invalid sessions are not kept alive.
-- Shared dialog assets were cache-busted across frontend pages.
