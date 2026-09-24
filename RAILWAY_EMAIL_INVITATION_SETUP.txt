@@ -1,0 +1,18 @@
+CafeKiosk Railway Email Invitations
+====================================
+
+CafeKiosk now uses Resend HTTPS API for Staff / Manager invitation emails.
+SMTP/Gmail settings are no longer required for this feature.
+
+See:
+  RESEND_EMAIL_INVITATION_SETUP.txt
+
+Required Railway variables:
+  RESEND_API_KEY
+  RESEND_FROM_EMAIL
+
+Optional:
+  RESEND_FROM_NAME=CafeKiosk
+
+The employee recipient email is entered by the cafe owner in Admin > Users.
+The cafe name and Staff/Manager role are generated dynamically in each invitation.

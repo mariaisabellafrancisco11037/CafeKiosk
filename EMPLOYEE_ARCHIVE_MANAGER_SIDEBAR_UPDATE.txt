@@ -1,0 +1,14 @@
+CafeKiosk Employee Archive + Manager Sidebar Update
+
+1. Admin > User
+- Active/current employees stay in the main User Accounts table.
+- Fire & Archive signs the employee out immediately and moves the account to Former Employee Archives.
+- The archive shows the last archive reason, archive date, and administrator who archived the account.
+- Restore returns the former employee account to the current employee list and enables login again.
+- Account-status history and Audit Logs are preserved in MySQL.
+
+2. Manager sidebar
+- Sidebar navigation is icon-only.
+- The only sidebar text kept is the registered cafe name.
+- Dashboard, POS, and Order Queue remain available through icons with tooltips/accessibility labels.
+- Applied to Manager Dashboard, Manager POS, and Manager Order Queue.

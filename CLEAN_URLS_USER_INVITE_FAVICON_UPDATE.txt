@@ -1,0 +1,17 @@
+CafeKiosk update
+
+- Fixed Admin User Management Add Staff/Manager and Invite Staff/Manager flows.
+- Added clean extensionless public page routes. Physical .php files remain internal static templates.
+- Old .php URLs redirect to their clean equivalent so bookmarks still work.
+- Added CafeKiosk coffee mug logo as favicon/browser-tab icon to all frontend pages.
+
+Primary Admin pages:
+/admin/dashboard
+/admin/order-monitor
+/admin/menu-management
+/admin/promotions
+/admin/inventory
+/admin/report
+/admin/audit-logs
+/admin/users
+/admin/settings

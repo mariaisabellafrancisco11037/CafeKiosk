@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
-const { sendStaffInvitation } = require('../services/emailService');
+const { sendStaffInvitation, sendPasswordResetEmail, getEmailConfig } = require('../services/emailService');
+const { buildPublicUrl } = require('../services/publicUrlService');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
@@ -140,6 +141,8 @@ async function ensureAuthSignupSchema(connection) {
   await addColumnIfMissing(connection, 'users', 'updated_at', 'DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
   await addColumnIfMissing(connection, 'users', 'approval_pin_hash', 'VARCHAR(255) NULL');
   await addColumnIfMissing(connection, 'users', 'approval_pin_updated_at', 'DATETIME NULL');
+  await addColumnIfMissing(connection, 'users', 'failed_attempts', 'INT UNSIGNED NOT NULL DEFAULT 0');
+  await addColumnIfMissing(connection, 'users', 'lock_until', 'DATETIME NULL');
 
   // Older schemas only allowed Admin/Staff. Add Manager without touching rows.
   try {
@@ -383,6 +386,7 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole) {
   const selectFields = `
     SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email,
            u.password_hash, u.role, u.is_owner, u.status,
+           u.failed_attempts, u.lock_until,
            c.cafe_name, c.status AS cafe_status,
            COALESCE(c.approval_status, 'Approved') AS approval_status,
            c.rejection_reason
@@ -435,6 +439,8 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole) {
     cafeName: row.cafe_name || row.cafe_id,
     isOwner: Boolean(row.is_owner),
     status: row.status,
+    failedAttempts: Number(row.failed_attempts || 0),
+    lockUntil: row.lock_until || null,
     cafeStatus: row.cafe_status,
     approvalStatus: row.approval_status || 'Approved',
     rejectionReason: row.rejection_reason || ''
@@ -916,9 +922,41 @@ exports.login = async (req, res) => {
   }
 
   if (account) {
+    const lockUntil = account.lockUntil ? new Date(account.lockUntil) : null;
+    if (lockUntil && Number.isFinite(lockUntil.getTime()) && lockUntil.getTime() > Date.now()) {
+      await recordLoginAttempt(username, account.userId, 'Locked', req, account.cafeId);
+      const minutes = Math.max(1, Math.ceil((lockUntil.getTime() - Date.now()) / 60000));
+      return res.status(429).json({
+        success: false,
+        code: 'ACCOUNT_TEMPORARILY_LOCKED',
+        message: `Too many failed sign-in attempts. Try again in about ${minutes} minute${minutes === 1 ? '' : 's'}, or use Forgot Password.`
+      });
+    }
+
     const passwordOK = await bcrypt.compare(password, account.passwordHash || '');
     if (!passwordOK) {
-      await recordLoginAttempt(username, account.userId, 'Failed', req);
+      const nextAttempts = Number(account.failedAttempts || 0) + 1;
+      const shouldLock = nextAttempts >= 5;
+      try {
+        if (shouldLock) {
+          await pool.execute(
+            'UPDATE users SET failed_attempts=?, lock_until=DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE user_id=?',
+            [nextAttempts, account.userId]
+          );
+          await recordLoginAttempt(username, account.userId, 'Locked', req, account.cafeId);
+        } else {
+          await pool.execute('UPDATE users SET failed_attempts=? WHERE user_id=?', [nextAttempts, account.userId]);
+          await recordLoginAttempt(username, account.userId, 'Failed', req, account.cafeId);
+        }
+      } catch (_) {}
+
+      if (shouldLock) {
+        return res.status(429).json({
+          success: false,
+          code: 'ACCOUNT_TEMPORARILY_LOCKED',
+          message: 'Too many failed sign-in attempts. This account is temporarily locked for 10 minutes. You can also use Forgot Password.'
+        });
+      }
       return res.status(401).json({ success: false, message: 'Invalid User ID/email or password.' });
     }
 
@@ -981,6 +1019,284 @@ exports.login = async (req, res) => {
     user: publicUser(account),
     redirect: loginRedirect(account.role)
   });
+};
+
+
+const PASSWORD_RESET_EXPIRES_MINUTES = Math.max(10, Number(process.env.PASSWORD_RESET_EXPIRES_MINUTES) || 30);
+
+function validRecoveryRole(value) {
+  const role = normalizeRole(value);
+  return ['Admin', 'Manager', 'Staff'].includes(role) ? role : '';
+}
+
+function passwordResetLoginUrl(role) {
+  const normalized = normalizeRole(role);
+  if (normalized === 'Admin') return '/admin-login';
+  if (normalized === 'Manager') return '/manager-login';
+  return '/staff-login';
+}
+
+function validateRecoveryPassword(value) {
+  const password = String(value || '');
+  if (password.length < 8) return 'Password must be at least 8 characters.';
+  if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+    return 'Password must contain at least one letter and one number.';
+  }
+  return '';
+}
+
+exports.requestPasswordReset = async (req, res) => {
+  const email = safeText(req.body?.email).toLowerCase();
+  const requestedRole = validRecoveryRole(req.body?.role);
+  const genericMessage = 'If an eligible CafeKiosk account matches that email, a secure password-reset link will be sent. Please check your inbox and spam folder.';
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ success: false, message: 'Please enter a valid registered email address.' });
+  }
+
+  const emailConfig = getEmailConfig();
+  if (!emailConfig.configured) {
+    return res.status(503).json({
+      success: false,
+      code: 'PASSWORD_EMAIL_NOT_CONFIGURED',
+      message: 'Password recovery email is not configured yet. Please contact the CafeKiosk administrator.'
+    });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return res.status(503).json({ success: false, message: 'Password recovery is temporarily unavailable.' });
+
+  try {
+    await ensureAuthSignupSchema(connection);
+    const params = requestedRole ? [email, requestedRole] : [email];
+    const [rows] = await connection.execute(
+      `SELECT u.user_id, u.cafe_id, u.full_name, u.email, u.role, u.status,
+              c.cafe_name, c.status AS cafe_status, COALESCE(c.approval_status, 'Approved') AS approval_status
+         FROM users u
+         JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE LOWER(u.email)=?${requestedRole ? ' AND u.role=?' : ''}
+        LIMIT 1`,
+      params
+    );
+
+    if (!rows.length || String(rows[0].status || '').toLowerCase() === 'inactive') {
+      return res.json({ success: true, message: genericMessage });
+    }
+
+    const user = rows[0];
+    const [recent] = await connection.execute(
+      `SELECT reset_id
+         FROM password_reset_tokens
+        WHERE user_id=? AND used_at IS NULL AND created_at > (NOW() - INTERVAL 60 SECOND)
+        ORDER BY reset_id DESC LIMIT 1`,
+      [user.user_id]
+    );
+    if (recent.length) {
+      return res.json({ success: true, message: genericMessage, throttled: true });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const tokenHash = sha256(token);
+    await connection.beginTransaction();
+    await connection.execute(
+      `UPDATE password_reset_tokens
+          SET used_at=COALESCE(used_at, NOW())
+        WHERE user_id=? AND used_at IS NULL`,
+      [user.user_id]
+    );
+    const [inserted] = await connection.execute(
+      `INSERT INTO password_reset_tokens (user_id, token_hash, expires_at, used_at, created_at)
+       VALUES (?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE), NULL, NOW())`,
+      [user.user_id, tokenHash, PASSWORD_RESET_EXPIRES_MINUTES]
+    );
+    await connection.commit();
+
+    const resetUrl = buildPublicUrl(req, `/reset-password?token=${encodeURIComponent(token)}`);
+    const delivery = await sendPasswordResetEmail({
+      to: user.email,
+      cafeName: user.cafe_name,
+      fullName: user.full_name,
+      role: user.role,
+      resetUrl,
+      expiresMinutes: PASSWORD_RESET_EXPIRES_MINUTES
+    });
+
+    if (!delivery.sent) {
+      try {
+        await connection.execute('UPDATE password_reset_tokens SET used_at=NOW() WHERE reset_id=?', [inserted.insertId]);
+      } catch (_) {}
+      console.error('Password reset email delivery failed:', delivery.error || 'Unknown Resend error');
+    } else {
+      try {
+        addAuditLog({
+          cafeId: user.cafe_id,
+          user: user.full_name || user.email,
+          userId: String(user.user_id),
+          role: user.role,
+          action: 'Password Reset Requested',
+          category: 'Authentication',
+          details: 'A secure password reset link was issued to the registered email address.',
+          entityId: String(user.user_id),
+          source: 'Forgot Password',
+          method: req.method,
+          path: req.originalUrl,
+          ip: req.ip || '',
+          statusCode: 200,
+          success: true
+        });
+      } catch (_) {}
+    }
+
+    return res.json({ success: true, message: genericMessage });
+  } catch (error) {
+    try { await connection.rollback(); } catch (_) {}
+    console.error('Forgot password request error:', error);
+    return res.status(500).json({ success: false, message: 'Password recovery is temporarily unavailable. Please try again.' });
+  } finally {
+    connection.release();
+  }
+};
+
+exports.validatePasswordReset = async (req, res) => {
+  const token = safeText(req.query?.token);
+  if (!token || token.length < 32) {
+    return res.status(400).json({ success: false, valid: false, message: 'This password-reset link is invalid.' });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return res.status(503).json({ success: false, valid: false, message: 'Password recovery is temporarily unavailable.' });
+
+  try {
+    await ensureAuthSignupSchema(connection);
+    const [rows] = await connection.execute(
+      `SELECT pr.reset_id, pr.expires_at,
+              u.user_id, u.full_name, u.email, u.role, u.status,
+              c.cafe_name
+         FROM password_reset_tokens pr
+         JOIN users u ON u.user_id=pr.user_id
+         JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE pr.token_hash=?
+          AND pr.used_at IS NULL
+          AND pr.expires_at>NOW()
+          AND u.status<>'Inactive'
+        LIMIT 1`,
+      [sha256(token)]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({ success: false, valid: false, message: 'This password-reset link is invalid, expired, or has already been used.' });
+    }
+
+    const row = rows[0];
+    return res.json({
+      success: true,
+      valid: true,
+      account: {
+        fullName: row.full_name,
+        role: row.role,
+        cafeName: row.cafe_name,
+        emailHint: String(row.email || '').replace(/^(.{1,2}).*(@.*)$/, '$1••••$2')
+      }
+    });
+  } catch (error) {
+    console.error('Validate password reset error:', error);
+    return res.status(500).json({ success: false, valid: false, message: 'Unable to validate this password-reset link.' });
+  } finally {
+    connection.release();
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const token = safeText(req.body?.token);
+  const newPassword = String(req.body?.newPassword || '');
+  const confirmPassword = String(req.body?.confirmPassword || '');
+  const passwordError = validateRecoveryPassword(newPassword);
+
+  if (!token) return res.status(400).json({ success: false, message: 'Password-reset token is required.' });
+  if (passwordError) return res.status(400).json({ success: false, message: passwordError });
+  if (newPassword !== confirmPassword) return res.status(400).json({ success: false, message: 'The password confirmation does not match.' });
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return res.status(503).json({ success: false, message: 'Password recovery is temporarily unavailable.' });
+
+  try {
+    await ensureAuthSignupSchema(connection);
+    await connection.beginTransaction();
+    const [rows] = await connection.execute(
+      `SELECT pr.reset_id, pr.user_id,
+              u.cafe_id, u.full_name, u.email, u.role, u.status, u.password_hash
+         FROM password_reset_tokens pr
+         JOIN users u ON u.user_id=pr.user_id
+        WHERE pr.token_hash=?
+          AND pr.used_at IS NULL
+          AND pr.expires_at>NOW()
+        LIMIT 1 FOR UPDATE`,
+      [sha256(token)]
+    );
+
+    if (!rows.length || String(rows[0].status || '').toLowerCase() === 'inactive') {
+      await connection.rollback();
+      return res.status(404).json({ success: false, message: 'This password-reset link is invalid, expired, or has already been used.' });
+    }
+
+    const user = rows[0];
+    const samePassword = await bcrypt.compare(newPassword, user.password_hash || '');
+    if (samePassword) {
+      await connection.rollback();
+      return res.status(400).json({ success: false, message: 'Choose a new password that is different from your current password.' });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await connection.execute(
+      `UPDATE users
+          SET password_hash=?, failed_attempts=0, lock_until=NULL, must_change_password=0, updated_at=NOW()
+        WHERE user_id=?`,
+      [passwordHash, user.user_id]
+    );
+    await connection.execute(
+      `UPDATE password_reset_tokens
+          SET used_at=NOW()
+        WHERE user_id=? AND used_at IS NULL`,
+      [user.user_id]
+    );
+
+    if (await tableExists(connection, 'user_sessions')) {
+      await connection.execute('DELETE FROM user_sessions WHERE user_id=?', [user.user_id]);
+    }
+
+    await connection.commit();
+
+    try {
+      addAuditLog({
+        cafeId: user.cafe_id,
+        user: user.full_name || user.email,
+        userId: String(user.user_id),
+        role: user.role,
+        action: 'Password Reset Completed',
+        category: 'Authentication',
+        details: 'Password was changed through the verified registered-email recovery flow.',
+        entityId: String(user.user_id),
+        source: 'Forgot Password',
+        method: req.method,
+        path: req.originalUrl,
+        ip: req.ip || '',
+        statusCode: 200,
+        success: true
+      });
+    } catch (_) {}
+
+    return res.json({
+      success: true,
+      message: 'Your password has been reset successfully. You can now sign in with your new password.',
+      loginUrl: passwordResetLoginUrl(user.role)
+    });
+  } catch (error) {
+    try { await connection.rollback(); } catch (_) {}
+    console.error('Reset password error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to reset the password right now.' });
+  } finally {
+    connection.release();
+  }
 };
 
 exports.ownerSignup = async (req, res) => {
@@ -1603,6 +1919,8 @@ exports.health = async (req, res) => {
     simultaneousSessions: true,
     roles: ['Admin', 'Staff', 'Manager'],
     signup: { owner: true, staffInvite: true },
+    passwordRecovery: { enabled: true, provider: getEmailConfig().provider, emailConfigured: getEmailConfig().configured, expiresMinutes: PASSWORD_RESET_EXPIRES_MINUTES },
+    loginProtection: { temporaryLockout: true, failedAttemptsBeforeLock: 5, lockMinutes: 10 },
     cookies: COOKIE_NAMES
   });
 };

@@ -1,0 +1,40 @@
+CafeKiosk - Resend Staff / Manager Invitation Setup
+====================================================
+
+This build sends Staff and Manager invitations using the Resend HTTPS API.
+It does NOT require Gmail SMTP, port 465/587, or a Google App Password.
+
+1. In Resend, verify the domain you want to send from.
+2. Create a Resend API key.
+3. In Railway > CafeKiosk > Variables, add:
+
+   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
+   RESEND_FROM_EMAIL=invites@your-verified-domain.com
+   RESEND_FROM_NAME=CafeKiosk
+
+4. Deploy/apply the Railway variable changes.
+5. Check the CafeKiosk deploy log. It should say:
+   "Staff/Manager invitation email is configured through Resend HTTPS API."
+6. In Admin > Users, invite a Staff or Manager using their real email.
+
+Personalized sender behavior
+----------------------------
+The actual Resend sender address stays RESEND_FROM_EMAIL, but the visible display
+name is generated from the cafe account, for example:
+
+  Sekira Cozy Cove Cafe via CafeKiosk <invites@yourdomain.com>
+
+If the cafe owner's registered email is available, CafeKiosk also sets that email
+as Reply-To. This means the employee can reply directly to the cafe owner without
+CafeKiosk needing every owner to configure their own mail account.
+
+The recipient is ALWAYS the Staff/Manager email entered in the invitation form.
+
+Important Resend note
+---------------------
+If your Resend account/domain is not fully verified or is still restricted to test
+sending, Resend may reject delivery to arbitrary recipient addresses. Complete the
+Resend domain/sender verification before your live thesis demonstration.
+
+Never commit RESEND_API_KEY into GitHub or .env files that are tracked by Git.
+Keep the API key in Railway Variables only.

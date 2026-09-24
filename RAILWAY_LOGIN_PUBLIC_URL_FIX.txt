@@ -1,0 +1,51 @@
+CafeKiosk Railway Login / Public URL Fix
+========================================
+
+What was fixed
+--------------
+1. Railway/public HTTPS pages now call the backend on the SAME public origin.
+   Example:
+     https://cafekiosk-production.up.railway.app/api/auth/admin-login
+   instead of the invalid:
+     https://cafekiosk-production.up.railway.app:5000/api/auth/admin-login
+
+2. The same fix was applied across Login, Admin, POS, Manager, Kiosk,
+   order queue, inventory, reports, menu management, live presence,
+   promotions, settings, signup, and System Monitor scripts.
+
+3. Local development still works:
+   - http://127.0.0.1:5000 -> same origin
+   - VS Code Live Server on :5500 -> backend on :5000
+   - laptop LAN/hotspot on :5000 -> same LAN origin
+
+4. Railway startup logs now prefer RAILWAY_PUBLIC_DOMAIN / PUBLIC_APP_URL
+   and print the real public HTTPS URLs instead of presenting localhost
+   and Railway-internal LAN IPs as the customer-facing links.
+
+5. The centered CafeKiosk message dialog from the previous Railway fix is
+   preserved.
+
+Railway variable still required
+-------------------------------
+CafeKiosk service:
+  MYSQL_URL=${{MySQL.MYSQL_URL}}
+
+Do not commit a real .env containing database passwords.
+
+Quick Git update
+----------------
+git add .
+git commit -m "Fix Railway login and public API URLs"
+git push origin main
+
+After Railway redeploys, test:
+  /login
+  /admin/order-monitor
+  /pos
+  /manager-pos
+  /order-queue
+  /system-admin-login
+
+If the login dialog now says "Invalid User ID/email or password", the browser
+is reaching the backend correctly. Use an account that exists in Railway MySQL
+or create a new cafe owner account through /owner-signup.

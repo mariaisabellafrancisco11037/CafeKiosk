@@ -18,6 +18,12 @@ router.post('/manager-login', (req, res, next) => {
   return controller.login(req, res, next);
 });
 
+// Secure registered-email password recovery. The request endpoint deliberately
+// returns a generic success message so it does not reveal whether an email exists.
+router.post('/forgot-password', controller.requestPasswordReset);
+router.get('/password-reset/validate', controller.validatePasswordReset);
+router.post('/password-reset', controller.resetPassword);
+
 router.post('/signup/owner', controller.ownerSignup);
 router.get('/invites/validate', controller.validateInvite);
 router.post('/signup/staff', controller.staffSignup);

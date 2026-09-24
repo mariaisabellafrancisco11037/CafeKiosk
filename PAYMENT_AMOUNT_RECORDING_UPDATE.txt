@@ -1,0 +1,10 @@
+CafeKiosk Payment Amount Recording - Reliable UI Fix
+
+- Staff POS and Manager POS now use ONE visible numeric payment field.
+- Cash: label is "Cash Received" and Change is calculated.
+- GCash/Online: label becomes "Amount Paid Online / GCash".
+- Card: label becomes "Amount Paid by Card".
+- The exact tendered amount is persisted as orders.payment_amount.
+- cash_received is stored only for Cash payments.
+- The POS script is cache-busted with ?v=payment-amount-v2 so Railway/browser cache cannot keep the old hidden-field behavior.
+- Backend still validates that the amount paid covers the final total.

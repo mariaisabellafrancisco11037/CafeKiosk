@@ -1,0 +1,8 @@
+CafeKiosk Staff/Manager Invitation Copy Link Fix
+
+- Copy Link now uses navigator.clipboard when available.
+- Adds a verified textarea/execCommand fallback for restricted browsers/webviews.
+- Does not report success unless the copy operation actually succeeds.
+- If automatic clipboard access is blocked, the secure invite URL is selected for Ctrl+C / mobile long-press copy.
+- Copy Link can use either the displayed backup input or the Open Link URL.
+- Invitation script cache version bumped so deployed browsers receive the new handler.

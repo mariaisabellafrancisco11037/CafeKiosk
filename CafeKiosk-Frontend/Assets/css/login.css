@@ -534,6 +534,15 @@ button {
   margin-top:
     10px;
 
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  text-decoration:
+    none;
+
   background:
     transparent;
 
@@ -1004,3 +1013,68 @@ and (orientation: landscape) {
   text-decoration: none;
 }
 .system-monitor-link:hover { color: var(--green-dark); }
+
+
+/* =========================================================
+   SECURE PASSWORD RECOVERY
+========================================================= */
+.password-recovery-card {
+  width: min(460px, calc(100vw - 32px));
+}
+
+.recovery-intro {
+  max-width: 365px;
+  margin: 2px auto 22px;
+  color: rgba(78, 51, 36, 0.68);
+  text-align: center;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.recovery-security-note,
+.password-requirements {
+  margin: 16px auto 0;
+  max-width: 360px;
+  color: rgba(78, 51, 36, .62);
+  font-size: .76rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.recovery-status-card {
+  width: 100%;
+  margin: 4px 0 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 250, 241, .78);
+  color: var(--brown-soft);
+  font-size: .84rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.recovery-status-card.valid {
+  border-color: rgba(83, 131, 101, .35);
+  background: rgba(83, 131, 101, .09);
+}
+
+.recovery-status-card.error {
+  border-color: rgba(176, 70, 70, .28);
+  background: rgba(176, 70, 70, .07);
+  color: #7c3434;
+}
+
+.recovery-login-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--brown-soft);
+  font-size: .85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.recovery-login-link:hover {
+  color: var(--brown-dark);
+  text-decoration: underline;
+}

@@ -1,0 +1,9 @@
+CafeKiosk POS layout update
+
+- Removed the visible Discount Eligibility card from Staff POS and Manager POS.
+- Added a normal Discount dropdown: No Discount, Student, Senior Citizen, PWD.
+- Discount + Order Type share the first compact row.
+- Payment Type + Amount Paid share the next compact row.
+- Removed the promotion note from POS checkout to free vertical space.
+- Reduced checkout control heights so the Order Summary/cart list has more room.
+- Cache-busted POS CSS/JS and discount-client.js.

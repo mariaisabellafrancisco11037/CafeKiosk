@@ -76,9 +76,9 @@ async function start() {
     process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL
   );
   if (emailVarsReady) {
-    console.log('✉️  Staff/Manager invitation email is configured through Resend HTTPS API.');
+    console.log('✉️  Staff/Manager invitations and Forgot Password recovery are configured through Resend HTTPS API.');
   } else {
-    console.warn('⚠️  Invitation email is not configured. Add RESEND_API_KEY and RESEND_FROM_EMAIL to Railway Variables.');
+    console.warn('⚠️  Email delivery is not configured. Staff invitations and Forgot Password recovery require RESEND_API_KEY and RESEND_FROM_EMAIL in Railway Variables.');
     console.warn('   Optional: RESEND_FROM_NAME=CafeKiosk. Secure invitation links will still be shown as a manual fallback.');
   }
 

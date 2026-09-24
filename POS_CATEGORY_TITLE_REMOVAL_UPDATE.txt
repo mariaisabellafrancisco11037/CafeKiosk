@@ -1,0 +1,7 @@
+CafeKiosk POS Category Title Removal
+
+- Removed the large category title/icon header from Staff POS and Manager POS.
+- Category navigation remains directly above the search/menu area.
+- All Menu Items and horizontal category scrolling remain intact.
+- Updated POS JavaScript to tolerate the removed title/icon elements.
+- Versioned the POS script so deployed browsers do not keep the previous cached UI logic.

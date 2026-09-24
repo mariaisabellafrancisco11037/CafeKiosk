@@ -206,6 +206,16 @@ const SYSTEM_ADMIN_LOGIN_FILE = path.join(
     "system-admin-login.php"
 );
 
+const FORGOT_PASSWORD_FILE = path.join(
+    AUTH_FOLDER,
+    "forgot-password.php"
+);
+
+const RESET_PASSWORD_FILE = path.join(
+    AUTH_FOLDER,
+    "reset-password.php"
+);
+
 const SYSTEM_ADMIN_DASHBOARD_FILE = path.join(
     SYSTEM_ADMIN_FOLDER,
     "dashboard.php"
@@ -1097,6 +1107,7 @@ const LEGACY_PAGE_REDIRECTS = new Map([
     ['/auth/login.php', '/login'], ['/auth/admin-login.php', '/admin-login'],
     ['/auth/staff-login.php', '/staff-login'], ['/auth/manager-login.php', '/manager-login'],
     ['/auth/owner-signup.php', '/owner-signup'], ['/auth/staff-signup.php', '/staff-signup'],
+    ['/auth/forgot-password.php', '/forgot-password'], ['/auth/reset-password.php', '/reset-password'],
     ['/auth/system-admin-login.php', '/system-admin-login'],
     ['/admin/dashboard.php', '/admin/dashboard'], ['/admin/order-monitor.php', '/admin/order-monitor'],
     ['/admin/menu-management.php', '/admin/menu-management'], ['/admin/promotions-discount.php', '/admin/promotions'],
@@ -1260,6 +1271,21 @@ app.get(
         res.sendFile(
             MANAGER_LOGIN_FILE
         );
+    }
+);
+
+
+app.get(
+    "/forgot-password",
+    (req, res) => {
+        res.sendFile(FORGOT_PASSWORD_FILE);
+    }
+);
+
+app.get(
+    "/reset-password",
+    (req, res) => {
+        res.sendFile(RESET_PASSWORD_FILE);
     }
 );
 

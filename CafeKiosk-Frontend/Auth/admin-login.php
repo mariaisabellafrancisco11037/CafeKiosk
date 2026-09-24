@@ -120,14 +120,7 @@
           LOG IN
         </button>
 
-
-        <button
-          type="button"
-          class="forgot-button"
-          data-forgot
-        >
-          Forgot Password?
-        </button>
+        <a class="forgot-button" href="/forgot-password?role=admin">Forgot Password?</a>
 
 
         <p class="login-hint">
@@ -142,55 +135,7 @@
 
   </main>
 
-
-  <div
-    id="forgotModal"
-    class="forgot-overlay"
-    aria-hidden="true"
-  >
-
-    <section
-      class="forgot-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="forgotTitle"
-    >
-
-      <button
-        id="closeForgot"
-        type="button"
-        class="forgot-close"
-        aria-label="Close"
-      >
-        ×
-      </button>
-
-
-      <h2 id="forgotTitle">
-        Forgot Password
-      </h2>
-
-
-      <p>
-        Please contact your CafeKiosk administrator or system manager
-        to reset your admin account password.
-      </p>
-
-
-      <button
-        id="forgotOk"
-        type="button"
-        class="modal-ok"
-      >
-        OK
-      </button>
-
-    </section>
-
-  </div>
-
-
-  <script src="../Assets/js/login.js"></script>
+  <script src="../Assets/js/login.js?v=password-recovery-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
