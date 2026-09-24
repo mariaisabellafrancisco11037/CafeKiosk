@@ -3483,3 +3483,80 @@ body.uniform-pos.cku-v2 .bottom-fields .ck-promo-client {
     pointer-events: none;
   }
 }
+
+/* =====================================================================
+   MENU GHOST SCROLL FIX — 2026-09-24
+   One vertical scroll owner only. Removes the artificial blank scroll tail
+   that was created by the previous bottom-visibility spacer + stable gutter.
+   ===================================================================== */
+@media (min-width: 851px) {
+  /* POS / Manager POS */
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding-bottom: 10px !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid {
+    flex: 1 1 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 2px 8px 14px 1px !important;
+    scroll-padding-bottom: 14px !important;
+    scrollbar-gutter: auto !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Admin Menu Management */
+  body.uniform-admin.cku-v2 .menu-main.cku-content {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding-bottom: 10px !important;
+  }
+
+  body.uniform-admin.cku-v2 .menu-main.cku-content > #menuView.menu-dashboard:not(.hidden) {
+    flex: 1 1 0 !important;
+    height: 0 !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-panel {
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-grid {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 2px 6px 14px 1px !important;
+    scroll-padding-bottom: 14px !important;
+    scrollbar-gutter: auto !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-grid::after {
+    content: none !important;
+    display: none !important;
+  }
+}
