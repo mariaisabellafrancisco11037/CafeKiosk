@@ -3400,3 +3400,86 @@ body.uniform-pos.cku-v2 .bottom-fields .ck-promo-client {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* =====================================================================
+   MENU BOTTOM VISIBILITY FIX — 2026-09-24
+   POS content lives in row 2 of the shared shell, so using 100dvh again
+   made the menu taller than the available row and clipped the last cards.
+   Menu Management now uses the same remaining-height model.
+   ===================================================================== */
+
+@media (min-width: 851px) {
+  /* Staff + Manager POS: use only the height available below the shared topbar. */
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding-bottom: 18px !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: 44px !important;
+    scroll-padding-bottom: 44px !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  /* A real final grid row guarantees scrollable clearance after the last cards. */
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid::after {
+    content: "";
+    grid-column: 1 / -1;
+    display: block;
+    height: 18px;
+    pointer-events: none;
+  }
+
+  /* Admin Menu Management: fill the shared content row instead of exceeding it. */
+  body.uniform-admin.cku-v2 .menu-main.cku-content {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    padding-bottom: 18px !important;
+  }
+
+  body.uniform-admin.cku-v2 .menu-main.cku-content > #menuView.menu-dashboard:not(.hidden) {
+    flex: 1 1 auto !important;
+    height: auto !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-panel {
+    height: auto !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-grid {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: 42px !important;
+    scroll-padding-bottom: 42px !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-grid::after {
+    content: "";
+    grid-column: 1 / -1;
+    display: block;
+    height: 18px;
+    pointer-events: none;
+  }
+}

@@ -6,7 +6,7 @@
   <title>CafeKiosk - Menu Management</title>
   <link rel="stylesheet" href="../Assets/css/menu-management.css?v=33">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=35-menu-bottom-fix">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
