@@ -102,10 +102,10 @@
     </main>
   </div>
   <script src="../Assets/js/auth-session.js?v=manager1"></script>
-  <script src="../Assets/js/manager-dashboard.js?v=1"></script>
+  <script src="../Assets/js/manager-dashboard.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
-  <script src="../Assets/js/live-presence.js?v=manager2"></script>
+  <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>

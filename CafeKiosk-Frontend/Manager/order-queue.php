@@ -275,11 +275,11 @@
   </div>
 
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/order-queue.js"></script>
+  <script src="../Assets/js/order-queue.js?v=manager-realtime-v3"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
-  <script src="../Assets/js/live-presence.js?v=4"></script>
+  <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>

@@ -274,6 +274,13 @@ exports.createOrder =
                 req.body = { ...req.body, cafeId: kiosk.cafeId };
             }
 
+            // Authenticated POS orders always belong to the cafe stored in the
+            // authenticated account. Never trust a browser/localStorage cafeId
+            // for Staff, Manager, or Admin POS submissions.
+            if (incomingSource === 'pos' && req.user?.cafeId) {
+                req.body = { ...req.body, cafeId: String(req.user.cafeId) };
+            }
+
             const order =
                 normalizeOrderPayload(
                     req.body

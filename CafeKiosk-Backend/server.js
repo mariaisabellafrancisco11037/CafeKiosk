@@ -888,7 +888,7 @@ io.on(
                 callback
             ) => {
 
-                const normalizedCafeId =
+                const requestedCafeId =
                     normalizeCafeId(
                         cafeId
                     );
@@ -921,6 +921,8 @@ io.on(
 
                     return;
                 }
+
+                const normalizedCafeId = normalizeCafeId(socket.user?.cafeId || requestedCafeId);
 
                 const room =
                     `pos-${normalizedCafeId}`;
@@ -963,7 +965,7 @@ io.on(
                 callback
             ) => {
 
-                const normalizedCafeId =
+                const requestedCafeId =
                     normalizeCafeId(
                         cafeId
                     );
@@ -996,6 +998,8 @@ io.on(
 
                     return;
                 }
+
+                const normalizedCafeId = normalizeCafeId(socket.user?.cafeId || requestedCafeId);
 
                 const room =
                     `order-queue-${normalizedCafeId}`;

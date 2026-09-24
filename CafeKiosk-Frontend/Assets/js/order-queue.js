@@ -10,12 +10,30 @@ function authenticatedCafeId() {
   ];
   return String(candidates.find(v => String(v || '').trim()) || 'cafe-1').trim();
 }
-const CAFE_ID = authenticatedCafeId();
+let CAFE_ID = authenticatedCafeId();
 
 localStorage.setItem(
   "cafeId",
   CAFE_ID
 );
+
+function syncAuthenticatedCafeId(preferredCafeId = "") {
+  const resolved = String(
+    preferredCafeId ||
+    window.CafeAuth?.session?.cafeId ||
+    (() => {
+      const role = String(window.CafeAuth?.role || sessionStorage.getItem("cafeActiveRole") || "").toLowerCase();
+      const key = role === "manager" ? "cafeManagerSession" : role === "admin" ? "cafeAdminSession" : "cafeStaffSession";
+      try { return JSON.parse(localStorage.getItem(key) || "null")?.cafeId || ""; } catch (_) { return ""; }
+    })() ||
+    CAFE_ID ||
+    "cafe-1"
+  ).trim() || "cafe-1";
+
+  CAFE_ID = resolved;
+  localStorage.setItem("cafeId", CAFE_ID);
+  return CAFE_ID;
+}
 function resolveBackendOrigin() {
   // LAN-safe rule: when the page is opened through HTTP/HTTPS, always use
   // the exact hostname the browser used (localhost on laptop, LAN IP on tablet).
@@ -1195,7 +1213,7 @@ function eventBelongsToThisCafe(payload) {
 
   return (
     String(payload.cafeId).trim() ===
-    String(CAFE_ID).trim()
+    String(syncAuthenticatedCafeId()).trim()
   );
 }
 
@@ -1417,9 +1435,11 @@ async function fetchOrders() {
 
   try {
 
+    const activeCafeId = syncAuthenticatedCafeId();
+
     const response =
-      await fetch(
-        `${API_URL}/api/orders?cafeId=${encodeURIComponent(CAFE_ID)}`,
+      await authenticatedFetch(
+        `${API_URL}/api/orders?cafeId=${encodeURIComponent(activeCafeId)}`,
         {
           method:
             "GET",
@@ -1448,6 +1468,12 @@ async function fetchOrders() {
 
     const data =
       await response.json();
+
+    // The authenticated backend is the canonical tenant source. This avoids
+    // a stale cafeId from another Admin/Staff/Manager tab hiding valid orders.
+    if (data?.cafeId) {
+      syncAuthenticatedCafeId(data.cafeId);
+    }
 
 
     const raw =
@@ -1702,16 +1728,27 @@ function joinRealtimeRooms() {
     return;
   }
 
-  // Server-side authenticated Socket.IO accepts Staff/Admin
-  // for both of these rooms.
+  const activeCafeId = syncAuthenticatedCafeId();
+
+  // Always join using the cafe attached to the active authenticated role.
+  // The server also enforces socket.user.cafeId, so another role tab cannot
+  // accidentally move this Manager/Staff queue into the wrong cafe room.
   queueSocket.emit(
     "join-order-queue",
-    CAFE_ID
+    activeCafeId,
+    result => {
+      if (result?.cafeId) syncAuthenticatedCafeId(result.cafeId);
+      if (result?.success === false) console.warn("Order Queue room join rejected:", result.message || result);
+    }
   );
 
   queueSocket.emit(
     "join-pos",
-    CAFE_ID
+    activeCafeId,
+    result => {
+      if (result?.cafeId) syncAuthenticatedCafeId(result.cafeId);
+      if (result?.success === false) console.warn("POS room join rejected:", result.message || result);
+    }
   );
 }
 
@@ -2874,6 +2911,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener(
     "cafe:auth-ready",
     () => {
+      syncAuthenticatedCafeId();
       if (
         window.CafeAuth?.socket &&
         queueSocket !== window.CafeAuth.socket
@@ -2888,4 +2926,11 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchOrders();
     }
   );
+  window.addEventListener("cafekiosk:identity", event => {
+    if (event?.detail?.cafeId) syncAuthenticatedCafeId(event.detail.cafeId);
+    joinRealtimeRooms();
+    fetchOrders();
+  });
+
+
 });

@@ -20,6 +20,21 @@
   function renderLatest(orders){const wrap=$('latestShopOrders');if(!wrap)return;if(!orders?.length){wrap.innerHTML='<div class="staff-empty-state">No orders have been recorded yet.</div>';return;}wrap.innerHTML=orders.map(o=>`<article class="staff-latest-order"><div class="staff-latest-order-head"><strong>${esc(o.orderNumber)}</strong><span class="staff-source-pill">${esc(o.source)}</span></div><p>${esc(o.customerName||'Walk-in Customer')} · ${esc(o.serviceType||'')}</p><div class="staff-latest-order-foot"><span class="staff-status-pill ${statusClass(o.status)}">${esc(o.status)}</span><b>${money(o.total)}</b></div></article>`).join('');}
   function render(data){const p=data.profile||{},mine=data.personal||{},shop=data.shop||{};$('staffDashboardName').textContent=p.displayName||'Manager';$('myOrdersToday').textContent=Number(mine.ordersCreatedToday||0);$('mySalesToday').textContent=money(mine.salesCreatedToday);$('completedByMe').textContent=Number(mine.completedByMeToday||0);$('pendingOrders').textContent=Number(shop.pendingCount||0);$('preparingOrders').textContent=Number(shop.preparingCount||0);$('readyOrders').textContent=Number(shop.readyCount||0);$('completedOrders').textContent=Number(shop.completedToday||0);$('activeQueueCount').textContent=Number(shop.pendingCount||0)+Number(shop.preparingCount||0)+Number(shop.readyCount||0);$('stockAlertCount').textContent=Number(shop.lowStockCount||0);$('shopSalesToday').textContent=money(shop.completedSalesToday);$('trackingNote').textContent=data.personalTrackingAvailable?'Tracked from your account':'Personal tracking unavailable';renderRecent(data.recentOrders,!!data.personalTrackingAvailable);renderStock(data.stockAlerts);renderLatest(data.recentShopOrders);}
   async function load(showSuccess=false){if(loading)return;loading=true;const btn=$('refreshStaffDashboard'),msg=$('staffDashboardMessage');if(btn)btn.disabled=true;if(msg){msg.textContent='';msg.className='staff-dashboard-message';}try{if(!window.CafeAuth?.apiFetch||!window.CafeAuth?.API_ORIGIN)throw new Error('CafeKiosk authentication is unavailable.');const response=await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/staff/dashboard`,{method:'GET',cache:'no-store'});const payload=await response.json().catch(()=>({}));if(!response.ok||!payload.success)throw new Error(payload.message||'Unable to load the manager dashboard.');render(payload);if(showSuccess&&msg){msg.textContent='Dashboard refreshed from MySQL.';msg.className='staff-dashboard-message success';}}catch(error){if(msg)msg.textContent=error.message||'Unable to load dashboard data.';console.error('Manager dashboard:',error);}finally{loading=false;if(btn)btn.disabled=false;}}
-  function wireRealtime(){const socket=window.CafeAuth?.socket;if(!socket?.on)return;const refresh=()=>load(false);['order-updated','order:updated','orders:changed','inventory:changed'].forEach(e=>socket.on(e,refresh));}
+  function wireRealtime(){
+    const socket=window.CafeAuth?.socket;
+    if(!socket?.on)return;
+    const cafeId=String(window.CafeAuth?.session?.cafeId||localStorage.getItem('cafeId')||'cafe-1').trim()||'cafe-1';
+    const join=()=>{
+      if(socket.connected){
+        socket.emit('join-order-queue',cafeId);
+        socket.emit('join-pos',cafeId);
+      }
+    };
+    const refresh=()=>load(false);
+    ['new-order','order:created','order-updated','order:updated','orders:changed','inventory:changed'].forEach(e=>socket.on(e,refresh));
+    socket.on('connect',join);
+    socket.on('auth:ready',join);
+    join();
+  }
   document.addEventListener('DOMContentLoaded',()=>{showSessionName();updateClock();setInterval(updateClock,30000);$('refreshStaffDashboard')?.addEventListener('click',()=>load(true));load(false);setTimeout(wireRealtime,1200);setInterval(()=>load(false),30000);});
 })();

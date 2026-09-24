@@ -16,7 +16,7 @@
   function resolveSurface() {
     const path = String(location.pathname || '').toLowerCase();
     if (path.includes('/kiosk/') || ['/','/order-type','/menu','/checkout'].includes(path)) return 'kiosk';
-    if (path.includes('/pos/') || ['/pos','/order-queue','/staff-dashboard','/manager-pos','/manager-order-queue'].includes(path)) return 'pos';
+    if (path.includes('/pos/') || ['/pos','/order-queue','/staff-dashboard','/manager-dashboard','/manager-pos','/manager-order-queue'].includes(path)) return 'pos';
     return '';
   }
 
