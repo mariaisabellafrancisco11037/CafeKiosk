@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
-  <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=1">
+  <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=2">
+  <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v3">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
@@ -21,9 +22,9 @@
       <div class="logo"><img src="../Assets/images/logo.png" alt="CafeKiosk Logo"></div>
       <div class="manager-sidebar-cafe-name" data-cafe-identity>Current Cafe</div>
       <nav class="staff-navigation" aria-label="Manager navigation">
-        <a href="/manager-dashboard" class="staff-nav-button active" aria-current="page" aria-label="Dashboard" title="Dashboard"><span class="staff-nav-icon" aria-hidden="true">▦</span></a>
-        <a href="/manager-pos" class="staff-nav-button" aria-label="POS" title="POS"><span class="staff-nav-icon" aria-hidden="true">☕</span></a>
-        <a href="/manager-order-queue" class="staff-nav-button" aria-label="Order Queue" title="Order Queue"><span class="staff-nav-icon" aria-hidden="true">☷</span></a>
+        <a href="/manager-dashboard" class="staff-nav-button active" aria-current="page" aria-label="Dashboard" title="Dashboard"><span class="staff-nav-icon" aria-hidden="true">▦</span><span class="manager-nav-label">Dashboard</span></a>
+        <a href="/manager-pos" class="staff-nav-button" aria-label="POS" title="POS"><span class="staff-nav-icon" aria-hidden="true">☕</span><span class="manager-nav-label">POS</span></a>
+        <a href="/manager-order-queue" class="staff-nav-button" aria-label="Order Queue" title="Order Queue"><span class="staff-nav-icon" aria-hidden="true">☷</span><span class="manager-nav-label">Order Queue</span></a>
       </nav>
     </aside>
 

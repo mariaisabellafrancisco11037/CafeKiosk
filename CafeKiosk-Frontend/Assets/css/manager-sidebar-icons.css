@@ -1,4 +1,4 @@
-/* CafeKiosk Manager sidebar: icon-only navigation with cafe name preserved. */
+/* CafeKiosk Manager sidebar: icon + text navigation with cafe name preserved. */
 .manager-sidebar-icons .manager-sidebar-cafe-name{
   display:block;
   margin:0 6px 14px;
@@ -11,28 +11,62 @@
 }
 .manager-sidebar-icons .staff-label,
 .manager-sidebar-icons .manager-access-note{display:none!important}
-.manager-sidebar-icons .staff-navigation{align-items:center}
+.manager-sidebar-icons .staff-navigation{
+  width:100%!important;
+  align-items:stretch!important;
+}
 .manager-sidebar-icons .staff-nav-button{
-  width:52px!important;
-  min-width:52px;
-  min-height:52px;
-  padding:0!important;
-  justify-content:center!important;
-  gap:0!important;
-  border-radius:15px;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:44px!important;
+  padding:8px 10px!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  border-radius:12px;
 }
 .manager-sidebar-icons .staff-nav-icon{
-  width:auto!important;
-  min-width:0!important;
-  font-size:1.18rem;
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  flex:0 0 20px!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:1rem;
 }
-.manager-sidebar-icons .staff-nav-button > span:not(.staff-nav-icon){display:none!important}
+.manager-sidebar-icons .staff-nav-icon svg{
+  width:19px!important;
+  height:19px!important;
+}
+.manager-sidebar-icons .manager-nav-label{
+  display:inline-block!important;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:.78rem;
+  font-weight:800;
+}
 .manager-sidebar-icons .logo{margin-bottom:10px}
 .manager-sidebar-icons .logo img{width:72px;height:72px}
 .manager-dashboard-page .cafekiosk-cafe-identity,
 .manager-pos-page .cafekiosk-cafe-identity,
 .manager-order-queue-page .cafekiosk-cafe-identity{display:none!important}
+
 @media(max-width:900px){
   .manager-sidebar-icons .manager-sidebar-cafe-name{max-width:130px;margin:0 4px;text-align:left}
-  .manager-sidebar-icons .staff-navigation{align-items:center}
+  .manager-sidebar-icons .staff-navigation{align-items:stretch!important}
+}
+
+/* On very small screens, keep the compact icon-only mobile bar. */
+@media(max-width:520px){
+  .manager-sidebar-icons .manager-nav-label{display:none!important}
+  .manager-sidebar-icons .staff-nav-button{
+    width:46px!important;
+    min-width:46px!important;
+    max-width:46px!important;
+    padding:0!important;
+    justify-content:center!important;
+    gap:0!important;
+  }
 }

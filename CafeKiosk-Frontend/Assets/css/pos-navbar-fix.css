@@ -26,32 +26,37 @@ body.uniform-pos .cku-sidebar .staff-nav-icon svg {
   fill: none !important;
 }
 
-/* Manager navigation deliberately stays icon-only, with the cafe name visible. */
+/* Manager navigation: show icon + label on desktop, while preserving the cafe name. */
 body.uniform-manager .manager-sidebar-icons .staff-navigation {
-  align-items: center !important;
+  width: 100% !important;
+  align-items: stretch !important;
 }
 
 body.uniform-manager .manager-sidebar-icons .staff-nav-button {
-  width: 52px !important;
-  min-width: 52px !important;
-  max-width: 52px !important;
-  height: 52px !important;
-  min-height: 52px !important;
-  padding: 0 !important;
-  justify-content: center !important;
-  gap: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 44px !important;
+  padding: 8px 10px !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
 }
 
 body.uniform-manager .manager-sidebar-icons .staff-nav-icon {
-  width: 22px !important;
-  height: 22px !important;
-  min-width: 22px !important;
-  flex: 0 0 22px !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  flex: 0 0 20px !important;
   font-size: 0 !important;
 }
 
-body.uniform-manager .manager-sidebar-icons .staff-nav-button > span:not(.staff-nav-icon) {
-  display: none !important;
+body.uniform-manager .manager-sidebar-icons .manager-nav-label {
+  display: inline-block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 /* Keep the regular Staff navigation readable. */
@@ -159,12 +164,16 @@ body.uniform-pos:not(.uniform-manager) .cku-sidebar .staff-nav-button > span:las
   }
 
   body.uniform-manager.cku-v2 .manager-sidebar-icons .staff-nav-button {
-    flex: 0 0 46px !important;
-    width: 46px !important;
-    min-width: 46px !important;
-    max-width: 46px !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 92px !important;
+    max-width: none !important;
     height: 46px !important;
     min-height: 46px !important;
+    padding: 7px 10px !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    white-space: nowrap !important;
   }
 
   body.uniform-pos.cku-v2 .cku-topbar {
@@ -237,6 +246,22 @@ body.uniform-pos:not(.uniform-manager) .cku-sidebar .staff-nav-button > span:las
   }
 
   body.uniform-pos.cku-v2:not(.uniform-manager) .cku-sidebar .staff-nav-button > span:last-child:not(.staff-nav-icon) {
+    display: none !important;
+  }
+}
+
+
+@media (max-width: 520px) {
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .staff-nav-button {
+    flex: 0 0 46px !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .manager-nav-label {
     display: none !important;
   }
 }
