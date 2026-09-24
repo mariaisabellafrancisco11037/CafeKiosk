@@ -54,7 +54,10 @@
         <label class="select-box">
           <select id="sourceFilter" aria-label="Filter by source">
             <option value="all">All Source</option>
-            <option value="POS">POS</option>
+            <option value="POS">All POS</option>
+            <option value="Staff POS">Staff POS</option>
+            <option value="Manager POS">Manager POS</option>
+            <option value="Admin POS">Admin POS</option>
             <option value="Kiosk">Kiosk</option>
           </select>
         </label>
@@ -275,7 +278,7 @@
   </div>
 
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/order-queue.js?v=manager-realtime-v3"></script>
+  <script src="../Assets/js/order-queue.js?v=pos-source-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

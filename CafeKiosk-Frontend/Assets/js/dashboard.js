@@ -431,6 +431,10 @@
 
       source,
 
+      sourceLabel:
+        String(raw.sourceLabel || raw.source_label || "").trim() ||
+        (source === "Kiosk" ? "Kiosk" : "POS"),
+
       status:
         normalizeStatus(
           raw.status
@@ -1043,7 +1047,7 @@
 
               <td>
                 <span class="source-badge">
-                  ${escapeHTML(order.source)}
+                  ${escapeHTML(order.sourceLabel || order.source)}
                 </span>
               </td>
 

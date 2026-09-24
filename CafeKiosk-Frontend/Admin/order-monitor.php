@@ -344,7 +344,19 @@
             </option>
 
             <option value="POS">
-              POS
+              All POS
+            </option>
+
+            <option value="STAFF POS">
+              Staff POS
+            </option>
+
+            <option value="MANAGER POS">
+              Manager POS
+            </option>
+
+            <option value="ADMIN POS">
+              Admin POS
             </option>
 
             <option value="KIOSK">
@@ -965,7 +977,7 @@
 
   <script src="/Assets/js/auth-session.js?v=20260913"></script>
 
-  <script src="../Assets/js/order-monitor.js?v=20260913"></script>
+  <script src="../Assets/js/order-monitor.js?v=pos-source-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

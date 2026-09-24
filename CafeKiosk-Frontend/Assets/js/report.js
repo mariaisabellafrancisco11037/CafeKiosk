@@ -125,6 +125,9 @@
       ...order,
       id: String(order?.orderNumber ?? order?.orderId ?? order?.id ?? `order-${index + 1}`),
       source,
+      sourceLabel:
+        String(order?.sourceLabel ?? order?.source_label ?? "").trim() ||
+        (source === "Kiosk" ? "Kiosk" : "POS"),
       status: normStatus(order?.status),
       createdAt,
       date: Number.isNaN(date.getTime()) ? null : date,
@@ -262,7 +265,7 @@
               <span>${esc(order.date ? order.date.toLocaleString("en-PH") : "No date")}</span>
             </div>
             <div class="transaction-row">
-              <b>Channel:</b><span>${esc(order.source)}</span>
+              <b>Channel:</b><span>${esc(order.sourceLabel || order.source)}</span>
               <b>Customer:</b><span>${esc(order.customer)}</span>
               <b>Amount:</b><span>${esc(money(order.total))}</span>
               <b>Payment:</b><span>${esc(order.paymentMethod)}</span>
@@ -396,7 +399,7 @@
   function render() {
     renderMetrics();
     renderHistory();
-    renderBreakdown("sourceBreakdown", countBy(order => order.source));
+    renderBreakdown("sourceBreakdown", countBy(order => order.sourceLabel || order.source));
     renderBreakdown("statusBreakdown", countBy(order => order.status));
     renderBreakdown("paymentBreakdown", countBy(order => order.paymentMethod));
     renderBreakdown("productBreakdown", productStats().map(product => [product.name, product.qty]));
@@ -454,7 +457,7 @@
       rows.push([
         order.id,
         order.date ? order.date.toISOString() : "",
-        order.source,
+        order.sourceLabel || order.source,
         order.customer,
         order.status,
         order.paymentMethod,

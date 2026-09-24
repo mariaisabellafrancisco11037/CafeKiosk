@@ -318,7 +318,7 @@
 
   <!-- Existing CafeKiosk authentication helper -->
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/dashboard.js"></script>
+  <script src="../Assets/js/dashboard.js?v=pos-source-v1"></script>
 <script src="../Assets/js/dashboard-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

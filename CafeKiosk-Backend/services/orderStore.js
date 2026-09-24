@@ -10,6 +10,21 @@ function safeStatus(v){const allowed=['Pending','Preparing','Ready','Completed',
 
 async function hydrateRows(rows){
   if(!rows.length)return [];
+
+  // Resolve the authenticated creator's role so every POS order can expose a
+  // human-readable origin without changing the stable source value ("POS").
+  // This keeps existing reports/filters compatible while letting the UI show
+  // Staff POS, Manager POS, or Admin POS.
+  const creatorIds=[...new Set(rows.map(r=>Number(r.created_by_user_id)).filter(id=>Number.isFinite(id)&&id>0))];
+  const creatorRoleMap=new Map();
+  if(creatorIds.length){
+    const userMarks=creatorIds.map(()=>'?').join(',');
+    const [creatorRows]=await pool.query(`SELECT user_id, role FROM users WHERE user_id IN (${userMarks})`,creatorIds);
+    for(const user of creatorRows){
+      creatorRoleMap.set(Number(user.user_id),String(user.role||'').trim());
+    }
+  }
+
   const ids=rows.map(r=>r.order_id);
   const marks=ids.map(()=>'?').join(',');
   const [items]=await pool.query(`SELECT * FROM order_items WHERE order_id IN (${marks}) ORDER BY order_item_id`,ids);
@@ -21,9 +36,24 @@ async function hydrateRows(rows){
   for(const i of items){if(!itemMap.has(i.order_id))itemMap.set(i.order_id,[]);itemMap.get(i.order_id).push({
     productId:i.product_id?String(i.product_id):'',name:i.product_name_snapshot,category:i.category_snapshot||'',price:num(i.base_price),customizationCost:num(i.customization_cost),unitPrice:num(i.unit_price),qty:num(i.quantity,1),quantity:num(i.quantity,1),subtotal:num(i.line_total),total:num(i.line_total),customizations:customMap.get(i.order_item_id)||[],selectedSizeName:i.selected_size_name||''
   });}
-  return rows.map(r=>({
-    id:String(r.order_id),cafeId:r.cafe_id,source:r.source,createdByUserId:r.created_by_user_id?Number(r.created_by_user_id):null,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[]
-  }));
+  return rows.map(r=>{
+    const creatorUserId=r.created_by_user_id?Number(r.created_by_user_id):null;
+    const creatorRole=creatorUserId?creatorRoleMap.get(creatorUserId)||'':'';
+    const source=String(r.source||'').trim()||'Kiosk';
+    const sourceLabel=source.toLowerCase().includes('kiosk')
+      ? 'Kiosk'
+      : creatorRole==='Manager'
+        ? 'Manager POS'
+        : creatorRole==='Admin'
+          ? 'Admin POS'
+          : creatorRole==='Staff'
+            ? 'Staff POS'
+            : 'POS';
+
+    return {
+      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[]
+    };
+  });
 }
 
 async function listOrders({cafeId,source,status,limit}={}){

@@ -260,7 +260,9 @@ function convertOrder(order, index = 0) {
     cafeId: order.cafeId || CAFE_ID,
     customer: order.customerName || order.customer || (source === "Kiosk" ? "Kiosk #1" : "Walk-in Customer"),
     source,
-    sourceLabel: source === "Kiosk" ? "Kiosk System #1" : "POS System #1",
+    sourceLabel:
+      String(order.sourceLabel || order.source_label || "").trim() ||
+      (source === "Kiosk" ? "Kiosk" : "POS"),
     serving: formatServing(order.serviceType || order.serving),
     status: normalizeStatus(order.status),
     time: formatTime(createdAt),
@@ -1340,11 +1342,20 @@ function getFilteredOrders() {
 
   const filtered = orders.filter(order => {
     if (status !== "ALL" && order.status !== status) return false;
-    if (source !== "ALL" && order.source.toUpperCase() !== source) return false;
+    if (source !== "ALL") {
+      const sourceLabel = String(order.sourceLabel || "").toUpperCase();
+      if (source === "POS") {
+        if (order.source.toUpperCase() !== "POS") return false;
+      } else if (source === "STAFF POS" || source === "MANAGER POS" || source === "ADMIN POS") {
+        if (sourceLabel !== source) return false;
+      } else if (order.source.toUpperCase() !== source) {
+        return false;
+      }
+    }
     if (service !== "ALL" && order.serving.toUpperCase() !== service) return false;
 
     if (search) {
-      const haystack = `${order.id} ${order.customer} ${order.source} ${order.serving} ${order.status}`.toLowerCase();
+      const haystack = `${order.id} ${order.customer} ${order.source} ${order.sourceLabel || ""} ${order.serving} ${order.status}`.toLowerCase();
       if (!haystack.includes(search)) return false;
     }
     return true;
@@ -1403,7 +1414,7 @@ function renderTable() {
       <td class="order-id-cell">#${escapeHTML(order.id)}</td>
       <td>${escapeHTML(order.customer)}</td>
       <td>${escapeHTML(order.time)}</td>
-      <td>${escapeHTML(order.source)}</td>
+      <td>${escapeHTML(order.sourceLabel || order.source)}</td>
       <td>${escapeHTML(order.serving)}</td>
       <td>
         <button type="button" class="status-pill ${statusClass(order.status)}" data-status-cycle="${escapeAttr(order.id)}">

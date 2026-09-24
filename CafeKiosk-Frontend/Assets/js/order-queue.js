@@ -259,7 +259,9 @@ function normalizeOrder(order, index = 0) {
     time: created.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     date: created.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
     source,
-    sourceLabel: source === "Kiosk" ? "Kiosk System #1" : "POS System #1",
+    sourceLabel:
+      String(order.sourceLabel || order.source_label || "").trim() ||
+      (source === "Kiosk" ? "Kiosk" : "POS"),
     serving: order.serviceType ?? order.service_type ?? order.serving ?? "Dine In",
     status: normalizeStatus(order.status),
     subtotal: Number(order.subtotal ?? order.sub_total ?? order.total ?? 0),
@@ -886,9 +888,13 @@ function getFilteredOrders() {
     const normalized = normalizeStatus(order.status);
     const statusOK = status === "all" || normalized === status;
     const tabOK = activeStatusTab === "all" || normalized === activeStatusTab;
-    const sourceOK = source === "all" || order.source === source;
+    const sourceOK =
+      source === "all" ||
+      (source === "POS" && order.source === "POS") ||
+      (source === "Kiosk" && order.source === "Kiosk") ||
+      (["Staff POS", "Manager POS", "Admin POS"].includes(source) && order.sourceLabel === source);
     const serviceOK = service === "all" || order.serving === service;
-    const haystack = `${order.id} ${order.customer} ${order.source} ${order.serving} ${order.status}`.toLowerCase();
+    const haystack = `${order.id} ${order.customer} ${order.source} ${order.sourceLabel || ""} ${order.serving} ${order.status}`.toLowerCase();
     return statusOK && tabOK && sourceOK && serviceOK && (!search || haystack.includes(search));
   });
 
@@ -941,7 +947,7 @@ function renderTable() {
       <td>#${escapeHTML(order.id)}</td>
       <td>${escapeHTML(order.customer)}</td>
       <td>${escapeHTML(order.time)}</td>
-      <td>${escapeHTML(order.source)}</td>
+      <td>${escapeHTML(order.sourceLabel || order.source)}</td>
       <td>${escapeHTML(order.serving)}</td>
       <td><span class="status-pill ${cls}">${escapeHTML(normalizeStatus(order.status).toUpperCase())}</span></td>
       <td>

@@ -130,7 +130,7 @@
     </main>
   </div>
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/report.js"></script>
+  <script src="../Assets/js/report.js?v=pos-source-v1"></script>
 <script src="../Assets/js/report-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
