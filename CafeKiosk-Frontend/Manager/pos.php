@@ -23,6 +23,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v3">
+  <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
 </head>
 
 <body class="uniform-pos manager-pos-page">
@@ -257,31 +258,25 @@
                     </select>
                 </div>
 
-                <div class="checkout-control">
-                    <label class="field-label" for="paymentMethod">Payment Type</label>
-                    <select id="paymentMethod" class="checkout-field">
+
+                <div class="checkout-control checkout-control-payment">
+                    <label class="field-label" for="paymentSummaryButton">Payment Method</label>
+                    <button type="button" id="paymentSummaryButton" class="ck-payment-summary-button" aria-haspopup="dialog" aria-controls="paymentModal">
+                        <span id="paymentSummaryIcon" class="ck-payment-summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></span>
+                        <span class="ck-payment-summary-copy">
+                            <strong id="paymentSummaryMethod">Cash</strong>
+                            <small id="paymentSummaryAmount">Tap to enter payment</small>
+                        </span>
+                        <span class="ck-payment-summary-arrow" aria-hidden="true">›</span>
+                    </button>
+                    <select id="paymentMethod" class="ck-payment-native-control" aria-hidden="true" tabindex="-1">
                         <option value="Cash">Cash</option>
                         <option value="GCash">GCash / Online Payment</option>
                         <option value="Card">Card</option>
                     </select>
-                </div>
-
-                <div id="paymentEntryFields" class="checkout-control payment-entry-group">
-                    <label class="field-label" for="cashReceived" id="paymentAmountLabel">Cash Received</label>
-                    <input
-                        type="number"
-                        id="cashReceived"
-                        class="checkout-field"
-                        placeholder="₱0.00"
-                        min="0"
-                        step="0.01"
-                        inputmode="decimal"
-                        autocomplete="off"
-                    >
-                    <div class="change-row" id="changeRow">
-                        <span>Change</span>
-                        <strong id="changeAmount">₱0.00</strong>
-                    </div>
+                    <input type="number" id="cashReceived" class="ck-payment-native-control" min="0" step="0.01" inputmode="decimal" autocomplete="off" aria-hidden="true" tabindex="-1">
+                    <span id="paymentAmountLabel" class="ck-payment-native-control">Cash Received</span>
+                    <div id="changeRow" class="ck-payment-native-control"><strong id="changeAmount">₱0.00</strong></div>
                 </div>
 
             </div>
@@ -446,8 +441,43 @@
 </div>
 
 
+
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="ck-payment-overlay" aria-hidden="true">
+  <section class="ck-payment-modal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+    <div class="ck-payment-modal-header">
+      <div><h2 id="paymentModalTitle">Payment</h2><p>Choose a payment method and enter the amount received.</p></div>
+      <button type="button" id="paymentModalClose" class="ck-payment-modal-close" aria-label="Close payment">×</button>
+    </div>
+    <div class="ck-payment-total-box"><span>Total Due</span><strong id="paymentModalTotal">₱0.00</strong></div>
+    <div class="ck-payment-methods" role="group" aria-label="Payment method">
+      <button type="button" class="ck-payment-method active" data-payment-method="Cash"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></span><span>Cash</span></button>
+      <button type="button" class="ck-payment-method" data-payment-method="GCash"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg></span><span>GCash / Online</span></button>
+      <button type="button" class="ck-payment-method" data-payment-method="Card"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg></span><span>Card</span></button>
+    </div>
+    <div class="ck-payment-entry">
+      <label id="paymentModalAmountLabel" for="paymentModalAmount">Cash Received</label>
+      <div class="ck-payment-input-wrap"><span class="ck-payment-currency">₱</span><input id="paymentModalAmount" class="ck-payment-amount-input" type="number" min="0" step="0.01" inputmode="decimal" autocomplete="off" placeholder="0.00"></div>
+      <div class="ck-payment-quick">
+        <button type="button" data-payment-quick="exact">Exact</button>
+        <button type="button" data-payment-quick="100">₱100</button>
+        <button type="button" data-payment-quick="200">₱200</button>
+        <button type="button" data-payment-quick="500">₱500</button>
+        <button type="button" data-payment-quick="1000">₱1,000</button>
+      </div>
+      <div id="paymentModalChange" class="ck-payment-change"><span>Change</span><strong>₱0.00</strong></div>
+      <p id="paymentModalHint" class="ck-payment-hint">Enter the cash handed to you by the customer.</p>
+      <div id="paymentModalError" class="ck-payment-error" aria-live="polite"></div>
+    </div>
+    <div class="ck-payment-actions">
+      <button type="button" id="paymentModalCancel" class="ck-payment-cancel">Cancel</button>
+      <button type="button" id="paymentModalConfirm" class="ck-payment-confirm">Complete Payment</button>
+    </div>
+  </section>
+</div>
+
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=pos-no-category-title-v5"></script>
+<script src="/Assets/js/pos.js?v=payment-modal-v1"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>

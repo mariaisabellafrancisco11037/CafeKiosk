@@ -557,6 +557,19 @@ let pendingItem =
 
 let selectedPaymentMethod =
     "Cash";
+let pendingPaymentMethod =
+    "Cash";
+
+const PAYMENT_ICON_MARKUP = {
+    Cash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg>`,
+    GCash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg>`,
+    Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`
+};
+
+function paymentMethodLabel(method) {
+    if (method === "GCash") return "GCash / Online";
+    return method === "Card" ? "Card" : "Cash";
+}
 
 
 // =========================================================
@@ -2459,16 +2472,17 @@ function updateChange() {
 function updatePaymentFields() {
 
     const payment =
-        $("paymentMethod").value;
+        $("paymentMethod")?.value ||
+        selectedPaymentMethod ||
+        "Cash";
+
+    selectedPaymentMethod = payment;
 
     const amountInput =
         $("cashReceived");
 
     const amountLabel =
         $("paymentAmountLabel");
-
-    const paymentNote =
-        $("paymentRecordNote");
 
     const changeRow =
         $("changeRow");
@@ -2482,29 +2496,133 @@ function updatePaymentFields() {
                     : "Cash Received";
     }
 
-    if (paymentNote) {
-        paymentNote.textContent =
-            payment === "Card"
-                ? "Enter the exact amount charged to the customer's card."
-                : payment === "GCash"
-                    ? "Enter the exact amount received through GCash or online payment."
-                    : "Enter the cash amount received from the customer.";
-    }
-
     if (changeRow) {
         changeRow.hidden = payment !== "Cash";
     }
 
-    if (amountInput) {
-        // Clear the previous tender whenever the payment method changes so a
-        // Cash value cannot accidentally be reused as a GCash/Card payment.
-        amountInput.value = "";
-        amountInput.placeholder = "₱0.00";
-        amountInput.disabled = false;
+    const summaryMethod = $("paymentSummaryMethod");
+    const summaryAmount = $("paymentSummaryAmount");
+    const summaryIcon = $("paymentSummaryIcon");
+    const amount = Number(amountInput?.value || 0);
+
+    if (summaryMethod) summaryMethod.textContent = paymentMethodLabel(payment);
+    if (summaryIcon) summaryIcon.innerHTML = PAYMENT_ICON_MARKUP[payment] || PAYMENT_ICON_MARKUP.Cash;
+    if (summaryAmount) {
+        summaryAmount.textContent =
+            amount > 0
+                ? `Paid ${money(amount)}`
+                : "Tap to enter payment";
     }
 
     updateChange();
+}
 
+function updatePOSPaymentModalUI() {
+    const modal = $("paymentModal");
+    if (!modal) return;
+
+    const method = pendingPaymentMethod || selectedPaymentMethod || $("paymentMethod")?.value || "Cash";
+    const totals = calculateCart();
+    const input = $("paymentModalAmount");
+    const amount = Math.max(0, Number(input?.value || 0) || 0);
+    const changeBox = $("paymentModalChange");
+    const label = $("paymentModalAmountLabel");
+    const hint = $("paymentModalHint");
+    const error = $("paymentModalError");
+
+    $("paymentModalTotal").textContent = money(totals.total);
+
+    document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+        button.classList.toggle("active", button.dataset.paymentMethod === method);
+        button.setAttribute("aria-pressed", button.dataset.paymentMethod === method ? "true" : "false");
+    });
+
+    if (label) {
+        label.textContent = method === "Cash"
+            ? "Cash Received"
+            : method === "Card"
+                ? "Amount Paid by Card"
+                : "Amount Paid Online / GCash";
+    }
+
+    if (hint) {
+        hint.textContent = method === "Cash"
+            ? "Enter the cash handed to you by the customer. Change is calculated automatically."
+            : method === "Card"
+                ? "Enter the amount successfully charged to the customer's card."
+                : "Enter the amount successfully received through GCash or online payment.";
+    }
+
+    if (changeBox) {
+        changeBox.hidden = method !== "Cash";
+        const change = method === "Cash" && amount >= totals.total
+            ? amount - totals.total
+            : 0;
+        const strong = changeBox.querySelector("strong");
+        if (strong) strong.textContent = money(change);
+    }
+
+    if (error) error.textContent = "";
+}
+
+function selectPOSPaymentMethod(method, clearAmount = true) {
+    const normalized = ["Cash", "GCash", "Card"].includes(method) ? method : "Cash";
+    pendingPaymentMethod = normalized;
+    if (clearAmount && $("paymentModalAmount")) $("paymentModalAmount").value = "";
+    updatePOSPaymentModalUI();
+}
+
+function openPOSPaymentModal() {
+    if (cart.length === 0) {
+        alert("Please add items first.");
+        return;
+    }
+
+    const modal = $("paymentModal");
+    if (!modal) return;
+
+    selectedPaymentMethod = $("paymentMethod")?.value || selectedPaymentMethod || "Cash";
+    pendingPaymentMethod = selectedPaymentMethod;
+    const input = $("paymentModalAmount");
+    if (input) input.value = $("cashReceived")?.value || "";
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("ck-payment-open");
+    updatePOSPaymentModalUI();
+    window.setTimeout(() => input?.focus(), 40);
+}
+
+function closePOSPaymentModal() {
+    const modal = $("paymentModal");
+    if (!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("ck-payment-open");
+}
+
+function commitPOSPaymentAndSubmit() {
+    const totals = calculateCart();
+    const input = $("paymentModalAmount");
+    const error = $("paymentModalError");
+    const amount = Number(input?.value || 0);
+
+    if (!Number.isFinite(amount) || amount < totals.total) {
+        if (error) {
+            error.textContent = pendingPaymentMethod === "Cash"
+                ? `Cash received must be at least ${money(totals.total)}.`
+                : `${paymentMethodLabel(pendingPaymentMethod)} payment must be at least ${money(totals.total)}.`;
+        }
+        input?.focus();
+        return;
+    }
+
+    selectedPaymentMethod = pendingPaymentMethod;
+    if ($("paymentMethod")) $("paymentMethod").value = selectedPaymentMethod;
+    if ($("cashReceived")) $("cashReceived").value = amount.toFixed(2);
+    updatePaymentFields();
+    closePOSPaymentModal();
+    confirmPOSOrder();
 }
 
 
@@ -3005,6 +3123,7 @@ function clearPOSCart() {
         $("paymentAmount").value = "";
     }
 
+    updatePaymentFields();
     renderCart();
 
 }
@@ -3127,31 +3246,38 @@ function setupEvents() {
     }
 
 
-    $("cashReceived")
-        .addEventListener(
-            "input",
-            updateChange
-        );
+    $("cashReceived")?.addEventListener("input", updateChange);
 
-    $("paymentMethod")
-        .addEventListener(
-            "change",
-            event => {
+    $("paymentMethod")?.addEventListener("change", event => {
+        selectedPaymentMethod = event.target.value;
+        updatePaymentFields();
+    });
 
-                selectedPaymentMethod =
-                    event.target.value;
+    $("paymentSummaryButton")?.addEventListener("click", openPOSPaymentModal);
+    $("checkoutButton")?.addEventListener("click", openPOSPaymentModal);
 
-                updatePaymentFields();
+    $("paymentModalClose")?.addEventListener("click", closePOSPaymentModal);
+    $("paymentModalCancel")?.addEventListener("click", closePOSPaymentModal);
+    $("paymentModalConfirm")?.addEventListener("click", commitPOSPaymentAndSubmit);
+    $("paymentModalAmount")?.addEventListener("input", updatePOSPaymentModalUI);
 
-            }
-        );
+    document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+        button.addEventListener("click", () => selectPOSPaymentMethod(button.dataset.paymentMethod, true));
+    });
 
+    document.querySelectorAll("#paymentModal [data-payment-quick]").forEach(button => {
+        button.addEventListener("click", () => {
+            const total = calculateCart().total;
+            const raw = button.dataset.paymentQuick;
+            const value = raw === "exact" ? total : Number(raw || 0);
+            if ($("paymentModalAmount")) $("paymentModalAmount").value = Number(value).toFixed(2);
+            updatePOSPaymentModalUI();
+        });
+    });
 
-    $("checkoutButton")
-        .addEventListener(
-            "click",
-            confirmPOSOrder
-        );
+    $("paymentModal")?.addEventListener("click", event => {
+        if (event.target === $("paymentModal")) closePOSPaymentModal();
+    });
 
 
     $("clearCartButton")
@@ -3177,6 +3303,12 @@ function setupEvents() {
 
             }
         );
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && $("paymentModal")?.classList.contains("active")) {
+            closePOSPaymentModal();
+        }
+    });
 
 }
 

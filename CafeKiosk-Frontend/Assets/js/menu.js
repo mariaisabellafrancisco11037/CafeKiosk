@@ -4,6 +4,12 @@
 
 let order = [];
 let selectedPaymentMethod = "Cash";
+let pendingKioskPaymentMethod = "Cash";
+const KIOSK_PAYMENT_ICON_MARKUP = {
+  Cash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg>`,
+  GCash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg>`,
+  Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`
+};
 let currentCategory = "coffee";
 let pendingItem = null;
 
@@ -2026,15 +2032,21 @@ function renderOrder() {
 // PAYMENT METHOD
 // =====================================================
 
-function updatePaymentMethod(
-  value
-) {
+function kioskPaymentMethodLabel(method) {
+  if (method === "GCash") return "GCash / Online";
+  return method === "Card" ? "Card" : "Cash";
+}
 
-  selectedPaymentMethod =
-    value;
+function updatePaymentMethod(value) {
+  selectedPaymentMethod = ["Cash", "GCash", "Card"].includes(value)
+    ? value
+    : "Cash";
+
+  const native = document.getElementById("paymentMethod");
+  if (native) native.value = selectedPaymentMethod;
 
   updateKioskCashUI();
-
+  updateKioskPaymentSummary();
 }
 
 
@@ -2137,6 +2149,178 @@ function updateKioskCashUI() {
 
 }
 
+
+
+function updateKioskPaymentSummary() {
+  const method = selectedPaymentMethod || "Cash";
+  const icon = document.getElementById("kioskPaymentSummaryIcon");
+  const name = document.getElementById("kioskPaymentSummaryMethod");
+  const amountLabel = document.getElementById("kioskPaymentSummaryAmount");
+  const paymentAmount = Number(sessionStorage.getItem("paymentAmount") || 0) || 0;
+
+  if (icon) icon.innerHTML = KIOSK_PAYMENT_ICON_MARKUP[method] || KIOSK_PAYMENT_ICON_MARKUP.Cash;
+  if (name) name.textContent = kioskPaymentMethodLabel(method);
+  if (amountLabel) {
+    amountLabel.textContent = paymentAmount > 0
+      ? `Paid ₱${paymentAmount.toFixed(2)}`
+      : "Tap to enter payment";
+  }
+}
+
+function updateKioskPaymentModalUI() {
+  const total = getDisplayedOrderTotal();
+  const input = document.getElementById("paymentModalAmount");
+  const amount = Math.max(0, Number(input?.value || 0) || 0);
+  const method = pendingKioskPaymentMethod || selectedPaymentMethod || "Cash";
+  const totalEl = document.getElementById("paymentModalTotal");
+  const label = document.getElementById("paymentModalAmountLabel");
+  const hint = document.getElementById("paymentModalHint");
+  const changeBox = document.getElementById("paymentModalChange");
+  const error = document.getElementById("paymentModalError");
+
+  if (totalEl) totalEl.textContent = `₱${total.toFixed(2)}`;
+
+  document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+    const active = button.dataset.paymentMethod === method;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+
+  if (label) {
+    label.textContent = method === "Cash"
+      ? "Cash Received"
+      : method === "Card"
+        ? "Amount Paid by Card"
+        : "Amount Paid Online / GCash";
+  }
+
+  if (hint) {
+    hint.textContent = method === "Cash"
+      ? "Enter the cash amount for this order. Change is calculated automatically."
+      : method === "Card"
+        ? "Enter the amount paid by card."
+        : "Enter the amount paid through GCash or online payment.";
+  }
+
+  if (changeBox) {
+    changeBox.hidden = method !== "Cash";
+    const strong = changeBox.querySelector("strong");
+    const change = method === "Cash" && amount >= total ? amount - total : 0;
+    if (strong) strong.textContent = `₱${change.toFixed(2)}`;
+  }
+
+  if (error) error.textContent = "";
+}
+
+function selectKioskPaymentMethod(method, clearAmount = true) {
+  pendingKioskPaymentMethod = ["Cash", "GCash", "Card"].includes(method)
+    ? method
+    : "Cash";
+  if (clearAmount) {
+    const input = document.getElementById("paymentModalAmount");
+    if (input) input.value = "";
+  }
+  updateKioskPaymentModalUI();
+}
+
+function showKioskPaymentModal() {
+  if (order.length === 0) {
+    alert("Please add items before confirming.");
+    return;
+  }
+
+  const modal = document.getElementById("paymentModal");
+  const input = document.getElementById("paymentModalAmount");
+  if (!modal) return;
+
+  const savedMethod = document.getElementById("paymentMethod")?.value || selectedPaymentMethod || "Cash";
+  selectedPaymentMethod = ["Cash", "GCash", "Card"].includes(savedMethod) ? savedMethod : "Cash";
+  pendingKioskPaymentMethod = selectedPaymentMethod;
+  if (input) input.value = sessionStorage.getItem("paymentAmount") || "";
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("ck-payment-open");
+  updateKioskPaymentModalUI();
+  window.setTimeout(() => input?.focus(), 40);
+}
+
+function closeKioskPaymentModal() {
+  const modal = document.getElementById("paymentModal");
+  if (!modal) return;
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("ck-payment-open");
+}
+
+function commitKioskPayment() {
+  const total = getDisplayedOrderTotal();
+  const input = document.getElementById("paymentModalAmount");
+  const error = document.getElementById("paymentModalError");
+  const amount = Number(input?.value || 0);
+
+  if (!Number.isFinite(amount) || amount < total) {
+    if (error) {
+      error.textContent = pendingKioskPaymentMethod === "Cash"
+        ? `Cash received must be at least ₱${total.toFixed(2)}.`
+        : `${kioskPaymentMethodLabel(pendingKioskPaymentMethod)} payment must be at least ₱${total.toFixed(2)}.`;
+    }
+    input?.focus();
+    return;
+  }
+
+  selectedPaymentMethod = pendingKioskPaymentMethod;
+  const cashReceived = selectedPaymentMethod === "Cash" ? amount : 0;
+  const change = selectedPaymentMethod === "Cash" ? Math.max(0, amount - total) : 0;
+
+  const native = document.getElementById("paymentMethod");
+  const cashInput = document.getElementById("cashReceived");
+  if (native) native.value = selectedPaymentMethod;
+  if (cashInput) cashInput.value = cashReceived.toFixed(2);
+
+  sessionStorage.setItem("paymentMethod", selectedPaymentMethod);
+  sessionStorage.setItem("paymentAmount", amount.toFixed(2));
+  sessionStorage.setItem("cashReceived", cashReceived.toFixed(2));
+  sessionStorage.setItem("changeAmount", change.toFixed(2));
+
+  updateKioskCashUI();
+  updateKioskPaymentSummary();
+  closeKioskPaymentModal();
+  showOrderModal();
+}
+
+function setupKioskPaymentModal() {
+  document.getElementById("kioskPaymentSummaryButton")?.addEventListener("click", showKioskPaymentModal);
+  document.getElementById("paymentModalClose")?.addEventListener("click", closeKioskPaymentModal);
+  document.getElementById("paymentModalCancel")?.addEventListener("click", closeKioskPaymentModal);
+  document.getElementById("paymentModalConfirm")?.addEventListener("click", commitKioskPayment);
+  document.getElementById("paymentModalAmount")?.addEventListener("input", updateKioskPaymentModalUI);
+
+  document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+    button.addEventListener("click", () => selectKioskPaymentMethod(button.dataset.paymentMethod, true));
+  });
+
+  document.querySelectorAll("#paymentModal [data-payment-quick]").forEach(button => {
+    button.addEventListener("click", () => {
+      const total = getDisplayedOrderTotal();
+      const raw = button.dataset.paymentQuick;
+      const value = raw === "exact" ? total : Number(raw || 0);
+      const input = document.getElementById("paymentModalAmount");
+      if (input) input.value = Number(value).toFixed(2);
+      updateKioskPaymentModalUI();
+    });
+  });
+
+  document.getElementById("paymentModal")?.addEventListener("click", event => {
+    if (event.target === event.currentTarget) closeKioskPaymentModal();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && document.getElementById("paymentModal")?.classList.contains("active")) {
+      closeKioskPaymentModal();
+    }
+  });
+}
 
 // =====================================================
 // SHOW ORDER CONFIRMATION MODAL
@@ -2263,6 +2447,19 @@ function showOrderModal() {
     modalIcon.src =
       info.icon;
 
+  }
+
+  const modalPaymentMethod = document.getElementById("modalPaymentMethod");
+  if (modalPaymentMethod) {
+    modalPaymentMethod.textContent = kioskPaymentMethodLabel(selectedPaymentMethod);
+    modalPaymentMethod.classList.remove("payment-cash", "payment-gcash", "payment-card");
+    modalPaymentMethod.classList.add(
+      selectedPaymentMethod === "Card"
+        ? "payment-card"
+        : selectedPaymentMethod === "GCash"
+          ? "payment-gcash"
+          : "payment-cash"
+    );
   }
 
   const modalTotal =
@@ -2584,36 +2781,28 @@ async function confirmOrder() {
 
   const cashReceived =
     isCashPayment
-      ? Math.max(
-          0,
-          Number(
-            cashInput?.value ||
-            0
-          ) || 0
-        )
+      ? Math.max(0, Number(cashInput?.value || 0) || 0)
       : 0;
 
-  if (
-    isCashPayment &&
-    cashReceived < orderTotal
-  ) {
+  const paymentAmount = Math.max(
+    0,
+    Number(
+      sessionStorage.getItem("paymentAmount") ||
+      (isCashPayment ? cashReceived : 0)
+    ) || 0
+  );
 
+  if (paymentAmount < orderTotal) {
     alert(
-      `Cash received must be at least ₱${orderTotal.toFixed(2)}.`
+      `${kioskPaymentMethodLabel(selectedPaymentMethod)} payment must be at least ₱${orderTotal.toFixed(2)}.`
     );
-
-    cashInput?.focus();
-
+    showKioskPaymentModal();
     return;
-
   }
 
   const change =
     isCashPayment
-      ? Math.max(
-          0,
-          cashReceived - orderTotal
-        )
+      ? Math.max(0, cashReceived - orderTotal)
       : 0;
 
 
@@ -2646,6 +2835,11 @@ async function confirmOrder() {
 
     paymentMethod:
       selectedPaymentMethod,
+
+    paymentAmount,
+
+    paymentStatus:
+      "Paid",
 
     status:
       "Pending",
@@ -2755,6 +2949,11 @@ async function confirmOrder() {
   sessionStorage.setItem(
     "paymentMethod",
     selectedPaymentMethod
+  );
+
+  sessionStorage.setItem(
+    "paymentAmount",
+    String(paymentAmount)
   );
 
   sessionStorage.setItem(
@@ -3099,10 +3298,15 @@ function cancelOrder() {
   );
 
   sessionStorage.removeItem(
+    "paymentAmount"
+  );
+
+  sessionStorage.removeItem(
     "changeAmount"
   );
 
   updateKioskCashUI();
+  updateKioskPaymentSummary();
 
 
   renderOrder();
@@ -3556,6 +3760,8 @@ window.addEventListener(
     }
 
     updateKioskCashUI();
+    setupKioskPaymentModal();
+    updateKioskPaymentSummary();
 
 
     // -------------------------------------------------

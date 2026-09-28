@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="/Assets/css/checkout.css">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
+  <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -105,7 +106,7 @@
 
                 <span>Payment Method</span>
 
-                <strong id="paymentMethod">
+                <strong id="paymentMethod" class="ck-receipt-payment payment-cash">
                     Cash
                 </strong>
 
@@ -174,7 +175,7 @@
 
 
     <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/checkout.js"></script>
+<script src="/Assets/js/checkout.js?v=payment-modal-v1"></script>
 
 <script src="/Assets/js/checkout-discount.js"></script>
   <script src="/Assets/js/uniform-theme.js"></script>

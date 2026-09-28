@@ -2077,15 +2077,29 @@ function initializeReceipt() {
         );
 
 
+    const paymentMethod =
+        getPaymentMethod();
+
     if (paymentMethodElement) {
 
         paymentMethodElement.textContent =
-            getPaymentMethod();
+            paymentMethod === "GCash" ? "GCash / Online" : paymentMethod;
+
+        paymentMethodElement.classList.remove(
+            "payment-cash",
+            "payment-gcash",
+            "payment-card"
+        );
+
+        paymentMethodElement.classList.add(
+            paymentMethod === "Card"
+                ? "payment-card"
+                : paymentMethod === "GCash"
+                    ? "payment-gcash"
+                    : "payment-cash"
+        );
 
     }
-
-    const paymentMethod =
-        getPaymentMethod();
 
     const paymentAmounts =
         getSavedPaymentAmounts();
