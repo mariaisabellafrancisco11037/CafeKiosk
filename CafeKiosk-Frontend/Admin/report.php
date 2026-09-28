@@ -126,11 +126,56 @@
         </div>
       </section>
 
+      <div class="print-options-modal" id="printOptionsModal" aria-hidden="true">
+        <div class="print-options-backdrop" data-close-print-options></div>
+        <section class="print-options-dialog" role="dialog" aria-modal="true" aria-labelledby="printOptionsTitle">
+          <div class="print-options-head">
+            <div>
+              <span class="page-kicker">TRANSACTION HISTORY</span>
+              <h2 id="printOptionsTitle">Print Options</h2>
+              <p>Choose whether to print one transaction or the complete transaction history for the selected date range.</p>
+            </div>
+            <button class="print-options-close" id="closePrintOptionsBtn" type="button" aria-label="Close print options">&times;</button>
+          </div>
+
+          <div class="print-choice-list">
+            <label class="print-choice-card" data-print-choice-card="single">
+              <input type="radio" name="transactionPrintMode" value="single" checked>
+              <span class="print-choice-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l3 3v17H6z"/><path d="M15 2v4h4M9 11h6M9 15h6"/></svg>
+              </span>
+              <span class="print-choice-copy"><strong>Print One Transaction</strong><small>Print a single order with its complete transaction details.</small></span>
+            </label>
+
+            <div class="print-transaction-picker" id="printTransactionPicker">
+              <label for="printTransactionSelect">Select transaction</label>
+              <select id="printTransactionSelect"></select>
+            </div>
+
+            <label class="print-choice-card" data-print-choice-card="all">
+              <input type="radio" name="transactionPrintMode" value="all">
+              <span class="print-choice-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+              </span>
+              <span class="print-choice-copy"><strong>Print Entire Transaction History</strong><small id="printAllDescription">Print every transaction in the selected date range.</small></span>
+            </label>
+          </div>
+
+          <div class="print-options-actions">
+            <button class="text-action" id="cancelPrintOptionsBtn" type="button">Cancel</button>
+            <button class="primary-action print-confirm-action" id="confirmPrintBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Print
+            </button>
+          </div>
+        </section>
+      </div>
+
       <div class="page-message" id="reportMessage" hidden></div>
     </main>
   </div>
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/report.js?v=pos-source-v1"></script>
+  <script src="../Assets/js/report.js?v=print-options-v1"></script>
 <script src="../Assets/js/report-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

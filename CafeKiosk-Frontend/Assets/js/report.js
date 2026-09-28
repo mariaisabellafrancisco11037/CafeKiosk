@@ -249,20 +249,29 @@
     }
   }
 
+  function sortedHistoryOrders() {
+    return [...filteredOrders]
+      .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+  }
+
   function renderHistory() {
     const element = $("transactionList");
     if (!element) return;
 
-    const list = [...filteredOrders]
-      .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
-      .slice(0, 40);
+    const list = sortedHistoryOrders().slice(0, 40);
 
     element.innerHTML = list.length
       ? list.map(order => `
           <article class="transaction-card">
             <div class="transaction-head">
-              <strong>${esc(order.id)}</strong>
-              <span>${esc(order.date ? order.date.toLocaleString("en-PH") : "No date")}</span>
+              <div class="transaction-id-wrap">
+                <strong>${esc(order.id)}</strong>
+                <span>${esc(order.date ? order.date.toLocaleString("en-PH") : "No date")}</span>
+              </div>
+              <button class="transaction-print-btn" type="button" data-print-transaction="${esc(order.id)}" aria-label="Print transaction ${esc(order.id)}" title="Print this transaction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>Print</span>
+              </button>
             </div>
             <div class="transaction-row">
               <b>Channel:</b><span>${esc(order.sourceLabel || order.source)}</span>
@@ -275,6 +284,10 @@
           </article>
         `).join("")
       : `<div class="empty-state">No transactions in this date range.</div>`;
+
+    element.querySelectorAll("[data-print-transaction]").forEach(button => {
+      button.addEventListener("click", () => openPrintOptions(button.dataset.printTransaction || ""));
+    });
   }
 
   function dayGroups() {
@@ -477,6 +490,159 @@
     URL.revokeObjectURL(link.href);
   }
 
+  function cafeDisplayName() {
+    let session = window.CafeAuth?.session;
+    if (!session) {
+      try { session = JSON.parse(localStorage.getItem("cafeAdminSession") || "null"); } catch { session = null; }
+    }
+    return String(session?.cafeName || localStorage.getItem("cafeName") || "CafeKiosk").trim() || "CafeKiosk";
+  }
+
+  function printRangeLabel() {
+    const range = rangeBounds();
+    if (!range) return "Selected date range";
+    return `${range.start.toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" })} – ${range.end.toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" })}`;
+  }
+
+  function populatePrintTransactionOptions(preselectedId = "") {
+    const select = $("printTransactionSelect");
+    if (!select) return;
+    const rows = sortedHistoryOrders();
+    select.innerHTML = rows.map(order => {
+      const label = `${order.id} • ${order.date ? order.date.toLocaleString("en-PH") : "No date"} • ${money(order.total)}`;
+      return `<option value="${esc(order.id)}">${esc(label)}</option>`;
+    }).join("");
+    if (preselectedId && rows.some(order => order.id === preselectedId)) select.value = preselectedId;
+    if ($("printAllDescription")) {
+      $("printAllDescription").textContent = `Print all ${rows.length.toLocaleString()} transaction${rows.length === 1 ? "" : "s"} in the selected date range.`;
+    }
+  }
+
+  function updatePrintChoiceUi() {
+    const selected = document.querySelector('input[name="transactionPrintMode"]:checked')?.value || "single";
+    $("printTransactionPicker")?.classList.toggle("is-disabled", selected !== "single");
+    document.querySelectorAll("[data-print-choice-card]").forEach(card => {
+      card.classList.toggle("selected", card.dataset.printChoiceCard === selected);
+    });
+  }
+
+  function openPrintOptions(preselectedId = "") {
+    const rows = sortedHistoryOrders();
+    if (!rows.length) {
+      if ($("reportMessage")) {
+        $("reportMessage").hidden = false;
+        $("reportMessage").textContent = "There are no transactions in the selected date range to print.";
+      }
+      return;
+    }
+    populatePrintTransactionOptions(preselectedId);
+    const singleRadio = document.querySelector('input[name="transactionPrintMode"][value="single"]');
+    if (singleRadio) singleRadio.checked = true;
+    updatePrintChoiceUi();
+    const modal = $("printOptionsModal");
+    if (!modal) return;
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-options-open");
+    setTimeout(() => $("printTransactionSelect")?.focus(), 30);
+  }
+
+  function closePrintOptions() {
+    const modal = $("printOptionsModal");
+    if (!modal) return;
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-options-open");
+  }
+
+  function printableItems(order) {
+    if (!Array.isArray(order.items) || !order.items.length) return "";
+    return `
+      <div class="items-block">
+        <h3>Order Items</h3>
+        <table class="items-table">
+          <thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Amount</th></tr></thead>
+          <tbody>${order.items.map(item => {
+            const name = item?.name ?? item?.productName ?? item?.title ?? "Item";
+            return `<tr><td>${esc(name)}</td><td class="num">${itemQty(item)}</td><td class="num">${esc(money(itemTotal(item)))}</td></tr>`;
+          }).join("")}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function singleTransactionMarkup(order) {
+    return `
+      <section class="single-transaction">
+        <div class="receipt-title"><span>Transaction</span><strong>${esc(order.id)}</strong></div>
+        <div class="detail-grid">
+          <div><span>Date & Time</span><strong>${esc(order.date ? order.date.toLocaleString("en-PH") : "No date")}</strong></div>
+          <div><span>Source</span><strong>${esc(order.sourceLabel || order.source)}</strong></div>
+          <div><span>Customer</span><strong>${esc(order.customer)}</strong></div>
+          <div><span>Status</span><strong>${esc(order.status)}</strong></div>
+          <div><span>Payment Method</span><strong>${esc(order.paymentMethod)}</strong></div>
+          <div><span>Amount Paid</span><strong>${esc(money(order.paymentAmount || order.total))}</strong></div>
+        </div>
+        ${printableItems(order)}
+        <div class="grand-total"><span>Total</span><strong>${esc(money(order.total))}</strong></div>
+      </section>`;
+  }
+
+  function allTransactionsMarkup(orders) {
+    const total = orders.reduce((sum, order) => sum + n(order.total), 0);
+    return `
+      <section class="history-summary">
+        <div class="summary-strip"><div><span>Transactions</span><strong>${orders.length.toLocaleString()}</strong></div><div><span>Total Value</span><strong>${esc(money(total))}</strong></div></div>
+        <table class="history-table">
+          <thead><tr><th>Order ID</th><th>Date</th><th>Source</th><th>Payment</th><th>Status</th><th class="num">Amount</th></tr></thead>
+          <tbody>${orders.map(order => `<tr><td><strong>${esc(order.id)}</strong></td><td>${esc(order.date ? order.date.toLocaleString("en-PH") : "No date")}</td><td>${esc(order.sourceLabel || order.source)}</td><td>${esc(order.paymentMethod)}</td><td>${esc(order.status)}</td><td class="num">${esc(money(order.total))}</td></tr>`).join("")}</tbody>
+        </table>
+      </section>`;
+  }
+
+  function printTransactions(orders, mode) {
+    if (!orders.length) return;
+    const cafeName = cafeDisplayName();
+    const reportTitle = mode === "single" ? "Transaction Receipt" : "Transaction History";
+    const body = mode === "single" ? singleTransactionMarkup(orders[0]) : allTransactionsMarkup(orders);
+    const generated = new Date().toLocaleString("en-PH");
+    const frame = document.createElement("iframe");
+    frame.setAttribute("aria-hidden", "true");
+    frame.style.position = "fixed";
+    frame.style.right = "0";
+    frame.style.bottom = "0";
+    frame.style.width = "0";
+    frame.style.height = "0";
+    frame.style.border = "0";
+    document.body.appendChild(frame);
+    const doc = frame.contentDocument || frame.contentWindow?.document;
+    if (!doc) { frame.remove(); return; }
+    doc.open();
+    doc.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(reportTitle)} - ${esc(cafeName)}</title><style>
+      @page{size:auto;margin:14mm}*{box-sizing:border-box}body{margin:0;color:#2f241b;font:12px Arial,Helvetica,sans-serif;background:#fff}.print-sheet{max-width:900px;margin:0 auto}.print-header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;border-bottom:2px solid #4c956f;padding-bottom:12px;margin-bottom:18px}.print-header h1{font-size:22px;margin:0 0 4px}.print-header h2{font-size:15px;margin:0;color:#674a31}.print-meta{text-align:right;color:#6f6255;font-size:10px;line-height:1.55}.receipt-title{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#f7f1e6;border:1px solid #ddd2c2;border-radius:8px;margin-bottom:14px}.receipt-title span{font-weight:700;color:#7e6c59}.receipt-title strong{font-size:18px}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}.detail-grid div{border:1px solid #e4dbce;border-radius:7px;padding:9px 10px}.detail-grid span,.summary-strip span{display:block;color:#817363;font-size:9px;text-transform:uppercase;font-weight:700;margin-bottom:3px}.detail-grid strong{font-size:12px}.items-block h3{font-size:13px;margin:16px 0 7px}.items-table,.history-table{width:100%;border-collapse:collapse}.items-table th,.items-table td,.history-table th,.history-table td{padding:7px 8px;border-bottom:1px solid #e7dfd4;text-align:left;vertical-align:top}.items-table th,.history-table th{background:#f7f1e6;font-size:9px;text-transform:uppercase;color:#6b5a49}.num{text-align:right!important;white-space:nowrap}.grand-total{display:flex;justify-content:flex-end;gap:22px;align-items:center;border-top:2px solid #4c956f;margin-top:14px;padding-top:12px;font-size:15px}.grand-total strong{font-size:20px}.summary-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.summary-strip div{padding:10px 12px;border:1px solid #ddd2c2;background:#faf6ef;border-radius:7px}.summary-strip strong{font-size:16px}.history-table{font-size:10px}.history-table tr{break-inside:avoid}.print-footer{margin-top:18px;padding-top:8px;border-top:1px solid #ddd2c2;color:#877868;font-size:9px;text-align:center}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+    </style></head><body><main class="print-sheet"><header class="print-header"><div><h1>${esc(cafeName)}</h1><h2>${esc(reportTitle)}</h2></div><div class="print-meta"><strong>${esc(printRangeLabel())}</strong><br>Generated ${esc(generated)}</div></header>${body}<footer class="print-footer">Generated by CafeKiosk Admin • ${esc(cafeName)}</footer></main></body></html>`);
+    doc.close();
+    setTimeout(() => {
+      frame.contentWindow?.focus();
+      frame.contentWindow?.print();
+      setTimeout(() => frame.remove(), 1200);
+    }, 180);
+  }
+
+  function confirmPrintSelection() {
+    const mode = document.querySelector('input[name="transactionPrintMode"]:checked')?.value || "single";
+    const rows = sortedHistoryOrders();
+    if (!rows.length) return;
+    let selected = rows;
+    if (mode === "single") {
+      const id = $("printTransactionSelect")?.value || "";
+      const order = rows.find(row => row.id === id);
+      if (!order) return;
+      selected = [order];
+    }
+    closePrintOptions();
+    printTransactions(selected, mode);
+  }
+
   function renderAdmin() {
     let session = window.CafeAuth?.session;
 
@@ -503,7 +669,15 @@
     $("last7Btn")?.addEventListener("click", () => { setDefaultRange(7); applyFilter(); });
     $("last30Btn")?.addEventListener("click", () => { setDefaultRange(30); applyFilter(); });
     $("exportBtn")?.addEventListener("click", exportCsv);
-    $("printBtn")?.addEventListener("click", () => window.print());
+    $("printBtn")?.addEventListener("click", () => openPrintOptions());
+    $("closePrintOptionsBtn")?.addEventListener("click", closePrintOptions);
+    $("cancelPrintOptionsBtn")?.addEventListener("click", closePrintOptions);
+    $("confirmPrintBtn")?.addEventListener("click", confirmPrintSelection);
+    document.querySelectorAll("[data-close-print-options]").forEach(el => el.addEventListener("click", closePrintOptions));
+    document.querySelectorAll('input[name="transactionPrintMode"]').forEach(input => input.addEventListener("change", updatePrintChoiceUi));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("printOptionsModal")?.classList.contains("open")) closePrintOptions();
+    });
 
     pollTimer = window.setInterval(() => {
       if (document.visibilityState === "visible") loadOrders();
