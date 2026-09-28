@@ -1,0 +1,296 @@
+/* CafeKiosk admin mobile/layout polish - 2026-09-28 */
+
+/* =========================================================
+   ADMIN ORDER MONITOR — strict vertical flow
+   ========================================================= */
+.order-monitor-page .queue-main {
+  grid-template-rows: 60px 40px auto 52px minmax(0, 1fr) 38px !important;
+  gap: 10px !important;
+}
+.order-monitor-page .admin-station-switcher {
+  margin: 0 !important;
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  min-height: 0 !important;
+}
+.order-monitor-page .admin-station-heading {
+  margin-bottom: 6px !important;
+}
+.order-monitor-page .admin-station-heading strong {
+  font-size: 10px !important;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.order-monitor-page .admin-station-heading span {
+  display: none !important;
+}
+.order-monitor-page .admin-station-tabs {
+  gap: 6px !important;
+}
+.order-monitor-page .admin-station-tab {
+  min-height: 34px !important;
+  padding: 5px 9px !important;
+  border-radius: 8px !important;
+  font-size: 9.5px !important;
+}
+.order-monitor-page .admin-station-tab strong {
+  min-width: 20px !important;
+  height: 20px !important;
+}
+.order-monitor-page .admin-station-switcher > p {
+  display: none !important;
+}
+.order-monitor-page .live-order-card {
+  min-height: 0 !important;
+  height: 100% !important;
+}
+.order-monitor-page .table-wrap {
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+
+/* =========================================================
+   REPORT & ANALYTICS — responsive filters + consistent breakdown
+   ========================================================= */
+.report-page .analytics-panel {
+  display: block !important;
+  width: 100%;
+}
+.report-page .analytics-grid {
+  align-items: stretch;
+}
+.report-page .analytics-box {
+  min-width: 0;
+}
+
+/* =========================================================
+   INVENTORY — one obvious horizontal table scroller
+   ========================================================= */
+.inventory-page .mobile-table-scroll-hint {
+  display: none;
+  color: #8a745c;
+  font-size: 11px;
+  font-weight: 650;
+  padding: 7px 10px;
+  border: 1px dashed rgba(93,66,42,.22);
+  border-radius: 8px;
+  background: #fff8ed;
+  margin: 2px 0 8px;
+}
+
+/* =========================================================
+   MENU MANAGEMENT — categories remain visible on phones
+   ========================================================= */
+.menu-management-page .category-scroll-area {
+  min-width: 0 !important;
+}
+
+@media (max-width: 850px) {
+  /* Keep the admin preparation choices compact and horizontal. */
+  .order-monitor-page .queue-main {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100dvh;
+    overflow: visible !important;
+  }
+  .order-monitor-page .filters-row {
+    flex: 0 0 auto;
+  }
+  .order-monitor-page .admin-station-switcher,
+  .order-monitor-page .status-tabs,
+  .order-monitor-page .pagination {
+    flex: 0 0 auto;
+  }
+  .order-monitor-page .admin-station-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .order-monitor-page .admin-station-tab {
+    min-width: 0 !important;
+    justify-content: center !important;
+  }
+  .order-monitor-page .admin-station-tab span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .order-monitor-page .live-order-card {
+    min-height: 420px !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 700px) {
+  /* REPORT FILTERS */
+  .report-page .report-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+  .report-page .date-filters {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+  .report-page .date-filters .field {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 54px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .report-page .date-filters .field > span {
+    font-size: 12px !important;
+  }
+  .report-page .date-filters .field input,
+  .report-page .date-filters .field select {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 46px !important;
+    font-size: 14px !important;
+  }
+  .report-page #applyFilterBtn {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    min-height: 44px !important;
+  }
+  .report-page .date-filters .text-action {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding-inline: 10px !important;
+  }
+  .report-page #last30Btn {
+    grid-column: 1 / -1 !important;
+  }
+  .report-page .report-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+  .report-page .report-actions .text-action {
+    width: 100% !important;
+    min-height: 42px !important;
+  }
+  .report-page .analytics-grid {
+    grid-template-columns: 1fr !important;
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+  .report-page .analytics-box {
+    min-height: auto !important;
+    padding: 14px !important;
+  }
+
+  /* INVENTORY TABLE */
+  .inventory-page .inventory-list-panel {
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+  .inventory-page .mobile-table-scroll-hint {
+    display: block !important;
+  }
+  .inventory-page .table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+    scrollbar-color: rgba(76,149,111,.82) #eadfce;
+    padding-bottom: 4px;
+  }
+  .inventory-page .inventory-table {
+    width: 760px !important;
+    min-width: 760px !important;
+    table-layout: fixed !important;
+  }
+  .inventory-page .table-wrap::-webkit-scrollbar {
+    height: 10px !important;
+  }
+  .inventory-page .table-wrap::-webkit-scrollbar-track {
+    background: #eadfce !important;
+    border-radius: 999px;
+  }
+  .inventory-page .table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(76,149,111,.82) !important;
+    border: 2px solid #eadfce;
+    border-radius: 999px;
+  }
+
+  /* MENU CATEGORIES */
+  .menu-management-page .category-panel {
+    overflow: visible !important;
+    gap: 10px !important;
+  }
+  .menu-management-page .category-scroll-area {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+  .menu-management-page .category-tabs {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 2px 1px 9px !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: auto;
+    scrollbar-color: rgba(76,149,111,.82) #eadfce;
+  }
+  .menu-management-page .category-tabs::-webkit-scrollbar {
+    height: 8px !important;
+  }
+  .menu-management-page .category-tabs::-webkit-scrollbar-track {
+    background: #eadfce !important;
+    border-radius: 999px;
+  }
+  .menu-management-page .category-tabs::-webkit-scrollbar-thumb {
+    background: rgba(76,149,111,.82) !important;
+    border-radius: 999px;
+  }
+  .menu-management-page .category-tab {
+    flex: 0 0 128px !important;
+    width: 128px !important;
+    min-width: 128px !important;
+    height: 44px !important;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .order-monitor-page .admin-station-tab {
+    padding: 5px 6px !important;
+    font-size: 8.8px !important;
+  }
+  .order-monitor-page .admin-station-tab strong {
+    display: none !important;
+  }
+  .report-page .page-main {
+    padding-inline: 12px !important;
+  }
+  .report-page .report-toolbar,
+  .report-page .metric-card,
+  .report-page .analytics-panel,
+  .report-page .chart-panel,
+  .report-page .history-panel {
+    border-radius: 12px !important;
+  }
+  .menu-management-page .category-tab {
+    flex-basis: 118px !important;
+    width: 118px !important;
+    min-width: 118px !important;
+  }
+}
