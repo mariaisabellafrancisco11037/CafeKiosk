@@ -6,10 +6,10 @@
 
   <title>CafeKiosk - Menu</title>
 
-  <link rel="stylesheet" href="/Assets/css/menu.css?v=8">
+  <link rel="stylesheet" href="/Assets/css/menu.css?v=20260928-notes-v1">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
-  <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=30">
+  <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
@@ -582,6 +582,12 @@
         class="item-custom-options"
       ></div>
 
+      <div class="item-custom-note">
+        <label for="itemSpecialNote">Special Request <span>(Optional)</span></label>
+        <textarea id="itemSpecialNote" maxlength="180" rows="3" placeholder="Example: Call my name when the order is ready, less ice, separate sauce..."></textarea>
+        <div class="item-custom-note-help"><span>This note will be shown to the preparation team.</span><span id="itemSpecialNoteCount">0/180</span></div>
+      </div>
+
       <div class="item-custom-divider"></div>
 
       <div class="item-custom-footer-row">
@@ -655,11 +661,11 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=payment-modal-v1"></script>
+<script src="/Assets/js/menu.js?v=20260928-notes-v1"></script>
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>
-  <script src="/Assets/js/uniform-theme.js"></script>
+  <script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="/Assets/js/live-presence.js?v=3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>

@@ -7,6 +7,41 @@ function paymentStatus(v){const s=String(v||'').trim().toLowerCase();if(s==='pai
 function eligibility(v){const s=String(v||'General').trim().toLowerCase();if(s==='student')return 'Student';if(s==='senior')return 'Senior';if(s==='pwd')return 'PWD';return 'General';}
 function paymentMethod(v){const s=String(v||'Cash').toLowerCase();if(s.includes('gcash'))return 'GCash';if(s.includes('card'))return 'Card';if(s.includes('other'))return 'Other';return 'Cash';}
 function safeStatus(v){const allowed=['Pending','Preparing','Ready','Completed','Cancelled','Refunded','Voided'];return allowed.includes(v)?v:'Pending';}
+function stationStatus(v){const s=String(v||'Pending').trim().toLowerCase();if(s.includes('complete')||s==='ready')return 'Completed';if(s.includes('prepar')||s==='accepted')return 'Preparing';return 'Pending';}
+function classifyPrepStation(category,name=''){
+  const text=`${category||''} ${name||''}`.toLowerCase();
+  const beverageWords=['coffee','non-coffee','non coffee','milk tea','milktea','tea','beverage','drink','frappe','smoothie','juice','soda','latte','espresso','americano','cappuccino','mocha','chocolate','matcha'];
+  const foodWords=['food','snack','dessert','pastry','meal','rice','sandwich','burger','pasta','noodle','cake','bread','waffle','fries','pizza'];
+  if(beverageWords.some(word=>text.includes(word)))return 'Beverage';
+  if(foodWords.some(word=>text.includes(word)))return 'Food';
+  return 'Food';
+}
+let stationSchemaReady=false;
+async function ensureStationSchema(){
+  if(stationSchemaReady)return;
+  await pool.query(`CREATE TABLE IF NOT EXISTS order_station_status (
+    order_id BIGINT UNSIGNED NOT NULL,
+    station VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+    updated_by_user_id BIGINT UNSIGNED NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (order_id, station),
+    KEY idx_order_station_status_station (station, status),
+    KEY idx_order_station_status_updated (updated_at)
+  ) ENGINE=InnoDB`);
+  stationSchemaReady=true;
+}
+function stationsForItems(items=[]){return [...new Set((items||[]).map(item=>classifyPrepStation(item.category,item.name)).filter(Boolean))];}
+async function syncOrderStations(conn,orderId,items=[]){
+  await ensureStationSchema();
+  const stations=stationsForItems(items);
+  if(!stations.length){await conn.execute('DELETE FROM order_station_status WHERE order_id=?',[orderId]);return;}
+  for(const station of stations){
+    await conn.execute(`INSERT INTO order_station_status (order_id,station,status) VALUES (?,?, 'Pending') ON DUPLICATE KEY UPDATE order_id=VALUES(order_id)`,[orderId,station]);
+  }
+  const marks=stations.map(()=>'?').join(',');
+  await conn.execute(`DELETE FROM order_station_status WHERE order_id=? AND station NOT IN (${marks})`,[orderId,...stations]);
+}
 
 async function hydrateRows(rows){
   if(!rows.length)return [];
@@ -34,8 +69,17 @@ async function hydrateRows(rows){
   const customMap=new Map();for(const c of customs){if(!customMap.has(c.order_item_id))customMap.set(c.order_item_id,[]);customMap.get(c.order_item_id).push(c.customization_value);}
   const itemMap=new Map();
   for(const i of items){if(!itemMap.has(i.order_id))itemMap.set(i.order_id,[]);itemMap.get(i.order_id).push({
-    productId:i.product_id?String(i.product_id):'',name:i.product_name_snapshot,category:i.category_snapshot||'',price:num(i.base_price),customizationCost:num(i.customization_cost),unitPrice:num(i.unit_price),qty:num(i.quantity,1),quantity:num(i.quantity,1),subtotal:num(i.line_total),total:num(i.line_total),customizations:customMap.get(i.order_item_id)||[],selectedSizeName:i.selected_size_name||''
+    productId:i.product_id?String(i.product_id):'',name:i.product_name_snapshot,category:i.category_snapshot||'',prepStation:classifyPrepStation(i.category_snapshot||'',i.product_name_snapshot||''),price:num(i.base_price),customizationCost:num(i.customization_cost),unitPrice:num(i.unit_price),qty:num(i.quantity,1),quantity:num(i.quantity,1),subtotal:num(i.line_total),total:num(i.line_total),customizations:customMap.get(i.order_item_id)||[],selectedSizeName:i.selected_size_name||''
   });}
+  await ensureStationSchema();
+  const stationMap=new Map();
+  if(ids.length){
+    const [stationRows]=await pool.query(`SELECT order_id,station,status,updated_at FROM order_station_status WHERE order_id IN (${marks})`,ids);
+    for(const row of stationRows){
+      if(!stationMap.has(row.order_id))stationMap.set(row.order_id,{});
+      stationMap.get(row.order_id)[row.station]={status:stationStatus(row.status),updatedAt:iso(row.updated_at)};
+    }
+  }
   return rows.map(r=>{
     const creatorUserId=r.created_by_user_id?Number(r.created_by_user_id):null;
     const creatorRole=creatorUserId?creatorRoleMap.get(creatorUserId)||'':'';
@@ -51,7 +95,7 @@ async function hydrateRows(rows){
             : 'POS';
 
     return {
-      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[]
+      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[],stations:stationsForItems(itemMap.get(r.order_id)||[]),stationStatuses:stationMap.get(r.order_id)||{}
     };
   });
 }
@@ -82,6 +126,7 @@ async function createOrder(order){
       uuid,order.cafeId,order.orderNumber,order.source,Number.isFinite(Number(order.createdByUserId))?Number(order.createdByUserId):null,order.customerName||'Walk-in Customer',eligibility(order.customerEligibility),order.serviceType||'Dine In',safeStatus(order.status),order.promotionId||null,order.promotionName||null,num(order.subtotal),num(order.discountAmount??order.discount),num(order.total),paymentMethod(order.paymentMethod),paymentStatus(order.paymentStatus),num(order.paymentAmount),num(order.cashReceived),num(order.change),order.createdAt?new Date(order.createdAt):new Date(),new Date(),order.status==='Completed'?new Date():null
     ]);
     await insertItems(conn,r.insertId,order.items||[]);
+    await syncOrderStations(conn,r.insertId,order.items||[]);
     await conn.execute(`INSERT INTO order_status_history (order_id,changed_by_user_id,old_status,new_status,reason,source) VALUES (?,?,?,?,?,?)`,[r.insertId,Number.isFinite(Number(order.createdByUserId))?Number(order.createdByUserId):null,null,safeStatus(order.status),null,order.source||'System']);
     await conn.commit();const saved=await findOrder(String(r.insertId));return {order:saved,created:true};
   }catch(e){await conn.rollback();throw e;}finally{conn.release();}}
@@ -93,10 +138,23 @@ async function updateOrder(identifier,patch={}){
       patch.customerName??current.customerName,eligibility(patch.customerEligibility??current.customerEligibility),patch.serviceType??current.serviceType,status,patch.statusReason??patch.reason??null,patch.promotionId??current.promotionId??null,patch.promotionName??current.promotionName??null,num(patch.subtotal,current.subtotal),num(patch.discountAmount??patch.discount,current.discountAmount),num(patch.total,current.total),paymentMethod(patch.paymentMethod??current.paymentMethod),paymentStatus(patch.paymentStatus??current.paymentStatus),num(patch.paymentAmount,current.paymentAmount),num(patch.cashReceived,current.cashReceived),num(patch.change,current.change),status==='Completed'?new Date():null,Number(current.id)
     ]);
     if(status!==current.status)await conn.execute('INSERT INTO order_status_history (order_id,changed_by_user_id,old_status,new_status,reason,source) VALUES (?,?,?,?,?,?)',[Number(current.id),Number.isFinite(Number(patch.changedByUserId))?Number(patch.changedByUserId):null,current.status,status,patch.reason||patch.statusReason||null,patch.source||'API']);
-    if(Array.isArray(patch.items)){await conn.execute('DELETE FROM order_items WHERE order_id=?',[Number(current.id)]);await insertItems(conn,Number(current.id),patch.items);}
+    if(Array.isArray(patch.items)){await conn.execute('DELETE FROM order_items WHERE order_id=?',[Number(current.id)]);await insertItems(conn,Number(current.id),patch.items);await syncOrderStations(conn,Number(current.id),patch.items);}
+    if(patch.status && !patch.preserveStationStatuses && ['Pending','Preparing','Completed'].includes(status)){
+      await ensureStationSchema();
+      await conn.execute('UPDATE order_station_status SET status=?, updated_by_user_id=?, updated_at=CURRENT_TIMESTAMP WHERE order_id=?',[stationStatus(status),Number.isFinite(Number(patch.changedByUserId))?Number(patch.changedByUserId):null,Number(current.id)]);
+    }
     await conn.commit();return await findOrder(current.id);
   }catch(e){await conn.rollback();throw e;}finally{conn.release();}}
+async function updateStationStatus(identifier,station,status,userId=null){
+  const current=await findOrder(identifier);if(!current)return null;
+  const normalizedStation=String(station||'').trim().toLowerCase()==='beverage'?'Beverage':String(station||'').trim().toLowerCase()==='food'?'Food':'';
+  if(!normalizedStation)throw Object.assign(new Error('Invalid preparation station.'),{code:'INVALID_STATION'});
+  if(!stationsForItems(current.items).includes(normalizedStation))throw Object.assign(new Error(`This order has no ${normalizedStation.toLowerCase()} items.`),{code:'STATION_NOT_IN_ORDER'});
+  await ensureStationSchema();
+  await pool.execute(`INSERT INTO order_station_status (order_id,station,status,updated_by_user_id) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE status=VALUES(status),updated_by_user_id=VALUES(updated_by_user_id),updated_at=CURRENT_TIMESTAMP`,[Number(current.id),normalizedStation,stationStatus(status),Number.isFinite(Number(userId))?Number(userId):null]);
+  return findOrder(current.id);
+}
 async function resetOrders(){await pool.execute('DELETE FROM orders');return [];}
 async function readOrders(){return listOrders({});}
 async function ensureStore(){return true;}
-module.exports={ensureStore,readOrders,listOrders,findOrder,createOrder,updateOrder,resetOrders};
+module.exports={ensureStore,readOrders,listOrders,findOrder,createOrder,updateOrder,updateStationStatus,classifyPrepStation,stationsForItems,ensureStationSchema,resetOrders};

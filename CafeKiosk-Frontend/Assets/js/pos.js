@@ -1393,6 +1393,11 @@ function showItemModal(item) {
         selections: {}
     };
 
+    const noteInput = $("itemSpecialNote");
+    if (noteInput) noteInput.value = "";
+    const noteCount = $("itemSpecialNoteCount");
+    if (noteCount) noteCount.textContent = "0/180";
+
 
     $("modalProductName")
         .textContent =
@@ -2005,6 +2010,10 @@ function closeItemModal() {
         .classList
         .remove("active");
 
+    const noteInput = $("itemSpecialNote");
+    if (noteInput) noteInput.value = "";
+    const noteCount = $("itemSpecialNoteCount");
+    if (noteCount) noteCount.textContent = "0/180";
 
     pendingItem =
         null;
@@ -2046,6 +2055,15 @@ function confirmAddItem() {
 
     const labels =
         customizationLabels();
+
+    const specialNote = String($("itemSpecialNote")?.value || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 180);
+
+    if (specialNote) {
+        labels.push(`Note: ${specialNote}`);
+    }
 
 
     const key =
@@ -3401,6 +3419,96 @@ async function loadMysqlProductCatalog() {
   }
 }
 
+
+
+// =========================================================
+// SERVICE TYPE ICON PICKER (Staff + Manager POS)
+// =========================================================
+function serviceTypeIcon(type) {
+    const normalized = String(type || "").toLowerCase();
+    if (normalized.includes("take")) {
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 13H7L6 8Z"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><path d="M9 12h6"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16"/><path d="M6 10c0-4 2.5-6 6-6s6 2 6 6"/><path d="M3 10h18v3H3z"/><path d="M5 13v7M19 13v7M8 20h8"/></svg>';
+}
+
+function enhanceServiceTypePicker() {
+    const select = $("serviceType");
+    if (!select || select.dataset.ckServiceEnhanced === "true") return;
+    select.dataset.ckServiceEnhanced = "true";
+    select.classList.add("ck-service-native");
+
+    const picker = document.createElement("button");
+    picker.type = "button";
+    picker.className = "ck-service-picker";
+    picker.setAttribute("aria-haspopup", "dialog");
+    picker.innerHTML = `
+        <span class="ck-service-picker-icon"></span>
+        <span class="ck-service-picker-copy"><small>Service Type</small><strong></strong></span>
+        <span class="ck-service-picker-arrow" aria-hidden="true">›</span>
+    `;
+    select.insertAdjacentElement("afterend", picker);
+
+    const overlay = document.createElement("div");
+    overlay.className = "ck-service-overlay";
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML = `
+      <section class="ck-service-modal" role="dialog" aria-modal="true" aria-label="Choose service type">
+        <div class="ck-service-modal-head">
+          <div><h3>Service Type</h3><p>How will this order be served?</p></div>
+          <button type="button" class="ck-service-close" aria-label="Close">×</button>
+        </div>
+        <div class="ck-service-options">
+          <button type="button" class="ck-service-option" data-service-value="Dine In">
+            <span class="ck-service-option-icon">${serviceTypeIcon("Dine In")}</span>
+            <span><strong>Dine In</strong><small>Serve the order inside the cafe</small></span>
+            <span class="ck-service-check">✓</span>
+          </button>
+          <button type="button" class="ck-service-option" data-service-value="Takeout">
+            <span class="ck-service-option-icon">${serviceTypeIcon("Takeout")}</span>
+            <span><strong>Take Out</strong><small>Pack the order for takeaway</small></span>
+            <span class="ck-service-check">✓</span>
+          </button>
+        </div>
+      </section>`;
+    document.body.appendChild(overlay);
+
+    const update = () => {
+        const value = select.value || "Dine In";
+        picker.querySelector(".ck-service-picker-icon").innerHTML = serviceTypeIcon(value);
+        picker.querySelector("strong").textContent = /take/i.test(value) ? "Take Out" : "Dine In";
+        overlay.querySelectorAll(".ck-service-option").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.serviceValue === value);
+        });
+    };
+    const open = () => {
+        update();
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("ck-service-open");
+    };
+    const close = () => {
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("ck-service-open");
+    };
+
+    picker.addEventListener("click", open);
+    overlay.querySelector(".ck-service-close")?.addEventListener("click", close);
+    overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
+    overlay.querySelectorAll(".ck-service-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+            select.value = btn.dataset.serviceValue;
+            select.dispatchEvent(new Event("change", { bubbles: true }));
+            update();
+            close();
+        });
+    });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") close(); });
+    update();
+}
+
+
 // =========================================================
 // START
 // =========================================================
@@ -3412,6 +3520,13 @@ document.addEventListener(
         await loadMysqlProductCatalog();
 
         setupEvents();
+        enhanceServiceTypePicker();
+
+        const itemSpecialNote = $("itemSpecialNote");
+        itemSpecialNote?.addEventListener("input", () => {
+            const count = $("itemSpecialNoteCount");
+            if (count) count.textContent = `${itemSpecialNote.value.length}/180`;
+        });
 
         rebuildLocalAvailabilityIndex();
 

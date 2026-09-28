@@ -304,6 +304,68 @@
   }
 
 
+
+  function openProvisionOwnerModal() {
+    const modal = el('provisionOwnerModal');
+    el('provisionOwnerForm')?.reset();
+    if (el('provisionOwnerError')) el('provisionOwnerError').textContent = '';
+    if (el('provisionOwnerResult')) {
+      el('provisionOwnerResult').hidden = true;
+      el('provisionOwnerResult').innerHTML = '';
+    }
+    modal?.classList.add('open');
+    modal?.setAttribute('aria-hidden','false');
+    setTimeout(() => el('provisionCafeName')?.focus(), 50);
+  }
+
+  function closeProvisionOwnerModal() {
+    const modal = el('provisionOwnerModal');
+    modal?.classList.remove('open');
+    modal?.setAttribute('aria-hidden','true');
+  }
+
+  async function provisionOwner(event) {
+    event.preventDefault();
+    const button = el('confirmProvisionOwnerBtn');
+    const errorBox = el('provisionOwnerError');
+    const resultBox = el('provisionOwnerResult');
+    const payload = {
+      cafeName: String(el('provisionCafeName')?.value || '').trim(),
+      ownerName: String(el('provisionOwnerName')?.value || '').trim(),
+      ownerEmail: String(el('provisionOwnerEmail')?.value || '').trim(),
+      ownerPhone: String(el('provisionOwnerPhone')?.value || '').trim(),
+      address: String(el('provisionAddress')?.value || '').trim(),
+      username: String(el('provisionUsername')?.value || '').trim(),
+      temporaryPassword: String(el('provisionPassword')?.value || '')
+    };
+    errorBox.textContent = '';
+    resultBox.hidden = true;
+    button.disabled = true;
+    button.textContent = 'Creating...';
+    try {
+      const response = await fetch(backendUrl('/api/system-admin/cafes/provision'), {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+      const data = await response.json().catch(()=>({}));
+      if (!response.ok) throw new Error(data.message || 'Unable to create cafe owner account.');
+      resultBox.hidden = false;
+      resultBox.innerHTML = `<strong>${escapeHtml(data.message || 'Cafe owner account created.')}</strong>
+        <span>Cafe ID: ${escapeHtml(data.cafeId || '')}</span>
+        <span>Temporary User ID: ${escapeHtml(payload.username)}</span>
+        <span>Owner Email: ${escapeHtml(payload.ownerEmail)}</span>
+        <div class="provision-result-actions"><a href="/admin-login" target="_blank" rel="noopener">Open Admin Login</a>${data.kioskUrl ? `<a href="${escapeHtml(data.kioskUrl)}" target="_blank" rel="noopener">Open Kiosk</a>` : ''}</div>
+        <small>Use the temporary credentials to configure the cafe. After handoff, the Owner should change the User ID and password from My Profile.</small>`;
+      await Promise.all([refreshOverview(), loadApprovals()]);
+    } catch (error) {
+      errorBox.textContent = error.message || 'Unable to create cafe owner account.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Create & Approve Cafe';
+    }
+  }
+
   function openDeleteModal(cafeId) {
     const cafe = state.cafes.find((item) => String(item.cafeId) === String(cafeId));
     if (!cafe) return;
@@ -488,6 +550,7 @@
       closeProfileMenu();
       closeModal();
       closeDeleteModal();
+      closeProvisionOwnerModal();
     }
   });
 
@@ -517,6 +580,12 @@
     }
   });
 
+  el('openProvisionOwnerBtn')?.addEventListener('click', openProvisionOwnerModal);
+  el('openProvisionOwnerPanelBtn')?.addEventListener('click', openProvisionOwnerModal);
+  el('provisionOwnerClose')?.addEventListener('click', closeProvisionOwnerModal);
+  el('cancelProvisionOwnerBtn')?.addEventListener('click', closeProvisionOwnerModal);
+  el('provisionOwnerForm')?.addEventListener('submit', provisionOwner);
+  el('provisionOwnerModal')?.addEventListener('click', (event) => { if (event.target === el('provisionOwnerModal')) closeProvisionOwnerModal(); });
   el('statusModalClose')?.addEventListener('click', closeModal);
   el('statusModal')?.addEventListener('click', (event) => {
     if (event.target === el('statusModal')) closeModal();

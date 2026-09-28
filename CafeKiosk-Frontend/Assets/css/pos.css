@@ -2685,3 +2685,68 @@ body.uniform-pos .bottom-fields .ck-promo-client {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* CAFEKIOSK POS UX 2026-09-28 — Special note + service icon picker */
+.ck-special-note-block {
+  margin: 12px 0 2px;
+  padding: 12px;
+  border: 1px solid rgba(92,65,42,.18);
+  border-radius: 12px;
+  background: #fffaf1;
+}
+.ck-special-note-block label {
+  display:flex; justify-content:space-between; gap:8px; margin:0 0 7px;
+  color:#4b2f18; font-size:.78rem; font-weight:800;
+}
+.ck-special-note-block label span { color:#8d7964; font-size:.68rem; font-weight:650; }
+.ck-special-note-block textarea {
+  width:100%; min-height:72px; resize:vertical; padding:10px 11px;
+  border:1px solid rgba(92,65,42,.24); border-radius:10px; background:#fffdfa;
+  color:#4b2f18; font-size:.78rem; line-height:1.35; outline:none;
+}
+.ck-special-note-block textarea:focus { border-color:#4c956f; box-shadow:0 0 0 3px rgba(76,149,111,.12); }
+.ck-special-note-help { display:flex; justify-content:space-between; gap:10px; margin-top:6px; color:#8d7964; font-size:.65rem; }
+
+.ck-service-native {
+  position:absolute !important; width:1px !important; height:1px !important; opacity:0 !important;
+  overflow:hidden !important; pointer-events:none !important;
+}
+.ck-service-picker {
+  width:100%; min-height:48px; padding:7px 9px; display:grid;
+  grid-template-columns:34px minmax(0,1fr) 18px; align-items:center; gap:8px;
+  border:1px solid rgba(92,65,42,.24); border-radius:10px; background:#fffdfa;
+  color:#4b2f18; text-align:left; cursor:pointer;
+}
+.ck-service-picker:hover { border-color:#4c956f; background:#fffaf1; }
+.ck-service-picker-icon { width:32px; height:32px; display:grid; place-items:center; border-radius:9px; background:rgba(76,149,111,.12); color:#3e7d5c; }
+.ck-service-picker-icon svg,.ck-service-option-icon svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.ck-service-picker-copy { min-width:0; display:flex; flex-direction:column; gap:1px; }
+.ck-service-picker-copy small { color:#8d7964; font-size:9px; font-weight:700; }
+.ck-service-picker-copy strong { color:#4b2f18; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ck-service-picker-arrow { color:#8d7964; font-size:20px; text-align:center; }
+.ck-service-overlay { position:fixed; inset:0; z-index:10050; display:none; place-items:center; padding:18px; background:rgba(45,31,21,.44); backdrop-filter:blur(3px); }
+.ck-service-overlay.active { display:grid; }
+.ck-service-modal { width:min(94vw,460px); padding:18px; border:1px solid rgba(92,65,42,.2); border-radius:18px; background:#fffaf1; box-shadow:0 22px 60px rgba(45,31,21,.22); }
+.ck-service-modal-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.ck-service-modal-head h3 { margin:0; color:#4b2f18; font-size:1.15rem; }
+.ck-service-modal-head p { margin:4px 0 0; color:#8d7964; font-size:.78rem; }
+.ck-service-close { width:38px; height:38px; display:grid; place-items:center; border:1px solid rgba(92,65,42,.18); border-radius:10px; background:#fffdfa; color:#4b2f18; font-size:22px; cursor:pointer; }
+.ck-service-options { display:grid; gap:10px; }
+.ck-service-option { width:100%; min-height:78px; padding:12px; display:grid; grid-template-columns:48px minmax(0,1fr) 28px; align-items:center; gap:12px; border:1px solid rgba(92,65,42,.2); border-radius:14px; background:#fffdfa; color:#4b2f18; text-align:left; cursor:pointer; }
+.ck-service-option:hover,.ck-service-option.active { border-color:#4c956f; background:rgba(76,149,111,.08); }
+.ck-service-option-icon { width:48px; height:48px; display:grid; place-items:center; border-radius:13px; background:#f5ead8; color:#4b2f18; }
+.ck-service-option span:nth-child(2) { min-width:0; display:flex; flex-direction:column; gap:4px; }
+.ck-service-option strong { font-size:.95rem; }
+.ck-service-option small { color:#8d7964; font-size:.72rem; line-height:1.25; }
+.ck-service-check { width:25px; height:25px; display:grid; place-items:center; border-radius:50%; background:#4c956f; color:white; font-weight:900; opacity:0; transform:scale(.8); }
+.ck-service-option.active .ck-service-check { opacity:1; transform:scale(1); }
+body.ck-service-open { overflow:hidden !important; }
+
+@media (orientation: portrait) and (max-width:980px) {
+  .ck-service-picker { min-height:58px; grid-template-columns:40px minmax(0,1fr) 22px; padding:8px 10px; }
+  .ck-service-picker-icon { width:38px; height:38px; }
+  .ck-service-picker-icon svg { width:23px; height:23px; }
+  .ck-service-picker-copy strong { font-size:14px; }
+  .ck-service-picker-copy small { font-size:10px; }
+}

@@ -37,36 +37,46 @@ const recipeInventoryStore =
 const bcrypt = require('bcryptjs');
 const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
+const { verifyCafeApprovalPin } = require('../services/approvalPinService');
 
 async function verifyApprovalPin(req) {
     const action = String(req.body?.adjustmentAction || '').trim().toLowerCase();
     if (!['void', 'refund'].includes(action)) return { required: false, valid: true };
 
-    if (!req.user?.cafeId) return { required: true, valid: false, message: 'Login is required for void/refund approval.' };
-    const pin = String(req.body?.managerPin || '').trim();
-    if (!/^\d{4,6}$/.test(pin)) return { required: true, valid: false, message: 'Enter a valid 4-6 digit Admin/Manager PIN.' };
-
-    try {
-        const [rows] = await dbPool.execute(
-            `SELECT user_id, full_name, username, role, approval_pin_hash
-               FROM users
-              WHERE cafe_id = ? AND role IN ('Admin','Manager') AND status = 'Active' AND approval_pin_hash IS NOT NULL`,
-            [String(req.user.cafeId)]
-        );
-        for (const row of rows) {
-            if (await bcrypt.compare(pin, row.approval_pin_hash || '')) {
-                return { required: true, valid: true, approver: { userId: row.user_id, name: row.full_name, username: row.username, role: row.role } };
-            }
-        }
-        return { required: true, valid: false, message: 'Invalid Admin/Manager approval PIN.' };
-    } catch (error) {
-        if (error?.code === 'ER_BAD_FIELD_ERROR') {
-            return { required: true, valid: false, message: 'Approval PIN is not configured yet. An Admin or Manager must set one in Profile.' };
-        }
-        throw error;
+    if (!req.user?.cafeId) {
+        return { required: true, valid: false, code: 'APPROVAL_PIN_REQUIRED', message: 'Login is required for void/refund approval.' };
     }
-}
 
+    const requesterRole = String(req.user?.role || '').trim().toLowerCase();
+
+    // Admin and Manager sessions are themselves privileged approvals. A PIN is
+    // specifically required when Staff asks a supervisor to authorize a void/refund.
+    if (requesterRole === 'admin' || requesterRole === 'manager') {
+        return {
+            required: false,
+            valid: true,
+            approver: {
+                userId: Number.isFinite(Number(req.user?.userId)) ? Number(req.user.userId) : null,
+                name: req.user?.displayName || req.user?.fullName || req.user?.username || req.user?.role,
+                username: req.user?.username || '',
+                role: req.user?.role
+            }
+        };
+    }
+
+    if (requesterRole !== 'staff') {
+        return { required: true, valid: false, code: 'APPROVAL_PIN_REQUIRED', message: 'Staff approval requires an active Admin/Manager PIN.' };
+    }
+
+    const result = await verifyCafeApprovalPin(req.user.cafeId, req.body?.managerPin);
+    return {
+        required: true,
+        valid: Boolean(result.valid),
+        code: result.code,
+        message: result.message,
+        approver: result.approver || null
+    };
+}
 
 
 function emitInventoryChanged(
@@ -830,6 +840,81 @@ exports.updateOrder =
 
 
 // ============================================================
+// PATCH /api/orders/:orderId/station-status
+// Separate Beverage / Food preparation progress.
+// ============================================================
+
+exports.updateOrderStationStatus = async (req, res, next) => {
+    try {
+        const stationRaw = String(req.body?.station || '').trim().toLowerCase();
+        const station = stationRaw === 'beverage' ? 'Beverage' : stationRaw === 'food' ? 'Food' : '';
+        const requested = String(req.body?.status || '').trim().toLowerCase();
+        const status = requested.includes('complete') || requested === 'ready'
+            ? 'Completed'
+            : requested.includes('prepar') || requested === 'accepted'
+                ? 'Preparing'
+                : requested === 'pending'
+                    ? 'Pending'
+                    : '';
+
+        if (!station || !status) {
+            return res.status(400).json({ success: false, message: 'A valid station (Beverage/Food) and status (Pending/Preparing/Completed) are required.' });
+        }
+
+        const existing = await orderStore.findOrder(req.params.orderId);
+        if (!existing || String(existing.cafeId || '') !== String(req.user?.cafeId || '')) {
+            return res.status(404).json({ success: false, message: 'Order not found.' });
+        }
+
+        if (['Cancelled','Refunded','Voided'].includes(String(existing.status || ''))) {
+            return res.status(409).json({ success: false, message: 'A voided/refunded order cannot be updated by a preparation station.' });
+        }
+
+        let order = await orderStore.updateStationStatus(
+            req.params.orderId,
+            station,
+            status,
+            Number.isFinite(Number(req.user?.userId)) ? Number(req.user.userId) : null
+        );
+
+        const stations = Array.isArray(order?.stations) ? order.stations : [];
+        const statuses = order?.stationStatuses || {};
+        const values = stations.map(name => String(statuses?.[name]?.status || 'Pending'));
+        let globalStatus = 'Pending';
+        if (values.length && values.every(value => value === 'Completed')) globalStatus = 'Completed';
+        else if (values.some(value => value === 'Preparing' || value === 'Completed')) globalStatus = 'Preparing';
+
+        if (String(order.status || '') !== globalStatus) {
+            order = await orderStore.updateOrder(req.params.orderId, {
+                status: globalStatus,
+                changedByUserId: Number.isFinite(Number(req.user?.userId)) ? Number(req.user.userId) : null,
+                reason: `${station} station marked ${status}`,
+                source: `${station} Station`,
+                preserveStationStatuses: true
+            });
+        }
+
+        emitToCafe(req, 'order-updated', order);
+        emitToCafe(req, 'order:updated', order);
+        emitChanged(req, order, 'PATCH');
+
+        return res.json({
+            success: true,
+            message: `${station} station updated to ${status}.`,
+            station,
+            stationStatus: status,
+            order
+        });
+    } catch (error) {
+        if (error?.code === 'STATION_NOT_IN_ORDER' || error?.code === 'INVALID_STATION') {
+            return res.status(400).json({ success: false, message: error.message });
+        }
+        next(error);
+    }
+};
+
+
+// ============================================================
 // PATCH /api/orders/:orderId
 // OPTIONAL GENERAL ORDER UPDATE
 // ============================================================
@@ -847,7 +932,7 @@ exports.patchOrder =
                 await verifyApprovalPin(req);
 
             if (pinApproval.required && !pinApproval.valid) {
-                return res.status(403).json({ success: false, code: 'APPROVAL_PIN_REQUIRED', message: pinApproval.message });
+                return res.status(403).json({ success: false, code: pinApproval.code || 'APPROVAL_PIN_REQUIRED', message: pinApproval.message });
             }
 
 
@@ -879,7 +964,10 @@ exports.patchOrder =
             const patch = {
                 changedByUserId: Number.isFinite(Number(req.user?.userId))
                     ? Number(req.user.userId)
-                    : null
+                    : null,
+                reason: req.body?.adjustmentReason || req.body?.reason || null,
+                statusReason: req.body?.adjustmentReason || req.body?.statusReason || null,
+                approval: pinApproval.approver || null
             };
 
 
@@ -1211,7 +1299,12 @@ exports.patchOrder =
                         true,
 
                     message:
-                        "Order updated.",
+                        pinApproval?.approver
+                            ? `Order updated with approval from ${pinApproval.approver.role || "supervisor"} ${pinApproval.approver.name || ""}`.trim()
+                            : "Order updated.",
+
+                    approval:
+                        pinApproval?.approver || null,
 
                     order
                 });

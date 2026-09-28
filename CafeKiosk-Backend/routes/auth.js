@@ -37,9 +37,11 @@ router.patch('/users/:userId', requireRole('Admin'), controller.updateUser);
 router.patch('/users/:userId/status', requireRole('Admin'), controller.updateUserStatus);
 
 router.get('/me', verifyToken, controller.me);
+router.post('/change-user-id', verifyToken, controller.changeUserId);
 router.post('/change-password', verifyToken, controller.changePassword);
 router.get('/approval-pin', verifyToken, controller.approvalPinStatus);
 router.post('/approval-pin', verifyToken, controller.setApprovalPin);
+router.post('/approval-pin/verify', verifyToken, controller.verifyApprovalPin);
 router.post('/logout', verifyToken, controller.logout);
 
 module.exports = router;

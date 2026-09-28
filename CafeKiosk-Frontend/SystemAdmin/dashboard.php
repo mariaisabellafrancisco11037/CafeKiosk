@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - System Monitor</title>
   <link rel="stylesheet" href="../Assets/css/dashboard.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
-  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=3">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
+  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=20260928-onboarding-v1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
@@ -22,6 +22,10 @@
         <a class="staff-nav-link active" href="#overview">
           <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
           <span>Dashboard</span>
+        </a>
+        <a class="staff-nav-link" href="#onboarding">
+          <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7"/><path d="M16 11v6M13 14h6"/></svg></span>
+          <span>Owner Setup</span>
         </a>
         <a class="staff-nav-link" href="#approvals">
           <span class="staff-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
@@ -48,7 +52,7 @@
         </div>
         <div class="header-actions">
           <div class="connection-pill" id="serverPill"><span class="connection-dot syncing" id="serverDot"></span><span id="serverLabel">Checking System...</span></div>
-          <button class="refresh-btn" id="systemRefreshBtn" type="button">Refresh</button>
+          <button class="provision-owner-btn" id="openProvisionOwnerBtn" type="button">+ Create Owner Account</button><button class="refresh-btn" id="systemRefreshBtn" type="button">Refresh</button>
           <div class="system-profile-wrap">
             <button class="admin-profile system-profile-button" id="systemProfileButton" type="button" aria-haspopup="menu" aria-expanded="false">
               <div class="profile-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></div>
@@ -77,6 +81,24 @@
         <article class="monitor-panel compact-health-card"><span class="eyebrow">BACKEND</span><div class="health-line"><span class="health-indicator" id="backendIndicator"></span><strong id="backendStatus">Checking...</strong></div><span class="health-meta" id="uptimeText">Uptime —</span></article>
         <article class="monitor-panel compact-health-card"><span class="eyebrow">DATABASE</span><div class="health-line"><span class="health-indicator" id="databaseIndicator"></span><strong id="databaseStatus">Checking...</strong></div><span class="health-meta" id="databaseMeta">MySQL —</span></article>
         <article class="monitor-panel compact-health-card"><span class="eyebrow">WEBSOCKET</span><div class="health-line"><span class="health-indicator" id="websocketIndicator"></span><strong id="websocketStatus">Checking...</strong></div><span class="health-meta">POS / Kiosk realtime connection</span></article>
+      </section>
+
+
+      <section class="monitor-panel onboarding-panel" id="onboarding">
+        <div class="monitor-panel-header">
+          <div>
+            <span class="eyebrow">ASSISTED CAFE ONBOARDING</span>
+            <h2>Owner Account Setup</h2>
+            <p>Create and approve a cafe Owner account with temporary credentials. The IT Manager can use that Owner login to encode the initial menu and inventory before handoff.</p>
+          </div>
+          <button class="provision-owner-btn" id="openProvisionOwnerPanelBtn" type="button">+ Create Owner Account</button>
+        </div>
+        <div class="onboarding-flow">
+          <div><strong>1</strong><span>Create cafe &amp; temporary Owner login</span></div>
+          <div><strong>2</strong><span>IT Manager configures Menu &amp; Inventory</span></div>
+          <div><strong>3</strong><span>Hand account to Owner</span></div>
+          <div><strong>4</strong><span>Owner changes User ID &amp; password</span></div>
+        </div>
       </section>
 
       <section class="monitor-panel approval-panel" id="approvals">
@@ -121,6 +143,32 @@
         <div class="issue-list" id="issueList"><div class="monitor-empty">Checking technical issues...</div></div>
       </section>
     </main>
+  </div>
+
+
+  <div class="status-modal-backdrop" id="provisionOwnerModal" aria-hidden="true">
+    <section class="status-modal-card provision-owner-card" role="dialog" aria-modal="true" aria-labelledby="provisionOwnerTitle">
+      <button class="status-modal-close" id="provisionOwnerClose" type="button" aria-label="Close">×</button>
+      <span class="eyebrow">ASSISTED ONBOARDING</span>
+      <h2 id="provisionOwnerTitle">Create Cafe Owner Account</h2>
+      <p class="provision-help">The account is approved immediately because it is created by the IT Manager. Use the temporary credentials to perform initial menu and inventory setup, then give the account to the Owner.</p>
+      <form id="provisionOwnerForm" class="provision-owner-form">
+        <label><span>Cafe Name *</span><input id="provisionCafeName" required maxlength="150" placeholder="Example: Sekira Cozy Cove Cafe"></label>
+        <label><span>Owner Full Name *</span><input id="provisionOwnerName" required maxlength="120" placeholder="Cafe owner's name"></label>
+        <label><span>Owner Email *</span><input id="provisionOwnerEmail" required type="email" maxlength="190" placeholder="owner@example.com"></label>
+        <label><span>Phone</span><input id="provisionOwnerPhone" maxlength="40" placeholder="Optional"></label>
+        <label class="provision-wide"><span>Cafe Address</span><input id="provisionAddress" maxlength="255" placeholder="Optional"></label>
+        <label><span>Temporary User ID *</span><input id="provisionUsername" required minlength="3" maxlength="60" pattern="[A-Za-z0-9._-]{3,60}" autocomplete="off" placeholder="owner.temp"></label>
+        <label><span>Temporary Password *</span><input id="provisionPassword" required type="password" minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters"></label>
+        <div class="provision-wide provision-security-note">Temporary credentials are for setup and handoff only. The Owner can change both the User ID and password from My Profile after receiving the system.</div>
+        <div class="delete-error provision-wide" id="provisionOwnerError" role="alert"></div>
+        <div class="provision-wide provision-result" id="provisionOwnerResult" hidden></div>
+        <div class="delete-modal-actions provision-wide">
+          <button type="button" class="cancel-delete-btn" id="cancelProvisionOwnerBtn">Cancel</button>
+          <button type="submit" class="confirm-approval-btn" id="confirmProvisionOwnerBtn">Create &amp; Approve Cafe</button>
+        </div>
+      </form>
+    </section>
   </div>
 
   <div class="status-modal-backdrop" id="statusModal" aria-hidden="true">
@@ -169,7 +217,7 @@
   </div>
 
 
-  <script src="../Assets/js/system-monitor.js?v=logout-confirm-v2"></script>
+  <script src="../Assets/js/system-monitor.js?v=20260928-onboarding-v1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>

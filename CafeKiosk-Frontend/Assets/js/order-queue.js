@@ -61,6 +61,93 @@ function getAuthToken() {
   );
 }
 
+function activeQueueRole() {
+  const direct = String(window.CafeAuth?.role || window.CafeAuth?.session?.role || sessionStorage.getItem("cafeActiveRole") || "").trim().toLowerCase();
+  if (direct) return direct;
+  const path = String(window.location.pathname || "").toLowerCase();
+  if (path.includes("manager")) return "manager";
+  if (path.includes("admin")) return "admin";
+  return "staff";
+}
+
+function staffNeedsApprovalPin() {
+  return activeQueueRole() === "staff";
+}
+
+let verifiedApproval = null;
+
+function setApprovalPinFeedback(message = "", type = "") {
+  const el = $("approvalPinFeedback");
+  if (!el) return;
+  el.textContent = message;
+  el.className = `approval-pin-feedback${type ? ` ${type}` : ""}`;
+}
+
+async function verifyEnteredApprovalPin({ silent = false } = {}) {
+  const pinInput = $("managerPin");
+  const pin = String(pinInput?.value || "").trim();
+  verifiedApproval = null;
+  if (!/^\d{4,6}$/.test(pin)) {
+    if (!silent) setApprovalPinFeedback("Enter a 4-6 digit Admin/Manager PIN.", "error");
+    return null;
+  }
+  try {
+    setApprovalPinFeedback("Checking approval PIN...", "checking");
+    const response = await authenticatedFetch(`${API_URL}/api/auth/approval-pin/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ pin })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) throw new Error(data.message || "Approval PIN was not accepted.");
+    verifiedApproval = { pin, approver: data.approver || null };
+    const who = data.approver?.name || data.approver?.username || data.approver?.role || "Admin/Manager";
+    setApprovalPinFeedback(`Approved by ${who}.`, "success");
+    return verifiedApproval;
+  } catch (error) {
+    setApprovalPinFeedback(error.message || "Approval PIN was not accepted.", "error");
+    if (!silent) pinInput?.focus();
+    return null;
+  }
+}
+
+function configureApprovalPinUI() {
+  const input = $("managerPin");
+  if (!input) return;
+  const control = input.closest(".pin-control");
+  const label = document.querySelector('label[for="managerPin"]');
+  let feedback = $("approvalPinFeedback");
+  if (!feedback && control) {
+    feedback = document.createElement("div");
+    feedback.id = "approvalPinFeedback";
+    feedback.className = "approval-pin-feedback";
+    control.insertAdjacentElement("afterend", feedback);
+  }
+
+  if (staffNeedsApprovalPin()) {
+    if (label) label.textContent = "Admin/Manager Approval PIN:";
+    input.placeholder = "Ask an Admin/Manager for their approval PIN";
+    input.required = true;
+    if (control && !$("verifyApprovalPinButton")) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.id = "verifyApprovalPinButton";
+      button.className = "verify-approval-pin-btn";
+      button.textContent = "Verify";
+      button.addEventListener("click", () => verifyEnteredApprovalPin());
+      control.appendChild(button);
+    }
+    input.addEventListener("input", () => {
+      verifiedApproval = null;
+      setApprovalPinFeedback("");
+    });
+  } else {
+    if (label) label.textContent = "Supervisor Approval:";
+    if (control) control.style.display = "none";
+    setApprovalPinFeedback(`${activeQueueRole() === "manager" ? "Manager" : "Admin"} session is authorized for void/refund approval.`, "success");
+  }
+}
+
 async function authenticatedFetch(url, options = {}) {
   if (window.CafeAuth?.apiFetch) {
     return window.CafeAuth.apiFetch(url, options);
@@ -224,6 +311,45 @@ function escapeHTML(value) {
   })[char]);
 }
 
+function classifyPrepStation(category, name = "") {
+  const text = `${category || ""} ${name || ""}`.toLowerCase();
+  const beverageWords = ["coffee", "non-coffee", "non coffee", "milk tea", "milktea", "tea", "beverage", "drink", "frappe", "smoothie", "juice", "soda", "latte", "espresso", "americano", "cappuccino", "mocha", "chocolate", "matcha"];
+  const foodWords = ["food", "snack", "dessert", "pastry", "meal", "rice", "sandwich", "burger", "pasta", "noodle", "cake", "bread", "waffle", "fries", "pizza"];
+  if (beverageWords.some(word => text.includes(word))) return "Beverage";
+  if (foodWords.some(word => text.includes(word))) return "Food";
+  return "Food";
+}
+
+function normalizePrepStation(value) {
+  const station = String(value || "").trim().toLowerCase();
+  if (station === "beverage" || station === "beverages" || station === "drink" || station === "drinks") return "Beverage";
+  if (station === "food" || station === "foods" || station === "kitchen") return "Food";
+  return "";
+}
+
+function getOrderStations(order) {
+  const explicit = Array.isArray(order?.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [];
+  const derived = (order?.items || []).map(item => normalizePrepStation(item.prepStation) || classifyPrepStation(item.category, item.name));
+  return [...new Set([...explicit, ...derived].filter(Boolean))];
+}
+
+function orderHasStation(order, station) {
+  if (!station || station === "all") return true;
+  return getOrderStations(order).includes(station);
+}
+
+function stationStatusFor(order, station) {
+  if (!station || station === "all") return normalizeStatus(order?.status);
+  const raw = order?.stationStatuses?.[station];
+  return normalizeStatus(typeof raw === "object" ? raw?.status : raw || "Pending");
+}
+
+function itemsForStation(order, station = activePrepStation) {
+  if (!order || !Array.isArray(order.items)) return [];
+  if (!station || station === "all") return order.items;
+  return order.items.filter(item => (normalizePrepStation(item.prepStation) || classifyPrepStation(item.category, item.name)) === station);
+}
+
 function normalizeOrder(order, index = 0) {
   const createdRaw = order.createdAt || order.created_at || order.orderDate || order.date_created;
   const created = createdRaw ? new Date(createdRaw) : new Date();
@@ -268,8 +394,13 @@ function normalizeOrder(order, index = 0) {
     discount: Number(order.discountAmount ?? order.discount_amount ?? order.discount ?? 0),
     total: Number(order.total ?? order.total_amount ?? 0),
     promotionName: order.promotionName || order.promotion?.name || "",
+    stations: Array.isArray(order.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [],
+    stationStatuses: order.stationStatuses && typeof order.stationStatuses === "object" ? order.stationStatuses : {},
     items: (Array.isArray(rawItems) ? rawItems : []).map(item => ({
+      productId: item.productId ?? item.product_id ?? "",
       name: item.name ?? item.product_name ?? "Item",
+      category: item.category ?? item.category_snapshot ?? "Uncategorized",
+      prepStation: normalizePrepStation(item.prepStation ?? item.prep_station) || classifyPrepStation(item.category ?? item.category_snapshot, item.name ?? item.product_name),
       qty: Number(item.qty ?? item.quantity ?? 1),
       price: Number(item.price ?? item.unit_price ?? 0) + Number(item.customizationCost ?? item.customization_cost ?? 0),
       customizations: Array.isArray(item.customizations)
@@ -517,6 +648,8 @@ let selectedOrderId = null;
 let modalOrderId = null;
 let currentAction = "void";
 let activeStatusTab = "all";
+const initialStationParam = normalizePrepStation(new URLSearchParams(window.location.search).get("station"));
+let activePrepStation = initialStationParam || "all";
 let currentPage = 1;
 const PAGE_SIZE = 8;
 
@@ -848,6 +981,12 @@ function queueSnapshot(
               price:
                 item.price,
 
+              category:
+                item.category,
+
+              prepStation:
+                item.prepStation,
+
               customizations:
                 item.customizations
             })
@@ -868,14 +1007,28 @@ function getSelectedOrder() {
   );
 }
 
+function statusForCurrentView(order) {
+  return stationStatusFor(order, activePrepStation);
+}
+
 function countByStatus(status) {
-  return orders.filter(o => normalizeStatus(o.status) === status).length;
+  return orders.filter(order => orderHasStation(order, activePrepStation) && statusForCurrentView(order) === status).length;
+}
+
+function updateStationCounts() {
+  const all = orders.length;
+  const beverage = orders.filter(order => orderHasStation(order, "Beverage")).length;
+  const food = orders.filter(order => orderHasStation(order, "Food")).length;
+  if ($("allStationCount")) $("allStationCount").textContent = all;
+  if ($("beverageStationCount")) $("beverageStationCount").textContent = beverage;
+  if ($("foodStationCount")) $("foodStationCount").textContent = food;
 }
 
 function updateCounts() {
   $("pendingCount").textContent = countByStatus("Pending");
   $("preparingCount").textContent = countByStatus("Preparing");
   $("completedCount").textContent = countByStatus("Completed");
+  updateStationCounts();
 }
 
 function getFilteredOrders() {
@@ -885,7 +1038,8 @@ function getFilteredOrders() {
   const search = $("orderSearch").value.trim().toLowerCase();
 
   let result = orders.filter(order => {
-    const normalized = normalizeStatus(order.status);
+    const normalized = statusForCurrentView(order);
+    const stationOK = orderHasStation(order, activePrepStation);
     const statusOK = status === "all" || normalized === status;
     const tabOK = activeStatusTab === "all" || normalized === activeStatusTab;
     const sourceOK =
@@ -895,7 +1049,7 @@ function getFilteredOrders() {
       (["Staff POS", "Manager POS", "Admin POS"].includes(source) && order.sourceLabel === source);
     const serviceOK = service === "all" || order.serving === service;
     const haystack = `${order.id} ${order.customer} ${order.source} ${order.sourceLabel || ""} ${order.serving} ${order.status}`.toLowerCase();
-    return statusOK && tabOK && sourceOK && serviceOK && (!search || haystack.includes(search));
+    return stationOK && statusOK && tabOK && sourceOK && serviceOK && (!search || haystack.includes(search));
   });
 
   if ($("timeFilter").value === "oldest") result = result.slice().reverse();
@@ -942,14 +1096,15 @@ function renderTable() {
 
   pageRows.forEach(order => {
     const tr = document.createElement("tr");
-    const cls = statusClass(order.status);
+    const displayStatus = statusForCurrentView(order);
+    const cls = statusClass(displayStatus);
     tr.innerHTML = `
       <td>#${escapeHTML(order.id)}</td>
       <td>${escapeHTML(order.customer)}</td>
       <td>${escapeHTML(order.time)}</td>
       <td>${escapeHTML(order.sourceLabel || order.source)}</td>
       <td>${escapeHTML(order.serving)}</td>
-      <td><span class="status-pill ${cls}">${escapeHTML(normalizeStatus(order.status).toUpperCase())}</span></td>
+      <td><span class="status-pill ${cls}">${escapeHTML(displayStatus.toUpperCase())}</span></td>
       <td>
         <div class="action-cell">
           <button
@@ -1026,9 +1181,11 @@ function renderDetails() {
   $("detailCustomer").textContent = order.customer;
   $("detailSource").textContent = order.sourceLabel;
   $("detailTime").textContent = order.time;
-  $("detailStatus").textContent = normalizeStatus(order.status);
-  $("detailStatus").className = `detail-status ${statusClass(order.status)}`;
+  const detailViewStatus = statusForCurrentView(order);
+  $("detailStatus").textContent = detailViewStatus;
+  $("detailStatus").className = `detail-status ${statusClass(detailViewStatus)}`;
   $("detailTotal").textContent = peso(order.total);
+  if ($("updateStatusButton")) $("updateStatusButton").textContent = activePrepStation === "all" ? "Update Status" : `Update ${activePrepStation} Status`;
   {
     const totalEl = $("detailTotal");
     let box = document.getElementById("detailDiscountSummary");
@@ -1036,8 +1193,9 @@ function renderDetails() {
     if (box) box.innerHTML = '<div class="row"><span>Subtotal</span><strong>' + peso(order.subtotal) + '</strong></div>' + '<div class="row"><span>Discount</span><strong>-' + peso(order.discount) + '</strong></div>' + '<div class="row"><span>Promotion</span><strong>' + (order.promotionName ? escapeHTML(order.promotionName) : 'None') + '</strong></div>';
   }
 
-  $("detailItems").innerHTML = order.items.length
-    ? order.items.map(item => {
+  const visibleDetailItems = itemsForStation(order);
+  $("detailItems").innerHTML = visibleDetailItems.length
+    ? visibleDetailItems.map(item => {
         const details = item.customizations?.length
           ? `<div class="detail-customizations">${item.customizations.map(x => `-${escapeHTML(x)}`).join("<br>")}</div>`
           : "";
@@ -2085,7 +2243,9 @@ function openVoidRefundModal(id) {
     Number(order.paymentAmount ?? order.payment_amount ?? order.cashReceived ?? order.total) || order.total
   );
   $("reasonSelect").value = "";
-  $("managerPin").value = "";
+  if ($("managerPin")) $("managerPin").value = "";
+  verifiedApproval = null;
+  if (staffNeedsApprovalPin()) setApprovalPinFeedback("");
 
   $("modalItemsBody").innerHTML = order.items.map((item, index) => {
     const lineTotal = item.price * item.qty;
@@ -2216,8 +2376,8 @@ async function processVoidRefund() {
 
   const pin =
     $("managerPin")
-      .value
-      .trim();
+      ? $("managerPin").value.trim()
+      : "";
 
   if (!reason) {
     alert("Please select a reason.");
@@ -2225,12 +2385,18 @@ async function processVoidRefund() {
     return;
   }
 
-  if (!/^\d{4,6}$/.test(pin)) {
-    alert(
-      "Please enter a 4-6 digit Admin/Manager PIN."
-    );
-    $("managerPin").focus();
-    return;
+  if (staffNeedsApprovalPin()) {
+    if (!/^\d{4,6}$/.test(pin)) {
+      alert("Please enter a 4-6 digit Admin/Manager PIN.");
+      $("managerPin")?.focus();
+      return;
+    }
+    const approval = verifiedApproval?.pin === pin ? verifiedApproval : await verifyEnteredApprovalPin({ silent: true });
+    if (!approval) {
+      alert($("approvalPinFeedback")?.textContent || "The Admin/Manager approval PIN was not accepted.");
+      $("managerPin")?.focus();
+      return;
+    }
   }
 
   const option =
@@ -2267,7 +2433,7 @@ async function processVoidRefund() {
       reason,
 
     managerPin:
-      pin,
+      staffNeedsApprovalPin() ? pin : "",
 
     adjustmentAt:
       new Date().toISOString()
@@ -2334,6 +2500,15 @@ async function processVoidRefund() {
 
           price:
             Number(item.price || 0),
+
+          productId:
+            item.productId || "",
+
+          category:
+            item.category || "Uncategorized",
+
+          prepStation:
+            item.prepStation || classifyPrepStation(item.category, item.name),
 
           customizations:
             Array.isArray(
@@ -2511,9 +2686,7 @@ async function cycleSelectedOrderStatus() {
   }
 
   const status =
-    normalizeStatus(
-      order.status
-    );
+    statusForCurrentView(order);
 
   if (
     status === "Completed" ||
@@ -2541,13 +2714,14 @@ async function cycleSelectedOrderStatus() {
         "Updating...";
     }
 
+    const orderIdentifier = encodeURIComponent(order.orderNumber || order.apiId || order.id);
+    const stationSpecific = activePrepStation === "Beverage" || activePrepStation === "Food";
+    const endpoint = stationSpecific
+      ? `${API_URL}/api/orders/${orderIdentifier}/station-status`
+      : `${API_URL}/api/orders/${orderIdentifier}/status`;
     const response =
       await authenticatedFetch(
-        `${API_URL}/api/orders/${encodeURIComponent(
-          order.orderNumber ||
-          order.apiId ||
-          order.id
-        )}/status`,
+        endpoint,
         {
           method:
             "PATCH",
@@ -2561,10 +2735,9 @@ async function cycleSelectedOrderStatus() {
           },
 
           body:
-            JSON.stringify({
-              status:
-                nextStatus
-            })
+            JSON.stringify(stationSpecific
+              ? { station: activePrepStation, status: nextStatus }
+              : { status: nextStatus })
         }
       );
 
@@ -2607,6 +2780,9 @@ async function cycleSelectedOrderStatus() {
         orders[index] =
           normalized;
       }
+    } else if (activePrepStation === "Beverage" || activePrepStation === "Food") {
+      order.stationStatuses = order.stationStatuses || {};
+      order.stationStatuses[activePrepStation] = { status: nextStatus, updatedAt: new Date().toISOString() };
     } else {
       order.status =
         nextStatus;
@@ -2628,13 +2804,15 @@ async function cycleSelectedOrderStatus() {
   } finally {
     if (button) {
       button.disabled = false;
-      button.textContent =
-        "Update Status";
+      button.textContent = activePrepStation === "all"
+        ? "Update Status"
+        : `Update ${activePrepStation} Status`;
     }
   }
 }
 
 function setupEvents() {
+  configureApprovalPinUI();
   // Dynamic row buttons are recreated whenever the queue refreshes,
   // so handle them from one stable document-level listener.
   document.addEventListener(
@@ -2703,6 +2881,23 @@ function setupEvents() {
       renderTable();
     }
   );
+
+  document.querySelectorAll(".station-tab").forEach(tab => {
+    const station = normalizePrepStation(tab.dataset.station) || "all";
+    tab.classList.toggle("active", activePrepStation === station);
+    tab.addEventListener("click", () => {
+      activePrepStation = station;
+      document.querySelectorAll(".station-tab").forEach(button => button.classList.toggle("active", (normalizePrepStation(button.dataset.station) || "all") === activePrepStation));
+      const url = new URL(window.location.href);
+      if (activePrepStation === "all") url.searchParams.delete("station");
+      else url.searchParams.set("station", activePrepStation.toLowerCase());
+      window.history.replaceState({}, "", url);
+      currentPage = 1;
+      selectedOrderId = null;
+      renderAll();
+      if ($("updateStatusButton")) $("updateStatusButton").textContent = activePrepStation === "all" ? "Update Status" : `Update ${activePrepStation} Status`;
+    });
+  });
 
   document.querySelectorAll(".status-tab").forEach(tab => {
     tab.addEventListener("click", () => {

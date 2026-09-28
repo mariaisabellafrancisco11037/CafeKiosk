@@ -112,6 +112,13 @@
     return role === 'admin' || role === 'manager';
   }
 
+
+  function isCafeOwner() {
+    const p = currentProfile();
+    const role = String(p.role || session()?.role || '').trim().toLowerCase();
+    return role === 'admin' && Boolean(p.isOwner);
+  }
+
   function formatDateTime(value) {
     if (!value) return '—';
     const date = new Date(value);
@@ -235,6 +242,7 @@
           <div class="ckp-detail"><span>Last Login</span><strong data-ckp-field="lastLogin">—</strong></div>
         </div>
         <div class="ckp-dialog-actions">
+          <button type="button" class="ckp-secondary" data-ckp-userid hidden>Change User ID</button>
           <button type="button" class="ckp-secondary" data-ckp-password>Change Password</button>
           <button type="button" class="ckp-primary" data-ckp-close>Done</button>
         </div>
@@ -247,6 +255,10 @@
         closeProfileModal();
         openPasswordModal();
       }
+      if (event.target.closest('[data-ckp-userid]')) {
+        closeProfileModal();
+        openUserIdModal();
+      }
     });
     return modal;
   }
@@ -255,6 +267,8 @@
     closeMenu();
     const modal = ensureProfileModal();
     renderProfileEverywhere();
+    const userIdButton = modal.querySelector('[data-ckp-userid]');
+    if (userIdButton) userIdButton.hidden = !isCafeOwner();
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     refreshProfile();
@@ -265,6 +279,119 @@
     if (!modal) return;
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+  }
+
+
+  function ensureUserIdModal() {
+    let modal = document.getElementById('ckpUserIdModal');
+    if (modal) return modal;
+    modal = document.createElement('div');
+    modal.id = 'ckpUserIdModal';
+    modal.className = 'ckp-modal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = `
+      <section class="ckp-dialog ckp-password-dialog" role="dialog" aria-modal="true" aria-labelledby="ckpUserIdTitle">
+        <div class="ckp-dialog-head">
+          <div><span class="ckp-eyebrow">OWNER ACCOUNT</span><h2 id="ckpUserIdTitle">Change User ID</h2></div>
+          <button type="button" class="ckp-close" data-ckp-close-userid aria-label="Close User ID form">×</button>
+        </div>
+        <form id="ckpUserIdForm" class="ckp-password-form">
+          <label>Current User ID<input name="currentUsername" type="text" readonly></label>
+          <label>New User ID<input name="newUsername" type="text" minlength="3" maxlength="60" pattern="[A-Za-z0-9._-]{3,60}" autocomplete="username" required></label>
+          <label>Current Password<input name="currentPassword" type="password" autocomplete="current-password" required></label>
+          <p class="ckp-password-note">Owner User IDs may use letters, numbers, dots, underscores, and hyphens. You will stay signed in after the change.</p>
+          <div class="ckp-form-message" id="ckpUserIdMessage" aria-live="polite"></div>
+          <div class="ckp-dialog-actions">
+            <button type="button" class="ckp-secondary" data-ckp-close-userid>Cancel</button>
+            <button type="submit" class="ckp-primary">Update User ID</button>
+          </div>
+        </form>
+      </section>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', event => {
+      if (event.target === modal || event.target.closest('[data-ckp-close-userid]')) closeUserIdModal();
+    });
+    modal.querySelector('#ckpUserIdForm')?.addEventListener('submit', changeUserId);
+    return modal;
+  }
+
+  function openUserIdModal() {
+    closeMenu();
+    if (!isCafeOwner()) return;
+    const modal = ensureUserIdModal();
+    const form = modal.querySelector('#ckpUserIdForm');
+    const message = modal.querySelector('#ckpUserIdMessage');
+    form?.reset();
+    const current = form?.querySelector('[name="currentUsername"]');
+    if (current) current.value = currentProfile().username || '';
+    if (message) { message.textContent = ''; message.className = 'ckp-form-message'; }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => form?.querySelector('[name="newUsername"]')?.focus(), 30);
+  }
+
+  function closeUserIdModal() {
+    const modal = document.getElementById('ckpUserIdModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function updateStoredUsername(user) {
+    if (!user) return;
+    const role = String(user.role || currentProfile().role || 'Admin').toLowerCase();
+    const key = role === 'admin' ? 'cafeAdminSession' : role === 'manager' ? 'cafeManagerSession' : 'cafeStaffSession';
+    try {
+      const stored = JSON.parse(localStorage.getItem(key) || '{}');
+      const merged = { ...stored, ...user, username: user.username };
+      localStorage.setItem(key, JSON.stringify(merged));
+      const tab = JSON.parse(sessionStorage.getItem('cafeSession') || '{}');
+      sessionStorage.setItem('cafeSession', JSON.stringify({ ...tab, ...user, username: user.username }));
+    } catch (_) {}
+  }
+
+  async function changeUserId(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('button[type="submit"]');
+    const message = document.getElementById('ckpUserIdMessage');
+    const data = new FormData(form);
+    const newUsername = String(data.get('newUsername') || '').trim();
+    const currentPassword = String(data.get('currentPassword') || '');
+
+    if (!/^[A-Za-z0-9._-]{3,60}$/.test(newUsername)) {
+      if (message) { message.textContent = 'Use 3–60 letters, numbers, dots, underscores, or hyphens.'; message.className = 'ckp-form-message error'; }
+      return;
+    }
+    if (!window.CafeAuth?.apiFetch || !window.CafeAuth?.API_ORIGIN) {
+      if (message) { message.textContent = 'Authentication service is unavailable.'; message.className = 'ckp-form-message error'; }
+      return;
+    }
+
+    if (submit) { submit.disabled = true; submit.textContent = 'Updating...'; }
+    try {
+      const response = await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/change-user-id`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newUsername, currentPassword })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.success) throw new Error(payload.message || 'Unable to change User ID.');
+      if (payload.authToken && window.CafeAuth?.replaceToken) window.CafeAuth.replaceToken(payload.authToken);
+      if (payload.user) {
+        detailedProfile = { ...(detailedProfile || {}), ...payload.user };
+        updateStoredUsername(payload.user);
+        renderProfileEverywhere();
+      }
+      if (message) { message.textContent = payload.message || 'User ID updated successfully.'; message.className = 'ckp-form-message success'; }
+      form.querySelector('[name="currentPassword"]').value = '';
+      form.querySelector('[name="currentUsername"]').value = payload.user?.username || newUsername;
+      form.querySelector('[name="newUsername"]').value = '';
+    } catch (error) {
+      if (message) { message.textContent = error.message || 'Unable to change User ID.'; message.className = 'ckp-form-message error'; }
+    } finally {
+      if (submit) { submit.disabled = false; submit.textContent = 'Update User ID'; }
+    }
   }
 
   function ensurePasswordModal() {
@@ -475,6 +602,7 @@
       <div class="ckp-session-row"><span class="ckp-session-status"><i></i> Active</span><span data-ckp-session>${esc(sessionDuration(p.loginAt))}</span></div>
       <div class="ckp-menu-divider"></div>
       <button type="button" class="ckp-menu-item" data-ckp-action="profile">${PROFILE_ICON}<span><strong>My Profile</strong><small>Account and cafe details</small></span></button>
+      ${isCafeOwner() ? `<button type="button" class="ckp-menu-item" data-ckp-action="user-id">${PROFILE_ICON}<span><strong>Change User ID</strong><small>Update Owner login ID</small></span></button>` : ''}
       <button type="button" class="ckp-menu-item" data-ckp-action="password">${LOCK_ICON}<span><strong>Change Password</strong><small>Update account security</small></span></button>
       ${canManageApprovalPin() ? `<button type="button" class="ckp-menu-item" data-ckp-action="approval-pin">${PIN_ICON}<span><strong>Approval PIN</strong><small>Set PIN for Staff refund / void approval</small></span></button>` : ''}
       ${shortcut}
@@ -519,6 +647,7 @@
       const action = actionButton.dataset.ckpAction;
       if (action === 'profile') openProfileModal();
       if (action === 'password') openPasswordModal();
+      if (action === 'user-id') openUserIdModal();
       if (action === 'approval-pin') openPinModal();
       if (action === 'staff-dashboard') location.href = area() === 'manager' ? (location.port === '5000' ? '/manager-dashboard' : '/manager-dashboard') : pathToStaffDashboard();
       if (action === 'workspace') location.href = area() === 'admin' ? pathToAdminSettings() : area() === 'manager' ? pathToOrderQueue() : pathToOrderQueue();
@@ -585,6 +714,7 @@
       closeMenu();
       closeProfileModal();
       closePasswordModal();
+      closeUserIdModal();
       closePinModal();
     }
   });

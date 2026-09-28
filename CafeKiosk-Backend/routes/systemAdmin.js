@@ -1,9 +1,11 @@
 const express = require('express');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
 const ensurePanelistUpgrades = require('../ensure-panelist-upgrades');
+const { addAuditLog } = require('../services/auditLogStore');
 const {
   SYSTEM_ADMIN_COOKIE,
   requireSystemAdminApi
@@ -14,6 +16,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
 
 function text(value) {
   return String(value ?? '').trim();
+}
+
+
+function makeCafeId(cafeName) {
+  const base = text(cafeName)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 24) || 'cafe';
+  return `${base}-${crypto.randomBytes(3).toString('hex')}`;
+}
+
+async function optionalExecute(connection, sql, params = []) {
+  try {
+    return await connection.execute(sql, params);
+  } catch (error) {
+    if (error?.code === 'ER_NO_SUCH_TABLE' || error?.code === 'ER_BAD_FIELD_ERROR') return null;
+    throw error;
+  }
 }
 
 function safeEqual(left, right) {
@@ -421,6 +442,191 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
 // reviews it. This prevents an unknown visitor from creating an immediately
 // usable Admin account.
 // ============================================================
+
+
+router.post('/cafes/provision', requireSystemAdminApi, async (req, res) => {
+  const cafeName = text(req.body?.cafeName);
+  const ownerName = text(req.body?.ownerName || req.body?.fullName);
+  const ownerEmail = text(req.body?.ownerEmail || req.body?.email).toLowerCase();
+  const ownerPhone = text(req.body?.ownerPhone || req.body?.phone);
+  const address = text(req.body?.address);
+  const username = text(req.body?.username || req.body?.userId);
+  const temporaryPassword = String(req.body?.temporaryPassword || req.body?.password || '');
+
+  if (!cafeName || !ownerName || !ownerEmail || !username || !temporaryPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'Cafe name, owner name, email, temporary User ID, and temporary password are required.'
+    });
+  }
+  if (!/^\S+@\S+\.\S+$/.test(ownerEmail)) {
+    return res.status(400).json({ success: false, message: 'Please enter a valid owner email address.' });
+  }
+  if (!/^[A-Za-z0-9._-]{3,60}$/.test(username)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Temporary User ID must be 3 to 60 characters and use only letters, numbers, dots, underscores, or hyphens.'
+    });
+  }
+  if (temporaryPassword.length < 8) {
+    return res.status(400).json({ success: false, message: 'Temporary password must be at least 8 characters.' });
+  }
+
+  const actor = req.systemAdmin?.displayName || req.systemAdmin?.username || 'System Administrator';
+  const connection = await dbPool.getConnection().catch(() => null);
+  if (!connection) {
+    return res.status(503).json({ success: false, message: 'Database is unavailable.' });
+  }
+
+  try {
+    await ensurePanelistUpgrades();
+    await kioskAccessStore.ensureSchema();
+    await connection.beginTransaction();
+
+    const [emailRows] = await connection.execute(
+      'SELECT user_id FROM users WHERE LOWER(email)=LOWER(?) LIMIT 1',
+      [ownerEmail]
+    );
+    if (emailRows.length) {
+      await connection.rollback();
+      return res.status(409).json({ success: false, message: 'That owner email address already has a CafeKiosk account.' });
+    }
+
+    let cafeId = '';
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const candidate = makeCafeId(cafeName);
+      const [rows] = await connection.execute('SELECT cafe_id FROM cafes WHERE cafe_id=? LIMIT 1', [candidate]);
+      if (!rows.length) {
+        cafeId = candidate;
+        break;
+      }
+    }
+    if (!cafeId) throw new Error('Could not generate a unique Cafe ID.');
+
+    await connection.execute(
+      `INSERT INTO cafes
+       (cafe_id, cafe_name, address, contact_number, email, timezone, status,
+        approval_status, approval_requested_at, approved_at, approved_by, rejection_reason)
+       VALUES (?, ?, ?, ?, ?, 'Asia/Manila', 'Active', 'Approved', NOW(), NOW(), ?, NULL)`,
+      [cafeId, cafeName, address || null, ownerPhone || null, ownerEmail, actor]
+    );
+
+    const kioskSlug = await kioskAccessStore.createUniqueSlug(cafeId, cafeName, connection);
+    const passwordHash = await bcrypt.hash(temporaryPassword, 10);
+
+    const [ownerResult] = await connection.execute(
+      `INSERT INTO users
+       (cafe_id, full_name, username, email, phone, password_hash, role, is_owner,
+        status, email_verified_at, must_change_password)
+       VALUES (?, ?, ?, ?, ?, ?, 'Admin', 1, 'Active', NOW(), 1)`,
+      [cafeId, ownerName, username, ownerEmail, ownerPhone || null, passwordHash]
+    );
+
+    await optionalExecute(
+      connection,
+      `INSERT INTO store_settings (cafe_id, store_name, address, contact_number, email)
+       VALUES (?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE store_name=VALUES(store_name), address=VALUES(address),
+         contact_number=VALUES(contact_number), email=VALUES(email)`,
+      [cafeId, cafeName, address || null, ownerPhone || null, ownerEmail]
+    );
+    await optionalExecute(
+      connection,
+      `INSERT INTO tax_settings (cafe_id, tax_rate_percent, service_charge_percent)
+       VALUES (?, 0, 0)
+       ON DUPLICATE KEY UPDATE cafe_id=VALUES(cafe_id)`,
+      [cafeId]
+    );
+    await optionalExecute(
+      connection,
+      `INSERT INTO system_preferences
+       (cafe_id, default_order_type, low_stock_warning_default, currency_code, currency_symbol)
+       VALUES (?, 'Dine In', 10, 'PHP', '₱')
+       ON DUPLICATE KEY UPDATE cafe_id=VALUES(cafe_id)`,
+      [cafeId]
+    );
+
+    const methods = [
+      ['Cash', 'Cash', 1, 1],
+      ['GCash', 'GCash / E-wallet', 0, 2],
+      ['Card', 'Card', 0, 3],
+      ['Other', 'Other', 0, 4]
+    ];
+    for (const method of methods) {
+      await optionalExecute(
+        connection,
+        `INSERT INTO payment_methods (cafe_id, method_name, display_name, is_enabled, sort_order)
+         VALUES (?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE display_name=VALUES(display_name), sort_order=VALUES(sort_order)`,
+        [cafeId, ...method]
+      );
+    }
+
+    await optionalExecute(
+      connection,
+      `INSERT INTO cafe_approval_history
+       (cafe_id, cafe_name_snapshot, owner_name_snapshot, owner_email_snapshot,
+        old_status, new_status, reason, changed_by, changed_from_ip)
+       VALUES (?, ?, ?, ?, 'Provisioned', 'Approved', ?, ?, ?)`,
+      [
+        cafeId,
+        cafeName,
+        ownerName,
+        ownerEmail,
+        'Cafe and owner account provisioned directly by the System Administrator for assisted onboarding.',
+        actor,
+        String(req.ip || req.socket?.remoteAddress || '').slice(0, 45) || null
+      ]
+    );
+
+    await connection.commit();
+
+    try {
+      addAuditLog({
+        cafeId,
+        user: actor,
+        userId: req.systemAdmin?.username || 'system-admin',
+        role: 'SystemAdmin',
+        action: 'Provision Cafe Owner',
+        category: 'Users',
+        details: `Provisioned cafe ${cafeName} and owner account ${ownerName} (${username}) for assisted onboarding.`,
+        entityId: String(ownerResult.insertId),
+        source: 'System Admin Onboarding',
+        method: req.method,
+        path: req.originalUrl,
+        ip: req.ip || '',
+        statusCode: 201,
+        success: true
+      });
+    } catch (_) {}
+
+    return res.status(201).json({
+      success: true,
+      message: `${cafeName} was created and approved. Use the temporary Owner credentials to complete Menu Management and Inventory setup, then hand the account to the cafe owner.`,
+      cafeId,
+      ownerUserId: ownerResult.insertId,
+      ownerUsername: username,
+      ownerEmail,
+      kioskSlug,
+      kioskUrl: kioskAccessStore.buildKioskUrl(kioskSlug),
+      adminLoginUrl: '/admin-login',
+      handoffRequired: true
+    });
+  } catch (error) {
+    try { await connection.rollback(); } catch (_) {}
+    console.error('System Admin provision cafe error:', error);
+    if (error?.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ success: false, message: 'That User ID, owner email, or cafe identifier is already in use.' });
+    }
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to provision the cafe owner account.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  } finally {
+    connection.release();
+  }
+});
 
 router.get('/approvals', requireSystemAdminApi, async (req, res) => {
   try {

@@ -13,16 +13,16 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=8"
+        href="../Assets/css/pos.css?v=20260928-ux-v1"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=36-ghost-scroll-fix">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=2">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v3">
+  <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
 </head>
 
@@ -367,6 +367,11 @@
 
         <div id="dynamicOptions"></div>
 
+        <div class="ck-special-note-block">
+            <label for="itemSpecialNote">Special Request <span>(Optional)</span></label>
+            <textarea id="itemSpecialNote" maxlength="180" rows="3" placeholder="Example: Call the customer&apos;s name when the order is ready, less ice, separate sauce..."></textarea>
+            <div class="ck-special-note-help"><span>Shown to the preparation team</span><span id="itemSpecialNoteCount">0/180</span></div>
+        </div>
 
         <div class="modal-divider"></div>
 
@@ -477,11 +482,11 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=payment-modal-v1"></script>
+<script src="/Assets/js/pos.js?v=20260928-ux-v1"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
-  <script src="../Assets/js/uniform-theme.js?v=pos-navbar-v2"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>

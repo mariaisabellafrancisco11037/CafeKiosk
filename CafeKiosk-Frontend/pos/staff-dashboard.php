@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../Assets/css/order-queue.css?v=6">
   <link rel="stylesheet" href="../Assets/css/staff-dashboard.css?v=19">
   <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -93,7 +93,7 @@
   </div>
   <script src="../Assets/js/auth-session.js"></script>
   <script src="../Assets/js/staff-dashboard.js?v=19"></script>
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>

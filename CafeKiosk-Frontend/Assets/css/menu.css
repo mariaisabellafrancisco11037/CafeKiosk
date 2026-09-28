@@ -3067,3 +3067,20 @@ button.inventory-option-unavailable,
   font-size: 11px;
   line-height: 1.45;
 }
+
+
+/* CAFEKIOSK KIOSK SPECIAL REQUEST 2026-09-28 */
+#itemModal .item-custom-note {
+  margin: 4px 0 12px; padding: 12px; border:1px solid rgba(92,65,42,.18);
+  border-radius:12px; background:#fffaf1;
+}
+#itemModal .item-custom-note label { display:flex; justify-content:space-between; gap:8px; margin-bottom:7px; color:#4b2f18; font-size:.78rem; font-weight:800; }
+#itemModal .item-custom-note label span { color:#8d7964; font-size:.67rem; font-weight:650; }
+#itemModal .item-custom-note textarea { width:100%; min-height:74px; resize:vertical; padding:10px 11px; border:1px solid rgba(92,65,42,.24); border-radius:10px; background:#fffdfa; color:#4b2f18; font-size:.78rem; line-height:1.35; outline:none; }
+#itemModal .item-custom-note textarea:focus { border-color:#4c956f; box-shadow:0 0 0 3px rgba(76,149,111,.12); }
+#itemModal .item-custom-note-help { display:flex; justify-content:space-between; gap:10px; margin-top:6px; color:#8d7964; font-size:.64rem; }
+@media (max-width:599px) {
+  #itemModal .item-custom-note { padding:10px; margin-bottom:9px; }
+  #itemModal .item-custom-note textarea { min-height:68px; font-size:.75rem; }
+  #itemModal .item-custom-note-help span:first-child { max-width:75%; }
+}

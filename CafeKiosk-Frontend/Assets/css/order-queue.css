@@ -1367,3 +1367,84 @@ button{cursor:pointer}
     padding-top: 0;
   }
 }
+
+/* ============================================================
+   BEVERAGE / FOOD PREPARATION QUEUES + APPROVAL PIN FEEDBACK
+   ============================================================ */
+.station-switcher {
+  margin: 10px 0 12px;
+  padding: 11px 12px;
+  border: 1px solid rgba(94, 116, 100, .18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .78);
+}
+.station-switcher-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #6e6257;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.station-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.station-tab {
+  min-height: 46px;
+  border: 1px solid #dfd8cf;
+  border-radius: 11px;
+  background: #fff;
+  color: #594d43;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .18s ease;
+}
+.station-tab:hover { border-color: #7ba88a; transform: translateY(-1px); }
+.station-tab.active { background: #4f8f6b; border-color: #4f8f6b; color: #fff; box-shadow: 0 5px 16px rgba(67, 120, 89, .2); }
+.station-tab.beverage.active { background: #5e8770; border-color: #5e8770; }
+.station-tab.food.active { background: #8a6c52; border-color: #8a6c52; }
+.station-tab strong {
+  min-width: 21px;
+  height: 21px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: #f0ece7;
+  color: #66594d;
+  font-size: 10px;
+}
+.station-tab.active strong { background: rgba(255,255,255,.2); color: #fff; }
+.station-icon { font-size: 15px; line-height: 1; }
+.station-help { margin: 7px 2px 0; color: #8b7d70; font-size: 9px; line-height: 1.35; }
+.approval-pin-feedback { min-height: 18px; margin-top: 5px; font-size: 10px; font-weight: 700; color: #77695d; }
+.approval-pin-feedback.success { color: #2f7f54; }
+.approval-pin-feedback.error { color: #b84b4b; }
+.approval-pin-feedback.checking { color: #8a6c52; }
+.pin-control .verify-approval-pin-btn {
+  width: auto;
+  min-width: 58px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #4f8f6b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+@media (max-width: 760px) {
+  .station-tabs { grid-template-columns: 1fr; }
+  .station-tab { justify-content: flex-start; }
+  .station-tab strong { margin-left: auto; }
+}

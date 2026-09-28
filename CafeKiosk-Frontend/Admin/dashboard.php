@@ -6,7 +6,7 @@
   <title>CafeKiosk - Admin Dashboard</title>
   <link rel="stylesheet" href="../Assets/css/dashboard.css">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -93,26 +93,6 @@
             </svg>
           </span>
           <span>Report</span>
-        </a>
-
-        <a class="staff-nav-link" href="/admin/audit-logs">
-          <span class="staff-nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M8 3h8l2 3v15H6V6z"/>
-              <path d="M9 11h6M9 15h6M9 6h6"/>
-            </svg>
-          </span>
-          <span>Audit Logs</span>
-        </a>
-
-        <a class="staff-nav-link" href="/admin/users">
-          <span class="staff-nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>
-            </svg>
-          </span>
-          <span>User</span>
         </a>
 
         <a class="staff-nav-link" href="/admin/settings">
@@ -320,7 +300,7 @@
   <script src="../Assets/js/auth-session.js"></script>
   <script src="../Assets/js/dashboard.js?v=pos-source-v1"></script>
 <script src="../Assets/js/dashboard-products.js"></script>
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>

@@ -3321,7 +3321,71 @@ body.uniform-manager.cku-v2 .manager-role-strip {
     font-size: 16px !important;
   }
 }
-\n\n/* =========================================================\n   CAFEKIOSK V11 — MOBILE DRAWER PROPORTION REFINEMENT\n   Keeps the hamburger drawer compact and aligned with the\n   icon/text scale used by the desktop sidebar.\n========================================================= */\n@media (max-width: 760px) {\n  body.uniform-admin.cku-v2 .cku-sidebar {\n    width: min(78vw, 250px) !important;\n    max-width: 250px !important;\n    padding: 12px 10px 16px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .brand,\n  body.uniform-admin.cku-v2 .cku-sidebar .logo,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand {\n    height: 86px !important;\n    min-height: 86px !important;\n    align-items: flex-start !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .brand img,\n  body.uniform-admin.cku-v2 .cku-sidebar .logo img,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand img {\n    width: 66px !important;\n    height: 66px !important;\n    max-width: 66px !important;\n    max-height: 66px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-label,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-side-label,\n  body.uniform-admin.cku-v2 .cku-sidebar .cku-kiosk-label {\n    margin: 0 7px 7px !important;\n    font-size: 9.5px !important;\n    letter-spacing: .13em !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav,\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-navigation,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav {\n    gap: 3px !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link,\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button,\n  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a {\n    min-height: 38px !important;\n    padding: 6px 8px !important;\n    gap: 9px !important;\n    border-radius: 10px !important;\n    font-size: 12px !important;\n    line-height: 1.1 !important;\n  }\n\n  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-icon,\n  body.uniform-admin.cku-v2 .cku-sidebar .ico {\n    width: 18px !important;\n    height: 18px !important;\n    min-width: 18px !important;\n    flex-basis: 18px !important;\n  }\n}\n
+
+
+/* =========================================================
+   CAFEKIOSK V11 — MOBILE DRAWER PROPORTION REFINEMENT
+   Keeps the hamburger drawer compact and aligned with the
+   icon/text scale used by the desktop sidebar.
+========================================================= */
+@media (max-width: 760px) {
+  body.uniform-admin.cku-v2 .cku-sidebar {
+    width: min(78vw, 250px) !important;
+    max-width: 250px !important;
+    padding: 12px 10px 16px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .brand,
+  body.uniform-admin.cku-v2 .cku-sidebar .logo,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand {
+    height: 86px !important;
+    min-height: 86px !important;
+    align-items: flex-start !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .brand img,
+  body.uniform-admin.cku-v2 .cku-sidebar .logo img,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand img {
+    width: 66px !important;
+    height: 66px !important;
+    max-width: 66px !important;
+    max-height: 66px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-label,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-side-label,
+  body.uniform-admin.cku-v2 .cku-sidebar .cku-kiosk-label {
+    margin: 0 7px 7px !important;
+    font-size: 9.5px !important;
+    letter-spacing: .13em !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-navigation,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav {
+    gap: 3px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a {
+    min-height: 38px !important;
+    padding: 6px 8px !important;
+    gap: 9px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-icon,
+  body.uniform-admin.cku-v2 .cku-sidebar .ico {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    flex-basis: 18px !important;
+  }
+}
+
 
 /* =========================================================
    POS CHECKOUT COMPACT LAYOUT V3
@@ -3558,5 +3622,109 @@ body.uniform-pos.cku-v2 .bottom-fields .ck-promo-client {
   body.uniform-admin.cku-v2 #menuView .product-grid::after {
     content: none !important;
     display: none !important;
+  }
+}
+
+
+/* CAFEKIOSK 2026-09-28 MOBILE ADMIN DRAWER FIX */
+@media (max-width: 760px) {
+  body.uniform-admin.cku-v2 .cku-sidebar {
+    width: min(86vw, 320px) !important;
+    max-width: 320px !important;
+    padding: 14px 12px 18px !important;
+    gap: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .brand,
+  body.uniform-admin.cku-v2 .cku-sidebar .logo,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand {
+    width: 100% !important;
+    height: 92px !important;
+    min-height: 92px !important;
+    margin: 0 0 6px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .brand img,
+  body.uniform-admin.cku-v2 .cku-sidebar .logo img,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-brand img {
+    width: 74px !important;
+    height: 74px !important;
+    max-width: 74px !important;
+    max-height: 74px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-label,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-side-label {
+    display: block !important;
+    margin: 2px 10px 10px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    text-align: left !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-navigation,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 0 12px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link > span:last-child,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button > span:last-child,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a .label {
+    display: inline-block !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-icon,
+  body.uniform-admin.cku-v2 .cku-sidebar .ico {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    flex: 0 0 22px !important;
+  }
+
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-link.active,
+  body.uniform-admin.cku-v2 .cku-sidebar .staff-nav-button.active,
+  body.uniform-admin.cku-v2 .cku-sidebar .ck-nav > a.active {
+    min-height: 48px !important;
+    height: 48px !important;
+    flex-basis: 48px !important;
   }
 }

@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { verifyCafeApprovalPin } = require('../services/approvalPinService');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
@@ -1770,6 +1771,114 @@ exports.me = async (req, res) => {
   }
 };
 
+
+exports.changeUserId = async (req, res) => {
+  const newUsername = safeText(req.body?.newUsername || req.body?.username || req.body?.userId);
+  const currentPassword = String(req.body?.currentPassword || '');
+
+  if (!newUsername || !currentPassword) {
+    return res.status(400).json({ success: false, message: 'Current password and new User ID are required.' });
+  }
+  if (!/^[A-Za-z0-9._-]{3,60}$/.test(newUsername)) {
+    return res.status(400).json({
+      success: false,
+      message: 'User ID must be 3 to 60 characters and use only letters, numbers, dots, underscores, or hyphens.'
+    });
+  }
+
+  const numericUserId = Number(req.user?.userId);
+  const cafeId = safeText(req.user?.cafeId) || 'cafe-1';
+  if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
+    return res.status(400).json({ success: false, message: 'A database-backed CafeKiosk Owner account is required.' });
+  }
+
+  try {
+    const [rows] = await pool.execute(
+      `SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email, u.password_hash,
+              u.role, u.is_owner, c.cafe_name
+         FROM users u
+         LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE u.user_id=? AND u.cafe_id=? AND u.status='Active'
+        LIMIT 1`,
+      [numericUserId, cafeId]
+    );
+    if (!rows.length) return res.status(404).json({ success: false, message: 'Owner account was not found.' });
+
+    const owner = rows[0];
+    if (!owner.is_owner || normalizeRole(owner.role) !== 'Admin') {
+      return res.status(403).json({ success: false, message: 'Only the cafe Owner can change the Owner User ID.' });
+    }
+
+    const passwordOk = await bcrypt.compare(currentPassword, owner.password_hash || '');
+    if (!passwordOk) {
+      return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
+    }
+    if (String(owner.username || '').toLowerCase() === newUsername.toLowerCase()) {
+      return res.status(400).json({ success: false, message: 'Choose a User ID that is different from the current one.' });
+    }
+
+    const [duplicates] = await pool.execute(
+      `SELECT user_id FROM users
+        WHERE cafe_id=? AND LOWER(username)=LOWER(?) AND user_id<>?
+        LIMIT 1`,
+      [cafeId, newUsername, numericUserId]
+    );
+    if (duplicates.length) {
+      return res.status(409).json({ success: false, message: 'That User ID is already being used in this cafe.' });
+    }
+
+    await pool.execute(
+      `UPDATE users SET username=?, updated_at=NOW() WHERE user_id=? AND cafe_id=?`,
+      [newUsername, numericUserId, cafeId]
+    );
+
+    const updatedUser = {
+      userId: numericUserId,
+      username: newUsername,
+      email: owner.email || '',
+      displayName: owner.full_name,
+      role: 'Admin',
+      cafeId,
+      cafeName: owner.cafe_name || '',
+      isOwner: true
+    };
+    const authToken = signToken(updatedUser);
+    setRoleCookie(req, res, authToken, 'Admin');
+
+    try {
+      addAuditLog({
+        cafeId,
+        user: owner.full_name || newUsername,
+        userId: numericUserId,
+        role: 'Admin',
+        action: 'Change Owner User ID',
+        category: 'Users',
+        details: `Cafe Owner changed the login User ID from ${owner.username} to ${newUsername}.`,
+        entityId: String(numericUserId),
+        source: 'Owner Profile',
+        method: req.method,
+        path: req.originalUrl,
+        ip: req.ip || '',
+        statusCode: 200,
+        success: true
+      });
+    } catch (_) {}
+
+    return res.json({
+      success: true,
+      message: 'Owner User ID updated successfully.',
+      authToken,
+      user: publicUser(updatedUser)
+    });
+  } catch (error) {
+    console.error('Change owner User ID error:', error);
+    if (error?.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ success: false, message: 'That User ID is already being used in this cafe.' });
+    }
+    return res.status(500).json({ success: false, message: 'Unable to update the Owner User ID right now.' });
+  }
+};
+
 exports.changePassword = async (req, res) => {
   const currentPassword = String(req.body?.currentPassword || '');
   const newPassword = String(req.body?.newPassword || '');
@@ -1813,7 +1922,7 @@ exports.changePassword = async (req, res) => {
     const passwordHash = await bcrypt.hash(newPassword, 10);
     await pool.execute(
       `UPDATE users
-       SET password_hash = ?, updated_at = NOW(), failed_attempts = 0, lock_until = NULL
+       SET password_hash = ?, updated_at = NOW(), failed_attempts = 0, lock_until = NULL, must_change_password = 0
        WHERE user_id = ? AND cafe_id = ?`,
       [passwordHash, numericUserId, req.user?.cafeId || 'cafe-1']
     );
@@ -1897,6 +2006,30 @@ exports.approvalPinStatus = async (req, res) => {
     return res.json({ success: true, hasPin: Boolean(rows[0]?.has_pin), updatedAt: rows[0]?.approval_pin_updated_at || null });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Unable to read approval PIN status.' });
+  }
+};
+
+exports.verifyApprovalPin = async (req, res) => {
+  const role = normalizeRole(req.user?.role);
+  if (!['Admin', 'Manager', 'Staff'].includes(role)) {
+    return res.status(403).json({ success: false, message: 'An authenticated cafe account is required.' });
+  }
+  try {
+    // Admin/Manager sessions may verify a configured PIN too, which is useful
+    // when testing the setup from Profile. Staff uses this before submitting
+    // a protected refund/void action.
+    const result = await verifyCafeApprovalPin(req.user?.cafeId || 'cafe-1', req.body?.pin);
+    if (!result.valid) {
+      return res.status(403).json({ success: false, code: result.code, message: result.message });
+    }
+    return res.json({
+      success: true,
+      message: `Approved by ${result.approver?.role || 'supervisor'} ${result.approver?.name || ''}`.trim(),
+      approver: result.approver
+    });
+  } catch (error) {
+    console.error('Verify approval PIN error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to verify the approval PIN right now.' });
   }
 };
 

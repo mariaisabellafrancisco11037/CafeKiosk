@@ -17,6 +17,7 @@ const {
     listOrders,
     getOrder,
     updateOrder,
+    updateOrderStationStatus,
     patchOrder,
     orderHealth
 } = require(
@@ -80,6 +81,14 @@ router.patch(
     "/:orderId/status",
     requireRole("Admin", "Manager", "Staff"),
     updateOrder
+);
+
+
+// Separate beverage/food preparation status.
+router.patch(
+    "/:orderId/station-status",
+    requireRole("Admin", "Manager", "Staff"),
+    updateOrderStationStatus
 );
 
 

@@ -196,3 +196,26 @@ html { scroll-behavior: smooth; }
     max-height: 390px;
   }
 }
+
+
+/* Assisted cafe onboarding */
+.provision-owner-btn{min-height:38px;padding:0 14px;border:1px solid #4f9872;border-radius:10px;background:#4f9872;color:#fff;font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap}
+.provision-owner-btn:hover{background:#397656}
+.onboarding-panel{border-color:rgba(79,152,114,.3)}
+.onboarding-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.onboarding-flow div{display:flex;gap:9px;align-items:center;padding:12px;border:1px solid #e6d8c6;border-radius:11px;background:#fffdf9;font-size:10px;color:#6f5a49}
+.onboarding-flow strong{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:#e6f1e9;color:#3f7758;flex:0 0 auto}
+.provision-owner-card{width:min(720px,95vw)}
+.provision-help{margin:0 0 14px;color:#765f4c;font-size:10.5px;line-height:1.55}
+.provision-owner-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.provision-owner-form label{display:grid;gap:6px;color:#5e4a39;font-size:10px;font-weight:800}
+.provision-owner-form input{width:100%;min-height:40px;padding:0 11px;border:1px solid #d8c7af;border-radius:9px;background:#fffdf9;color:#4a392d;font:inherit;font-size:11px;outline:none}
+.provision-owner-form input:focus{border-color:#4f9872;box-shadow:0 0 0 3px rgba(79,152,114,.11)}
+.provision-wide{grid-column:1/-1}
+.provision-security-note{padding:10px 12px;border-radius:9px;background:#edf7f0;color:#376d52;font-size:10px;line-height:1.5}
+.provision-result{display:grid;gap:5px;padding:12px;border:1px solid #bdd8c7;border-radius:10px;background:#edf7f0;color:#2f6849;font-size:10px}
+.provision-result strong{font-size:11px}.provision-result span,.provision-result small{display:block}
+.provision-result-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.provision-result-actions a{display:inline-flex;align-items:center;min-height:32px;padding:0 10px;border-radius:8px;background:#4f9872;color:white;text-decoration:none;font-weight:800}
+@media(max-width:760px){.onboarding-flow{grid-template-columns:1fr 1fr}.provision-owner-form{grid-template-columns:1fr}.provision-wide{grid-column:auto}.header-actions .provision-owner-btn{width:100%}}
+@media(max-width:480px){.onboarding-flow{grid-template-columns:1fr}}

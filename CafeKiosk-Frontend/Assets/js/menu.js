@@ -1185,6 +1185,11 @@ function showItemModal(
     qty: 1
   };
 
+  const noteInput = document.getElementById("itemSpecialNote");
+  if (noteInput) noteInput.value = "";
+  const noteCount = document.getElementById("itemSpecialNoteCount");
+  if (noteCount) noteCount.textContent = "0/180";
+
   const categoryLabel =
     category
       .replace(/-/g, " ")
@@ -1850,6 +1855,15 @@ function confirmAddItem() {
     }
   });
 
+  const specialNote = String(document.getElementById("itemSpecialNote")?.value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 180);
+
+  if (specialNote) {
+    customizations.push(`Note: ${specialNote}`);
+  }
+
   addItem(
     pendingItem.name,
     pendingItem.price,
@@ -1891,6 +1905,11 @@ function closeItemModal(event) {
     );
   }
 
+  const noteInput = document.getElementById("itemSpecialNote");
+  if (noteInput) noteInput.value = "";
+  const noteCount = document.getElementById("itemSpecialNoteCount");
+  if (noteCount) noteCount.textContent = "0/180";
+
   pendingItem = null;
 }
 
@@ -1923,7 +1942,7 @@ function renderOrder() {
               ${item.customizations
                 .map(
                   option =>
-                    `<li>${option}</li>`
+                    `<li>${escapeHtml(option)}</li>`
                 )
                 .join("")}
             </ul>
@@ -2493,7 +2512,7 @@ function showOrderModal() {
               ${item.customizations
                 .map(
                   option =>
-                    `<li>${option}</li>`
+                    `<li>${escapeHtml(option)}</li>`
                 )
                 .join("")}
             </ul>
@@ -3834,3 +3853,11 @@ window.addEventListener(
 
   }
 );
+
+// Customer special-request counter (Kiosk item customization).
+document.addEventListener("DOMContentLoaded", () => {
+  const note = document.getElementById("itemSpecialNote");
+  const count = document.getElementById("itemSpecialNoteCount");
+  if (!note || !count) return;
+  note.addEventListener("input", () => { count.textContent = `${note.value.length}/180`; });
+});

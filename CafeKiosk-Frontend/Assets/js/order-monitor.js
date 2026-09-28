@@ -185,6 +185,38 @@ function escapeAttr(value) {
   return escapeHTML(value).replace(/`/g, "&#096;");
 }
 
+function classifyPrepStation(category, name = "") {
+  const text = `${category || ""} ${name || ""}`.toLowerCase();
+  const beverageWords = ["coffee", "non-coffee", "non coffee", "milk tea", "milktea", "tea", "beverage", "drink", "frappe", "smoothie", "juice", "soda", "latte", "espresso", "americano", "cappuccino", "mocha", "chocolate", "matcha"];
+  const foodWords = ["food", "snack", "dessert", "pastry", "meal", "rice", "sandwich", "burger", "pasta", "noodle", "cake", "bread", "waffle", "fries", "pizza"];
+  if (beverageWords.some(word => text.includes(word))) return "Beverage";
+  if (foodWords.some(word => text.includes(word))) return "Food";
+  return "Food";
+}
+function normalizePrepStation(value) {
+  const station = String(value || "").trim().toLowerCase();
+  if (["beverage","beverages","drink","drinks"].includes(station)) return "Beverage";
+  if (["food","foods","kitchen"].includes(station)) return "Food";
+  return "";
+}
+const initialStationParam = normalizePrepStation(new URLSearchParams(window.location.search).get("station"));
+let activePrepStation = initialStationParam || "all";
+function orderStations(order) {
+  const explicit = Array.isArray(order?.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [];
+  const derived = (order?.items || []).map(item => normalizePrepStation(item.prepStation) || classifyPrepStation(item.category,item.name));
+  return [...new Set([...explicit,...derived].filter(Boolean))];
+}
+function hasStation(order, station) { return !station || station === "all" || orderStations(order).includes(station); }
+function stationViewStatus(order) {
+  if (activePrepStation === "all") return normalizeStatus(order?.status);
+  const raw = order?.stationStatuses?.[activePrepStation];
+  return normalizeStatus(typeof raw === "object" ? raw?.status : raw || "Pending");
+}
+function stationItems(order) {
+  if (activePrepStation === "all") return order?.items || [];
+  return (order?.items || []).filter(item => (normalizePrepStation(item.prepStation) || classifyPrepStation(item.category,item.name)) === activePrepStation);
+}
+
 
 function isDiagnosticTestOrder(order) {
 
@@ -235,6 +267,8 @@ function convertItem(item) {
   return {
     ...item,
     name: item.name || "Item",
+    category: item.category || item.category_snapshot || "Uncategorized",
+    prepStation: normalizePrepStation(item.prepStation || item.prep_station) || classifyPrepStation(item.category || item.category_snapshot, item.name),
     qty,
     price: basePrice + customizationCost,
     customizations: customizations.filter(Boolean)
@@ -274,6 +308,8 @@ function convertOrder(order, index = 0) {
     promotionName: order.promotionName || order.promotion?.name || "",
     paymentMethod: order.paymentMethod || "Cash",
     paymentStatus: order.paymentStatus || "",
+    stations: Array.isArray(order.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [],
+    stationStatuses: order.stationStatuses && typeof order.stationStatuses === "object" ? order.stationStatuses : {},
     items
   };
 }
@@ -1341,7 +1377,9 @@ function getFilteredOrders() {
   const search = ($("search-input")?.value || "").trim().toLowerCase();
 
   const filtered = orders.filter(order => {
-    if (status !== "ALL" && order.status !== status) return false;
+    if (!hasStation(order, activePrepStation)) return false;
+    const viewStatus = stationViewStatus(order);
+    if (status !== "ALL" && viewStatus !== status) return false;
     if (source !== "ALL") {
       const sourceLabel = String(order.sourceLabel || "").toUpperCase();
       if (source === "POS") {
@@ -1368,9 +1406,13 @@ function getFilteredOrders() {
 }
 
 function updateCounts() {
-  $("count-pending").textContent = orders.filter(order => order.status === "PENDING").length;
-  $("count-preparing").textContent = orders.filter(order => order.status === "PREPARING").length;
-  $("count-completed").textContent = orders.filter(order => order.status === "COMPLETED").length;
+  const visible = orders.filter(order => hasStation(order, activePrepStation));
+  $("count-pending").textContent = visible.filter(order => stationViewStatus(order) === "PENDING").length;
+  $("count-preparing").textContent = visible.filter(order => stationViewStatus(order) === "PREPARING").length;
+  $("count-completed").textContent = visible.filter(order => stationViewStatus(order) === "COMPLETED").length;
+  if ($("admin-all-station-count")) $("admin-all-station-count").textContent = orders.length;
+  if ($("admin-beverage-station-count")) $("admin-beverage-station-count").textContent = orders.filter(order => hasStation(order,"Beverage")).length;
+  if ($("admin-food-station-count")) $("admin-food-station-count").textContent = orders.filter(order => hasStation(order,"Food")).length;
 
   const currentStatus = $("status-filter")?.value || "ALL";
   document.querySelectorAll("[data-status-tab]").forEach(button => {
@@ -1417,8 +1459,8 @@ function renderTable() {
       <td>${escapeHTML(order.sourceLabel || order.source)}</td>
       <td>${escapeHTML(order.serving)}</td>
       <td>
-        <button type="button" class="status-pill ${statusClass(order.status)}" data-status-cycle="${escapeAttr(order.id)}">
-          ${escapeHTML(order.status)}
+        <button type="button" class="status-pill ${statusClass(stationViewStatus(order))}" data-status-cycle="${escapeAttr(order.id)}">
+          ${escapeHTML(stationViewStatus(order))}
         </button>
       </td>
       <td>
@@ -1481,7 +1523,7 @@ function renderDetail() {
 
 
   const itemsHTML =
-    order.items
+    stationItems(order)
       .map(
         item => {
 
@@ -1571,9 +1613,9 @@ function renderDetail() {
             </strong>
 
             <span
-              class="detail-status ${statusClass(order.status)}"
+              class="detail-status ${statusClass(stationViewStatus(order))}"
             >
-              ${escapeHTML(titleCase(order.status))}
+              ${escapeHTML(titleCase(stationViewStatus(order)))}
             </span>
           </div>
 
@@ -1659,6 +1701,20 @@ async function updateBackendStatus(order, status) {
 }
 
 
+async function updateBackendStationStatus(order, station, status) {
+  const response = await authenticatedFetch(`${API_URL}/api/orders/${encodeURIComponent(order.backendId || order.id)}/station-status`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ station, status: titleCase(status) })
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.message || `HTTP ${response.status}`);
+  }
+  return response.json().catch(() => ({}));
+}
+
+
 async function patchBackendOrder(
   order,
   patch
@@ -1721,20 +1777,19 @@ async function patchBackendOrder(
 async function cycleOrderStatus(id) {
   const order = orders.find(item => item.id === id);
   if (!order) return;
-  const next = nextStatus(order.status);
-  if (next === order.status) return;
-  const previous = order.status;
-  order.status = next;
-  renderAll();
+  const current = stationViewStatus(order);
+  const next = nextStatus(current);
+  if (next === current) return;
   try {
-    const updated = await updateBackendStatus(order, next);
+    const updated = activePrepStation === "Beverage" || activePrepStation === "Food"
+      ? await updateBackendStationStatus(order, activePrepStation, next)
+      : await updateBackendStatus(order, next);
     if (updated?.order) upsertOrder(updated.order);
     renderAll();
   } catch (error) {
-    order.status = previous;
     renderAll();
     console.error(error);
-    alert("Unable to update order status.");
+    alert(error.message || "Unable to update order status.");
   }
 }
 
@@ -2338,6 +2393,21 @@ document.addEventListener("click", event => {
   if (event.target.closest("#detail-update")) {
     if (selectedId) cycleOrderStatus(selectedId);
   }
+});
+
+document.querySelectorAll("[data-admin-station]").forEach(button => {
+  const station = normalizePrepStation(button.dataset.adminStation) || "all";
+  button.classList.toggle("active", activePrepStation === station);
+  button.addEventListener("click", () => {
+    activePrepStation = station;
+    document.querySelectorAll("[data-admin-station]").forEach(tab => tab.classList.toggle("active", (normalizePrepStation(tab.dataset.adminStation) || "all") === activePrepStation));
+    const url = new URL(window.location.href);
+    if (activePrepStation === "all") url.searchParams.delete("station"); else url.searchParams.set("station", activePrepStation.toLowerCase());
+    window.history.replaceState({}, "", url);
+    currentPage = 1;
+    selectedId = null;
+    renderAll();
+  });
 });
 
 ["status-filter", "source-filter", "service-filter", "time-filter"].forEach(id => {

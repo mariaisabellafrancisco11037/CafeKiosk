@@ -265,3 +265,219 @@ body.uniform-pos:not(.uniform-manager) .cku-sidebar .staff-nav-button > span:las
     display: none !important;
   }
 }
+
+
+/* CAFEKIOSK 2026-09-28 PORTRAIT POS */
+@media (orientation: portrait) and (max-width: 980px) {
+  body.uniform-pos.cku-v2 {
+    --cku-topbar-height: 70px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container.cku-shell,
+  body.uniform-pos.cku-v2 .pos-container.cku-shell.cku-has-right {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container > .cku-sidebar {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 70 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 66px !important;
+    min-height: 66px !important;
+    padding: 7px 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    background: var(--cku-panel-strong) !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cku-line-soft) !important;
+    scrollbar-width: none !important;
+  }
+
+  body.uniform-pos.cku-v2 .pos-container > .cku-sidebar::-webkit-scrollbar { display:none !important; }
+
+  body.uniform-pos.cku-v2 .cku-sidebar .logo {
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    flex: 0 0 48px !important;
+    margin: 0 !important;
+    align-items: center !important;
+  }
+  body.uniform-pos.cku-v2 .cku-sidebar .logo img {
+    width: 46px !important;
+    height: 46px !important;
+    max-width: 46px !important;
+    max-height: 46px !important;
+  }
+  body.uniform-pos.cku-v2 .cku-sidebar .staff-label { display:none !important; }
+  body.uniform-pos.cku-v2 .cku-sidebar .staff-navigation {
+    width: max-content !important;
+    min-width: max-content !important;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 0 !important;
+  }
+  body.uniform-pos.cku-v2 .cku-sidebar .staff-nav-button,
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .staff-nav-button {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 104px !important;
+    max-width: none !important;
+    min-height: 46px !important;
+    height: 46px !important;
+    padding: 8px 12px !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+  }
+  body.uniform-manager.cku-v2 .manager-sidebar-cafe-name {
+    display: none !important;
+  }
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .manager-nav-label,
+  body.uniform-pos.cku-v2:not(.uniform-manager) .cku-sidebar .staff-nav-button > span:last-child:not(.staff-nav-icon) {
+    display: inline-block !important;
+    font-size: 12px !important;
+  }
+
+  body.uniform-pos.cku-v2 .cku-topbar {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 70px !important;
+    padding: 8px 10px !important;
+  }
+  body.uniform-pos.cku-v2 .cku-title-card {
+    min-height: 54px !important;
+    height: 54px !important;
+    padding: 8px 12px !important;
+  }
+  body.uniform-pos.cku-v2 .cku-title-card h1 { font-size: 18px !important; }
+  body.uniform-pos.cku-v2 .cku-header-right { flex: 0 0 auto !important; }
+  body.uniform-pos.cku-v2 .cku-profile-card {
+    width: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    padding: 4px !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+  body.uniform-pos.cku-v2 .cku-profile-card .uniform-profile-copy,
+  body.uniform-pos.cku-v2 .cku-profile-card .uniform-profile-caret { display:none !important; }
+
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 580px !important;
+    max-height: none !important;
+    padding: 10px 12px 14px !important;
+    overflow: visible !important;
+  }
+  body.uniform-pos.cku-v2 .category-navigation {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: thin !important;
+    padding-bottom: 5px !important;
+  }
+  body.uniform-pos.cku-v2 .category-button {
+    flex: 0 0 auto !important;
+    min-width: 124px !important;
+    min-height: 52px !important;
+    scroll-snap-align: start !important;
+  }
+  body.uniform-pos.cku-v2 .menu-search { min-height: 48px !important; }
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 2px 0 14px !important;
+  }
+  body.uniform-pos.cku-v2 .menu-card,
+  body.uniform-pos.cku-v2 .product-card {
+    min-width: 0 !important;
+  }
+
+  body.uniform-pos.cku-v2 .cart-panel.cku-right {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 14px 12px 24px !important;
+    overflow: visible !important;
+    border-left: 0 !important;
+    border-top: 1px solid var(--cku-line-soft) !important;
+  }
+  body.uniform-pos.cku-v2 .cart-panel.cku-right .uniform-pos-profile { display:none !important; }
+  body.uniform-pos.cku-v2 .cart-panel.cku-right .cart-list {
+    min-height: 120px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+  }
+  body.uniform-pos.cku-v2 .cart-panel.cku-right .bottom-fields.pos-checkout-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 620px) {
+  body.uniform-pos.cku-v2 .pos-container > .menu-area.cku-content > .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+  body.uniform-pos.cku-v2 .category-button {
+    min-width: 108px !important;
+    min-height: 48px !important;
+  }
+  body.uniform-pos.cku-v2 .cart-panel.cku-right .bottom-fields.pos-checkout-grid {
+    grid-template-columns: 1fr !important;
+  }
+  body.uniform-pos.cku-v2 .cku-sidebar .staff-nav-button,
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .staff-nav-button {
+    min-width: 52px !important;
+    width: 52px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+  body.uniform-pos.cku-v2 .cku-sidebar .staff-nav-button > span:last-child:not(.staff-nav-icon),
+  body.uniform-manager.cku-v2 .manager-sidebar-icons .manager-nav-label {
+    display: none !important;
+  }
+}

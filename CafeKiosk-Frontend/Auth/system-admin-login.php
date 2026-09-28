@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - System Administrator Login</title>
   <link rel="stylesheet" href="../Assets/css/login.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=30">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">

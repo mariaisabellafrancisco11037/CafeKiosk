@@ -8,10 +8,10 @@
 
   <link
     rel="stylesheet"
-    href="../Assets/css/order-monitor.css?v=20260913"
+    href="../Assets/css/order-monitor.css?v=station-v1"
   >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -198,57 +198,6 @@
 
 
         <a
-          href="/admin/audit-logs"
-          class="staff-nav-button"
-        >
-          <span
-            class="staff-nav-icon"
-            aria-hidden="true"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <path d="M9 2h6a2 2 0 0 1 2 2v1H7V4a2 2 0 0 1 2-2z"></path>
-              <rect x="4" y="5" width="16" height="16" rx="2"></rect>
-              <path d="M8 11h8M8 15h5"></path>
-            </svg>
-          </span>
-
-          <span>
-            Audit Logs
-          </span>
-        </a>
-
-
-        <a
-          href="/admin/users"
-          class="staff-nav-button"
-        >
-          <span
-            class="staff-nav-icon"
-            aria-hidden="true"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path>
-            </svg>
-          </span>
-
-          <span>
-            User
-          </span>
-        </a>
-
-
-        <a
           href="/admin/settings"
           class="staff-nav-button"
         >
@@ -416,6 +365,29 @@
           >
         </div>
 
+      </section>
+
+
+
+      <section class="admin-station-switcher" aria-label="Preparation station">
+        <div class="admin-station-heading">
+          <div>
+            <strong>Preparation Queue</strong>
+            <span>Separate beverage and food production</span>
+          </div>
+        </div>
+        <div class="admin-station-tabs" role="tablist" aria-label="Preparation queue filters">
+          <button type="button" class="admin-station-tab active" data-admin-station="all" role="tab">
+            <span>All Orders</span><strong id="admin-all-station-count">0</strong>
+          </button>
+          <button type="button" class="admin-station-tab beverage" data-admin-station="Beverage" role="tab">
+            <span>☕ Beverages</span><strong id="admin-beverage-station-count">0</strong>
+          </button>
+          <button type="button" class="admin-station-tab food" data-admin-station="Food" role="tab">
+            <span>🍽 Food</span><strong id="admin-food-station-count">0</strong>
+          </button>
+        </div>
+        <p>Mixed orders are visible in both station views; only that station's items are shown in the order detail.</p>
       </section>
 
 
@@ -977,9 +949,9 @@
 
   <script src="/Assets/js/auth-session.js?v=20260913"></script>
 
-  <script src="../Assets/js/order-monitor.js?v=pos-source-v1"></script>
+  <script src="../Assets/js/order-monitor.js?v=station-v1"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>

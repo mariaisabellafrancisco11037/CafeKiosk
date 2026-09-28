@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Manager Order Queue</title>
-  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=6">
+  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-pin-v1">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=2">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v3">
@@ -81,6 +81,29 @@
         <div class="date-box">
           <input id="dateFilter" type="text" value="01 / 02 / 2026 - 01 / 10 / 2026" aria-label="Date range">
         </div>
+      </section>
+
+
+      <section class="station-switcher" aria-label="Preparation station">
+        <span class="station-switcher-label">Preparation Queue</span>
+        <div class="station-tabs" role="tablist" aria-label="Separate beverage and food queues">
+          <button type="button" class="station-tab active" data-station="all" role="tab">
+            <span class="station-icon" aria-hidden="true">▦</span>
+            <span>All Orders</span>
+            <strong id="allStationCount">0</strong>
+          </button>
+          <button type="button" class="station-tab beverage" data-station="Beverage" role="tab">
+            <span class="station-icon" aria-hidden="true">☕</span>
+            <span>Beverages</span>
+            <strong id="beverageStationCount">0</strong>
+          </button>
+          <button type="button" class="station-tab food" data-station="Food" role="tab">
+            <span class="station-icon" aria-hidden="true">🍽</span>
+            <span>Food</span>
+            <strong id="foodStationCount">0</strong>
+          </button>
+        </div>
+        <p class="station-help">Mixed orders appear in both preparation queues, but each station sees only its own items.</p>
       </section>
 
       <section class="status-tabs" aria-label="Order status summary">
@@ -278,9 +301,9 @@
   </div>
 
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/order-queue.js?v=pos-source-v1"></script>
+  <script src="../Assets/js/order-queue.js?v=station-pin-v1"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>

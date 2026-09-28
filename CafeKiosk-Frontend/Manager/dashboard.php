@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../Assets/css/staff-dashboard.css?v=19">
   <link rel="stylesheet" href="../Assets/css/manager-dashboard.css?v=1">
   <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="../Assets/css/manager-sidebar-icons.css?v=2">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=pos-navbar-v3">
@@ -103,7 +103,7 @@
   </div>
   <script src="../Assets/js/auth-session.js?v=manager1"></script>
   <script src="../Assets/js/manager-dashboard.js?v=manager-realtime-v3"></script>
-  <script src="../Assets/js/uniform-theme.js?v=33"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>

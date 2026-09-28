@@ -2168,3 +2168,30 @@ button{cursor:pointer}
   }
 
 }
+
+/* ============================================================
+   ADMIN BEVERAGE / FOOD PREPARATION QUEUE SWITCHER
+   ============================================================ */
+.admin-station-switcher {
+  margin: 10px 0 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(92, 112, 98, .18);
+  border-radius: 14px;
+  background: rgba(255,255,255,.8);
+}
+.admin-station-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.admin-station-heading strong { display:block; color:#55483e; font-size:12px; }
+.admin-station-heading span { display:block; margin-top:2px; color:#8b7d70; font-size:9px; }
+.admin-station-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.admin-station-tab {
+  min-height:42px; border:1px solid #ded7cf; border-radius:10px; background:#fff; color:#5d5146;
+  display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 11px; font:inherit;
+  font-size:10px; font-weight:800; cursor:pointer; transition:.18s ease;
+}
+.admin-station-tab:hover { border-color:#73a083; transform:translateY(-1px); }
+.admin-station-tab.active { background:#4f8f6b; border-color:#4f8f6b; color:#fff; box-shadow:0 5px 15px rgba(70,118,88,.18); }
+.admin-station-tab.food.active { background:#896a50; border-color:#896a50; }
+.admin-station-tab strong { min-width:22px; height:22px; padding:0 6px; border-radius:999px; display:grid; place-items:center; background:#f1ece7; color:#66584d; font-size:9px; }
+.admin-station-tab.active strong { background:rgba(255,255,255,.2); color:#fff; }
+.admin-station-switcher > p { margin:7px 2px 0; color:#8b7d70; font-size:9px; }
+@media(max-width:760px){ .admin-station-tabs{grid-template-columns:1fr;} }
