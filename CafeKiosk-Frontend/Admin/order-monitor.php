@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-admin-order-inventory-final-v2">
 </head>
 
 <body class="uniform-admin">
@@ -392,6 +392,9 @@
       </section>
 
 
+      <!-- STATUS + LIVE ORDER: kept in one stack so no responsive gap can appear -->
+      <div class="status-live-stack">
+
       <!-- STATUS SUMMARY -->
       <section
         class="status-tabs"
@@ -495,6 +498,8 @@
         </div>
 
       </section>
+
+      </div>
 
 
       <nav

@@ -450,3 +450,200 @@ body.uniform-pos .status-tabs,
 @media (max-width: 440px) {
   body.uniform-admin .metric-grid { grid-template-columns: 1fr !important; }
 }
+
+
+/* =========================================================
+   FINAL ADMIN ORDER MONITOR LAYOUT — 2026-09-28
+   The filter row owns its real height, Preparation Queue can
+   never be overlapped, and Status touches Live Order directly.
+========================================================= */
+@media (min-width: 851px) {
+  .admin-order-app .queue-main {
+    display: grid !important;
+    grid-template-rows: 60px auto 64px minmax(0, 1fr) 38px !important;
+    row-gap: 10px !important;
+    column-gap: 0 !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .admin-order-app .filters-row {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 40px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-auto-rows: 40px !important;
+    gap: 8px !important;
+    position: static !important;
+    z-index: auto !important;
+    overflow: visible !important;
+  }
+
+  .admin-order-app .filters-row > * {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .admin-order-app .admin-station-switcher {
+    position: static !important;
+    z-index: auto !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+  }
+
+  .admin-order-app .status-live-stack {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    display: grid !important;
+    grid-template-rows: 52px minmax(0, 1fr) !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .admin-order-app .status-live-stack > .status-tabs,
+  .admin-order-app .status-live-stack > .live-order-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  .admin-order-app .status-live-stack > .status-tabs {
+    height: 52px !important;
+    min-height: 52px !important;
+    align-self: end !important;
+  }
+
+  .admin-order-app .status-live-stack > .live-order-card {
+    height: 100% !important;
+    min-height: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+
+  /* Join the two sections visually: no white/cream strip in between. */
+  .admin-order-app .status-live-stack > .status-tabs .status-tab {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+/* On narrower desktop/tablet widths, allow filters to use two rows.
+   Because the queue grid row is auto, Preparation Queue is pushed down
+   instead of being covered. */
+@media (min-width: 851px) and (max-width: 1180px) {
+  .admin-order-app .filters-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .admin-order-app .date-box {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (max-width: 850px) {
+  .admin-order-app .status-live-stack {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+
+  .admin-order-app .status-live-stack > .status-tabs,
+  .admin-order-app .status-live-stack > .live-order-card {
+    width: 100% !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  .admin-order-app .status-live-stack > .live-order-card {
+    min-height: 430px !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+}
+
+/* =========================================================
+   INVENTORY STOCK MOVEMENTS — PHONE HORIZONTAL SLIDEBAR
+========================================================= */
+.activity-mobile-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  body.uniform-admin .activity-panel {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    grid-template-rows: auto auto auto !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin .activity-mobile-scroll-hint {
+    width: 100% !important;
+    min-height: 30px !important;
+    margin: 0 0 7px !important;
+    padding: 5px 9px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    border: 1px solid rgba(79,128,95,.22) !important;
+    border-radius: 7px !important;
+    background: rgba(79,128,95,.07) !important;
+    color: #665646 !important;
+    font-size: 9.5px !important;
+  }
+
+  body.uniform-admin .activity-mobile-scroll-hint strong {
+    color: #4f805f !important;
+    font-size: 17px !important;
+  }
+
+  body.uniform-admin .activity-list {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(220px, 78vw) !important;
+    gap: 8px !important;
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-inline: contain !important;
+    scrollbar-gutter: stable !important;
+    scrollbar-width: auto !important;
+    scrollbar-color: rgba(79,128,95,.82) #eadfce !important;
+    padding: 0 0 10px !important;
+    scroll-snap-type: x proximity !important;
+  }
+
+  body.uniform-admin .activity-item {
+    min-width: 220px !important;
+    width: auto !important;
+    max-width: none !important;
+    scroll-snap-align: start !important;
+  }
+
+  body.uniform-admin .activity-list::-webkit-scrollbar {
+    height: 11px !important;
+    display: block !important;
+  }
+
+  body.uniform-admin .activity-list::-webkit-scrollbar-track {
+    background: #eadfce !important;
+    border-radius: 999px !important;
+  }
+
+  body.uniform-admin .activity-list::-webkit-scrollbar-thumb {
+    background: rgba(79,128,95,.82) !important;
+    border: 2px solid #eadfce !important;
+    border-radius: 999px !important;
+  }
+}
