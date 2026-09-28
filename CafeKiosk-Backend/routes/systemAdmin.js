@@ -12,7 +12,7 @@ const {
 } = require('../middleware/systemAdminMiddleware');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
+const { JWT_SECRET } = require('../config/security');
 
 function text(value) {
   return String(value ?? '').trim();

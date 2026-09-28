@@ -38,6 +38,7 @@ const bcrypt = require('bcryptjs');
 const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
 const { verifyCafeApprovalPin } = require('../services/approvalPinService');
+const { hardenOrderPayload } = require('../services/orderSecurityService');
 
 async function verifyApprovalPin(req) {
     const action = String(req.body?.adjustmentAction || '').trim().toLowerCase();
@@ -287,9 +288,19 @@ exports.createOrder =
             // Authenticated POS orders always belong to the cafe stored in the
             // authenticated account. Never trust a browser/localStorage cafeId
             // for Staff, Manager, or Admin POS submissions.
-            if (incomingSource === 'pos' && req.user?.cafeId) {
+            if (incomingSource === 'pos') {
+                if (!req.user?.cafeId) {
+                    return res.status(401).json({ success: false, message: 'Staff, Manager, or Admin login is required for POS orders.' });
+                }
                 req.body = { ...req.body, cafeId: String(req.user.cafeId) };
             }
+
+            // Server-authoritative pricing. The browser may display prices, but
+            // database base prices, promotions, tax/service rates and totals win.
+            req.body = await hardenOrderPayload(
+                req.body,
+                normalizeCafeId(req.body?.cafeId)
+            );
 
             const order =
                 normalizeOrderPayload(

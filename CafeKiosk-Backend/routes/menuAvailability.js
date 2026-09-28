@@ -50,6 +50,8 @@ router.put(
 // Kiosk and POS can read computed stock status.
 router.get(
     "/inventory-status",
+    verifyToken,
+    isAdmin,
     recipeInventoryController.getStatus
 );
 

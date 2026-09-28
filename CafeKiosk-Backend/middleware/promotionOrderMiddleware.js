@@ -1,14 +1,9 @@
 "use strict";
-const store=require("../services/promotionStore");
-const {applyPromotionForOrder}=require("../services/promotionEngine");
-module.exports=async function promotionOrderMiddleware(req,res,next){
-  try{
-    if(req.method!=="POST") return next();
-    const body=req.body&&typeof req.body==="object"?req.body:{};
-    const source=String(body.source||"").toLowerCase();
-    if(source!=="pos" && source!=="kiosk") return next();
-    const cafeId=String(body.cafeId||"cafe-1");
-    req.body=applyPromotionForOrder(body,await store.list(cafeId));
-  }catch(err){ console.error("Promotion middleware:",err); }
+
+// Pricing and promotions are intentionally applied inside orderController only
+// after the authenticated cafe / public kiosk slug has been resolved.
+// Keeping this middleware as a no-op preserves the existing server mount order
+// without trusting req.body.cafeId.
+module.exports = function promotionOrderMiddleware(req, res, next) {
   next();
 };

@@ -3,9 +3,9 @@ const router = express.Router();
 const controller = require("../controllers/inventoryController");
 const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
 
-// Kiosk and POS may read availability/stock status without admin auth.
-router.get("/status", controller.getStatus);
-router.get("/live", controller.getLiveDashboard);
+// Ingredient quantities and movement details are owner/admin confidential.
+router.get("/status", verifyToken, isAdmin, controller.getStatus);
+router.get("/live", verifyToken, isAdmin, controller.getLiveDashboard);
 
 // Admin inventory dashboard and recipe management.
 router.get("/", verifyToken, isAdmin, controller.getDashboard);

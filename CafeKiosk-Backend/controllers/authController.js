@@ -8,7 +8,7 @@ const kioskAccessStore = require('../services/kioskAccessStore');
 const { sendStaffInvitation, sendPasswordResetEmail, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
+const { JWT_SECRET, isProduction } = require('../config/security');
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 
 const COOKIE_NAMES = {
@@ -326,8 +326,8 @@ function loginRedirect(role) {
 function cookieOptions(req) {
   return {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
+    sameSite: 'strict',
+    secure: isProduction() || Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
     maxAge: 8 * 60 * 60 * 1000,
     path: '/'
   };

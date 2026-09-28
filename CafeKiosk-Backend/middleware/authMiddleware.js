@@ -15,10 +15,7 @@ const jwt =
     );
 
 const dbPool = require("../config/dbPool");
-
-const JWT_SECRET =
-    process.env.JWT_SECRET ||
-    "cafekiosk-demo-secret";
+const { JWT_SECRET } = require("../config/security");
 
 const COOKIE_NAMES = {
     admin:

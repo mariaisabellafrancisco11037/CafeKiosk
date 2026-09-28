@@ -440,9 +440,13 @@
   }
 
   async function fetchPromotions() {
+    const kioskSlug = String(window.CafeKioskTenant?.slug || sessionStorage.getItem("kioskSlug") || "").trim();
+    const query = kioskSlug
+      ? `kioskSlug=${encodeURIComponent(kioskSlug)}`
+      : `cafeId=${encodeURIComponent(CAFE_ID)}`;
     const response = await fetch(
-      `${api()}/api/promotions/active?cafeId=${encodeURIComponent(CAFE_ID)}`,
-      { cache: "no-store" }
+      `${api()}/api/promotions/active?${query}`,
+      { cache: "no-store", credentials: "include" }
     );
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();

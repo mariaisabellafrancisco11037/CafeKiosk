@@ -6,7 +6,7 @@ const kioskStore = require('../services/kioskAccessStore');
 const catalogStore = require('../services/catalogStore');
 const pool = require('../config/dbPool');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
+const { JWT_SECRET } = require('../config/security');
 
 function setupCafeId(token) {
   if (!token) return '';

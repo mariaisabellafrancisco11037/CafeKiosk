@@ -8,17 +8,22 @@ const fs = require("fs");
 const os = require("os");
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET, isProduction } = require("./config/security");
+const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
 const dbPool = require("./config/dbPool");
 
 const {
-    requirePageRole
+    requirePageRole,
+    requireRole
 } = require("./middleware/authMiddleware");
 const {
     requireSystemAdminPage
 } = require("./middleware/systemAdminMiddleware");
 
 const app = express();
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
 const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5000;
@@ -422,34 +427,63 @@ app.use(
 // END CAFEKIOSK_PHP_EXTENSION_COMPAT_V1
 // =====================================================
 
+const configuredCorsOrigins = new Set(
+    String(process.env.CORS_ALLOWED_ORIGINS || "")
+        .split(",")
+        .map(value => value.trim())
+        .filter(Boolean)
+);
+
+for (const value of [
+    process.env.PUBLIC_BASE_URL,
+    process.env.APP_BASE_URL,
+    process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : ""
+]) {
+    if (value) configuredCorsOrigins.add(String(value).replace(/\/$/, ""));
+}
+
+function corsOriginAllowed(origin) {
+    if (!origin) return true;
+    if (configuredCorsOrigins.has(origin)) return true;
+    if (!isProduction()) {
+        try {
+            const url = new URL(origin);
+            const host = url.hostname;
+            if (host === "localhost" || host === "127.0.0.1" ||
+                /^192\.168\./.test(host) || /^10\./.test(host) ||
+                /^172\.(1[6-9]|2\d|3[01])\./.test(host)) {
+                return true;
+            }
+        } catch (_) {}
+    }
+    return false;
+}
+
 app.use(
     cors({
-        // Reflect the requesting origin so cookies can work
-        // from localhost, tablet IPs and VS Code Live Server.
-        origin: true,
+        origin(origin, callback) {
+            return callback(null, corsOriginAllowed(origin));
+        },
         credentials: true,
-
-        methods: [
-            "GET",
-            "POST",
-            "PUT",
-            "PATCH",
-            "DELETE"
-        ]
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "X-Cafe-Role"]
     })
 );
 
+app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "same-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+    if (isProduction()) {
+        res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    }
+    next();
+});
 
-app.use(
-    express.json()
-);
-
-
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-);
+app.use(express.json({ limit: "256kb" }));
+app.use(express.urlencoded({ extended: true, limit: "128kb" }));
 
 
 // =====================================================
@@ -500,9 +534,7 @@ app.set(
 // in the cafe_token cookie.
 // =====================================================
 
-const SOCKET_JWT_SECRET =
-    process.env.JWT_SECRET ||
-    "cafekiosk-demo-secret";
+const SOCKET_JWT_SECRET = JWT_SECRET;
 
 
 function readSocketCookie(
@@ -576,16 +608,12 @@ io.use(
         next
     ) => {
 
+        const cookieHeader = socket.handshake.headers?.cookie;
         const token =
-            socket.handshake
-                .auth
-                ?.token ||
-            readSocketCookie(
-                socket.handshake
-                    .headers
-                    ?.cookie,
-                "cafe_token"
-            );
+            socket.handshake.auth?.token ||
+            readSocketCookie(cookieHeader, "cafe_admin_token") ||
+            readSocketCookie(cookieHeader, "cafe_manager_token") ||
+            readSocketCookie(cookieHeader, "cafe_staff_token");
 
 
         // Keep the kiosk compatible:
@@ -717,10 +745,8 @@ io.on(
 
 
                 const cafeId =
-                    String(
-                        payload.cafeId ||
-                        socket.user.cafeId ||
-                        "cafe-1"
+                    normalizeCafeId(
+                        socket.user.cafeId
                     );
 
 
@@ -830,8 +856,10 @@ io.on(
                 }
 
 
+                const safeCafeId = normalizeCafeId(socket.user?.cafeId);
+
                 const room =
-                    `admin-${cafeId}`;
+                    `admin-${safeCafeId}`;
 
 
                 socket.join(
@@ -853,26 +881,34 @@ io.on(
 
         socket.on(
             "join-kiosk",
-            (cafeId) => {
+            async () => {
+                try {
+                    let safeCafeId = "";
+                    if (socket.user?.cafeId) {
+                        safeCafeId = normalizeCafeId(socket.user.cafeId);
+                    } else {
+                        const referer = String(socket.handshake.headers?.referer || "");
+                        const match = referer.match(/\/kiosk\/([a-z0-9-]{3,40})(?:\/|$)/i);
+                        if (!match) {
+                            socket.emit("auth:error", { message: "A valid public Kiosk link is required." });
+                            return;
+                        }
+                        const kiosk = await kioskAccessStore.getBySlug(match[1]);
+                        if (!kiosk || kiosk.cafeStatus !== "Active" || !kiosk.kioskEnabled) {
+                            socket.emit("auth:error", { message: "This Kiosk link is not active." });
+                            return;
+                        }
+                        safeCafeId = normalizeCafeId(kiosk.cafeId);
+                    }
 
-                if (!cafeId) {
-                    return;
+                    socket.data.cafeId = safeCafeId;
+                    socket.data.presenceSurface = "kiosk";
+                    socket.join(`kiosk-${safeCafeId}`);
+                    console.log(`📱 Kiosk joined kiosk-${safeCafeId}`);
+                } catch (error) {
+                    console.error("Kiosk socket authorization failed:", error.message);
+                    socket.emit("auth:error", { message: "Unable to authorize this Kiosk connection." });
                 }
-
-
-                const room =
-                    `kiosk-${cafeId}`;
-
-
-                socket.join(
-                    room
-                );
-
-
-                console.log(
-                    `📱 Kiosk joined ${room}`
-                );
-
             }
         );
 
@@ -1038,16 +1074,11 @@ io.on(
         socket.on(
             "join-order",
             (orderId) => {
-
-                if (!orderId) {
+                if (!orderId || !socketCanUseStaffPages(socket)) {
+                    socket.emit("auth:error", { message: "Authenticated staff access is required." });
                     return;
                 }
-
-
-                socket.join(
-                    `order-${orderId}`
-                );
-
+                socket.join(`order-${orderId}`);
             }
         );
 
@@ -1057,9 +1088,9 @@ io.on(
         // =============================================
 
         socket.on("presence:activity", (payload = {}) => {
-            const cafeId = normalizeCafeId(payload.cafeId || socket.user?.cafeId || socket.data.cafeId || "cafe-1");
+            const cafeId = normalizeCafeId(socket.user?.cafeId || socket.data.cafeId || "");
             const surface = String(payload.surface || "").toLowerCase();
-            if (!["pos", "kiosk", "admin", "orderqueue"].includes(surface)) return;
+            if (!["pos", "kiosk", "admin", "orderqueue"].includes(surface) || !cafeId) return;
             socket.data.cafeId = cafeId;
             socket.data.presenceSurface = surface;
             socket.data.lastPresenceActivity = Date.now();
@@ -1790,166 +1821,9 @@ app.get(
 //   - "order-updated" is also emitted with the request snapshot.
 //
 
-app.use(
-    "/api/orders",
-    (req, res, next) => {
-
-        const mutatingMethods =
-            new Set([
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE"
-            ]);
-
-        if (
-            !mutatingMethods.has(
-                req.method
-            )
-        ) {
-            return next();
-        }
-
-        res.on(
-            "finish",
-            async () => {
-
-                if (
-                    res.statusCode < 200 ||
-                    res.statusCode >= 300
-                ) {
-                    console.log(
-                        `⚠️ No realtime broadcast because ${req.method} ${req.originalUrl} returned HTTP ${res.statusCode}`
-                    );
-
-                    return;
-                }
-
-                const cafeId =
-                    normalizeCafeId(
-                        req.body?.cafeId ||
-                        req.query?.cafeId ||
-                        "cafe-1"
-                    );
-
-                const changedAt =
-                    new Date()
-                        .toISOString();
-
-                const changePayload = {
-                    cafeId,
-                    method:
-                        req.method,
-                    path:
-                        req.originalUrl,
-                    changedAt
-                };
-
-                const roomNames = [
-                    `order-queue-${cafeId}`,
-                    `pos-${cafeId}`,
-                    `admin-${cafeId}`,
-                    `kiosk-${cafeId}`
-                ];
-
-                // New orders can be rendered immediately from the submitted
-                // payload while the client also keeps the normal DB sync path.
-                if (
-                    req.method ===
-                    "POST"
-                ) {
-
-                    const newOrderPayload = {
-                        ...(req.body || {}),
-                        cafeId,
-                        source:
-                            req.body?.source ||
-                            "Kiosk",
-                        status:
-                            req.body?.status ||
-                            "Pending",
-                        createdAt:
-                            req.body?.createdAt ||
-                            changedAt
-                    };
-
-                    for (
-                        const room
-                        of roomNames
-                    ) {
-                        io.to(
-                            room
-                        ).emit(
-                            "new-order",
-                            newOrderPayload
-                        );
-                    }
-                }
-
-                if (
-                    req.method ===
-                    "PATCH" ||
-                    req.method ===
-                    "PUT"
-                ) {
-
-                    const updatedPayload = {
-                        ...(req.body || {}),
-                        cafeId,
-                        updatedAt:
-                            changedAt
-                    };
-
-                    for (
-                        const room
-                        of roomNames
-                    ) {
-                        io.to(
-                            room
-                        ).emit(
-                            "order-updated",
-                            updatedPayload
-                        );
-                    }
-                }
-
-                for (
-                    const room
-                    of roomNames
-                ) {
-                    io.to(
-                        room
-                    ).emit(
-                        "orders:changed",
-                        changePayload
-                    );
-                }
-
-                const queueCount =
-                    (
-                        await io.in(
-                            `order-queue-${cafeId}`
-                        ).fetchSockets()
-                    ).length;
-
-                const posCount =
-                    (
-                        await io.in(
-                            `pos-${cafeId}`
-                        ).fetchSockets()
-                    ).length;
-
-                console.log(
-                    `🔄 ${req.method} ${req.originalUrl} -> cafe=${cafeId} | POS=${posCount} | Queue=${queueCount}`
-                );
-
-            }
-        );
-
-        next();
-
-    }
-);
+// Order controllers emit realtime events only after authorization and persistence.
+// Never rebroadcast raw browser request bodies: cafeId, prices and totals are untrusted.
+app.use("/api/orders", (req, res, next) => next());
 
 
 // =====================================================
@@ -1958,12 +1832,12 @@ app.use(
 
 app.get(
     "/api/realtime/status",
+    requireRole("Admin"),
     async (req, res) => {
 
         const cafeId =
             normalizeCafeId(
-                req.query.cafeId ||
-                "cafe-1"
+                req.user?.cafeId
             );
 
         const rooms = {

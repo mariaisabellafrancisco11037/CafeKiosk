@@ -43,9 +43,14 @@ async function checkoutConfig(cafeId) {
 
 router.get('/', optionalAuth, async (req, res, next) => {
   try {
-    // Logged-in Admin/Manager/Staff always uses the cafe in the authenticated
-    // session. Public legacy/demo calls may still pass cafeId explicitly.
-    const cafeId = String(req.user?.cafeId || req.query.cafeId || 'cafe-1');
+    // Real cafe catalogs are resolved either from the authenticated session
+    // or through /api/kiosk-access/public/:slug/catalog. Do not let a guest
+    // enumerate another tenant by changing ?cafeId= in DevTools.
+    const requestedCafeId = String(req.query.cafeId || 'cafe-1');
+    if (!req.user && requestedCafeId !== 'cafe-1') {
+      return res.status(404).json({ success: false, message: 'Catalog not found.' });
+    }
+    const cafeId = String(req.user?.cafeId || 'cafe-1');
     const [categories, products, config] = await Promise.all([
       store.listCategories(cafeId),
       store.list(cafeId),

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
+const { JWT_SECRET } = require('../config/security');
 const SYSTEM_ADMIN_COOKIE = 'cafe_system_admin_token';
 
 function parseCookies(cookieHeader) {
