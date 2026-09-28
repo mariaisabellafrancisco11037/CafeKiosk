@@ -1028,3 +1028,101 @@ body.uniform-pos .status-tabs,
     overflow-y: visible !important;
   }
 }
+
+
+/* =========================================================
+   MANAGER ORDER QUEUE — STATUS / LIVE ORDER STACK FIX V2
+   uniform-theme.js adds .cku-v2/.cku-content at runtime. Its
+   older higher-specificity queue grid can otherwise override
+   the general layout and create implicit rows/blank space.
+========================================================= */
+@media (min-width: 851px) {
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content,
+  body.uniform-pos.manager-order-queue-page .queue-main {
+    display: grid !important;
+    grid-template-rows: 60px 40px 48px minmax(0, 1fr) 38px !important;
+    gap: 10px !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content > .manager-status-live-stack,
+  body.uniform-pos.manager-order-queue-page .queue-main > .manager-status-live-stack {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-rows: 52px minmax(0, 1fr) !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .status-tabs,
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .live-order-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .status-tabs {
+    height: 52px !important;
+    min-height: 52px !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .live-order-card {
+    height: 100% !important;
+    min-height: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .status-tabs .status-tab {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+@media (min-width: 851px) and (max-width: 1100px) {
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content,
+  body.uniform-pos.manager-order-queue-page .queue-main {
+    grid-template-rows: 60px auto 48px minmax(430px, 1fr) 38px !important;
+  }
+}
+
+@media (max-width: 850px) {
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content,
+  body.uniform-pos.manager-order-queue-page .queue-main {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .status-tabs,
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .live-order-card {
+    width: 100% !important;
+    margin: 0 !important;
+    position: static !important;
+  }
+
+  body.uniform-pos.manager-order-queue-page .manager-status-live-stack > .live-order-card {
+    min-height: 430px !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+}
