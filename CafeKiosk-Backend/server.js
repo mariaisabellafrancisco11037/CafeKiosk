@@ -1119,6 +1119,20 @@ app.get('/favicon.ico', (req, res) => res.sendFile(path.join(ASSETS_FOLDER, 'ima
 // ASSETS
 // =====================================================
 
+// Authentication JavaScript changes together with the server-side
+// session protocol. Never let a browser reuse an older login.js that
+// expects browser-readable JWT tokens after the backend has moved to
+// HttpOnly-cookie authentication.
+app.use(
+    "/Assets/js/login.js",
+    (req, res, next) => {
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+        next();
+    }
+);
+
 app.use(
     "/Assets",
     express.static(

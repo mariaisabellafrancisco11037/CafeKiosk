@@ -135,7 +135,7 @@
 
   </main>
 
-  <script src="../Assets/js/login.js?v=password-recovery-v1"></script>
+  <script src="../Assets/js/login.js?v=server-auth-cookie-v2"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
