@@ -1054,7 +1054,8 @@ function renderMenu(category) {
           showItemModal(
             item.name,
             item.price,
-            category
+            category,
+            item.productId || item.id || null
           );
         }
       );
@@ -1117,7 +1118,8 @@ function addItem(
   customizations = [],
   customizationCost = 0,
   category = "coffee",
-  qty = 1
+  qty = 1,
+  productId = null
 ) {
 
   if (
@@ -1134,7 +1136,7 @@ function addItem(
 
 
   const key =
-    `${name}|${category}|${customizations.join("|")}`;
+    `${productId || name}|${category}|${customizations.join("|")}`;
 
   const existing =
     order.find(item =>
@@ -1148,6 +1150,8 @@ function addItem(
   } else {
 
     order.push({
+      productId,
+      id: productId,
       name,
       price,
       qty,
@@ -1174,7 +1178,8 @@ function addItem(
 function showItemModal(
   name,
   price,
-  category
+  category,
+  productId = null
 ) {
 
   if (
@@ -1191,6 +1196,7 @@ function showItemModal(
 
 
   pendingItem = {
+    productId,
     name,
     price,
     category,
@@ -1883,7 +1889,8 @@ function confirmAddItem() {
     customizations,
     customizationCost,
     pendingItem.category,
-    pendingItem.qty
+    pendingItem.qty,
+    pendingItem.productId || null
   );
 
   pendingItem = null;
@@ -2969,6 +2976,11 @@ async function confirmOrder() {
       orderToSave.map(
         item => ({
 
+          productId:
+            item.productId ||
+            item.id ||
+            null,
+
           name:
             item.name,
 
@@ -3610,7 +3622,8 @@ function searchMenuItems() {
             showItemModal(
               item.name,
               item.price,
-              currentCategory
+              currentCategory,
+              item.productId || item.id || null
             );
           }
         );

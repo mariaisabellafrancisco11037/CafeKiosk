@@ -1542,6 +1542,11 @@ function buildKioskOrderPayload() {
         cafeId:
             CAFE_ID,
 
+        kioskSlug:
+            window.CafeKioskTenant?.slug ||
+            sessionStorage.getItem("kioskSlug") ||
+            "",
+
         source:
             "Kiosk",
 

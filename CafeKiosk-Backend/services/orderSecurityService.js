@@ -14,19 +14,29 @@ function positiveQty(value) {
   return Number.isFinite(number) ? Math.min(99, Math.max(1, Math.trunc(number))) : 1;
 }
 
-async function productRows(cafeId, ids) {
-  if (!ids.length) return new Map();
-  const placeholders = ids.map(() => "?").join(",");
+function catalogKey(name, category) {
+  return `${String(name || "").trim().toLowerCase()}|${String(category || "").trim().toLowerCase()}`;
+}
+
+async function productRows(cafeId) {
   const [rows] = await pool.execute(
     `SELECT p.product_id, p.product_name, p.base_price, p.manual_availability,
             c.category_name
        FROM products p
        JOIN categories c ON c.category_id=p.category_id
-      WHERE p.cafe_id=? AND p.is_active=1
-        AND p.product_id IN (${placeholders})`,
-    [cafeId, ...ids]
+      WHERE p.cafe_id=? AND p.is_active=1`,
+    [cafeId]
   );
-  return new Map(rows.map(row => [String(row.product_id), row]));
+
+  const byId = new Map();
+  const byNameCategory = new Map();
+
+  for (const row of rows) {
+    byId.set(String(row.product_id), row);
+    byNameCategory.set(catalogKey(row.product_name, row.category_name), row);
+  }
+
+  return { byId, byNameCategory };
 }
 
 async function taxSettings(cafeId) {
@@ -57,16 +67,12 @@ async function hardenOrderPayload(payload = {}, cafeId) {
     throw error;
   }
 
-  const numericIds = [...new Set(
-    rawItems
-      .map(item => String(item?.productId ?? item?.product_id ?? "").trim())
-      .filter(value => /^\d+$/.test(value))
-  )];
-
-  const products = await productRows(cafeId, numericIds);
+  const products = await productRows(cafeId);
   const items = rawItems.map(raw => {
     const id = String(raw?.productId ?? raw?.product_id ?? "").trim();
-    const product = products.get(id);
+    const product =
+      (/^\d+$/.test(id) ? products.byId.get(id) : null) ||
+      products.byNameCategory.get(catalogKey(raw?.name, raw?.category));
 
     if (!product) {
       if (isProduction()) {

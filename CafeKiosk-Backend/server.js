@@ -2038,13 +2038,23 @@ app.use(
         );
 
 
+        const statusCode =
+            Number(err?.statusCode || err?.status) >= 400 &&
+            Number(err?.statusCode || err?.status) < 600
+                ? Number(err.statusCode || err.status)
+                : 500;
+
         res
-            .status(500)
+            .status(statusCode)
             .json({
                 success: false,
-
+                code:
+                    err?.code ||
+                    (statusCode >= 500 ? "INTERNAL_SERVER_ERROR" : "REQUEST_REJECTED"),
                 message:
-                    "Internal server error."
+                    statusCode >= 500
+                        ? "Internal server error."
+                        : (err?.message || "Request rejected.")
             });
 
     }

@@ -672,7 +672,7 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=20260928-settings-v1"></script>
+<script src="/Assets/js/menu.js?v=20260928-kiosk-order-security-v2"></script>
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>

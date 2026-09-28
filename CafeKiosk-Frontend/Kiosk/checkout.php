@@ -187,7 +187,7 @@
 
 
     <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/checkout.js?v=20260928-settings-v1"></script>
+<script src="/Assets/js/checkout.js?v=20260928-kiosk-order-security-v2"></script>
 
 <script src="/Assets/js/checkout-discount.js"></script>
   <script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
