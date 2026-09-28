@@ -1030,19 +1030,20 @@ body.uniform-pos .status-tabs,
 }
 
 /* =========================================================
-   MANAGER ORDER QUEUE — LIVE TABLE GAP FIX V3
-   Keep the original Status and Live Order sections as direct
-   grid children. uniform-theme.css adds .cku-v2/.cku-content
-   at runtime with a more-specific 4-row queue grid; this page
-   has 6 visible sections, so that rule created implicit rows
-   and a large blank spacer. Override only the grid definition.
+   MANAGER ORDER QUEUE — MATCH STAFF ORDER QUEUE V4
+   uniform-theme.js replaces the original .page-title-box with
+   the shared top header and hides that original grid child.
+   The Manager content area therefore has FIVE visible rows:
+   filters, preparation queue, status, Live Order, pagination.
+   Give each one its own track so the Live Order table expands
+   directly under Status exactly like the working Staff queue.
 ========================================================= */
 @media (min-width: 851px) {
   body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content {
     display: grid !important;
-    grid-template-rows: 60px 40px 48px 52px minmax(0, 1fr) 38px !important;
+    grid-template-rows: 40px 48px 52px minmax(0, 1fr) 38px !important;
     gap: 10px !important;
-    height: 100dvh !important;
+    height: 100% !important;
     min-height: 0 !important;
     overflow: hidden !important;
   }
@@ -1056,6 +1057,10 @@ body.uniform-pos .status-tabs,
     margin: 0 !important;
     min-height: 0 !important;
     align-self: stretch !important;
+  }
+
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content > .filters-row {
+    height: 40px !important;
   }
 
   body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content > .queue-station-row {
@@ -1083,10 +1088,14 @@ body.uniform-pos .status-tabs,
     height: 100% !important;
     overflow: auto !important;
   }
+
+  body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content > .pagination {
+    height: 38px !important;
+  }
 }
 
 @media (min-width: 851px) and (max-width: 1100px) {
   body.uniform-pos.cku-v2.manager-order-queue-page .queue-main.cku-content {
-    grid-template-rows: 60px auto 48px 52px minmax(430px, 1fr) 38px !important;
+    grid-template-rows: auto 48px 52px minmax(430px, 1fr) 38px !important;
   }
 }

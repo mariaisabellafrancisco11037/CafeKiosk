@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-live-table-gap-v3">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-match-staff-v4">
 </head>
 <body class="uniform-pos manager-order-queue-page">
   <div class="queue-app">
