@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="../Assets/css/inventory.css">
 <link rel="stylesheet" href="../Assets/css/inventory-responsive-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/admin-mobile-polish.css?v=20260928-mobile-polish-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
 </head>
-<body class="uniform-admin inventory-page">
+<body class="uniform-admin">
   <div class="inventory-shell">
     <!-- ADMIN SIDEBAR - SAME AS MENU MANAGEMENT -->
     <aside class="staff-sidebar">
@@ -183,7 +183,11 @@
                 </button>
               </div>
 
-              <div class="mobile-table-scroll-hint" aria-hidden="true">↔ Swipe horizontally to view all inventory columns</div>
+              <div class="inventory-mobile-scroll-hint" aria-hidden="true">
+                <span>Swipe left or right to view all inventory columns</span>
+                <strong>↔</strong>
+              </div>
+
               <div class="table-wrap">
                 <table class="inventory-table">
                   <thead>

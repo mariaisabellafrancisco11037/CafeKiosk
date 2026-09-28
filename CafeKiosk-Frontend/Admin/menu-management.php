@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="../Assets/css/menu-management.css?v=33">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/admin-mobile-polish.css?v=20260928-mobile-polish-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
 </head>
-<body class="uniform-admin menu-management-page">
+<body class="uniform-admin">
   <div class="menu-shell">
     <!-- ADMIN SIDEBAR - MATCHES ORDER MONITOR -->
     <aside class="staff-sidebar">

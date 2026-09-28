@@ -1,0 +1,452 @@
+/* CafeKiosk final layout/root responsiveness fix — loaded after all legacy theme CSS. */
+
+/* =========================================================
+   ORDER QUEUES / ORDER MONITOR
+   One explicit grid track per visual section. No implicit rows,
+   no flexible spacer between status and the Live Order table.
+========================================================= */
+@media (min-width: 851px) {
+  body.uniform-pos .queue-main {
+    display: grid !important;
+    grid-template-rows: 60px 40px 48px 52px minmax(0, 1fr) 38px !important;
+    gap: 10px !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-pos .queue-main > .filters-row,
+  body.uniform-pos .queue-main > .queue-station-row,
+  body.uniform-pos .queue-main > .status-tabs,
+  body.uniform-pos .queue-main > .live-order-card,
+  body.uniform-pos .queue-main > .pagination {
+    position: static !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+  }
+
+  body.uniform-pos .queue-main > .queue-station-row {
+    display: grid !important;
+    height: 48px !important;
+  }
+
+  body.uniform-pos .queue-main > .live-order-card {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .admin-order-app .queue-main {
+    display: grid !important;
+    grid-template-rows: 60px 40px 64px 52px minmax(0, 1fr) 38px !important;
+    gap: 10px !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .admin-order-app .queue-main > .filters-row,
+  .admin-order-app .queue-main > .admin-station-switcher,
+  .admin-order-app .queue-main > .status-tabs,
+  .admin-order-app .queue-main > .live-order-card,
+  .admin-order-app .queue-main > .pagination {
+    position: static !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+  }
+
+  .admin-order-app .queue-main > .live-order-card {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+}
+
+/* Shared preparation row design. */
+body.uniform-pos .queue-station-row {
+  box-sizing: border-box !important;
+  padding: 5px 8px !important;
+  grid-template-columns: 112px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border: 1px solid rgba(111,78,55,.18) !important;
+  border-radius: 9px !important;
+  background: rgba(255,255,255,.66) !important;
+  overflow: hidden !important;
+}
+body.uniform-pos .queue-station-row .station-switcher-label {
+  display: block !important;
+  margin: 0 !important;
+  color: #7a6857 !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+}
+body.uniform-pos .queue-station-row .station-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+body.uniform-pos .queue-station-row .station-tab {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 34px !important;
+  padding: 0 8px !important;
+  font-size: 9px !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+}
+
+.admin-order-app .admin-station-switcher {
+  box-sizing: border-box !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 6px 9px !important;
+  display: grid !important;
+  grid-template-columns: 118px minmax(0,1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(111,78,55,.18) !important;
+  border-radius: 9px !important;
+  background: rgba(255,255,255,.66) !important;
+}
+.admin-order-app .admin-station-heading { margin: 0 !important; }
+.admin-order-app .admin-station-heading strong {
+  font-size: 9px !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+.admin-order-app .admin-station-heading span,
+.admin-order-app .admin-station-switcher > p { display: none !important; }
+.admin-order-app .admin-station-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+.admin-order-app .admin-station-tab {
+  min-width: 0 !important;
+  height: 38px !important;
+  padding: 0 9px !important;
+  font-size: 9px !important;
+  border-radius: 8px !important;
+}
+
+/* Filters and status never overlap the preparation row. */
+body.uniform-pos .filters-row,
+.admin-order-app .filters-row {
+  position: relative !important;
+  z-index: 1 !important;
+  margin: 0 !important;
+}
+body.uniform-pos .status-tabs,
+.admin-order-app .status-tabs {
+  position: relative !important;
+  z-index: 0 !important;
+  margin: 0 !important;
+}
+
+/* Medium desktop/tablet: filter row may wrap, so its track becomes auto. */
+@media (min-width: 851px) and (max-width: 1100px) {
+  body.uniform-pos .queue-main {
+    grid-template-rows: 60px auto 48px 52px minmax(380px,1fr) 38px !important;
+  }
+  .admin-order-app .queue-main {
+    grid-template-rows: 60px auto 64px 52px minmax(380px,1fr) 38px !important;
+  }
+}
+
+/* Phone/tablet portrait: natural vertical flow; no absolute/implicit row behavior. */
+@media (max-width: 850px) {
+  body.uniform-pos .queue-main,
+  .admin-order-app .queue-main {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  body.uniform-pos .queue-main > *,
+  .admin-order-app .queue-main > * {
+    flex: 0 0 auto !important;
+    position: static !important;
+    margin: 0 !important;
+  }
+  body.uniform-pos .queue-station-row,
+  .admin-order-app .admin-station-switcher {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 8px !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    overflow: visible !important;
+  }
+  body.uniform-pos .queue-station-row .station-tabs,
+  .admin-order-app .admin-station-tabs {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+  }
+  body.uniform-pos .queue-station-row .station-tab,
+  .admin-order-app .admin-station-tab {
+    height: 40px !important;
+    padding: 0 5px !important;
+    font-size: 9px !important;
+  }
+  .admin-order-app .admin-station-heading { display: none !important; }
+  body.uniform-pos .status-tabs,
+  .admin-order-app .status-tabs {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 7px !important;
+  }
+  body.uniform-pos .status-tab,
+  .admin-order-app .status-tab {
+    min-width: 0 !important;
+    height: 48px !important;
+    padding: 0 9px !important;
+    font-size: 10px !important;
+  }
+  body.uniform-pos .live-order-card,
+  .admin-order-app .live-order-card {
+    height: auto !important;
+    min-height: 430px !important;
+    overflow: hidden !important;
+  }
+}
+
+/* =========================================================
+   MENU MANAGEMENT — PHONE CATEGORY VISIBILITY
+   Desktop's fixed 158px category card was clipping the tabs
+   after the mobile action buttons wrapped.
+========================================================= */
+@media (max-width: 760px) {
+  body.uniform-admin.cku-v2 .menu-main.cku-content > #menuView.menu-dashboard:not(.hidden),
+  body.uniform-admin #menuView.menu-dashboard:not(.hidden) {
+    height: auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .category-panel,
+  body.uniform-admin #menuView .category-panel {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin #menuView .category-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  body.uniform-admin #menuView .category-actions > button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .category-scroll-area,
+  body.uniform-admin #menuView .category-scroll-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: auto !important;
+    scrollbar-color: rgba(79,128,95,.78) #efe2d0 !important;
+    padding: 0 0 5px !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .category-tabs,
+  body.uniform-admin #menuView .category-tabs {
+    width: max-content !important;
+    min-width: 100% !important;
+    min-height: 48px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    grid-template-columns: none !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    padding: 0 0 6px !important;
+  }
+  body.uniform-admin #menuView .category-tabs::-webkit-scrollbar,
+  body.uniform-admin #menuView .category-scroll-area::-webkit-scrollbar {
+    height: 9px !important;
+    display: block !important;
+  }
+  body.uniform-admin #menuView .category-tabs::-webkit-scrollbar-track,
+  body.uniform-admin #menuView .category-scroll-area::-webkit-scrollbar-track {
+    background: #efe2d0 !important;
+    border-radius: 999px !important;
+  }
+  body.uniform-admin #menuView .category-tabs::-webkit-scrollbar-thumb,
+  body.uniform-admin #menuView .category-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(79,128,95,.78) !important;
+    border-radius: 999px !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .category-tab,
+  body.uniform-admin #menuView .category-tab {
+    flex: 0 0 122px !important;
+    width: 122px !important;
+    min-width: 122px !important;
+    height: 44px !important;
+  }
+
+  body.uniform-admin.cku-v2 #menuView .product-panel,
+  body.uniform-admin #menuView .product-panel {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  body.uniform-admin.cku-v2 #menuView .product-grid,
+  body.uniform-admin #menuView .product-grid {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    padding-right: 0 !important;
+  }
+}
+@media (max-width: 390px) {
+  body.uniform-admin #menuView .category-actions { grid-template-columns: 1fr !important; }
+  body.uniform-admin #menuView .category-tab { flex-basis: 112px !important; width:112px !important; min-width:112px !important; }
+}
+
+/* =========================================================
+   INVENTORY — REAL HORIZONTAL TABLE SCROLLER ON PHONES
+========================================================= */
+.inventory-mobile-scroll-hint { display: none; }
+@media (max-width: 760px) {
+  body.uniform-admin .inventory-list-panel {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+  body.uniform-admin .inventory-mobile-scroll-hint {
+    width: 100% !important;
+    min-height: 32px !important;
+    margin: 2px 0 7px !important;
+    padding: 6px 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    border: 1px solid rgba(79,128,95,.22) !important;
+    border-radius: 8px !important;
+    background: rgba(79,128,95,.07) !important;
+    color: #665646 !important;
+    font-size: 10px !important;
+  }
+  body.uniform-admin .inventory-mobile-scroll-hint strong {
+    color: #4f805f !important;
+    font-size: 18px !important;
+  }
+  body.uniform-admin .inventory-list-panel > .table-wrap,
+  body.uniform-admin .inventory-panel .table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-gutter: stable !important;
+    scrollbar-width: auto !important;
+    scrollbar-color: rgba(79,128,95,.78) #eadfce !important;
+    padding-bottom: 7px !important;
+  }
+  body.uniform-admin .inventory-list-panel > .table-wrap::-webkit-scrollbar,
+  body.uniform-admin .inventory-panel .table-wrap::-webkit-scrollbar {
+    height: 10px !important;
+    display: block !important;
+  }
+  body.uniform-admin .inventory-list-panel > .table-wrap::-webkit-scrollbar-track,
+  body.uniform-admin .inventory-panel .table-wrap::-webkit-scrollbar-track {
+    background: #eadfce !important;
+    border-radius: 999px !important;
+  }
+  body.uniform-admin .inventory-list-panel > .table-wrap::-webkit-scrollbar-thumb,
+  body.uniform-admin .inventory-panel .table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(79,128,95,.78) !important;
+    border: 2px solid #eadfce !important;
+    border-radius: 999px !important;
+  }
+  body.uniform-admin .inventory-table {
+    width: 760px !important;
+    min-width: 760px !important;
+    max-width: none !important;
+    table-layout: fixed !important;
+  }
+}
+
+/* =========================================================
+   REPORT & ANALYTICS — PHONE FILTERS + CONSISTENT BREAKDOWN
+========================================================= */
+.analytics-panel { display: block !important; }
+@media (max-width: 760px) {
+  body.uniform-admin .report-toolbar {
+    width: 100% !important;
+    padding: 12px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  body.uniform-admin .date-filters {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  body.uniform-admin .date-filters .field {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 42px minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  body.uniform-admin .date-filters .field input,
+  body.uniform-admin .date-filters .field select {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  body.uniform-admin .date-filters #applyFilterBtn {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+  body.uniform-admin .date-filters .text-action {
+    width: 100% !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
+  }
+  body.uniform-admin .report-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+  }
+  body.uniform-admin .report-actions > button { width: 100% !important; }
+  body.uniform-admin .metric-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  body.uniform-admin .analytics-grid { grid-template-columns: 1fr !important; }
+  body.uniform-admin .analytics-box { min-height: 0 !important; }
+}
+@media (max-width: 440px) {
+  body.uniform-admin .metric-grid { grid-template-columns: 1fr !important; }
+}

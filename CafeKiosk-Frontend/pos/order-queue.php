@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Order Queue</title>
-  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v3">
+  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v4">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
 </head>
 <body class="uniform-pos">
   <div class="queue-app">
@@ -82,6 +83,21 @@
       </section>
 
 
+      <section class="station-switcher queue-station-row" aria-label="Preparation queue filter">
+        <span class="station-switcher-label">Preparation Queue</span>
+        <div class="station-tabs" role="tablist" aria-label="Preparation queue filters">
+          <button type="button" class="station-tab active" data-station="all" role="tab" title="Show all orders">
+            <span class="station-icon" aria-hidden="true">▦</span><span>All Orders</span><strong id="allStationCount">0</strong>
+          </button>
+          <button type="button" class="station-tab beverage" data-station="Beverage" role="tab" title="Show beverage preparation queue">
+            <span class="station-icon" aria-hidden="true">☕</span><span>Beverages</span><strong id="beverageStationCount">0</strong>
+          </button>
+          <button type="button" class="station-tab food" data-station="Food" role="tab" title="Show food preparation queue">
+            <span class="station-icon" aria-hidden="true">🍽</span><span>Food</span><strong id="foodStationCount">0</strong>
+          </button>
+        </div>
+      </section>
+
       <section class="status-tabs" aria-label="Order status summary">
         <button class="status-tab pending active" data-status="Pending">
           <span>PENDING</span>
@@ -100,23 +116,6 @@
       <section class="live-order-card">
         <div class="section-caption live-order-toolbar">
           <span>Live Order</span>
-          <div class="station-tabs station-tabs-inline" role="tablist" aria-label="Preparation queue filter">
-            <button type="button" class="station-tab active" data-station="all" role="tab" title="Show all orders">
-              <span class="station-icon" aria-hidden="true">▦</span>
-              <span>All</span>
-              <strong id="allStationCount">0</strong>
-            </button>
-            <button type="button" class="station-tab beverage" data-station="Beverage" role="tab" title="Show beverage preparation queue">
-              <span class="station-icon" aria-hidden="true">☕</span>
-              <span>Beverages</span>
-              <strong id="beverageStationCount">0</strong>
-            </button>
-            <button type="button" class="station-tab food" data-station="Food" role="tab" title="Show food preparation queue">
-              <span class="station-icon" aria-hidden="true">🍽</span>
-              <span>Food</span>
-              <strong id="foodStationCount">0</strong>
-            </button>
-          </div>
         </div>
 
         <div class="table-wrap">
@@ -296,7 +295,7 @@
   </div>
 
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/order-queue.js?v=station-pin-v1"></script>
+  <script src="../Assets/js/order-queue.js?v=station-pin-v2"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

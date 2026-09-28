@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Report & Analytics</title>
-  <link rel="stylesheet" href="../Assets/css/report.css?v=mobile-report-v3">
+  <link rel="stylesheet" href="../Assets/css/report.css?v=compact-print-v2">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/admin-mobile-polish.css?v=20260928-mobile-polish-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
 </head>
-<body class="uniform-admin report-page">
+<body class="uniform-admin">
   <div class="menu-shell">
     <aside class="staff-sidebar">
       <a class="brand" href="/admin/dashboard" aria-label="CafeKiosk Admin">
@@ -96,16 +96,6 @@
         <article class="metric-card panel-card"><span>Top Product</span><strong id="topProduct">—</strong><small id="topProductQty">No sales yet</small></article>
       </section>
 
-      <section class="analytics-panel panel-card">
-        <div class="section-head"><div><h2>Analytics Breakdown</h2><p>Actual order data grouped by source, status and payment method.</p></div></div>
-        <div class="analytics-grid">
-          <div class="analytics-box"><h3>Order Sources</h3><div id="sourceBreakdown"></div></div>
-          <div class="analytics-box"><h3>Order Status</h3><div id="statusBreakdown"></div></div>
-          <div class="analytics-box"><h3>Payment Methods</h3><div id="paymentBreakdown"></div></div>
-          <div class="analytics-box"><h3>Top Products</h3><div id="productBreakdown"></div></div>
-        </div>
-      </section>
-
       <section class="report-grid">
         <article class="chart-panel panel-card">
           <div class="section-head"><div><h2>Sales Overview</h2><p>Completed-order revenue across the selected date range.</p></div><span class="live-label" id="reportStatus">Loading...</span></div>
@@ -117,6 +107,16 @@
           <div class="section-head"><div><h2>Transaction History</h2><p>Latest transactions in the selected range.</p></div></div>
           <div class="transaction-list scroll-area" id="transactionList"><div class="empty-state">Loading transactions...</div></div>
         </article>
+      </section>
+
+      <section class="analytics-panel panel-card">
+        <div class="section-head"><div><h2>Analytics Breakdown</h2><p>Actual order data grouped by source, status and payment method.</p></div></div>
+        <div class="analytics-grid">
+          <div class="analytics-box"><h3>Order Sources</h3><div id="sourceBreakdown"></div></div>
+          <div class="analytics-box"><h3>Order Status</h3><div id="statusBreakdown"></div></div>
+          <div class="analytics-box"><h3>Payment Methods</h3><div id="paymentBreakdown"></div></div>
+          <div class="analytics-box"><h3>Top Products</h3><div id="productBreakdown"></div></div>
+        </div>
       </section>
 
       <div class="print-options-modal" id="printOptionsModal" aria-hidden="true">
