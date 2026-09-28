@@ -2206,7 +2206,7 @@ async function setupRealtime() {
         API_URL,
         {
           auth: {
-            token
+            role: "admin"
           },
 
           withCredentials:

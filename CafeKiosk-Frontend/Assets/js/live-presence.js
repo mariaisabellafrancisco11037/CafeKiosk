@@ -39,20 +39,13 @@
     return String(localStorage.getItem('cafeId') || sessionStorage.getItem('cafeId') || 'cafe-1').trim() || 'cafe-1';
   }
 
-  function resolveAuthToken(surface) {
-    if (surface !== 'pos') return '';
-    const direct = String(window.CafeAuth?.token || '').trim();
-    if (direct) return direct;
-
-    const tabToken = String(sessionStorage.getItem('cafeAuthToken') || '').trim();
-    if (tabToken) return tabToken;
-
-    const activeRole = String(sessionStorage.getItem('cafeActiveRole') || '').toLowerCase();
-    if (activeRole === 'admin') return String(localStorage.getItem('cafeAdminAuthToken') || '').trim();
-    if (activeRole === 'manager') return String(localStorage.getItem('cafeManagerAuthToken') || '').trim();
-    if (activeRole === 'staff') return String(localStorage.getItem('cafeStaffAuthToken') || '').trim();
-
-    return String(localStorage.getItem('cafeStaffAuthToken') || localStorage.getItem('cafeManagerAuthToken') || localStorage.getItem('cafeAdminAuthToken') || '').trim();
+  function resolveSocketRole(surface) {
+    const activeRole = String(sessionStorage.getItem('cafeActiveRole') || '').trim().toLowerCase();
+    if (['admin','manager','staff'].includes(activeRole)) return activeRole;
+    const normalizedSurface = String(surface || '').trim().toLowerCase();
+    if (normalizedSurface === 'admin') return 'admin';
+    if (normalizedSurface === 'manager') return 'manager';
+    return 'staff';
   }
 
   function attachPresence(socket, surface, cafeId) {
@@ -93,7 +86,7 @@
       return;
     }
 
-    const token = resolveAuthToken(surface);
+    const role = resolveSocketRole(surface);
     const options = {
       withCredentials: true,
       transports: ['websocket', 'polling'],
@@ -101,7 +94,7 @@
       reconnectionAttempts: Infinity,
       reconnectionDelay: 700
     };
-    if (token) options.auth = { token };
+    if (role) options.auth = { role };
 
     const socket = window.io(apiOrigin(), options);
     window.CafeKioskPresenceSocket = attachPresence(socket, surface, cafeId);

@@ -8,9 +8,9 @@ const kioskAccessStore = require('../services/kioskAccessStore');
 const { sendStaffInvitation, sendPasswordResetEmail, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
 const { createSecurityAlert, clientIp } = require('../services/securityAlertService');
+const { ensureSessionSchema, createSession, attachTokenHash, revokeSession, revokeAllUserSessions, SESSION_HOURS } = require('../services/authSessionService');
 
 const { JWT_SECRET, isProduction } = require('../config/security');
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 const LOGIN_LOCK_THRESHOLD = Math.max(3, Number(process.env.LOGIN_LOCK_THRESHOLD || 5));
 const LOGIN_WARNING_THRESHOLD = Math.min(LOGIN_LOCK_THRESHOLD - 1, Math.max(2, Number(process.env.LOGIN_WARNING_THRESHOLD || 3)));
 const LOGIN_LOCK_MINUTES = Math.max(5, Number(process.env.LOGIN_LOCK_MINUTES || 15));
@@ -215,6 +215,9 @@ async function ensureAuthSignupSchema(connection) {
       KEY idx_password_reset_user (user_id, expires_at)
     ) ENGINE=InnoDB
   `);
+
+  // Server-side revocable sessions used by HttpOnly authentication cookies.
+  await ensureSessionSchema(connection);
 }
 
 async function resolveDatabaseAdmin(req) {
@@ -296,7 +299,23 @@ function makeCafeId(cafeName) {
   return `${base}-${crypto.randomBytes(3).toString('hex')}`;
 }
 
-function signToken(user) {
+function signToken(user, sessionId = '') {
+  const numericUserId = Number(user?.userId);
+
+  // Production/database sessions carry only the minimum stable identity needed
+  // to locate the server-side session. Role/cafe/name are always reloaded from
+  // MySQL on every protected request.
+  if (Number.isFinite(numericUserId) && numericUserId > 0) {
+    if (!sessionId) {
+      const error = new Error('A server-side session ID is required for database users.');
+      error.code = 'SERVER_SESSION_REQUIRED';
+      throw error;
+    }
+    return jwt.sign({ userId: numericUserId, sid: sessionId, v: 2 }, JWT_SECRET, { expiresIn: `${SESSION_HOURS}h` });
+  }
+
+  // Development-only fallback account compatibility. Railway disables these by
+  // default, so this payload is never accepted as production authentication.
   return jwt.sign({
     userId: user.userId,
     username: user.username,
@@ -304,8 +323,21 @@ function signToken(user) {
     role: user.role,
     cafeId: user.cafeId,
     cafeName: user.cafeName || '',
-    isOwner: Boolean(user.isOwner)
-  }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    isOwner: Boolean(user.isOwner),
+    fallback: true
+  }, JWT_SECRET, { expiresIn: `${SESSION_HOURS}h` });
+}
+
+async function issueLoginToken(user, req) {
+  const numericUserId = Number(user?.userId);
+  if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
+    return { token: signToken(user), sessionId: '' };
+  }
+
+  const session = await createSession(user, req);
+  const token = signToken(user, session.sessionId);
+  await attachTokenHash(session.sessionId, token);
+  return { token, sessionId: session.sessionId, expiresAt: session.expiresAt };
 }
 
 function publicUser(user) {
@@ -332,7 +364,7 @@ function cookieOptions(req) {
     httpOnly: true,
     sameSite: 'strict',
     secure: isProduction() || Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
-    maxAge: 8 * 60 * 60 * 1000,
+    maxAge: SESSION_HOURS * 60 * 60 * 1000,
     path: '/'
   };
 }
@@ -553,7 +585,8 @@ exports.listUsers = async (req, res) => {
           cafeId,
           isOwner: Boolean(admin.is_owner ?? true)
         };
-        refreshedAuthToken = signToken(linked);
+        const issued = await issueLoginToken(linked, req);
+        refreshedAuthToken = issued.token;
         setRoleCookie(req, res, refreshedAuthToken, 'Admin');
       }
     }
@@ -601,7 +634,6 @@ exports.listUsers = async (req, res) => {
           archivedAt: row.archived_at || null,
           isCurrentUser: Number(row.user_id) === Number(effectiveUserId)
         })),
-        authToken: refreshedAuthToken || undefined,
         currentUserId: Number.isFinite(effectiveUserId) ? effectiveUserId : null
       });
     } finally {
@@ -635,7 +667,8 @@ async function ensureDatabaseActor(req, res) {
     cafeId: req.user.cafeId,
     isOwner: Boolean(req.user.isOwner)
   };
-  const refreshed = signToken(linked);
+  const issued = await issueLoginToken(linked, req);
+  const refreshed = issued.token;
   setRoleCookie(req, res, refreshed, 'Admin');
   res.locals.refreshedAuthToken = refreshed;
   return numericUserId;
@@ -698,7 +731,7 @@ exports.createUser = async (req, res) => {
         success: true
       });
 
-      return res.status(201).json({ success: true, message: 'User account created.', userId: result.insertId, authToken: res.locals.refreshedAuthToken || undefined });
+      return res.status(201).json({ success: true, message: 'User account created.', userId: result.insertId });
     } finally {
       connection.release();
     }
@@ -762,6 +795,12 @@ exports.updateUser = async (req, res) => {
         );
       }
 
+
+      if (role !== target.role || password) {
+        await revokeAllUserSessions(targetId, connection);
+        emitForcedLogout(req, { ...target, role: target.role });
+      }
+
       addAuditLog({
         cafeId,
         user: req.user?.displayName || req.user?.username || 'Administrator',
@@ -778,7 +817,7 @@ exports.updateUser = async (req, res) => {
         statusCode: 200,
         success: true
       });
-      return res.json({ success: true, message: 'User account updated.', authToken: res.locals.refreshedAuthToken || undefined });
+      return res.json({ success: true, message: 'User account updated.' });
     } finally {
       connection.release();
     }
@@ -891,8 +930,7 @@ exports.updateUserStatus = async (req, res) => {
         ? `${target.full_name} was fired and moved to Former Employee Archives.`
         : `${target.full_name} was restored to the active employee list.`,
       user: { id: String(target.user_id), status: newStatus },
-      kickedOut: newStatus === 'Inactive',
-      authToken: res.locals.refreshedAuthToken || undefined
+      kickedOut: newStatus === 'Inactive'
     });
   } catch (error) {
     try { await connection.rollback(); } catch (_) {}
@@ -1040,13 +1078,19 @@ exports.login = async (req, res) => {
     account = fallback;
   }
 
-  const token = signToken(account);
-  setRoleCookie(req, res, token, account.role);
+  let issued;
+  try {
+    issued = await issueLoginToken(account, req);
+  } catch (error) {
+    console.error('Create secure login session error:', error);
+    return res.status(503).json({ success: false, message: 'Unable to create a secure login session right now.' });
+  }
+
+  setRoleCookie(req, res, issued.token, account.role);
 
   return res.json({
     success: true,
     message: 'Login successful.',
-    token,
     sessionRole: account.role,
     user: publicUser(account),
     redirect: loginRedirect(account.role)
@@ -1543,7 +1587,8 @@ exports.createInvite = async (req, res) => {
         cafeName,
         isOwner: Boolean(admin.is_owner ?? true)
       };
-      refreshedAuthToken = signToken(linkedAccount);
+      const issued = await issueLoginToken(linkedAccount, req);
+      refreshedAuthToken = issued.token;
       setRoleCookie(req, res, refreshedAuthToken, 'Admin');
     }
 
@@ -1573,8 +1618,7 @@ exports.createInvite = async (req, res) => {
       signupPath,
       inviteUrl,
       expiresHours,
-      databaseBackedAdmin: true,
-      authToken: refreshedAuthToken || undefined
+      databaseBackedAdmin: true
     });
   } catch (error) {
     console.error('Create invite error:', error);
@@ -1873,9 +1917,6 @@ exports.changeUserId = async (req, res) => {
       cafeName: owner.cafe_name || '',
       isOwner: true
     };
-    const authToken = signToken(updatedUser);
-    setRoleCookie(req, res, authToken, 'Admin');
-
     try {
       addAuditLog({
         cafeId,
@@ -1898,7 +1939,6 @@ exports.changeUserId = async (req, res) => {
     return res.json({
       success: true,
       message: 'Owner User ID updated successfully.',
-      authToken,
       user: publicUser(updatedUser)
     });
   } catch (error) {
@@ -1958,7 +1998,14 @@ exports.changePassword = async (req, res) => {
       [passwordHash, numericUserId, req.user?.cafeId || 'cafe-1']
     );
 
-    return res.json({ success: true, message: 'Password updated successfully.' });
+    await revokeAllUserSessions(numericUserId);
+    clearRoleCookie(req, res, req.user?.role || '');
+
+    return res.json({
+      success: true,
+      sessionRevoked: true,
+      message: 'Password updated successfully. For security, all devices were signed out. Please log in again.'
+    });
   } catch (error) {
     console.error('Change password error:', error);
     return res.status(500).json({ success: false, message: 'Unable to change password right now.' });
@@ -2156,8 +2203,17 @@ exports.verifyApprovalPin = async (req, res) => {
   }
 };
 
-exports.logout = (req, res) => {
+exports.logout = async (req, res) => {
   const role = req.user?.role || req.body?.role || '';
+  const sessionId = safeText(req.authClaims?.sid || req.user?.sid);
+  try {
+    if (sessionId) await revokeSession(sessionId, req.user?.userId);
+  } catch (error) {
+    // Fail closed for the browser session by clearing the cookie even if the
+    // revocation write is temporarily unavailable. The session DB check will
+    // still be enforced on future authenticated requests.
+    console.error('Session revocation during logout failed:', error.message);
+  }
   clearRoleCookie(req, res, role);
   return res.json({ success: true, role: normalizeRole(role), message: 'Logged out successfully.' });
 };
@@ -2176,7 +2232,8 @@ exports.health = async (req, res) => {
     roles: ['Admin', 'Staff', 'Manager'],
     signup: { owner: true, staffInvite: true },
     passwordRecovery: { enabled: true, provider: getEmailConfig().provider, emailConfigured: getEmailConfig().configured, expiresMinutes: PASSWORD_RESET_EXPIRES_MINUTES },
-    loginProtection: { temporaryLockout: true, failedAttemptsBeforeLock: 5, lockMinutes: 10 },
+    loginProtection: { temporaryLockout: true, failedAttemptsBeforeLock: LOGIN_LOCK_THRESHOLD, lockMinutes: LOGIN_LOCK_MINUTES },
+    authentication: { serverSideSessions: true, browserTokenStorage: false, currentDatabaseRoleAuthoritative: true, sessionHours: SESSION_HOURS },
     cookies: COOKIE_NAMES
   });
 };

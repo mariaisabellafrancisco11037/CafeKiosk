@@ -490,6 +490,13 @@
       if (!response.ok || !payload.success) throw new Error(payload.message || 'Unable to change password.');
       if (msg) { msg.textContent = payload.message || 'Password updated successfully.'; msg.className = 'ckp-form-message success'; }
       form.reset();
+      if (payload.sessionRevoked) {
+        window.CafeAuth?.clearClientSession?.(window.CafeAuth?.role);
+        setTimeout(() => {
+          const role = String(window.CafeAuth?.role || area() || '').toLowerCase();
+          location.href = role === 'admin' ? '/admin-login' : role === 'manager' ? '/manager-login' : '/staff-login';
+        }, 900);
+      }
     } catch (error) {
       if (msg) { msg.textContent = error.message || 'Unable to change password.'; msg.className = 'ckp-form-message error'; }
     } finally {
@@ -857,8 +864,18 @@
       return;
     }
 
-    // Fallback for a page that somehow loaded without auth-session.js.
+    // Fallback for a page that somehow loaded without auth-session.js. The
+    // backend cookie must still be revoked; deleting browser UI state alone is
+    // not considered a logout.
     const currentArea = area();
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', 'X-Cafe-Role': currentArea },
+        body: JSON.stringify({ role: currentArea })
+      });
+    } catch (_) {}
     if (currentArea === 'admin') {
       localStorage.removeItem('cafeAdminAuthToken');
       localStorage.removeItem('cafeAdminSession');

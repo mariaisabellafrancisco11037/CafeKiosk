@@ -2,18 +2,22 @@
 // CAFEKIOSK - SHARED AUTH SESSION
 // SIMULTANEOUS ADMIN + STAFF LOGIN FIX
 //
-// Admin keys:
-//   cafeAdminAuthToken
-//   cafeAdminSession
-//
-// Staff keys:
-//   cafeStaffAuthToken
-//   cafeStaffSession
-//
-// Each browser tab also keeps an active role in sessionStorage.
+// Authentication credentials are stored only in HttpOnly cookies.
+// JavaScript stores harmless UI/session metadata only; it cannot read the JWT.
+// Each browser tab keeps an active role selector in sessionStorage so the
+// backend can select the correct role-specific cookie when multiple roles are
+// signed in from the same browser.
 // ============================================================
 
 (() => {
+
+
+    // Security upgrade cleanup: old builds placed JWTs in Web Storage. Remove
+    // any leftovers immediately. Current authentication uses HttpOnly cookies.
+    ["cafeAdminAuthToken", "cafeManagerAuthToken", "cafeStaffAuthToken", "cafeAuthToken"].forEach(key => {
+        try { localStorage.removeItem(key); } catch (_) {}
+        try { sessionStorage.removeItem(key); } catch (_) {}
+    });
 
     const ROLE_CONFIG = {
 
@@ -81,28 +85,12 @@
     }
 
 
-    function hasRoleSession(
-        role
-    ) {
-
-        const config =
-            ROLE_CONFIG[
-                role
-            ];
-
-        if (!config) {
-            return false;
-        }
-
-
-        return Boolean(
-            localStorage.getItem(
-                config.tokenKey
-            )
-        );
-
+    function hasRoleSession(role) {
+        const config = ROLE_CONFIG[role];
+        if (!config) return false;
+        const saved = parseSession(config.sessionKey);
+        return Boolean(saved?.loggedIn);
     }
-
 
     function pageRolePreference() {
 
@@ -260,27 +248,9 @@
         null;
 
 
-    let token =
-        activeConfig
-            ? (
-                sessionStorage.getItem(
-                    "cafeAuthToken"
-                ) &&
-                String(
-                    sessionStorage.getItem(
-                        "cafeActiveRole"
-                    ) ||
-                    ""
-                ).toLowerCase() ===
-                    activeRole
-                    ? sessionStorage.getItem(
-                        "cafeAuthToken"
-                    )
-                    : localStorage.getItem(
-                        activeConfig.tokenKey
-                    )
-            )
-            : null;
+    // JWT is intentionally not readable by JavaScript. The secure HttpOnly
+    // cookie is sent automatically with authenticated requests.
+    let token = "";
 
 
     const session =
@@ -419,117 +389,40 @@
 
 
     async function logout() {
-
         try {
-
-            if (token) {
-
-                await fetch(
-                    `${API_ORIGIN}/api/auth/logout`,
-                    {
-                        method:
-                            "POST",
-
-                        credentials:
-                            "include",
-
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`,
-
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-                                role:
-                                    session?.role ||
-                                    activeRole
-                            })
-                    }
-                );
-
-            }
-
+            await fetch(`${API_ORIGIN}/api/auth/logout`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Cafe-Role": activeRole || ""
+                },
+                body: JSON.stringify({ role: session?.role || activeRole })
+            });
         } catch (error) {
-
-            console.warn(
-                "Logout request failed:",
-                error
-            );
-
+            console.warn("Logout request failed:", error);
         } finally {
-
-            // Critical: clear ONLY the role used by this page.
-            clearClientSession(
-                activeRole
-            );
-
-
-            window.location.href =
-                getLoginUrl(
-                    activeRole
-                );
-
+            clearClientSession(activeRole);
+            window.location.href = getLoginUrl(activeRole);
         }
-
     }
 
 
-    async function apiFetch(
-        url,
-        options = {}
-    ) {
+    async function apiFetch(url, options = {}) {
+        const headers = new Headers(options.headers || {});
+        if (activeRole) headers.set("X-Cafe-Role", activeRole);
 
-        const headers =
-            new Headers(
-                options.headers ||
-                {}
-            );
+        const response = await fetch(url, {
+            ...options,
+            credentials: "include",
+            headers
+        });
 
-
-        if (token) {
-
-            headers.set(
-                "Authorization",
-                `Bearer ${token}`
-            );
-
+        if (response.status === 401) {
+            clearClientSession(activeRole);
+            window.location.href = getLoginUrl(activeRole);
+            throw new Error("Session expired.");
         }
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    ...options,
-
-                    credentials:
-                        "include",
-
-                    headers
-                }
-            );
-
-
-        if (
-            response.status ===
-            401
-        ) {
-
-            // A 401 on Admin only logs out Admin.
-            // A 401 on Staff only logs out Staff.
-            await logout();
-
-
-            throw new Error(
-                "Session expired."
-            );
-
-        }
-
-
         return response;
     }
 
@@ -544,7 +437,8 @@
     function saveResolvedProfile(user) {
         if (!user || !activeConfig) return;
         const current = parseSession(activeConfig.sessionKey) || {};
-        const merged = { ...current, ...user, loggedIn: true, token: token || current.token || '' };
+        const merged = { ...current, ...user, loggedIn: true };
+        delete merged.token;
         localStorage.setItem(activeConfig.sessionKey, JSON.stringify(merged));
         sessionStorage.setItem('cafeSession', JSON.stringify(merged));
         if (user.cafeId) localStorage.setItem('cafeId', user.cafeId);
@@ -599,9 +493,7 @@
     async function refreshCafeIdentity() {
         if (!activeRole) return null;
         try {
-            const headers = {};
-            if (token) headers.Authorization = `Bearer ${token}`;
-            const response = await fetch(`${API_ORIGIN}/api/auth/me`, { credentials: 'include', headers, cache: 'no-store' });
+            const response = await apiFetch(`${API_ORIGIN}/api/auth/me`, { cache: 'no-store' });
             if (!response.ok) return null;
             const data = await response.json().catch(() => ({}));
             if (data?.user) {
@@ -619,8 +511,7 @@
     async function verifySession() {
 
         if (
-            !activeRole ||
-            !token
+            !activeRole
         ) {
 
             window.location.href =
@@ -739,25 +630,15 @@
         }
 
 
-        if (!token) {
-
-            console.warn(
-                "Authenticated socket was not started because this page has no role token."
-            );
-
-            return null;
-        }
-
-
         const socket =
             window.io(
                 API_ORIGIN,
                 {
 
-                    // Explicit role-specific token means two tabs can have
-                    // two independent authenticated sockets at the same time.
+                    // The role is only a cookie selector; the server still
+                    // verifies the signed HttpOnly cookie and live DB role.
                     auth: {
-                        token
+                        role: activeRole
                     },
 
                     withCredentials:
@@ -856,7 +737,7 @@
     }
 
     async function startSocket() {
-        if (!token) return null;
+        if (!activeRole) return null;
         try {
             await loadSocketClient();
             const socket = connectSocketNow();
@@ -873,12 +754,12 @@
     // few seconds and its role-specific token is cleared.
     let accountCheckBusy = false;
     async function checkAccountStatus() {
-        if (!token || accountCheckBusy || document.hidden) return;
+        if (!activeRole || accountCheckBusy || document.hidden) return;
         accountCheckBusy = true;
         try {
             const response = await fetch(`${API_ORIGIN}/api/auth/me`, {
                 credentials: "include",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { "X-Cafe-Role": activeRole },
                 cache: "no-store"
             });
             if (response.status === 401 || response.status === 403) {
@@ -896,20 +777,10 @@
         }
     }
 
-    function replaceToken(newToken) {
-        const nextToken = String(newToken || "").trim();
-        if (!nextToken || !activeConfig) return false;
-        token = nextToken;
-        localStorage.setItem(activeConfig.tokenKey, nextToken);
-        sessionStorage.setItem("cafeAuthToken", nextToken);
-        sessionStorage.setItem("cafeActiveRole", activeRole);
-        if (window.CafeAuth) window.CafeAuth.token = nextToken;
-
-        if (window.CafeAuth?.socket) {
-            try { window.CafeAuth.socket.disconnect(); } catch (_) {}
-            window.CafeAuth.socket = null;
-        }
-        startSocket();
+    function replaceToken() {
+        // Compatibility shim for older page scripts. Authentication tokens are
+        // no longer exposed to JavaScript or stored in Web Storage.
+        refreshCafeIdentity();
         return true;
     }
 

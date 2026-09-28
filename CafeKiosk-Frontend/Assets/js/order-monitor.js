@@ -1062,7 +1062,7 @@ async function startRealtimeConnection() {
         {
 
           auth: {
-            token
+            role: "admin"
           },
 
           withCredentials:

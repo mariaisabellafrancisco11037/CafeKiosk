@@ -51,6 +51,13 @@ async function start() {
       }
 
       try {
+        await require('./CafeKiosk-Backend/services/authSessionService').ensureSessionSchema();
+        console.log('🔐 Revocable server-side authentication session table ready.');
+      } catch (sessionSchemaError) {
+        console.error(`⚠️  Authentication session schema failed: ${sessionSchemaError.code || 'SESSION_SCHEMA_ERROR'} - ${sessionSchemaError.message}`);
+      }
+
+      try {
         const upgradeResult = await require('./CafeKiosk-Backend/ensure-panelist-upgrades')();
         console.log('🟢 Panelist-requested security/account schema ready.', upgradeResult?.added?.length ? `Added: ${upgradeResult.added.join(', ')}` : '');
       } catch (upgradeError) {

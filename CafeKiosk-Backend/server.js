@@ -7,7 +7,6 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { Server } = require("socket.io");
-const jwt = require("jsonwebtoken");
 const { JWT_SECRET, isProduction } = require("./config/security");
 const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
@@ -15,7 +14,8 @@ const dbPool = require("./config/dbPool");
 
 const {
     requirePageRole,
-    requireRole
+    requireRole,
+    activeDatabaseAccount
 } = require("./middleware/authMiddleware");
 const {
     requireSystemAdminPage
@@ -526,136 +526,78 @@ app.set(
 
 
 // =====================================================
-// OPTIONAL SOCKET AUTHENTICATION
+// SOCKET AUTHENTICATION
 //
-// Kiosk sockets may connect as guests.
-// Admin / Staff sockets receive socket.user when a
-// valid JWT is supplied in handshake.auth.token or
-// in the cafe_token cookie.
+// Authenticated sockets use the same HttpOnly role cookies as HTTP requests.
+// handshake.auth.role is only a selector for the matching cookie; it does not
+// grant a role. The signed cookie is verified and then revalidated against the
+// live MySQL user + server-side session before the socket is accepted.
+// Kiosk sockets may still connect as guests when no cafe auth cookie is used.
 // =====================================================
 
-const SOCKET_JWT_SECRET = JWT_SECRET;
-
-
-function readSocketCookie(
-    cookieHeader,
-    name
-) {
-
-    if (!cookieHeader) {
-        return null;
-    }
-
-
-    const parts =
-        String(cookieHeader)
-            .split(";")
-            .map(
-                item =>
-                    item.trim()
-            );
-
-
-    for (
-        const part
-        of parts
-    ) {
-
-        const index =
-            part.indexOf("=");
-
-
-        if (
-            index === -1
-        ) {
-            continue;
+function readSocketCookie(cookieHeader, name) {
+    if (!cookieHeader) return null;
+    const parts = String(cookieHeader).split(';').map((item) => item.trim());
+    for (const part of parts) {
+        const index = part.indexOf('=');
+        if (index === -1) continue;
+        const key = part.slice(0, index);
+        const value = part.slice(index + 1);
+        if (key === name) {
+            try { return decodeURIComponent(value); }
+            catch (_) { return value; }
         }
-
-
-        const key =
-            part.slice(
-                0,
-                index
-            );
-
-
-        const value =
-            part.slice(
-                index + 1
-            );
-
-
-        if (
-            key === name
-        ) {
-
-            return decodeURIComponent(
-                value
-            );
-
-        }
-
     }
-
-
     return null;
 }
 
+function socketCookieForRole(role) {
+    const key = String(role || '').trim().toLowerCase();
+    if (key === 'admin') return 'cafe_admin_token';
+    if (key === 'manager') return 'cafe_manager_token';
+    if (key === 'staff') return 'cafe_staff_token';
+    return '';
+}
 
-io.use(
-    (
-        socket,
-        next
-    ) => {
+io.use(async (socket, next) => {
+    const cookieHeader = socket.handshake.headers?.cookie;
+    const selectedRole = String(socket.handshake.auth?.role || '').trim().toLowerCase();
+    const selectedCookie = socketCookieForRole(selectedRole);
 
-        const cookieHeader = socket.handshake.headers?.cookie;
-        const token =
-            socket.handshake.auth?.token ||
-            readSocketCookie(cookieHeader, "cafe_admin_token") ||
-            readSocketCookie(cookieHeader, "cafe_manager_token") ||
-            readSocketCookie(cookieHeader, "cafe_staff_token");
+    let token = selectedCookie ? readSocketCookie(cookieHeader, selectedCookie) : null;
 
-
-        // Keep the kiosk compatible:
-        // no token = guest connection.
-        if (!token) {
-
-            socket.user =
-                null;
-
-            return next();
-        }
-
-
-        try {
-
-            socket.user =
-                jwt.verify(
-                    token,
-                    SOCKET_JWT_SECRET
-                );
-
-
-            return next();
-
-        } catch (error) {
-
-            console.log(
-                "🔒 Socket auth rejected:",
-                error.message
-            );
-
-
-            return next(
-                new Error(
-                    "Unauthorized socket session"
-                )
-            );
-
-        }
-
+    // Compatibility for older page scripts that have not supplied a selector.
+    // This still uses HttpOnly cookies only; browser-provided JWTs are ignored.
+    if (!token && !selectedCookie) {
+        token =
+            readSocketCookie(cookieHeader, 'cafe_admin_token') ||
+            readSocketCookie(cookieHeader, 'cafe_manager_token') ||
+            readSocketCookie(cookieHeader, 'cafe_staff_token');
     }
-);
+
+    if (!token) {
+        socket.user = null;
+        return next();
+    }
+
+    let claims;
+    try {
+        claims = require('jsonwebtoken').verify(token, JWT_SECRET);
+    } catch (error) {
+        console.log('🔒 Socket auth rejected:', error.message);
+        return next(new Error('Unauthorized socket session'));
+    }
+
+    const account = await activeDatabaseAccount(claims);
+    if (!account.ok || !account.user) {
+        console.log('🔒 Socket server-session rejected:', account.message || 'invalid session');
+        return next(new Error('Unauthorized socket session'));
+    }
+
+    socket.user = account.user;
+    socket.authClaims = claims;
+    return next();
+});
 
 
 function socketRole(

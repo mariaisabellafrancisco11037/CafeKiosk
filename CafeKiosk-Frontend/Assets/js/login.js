@@ -1,11 +1,19 @@
 // ============================================================
 // CAFEKIOSK - ADMIN / STAFF LOGIN
-// SIMULTANEOUS SESSION FIX
+// SERVER-SIDE SESSION AUTHENTICATION
 //
-// Admin and Staff are stored separately.
-// Logging in one role no longer overwrites the other role.
+// The backend stores the signed JWT only in HttpOnly role cookies.
+// JavaScript stores non-sensitive display/session metadata only.
 // ============================================================
 
+
+
+// Remove JWTs left by older CafeKiosk builds. The current build relies on
+// HttpOnly cookies and never stores authentication tokens in Web Storage.
+["cafeAdminAuthToken", "cafeManagerAuthToken", "cafeStaffAuthToken", "cafeAuthToken"].forEach(key => {
+    try { localStorage.removeItem(key); } catch (_) {}
+    try { sessionStorage.removeItem(key); } catch (_) {}
+});
 
 // ============================================================
 // CONFIG
@@ -221,7 +229,6 @@ function setSubmitting(
 // ============================================================
 
 function saveSession(
-    token,
     user
 ) {
 
@@ -250,8 +257,6 @@ function saveSession(
 
         loggedIn:
             true,
-
-        token,
 
         userId:
             user.userId,
@@ -300,12 +305,6 @@ function saveSession(
 
 
     localStorage.setItem(
-        config.tokenKey,
-        token
-    );
-
-
-    localStorage.setItem(
         "cafeId",
         user.cafeId ||
         CAFE_ID
@@ -325,18 +324,17 @@ function saveSession(
 
 
     sessionStorage.setItem(
-        "cafeAuthToken",
-        token
-    );
-
-
-    sessionStorage.setItem(
         "cafeSession",
         JSON.stringify(
             session
         )
     );
 
+
+    // Remove any legacy browser-readable authentication token left by an
+    // older CafeKiosk build. The current build uses HttpOnly cookies only.
+    localStorage.removeItem(config.tokenKey);
+    sessionStorage.removeItem("cafeAuthToken");
 
     // Remove obsolete shared localStorage values from the old login system.
     // These old keys caused the second login to overwrite the first login.
@@ -450,7 +448,6 @@ function loadSocketClient() {
 // ============================================================
 
 async function connectLoginSocket(
-    token,
     user
 ) {
 
@@ -489,10 +486,10 @@ async function connectLoginSocket(
                     API_ORIGIN,
                     {
 
-                        // Explicit token is critical:
-                        // this socket keeps its own Admin/Staff identity.
+                        // Role selects the corresponding HttpOnly cookie.
+                        // The backend verifies that cookie and the live DB role.
                         auth: {
-                            token
+                            role: String(user.role || "").toLowerCase()
                         },
 
                         withCredentials:
@@ -740,7 +737,6 @@ async function handleLogin(
 
 
         if (
-            !data.token ||
             !data.user
         ) {
 
@@ -766,7 +762,6 @@ async function handleLogin(
 
 
         saveSession(
-            data.token,
             data.user
         );
 
@@ -787,7 +782,6 @@ async function handleLogin(
 
 
         await connectLoginSocket(
-            data.token,
             data.user
         );
 

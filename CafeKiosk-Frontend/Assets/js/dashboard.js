@@ -1938,8 +1938,7 @@
           API_URL,
           {
             auth: {
-              token:
-                getAuthToken()
+              role: "admin"
             },
 
             withCredentials:

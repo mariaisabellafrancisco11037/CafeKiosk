@@ -2193,7 +2193,7 @@ function setupSocket() {
     API_URL,
     {
       auth: {
-        token
+        role: String(sessionStorage.getItem("cafeActiveRole") || "staff").toLowerCase()
       },
 
       withCredentials: true,
