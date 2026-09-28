@@ -511,3 +511,312 @@ body.cku-v2 .cku-topbar {
     z-index: 6200 !important;
   }
 }
+
+
+/* =========================================================
+   APPROVAL PIN DIALOG — CLEAR CREATE / VERIFY FLOW
+   ========================================================= */
+.ckp-pin-dialog {
+  position: relative;
+  width: min(660px, 96vw);
+  max-height: min(820px, 92dvh);
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.ckp-dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #decdb5;
+  border-radius: 10px;
+  background: #fffdf8;
+  color: #6a5039;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ckp-dialog-close:hover {
+  background: #f7eddf;
+}
+
+.ckp-pin-heading {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding-right: 42px;
+}
+
+.ckp-pin-heading .ckp-dialog-icon {
+  width: 46px;
+  height: 46px;
+  margin: 0;
+}
+
+.ckp-pin-heading h2 {
+  margin: 4px 0 6px;
+  color: #493321;
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.ckp-dialog-subtitle {
+  margin: 0;
+  color: #765e48;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ckp-pin-status {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 11px;
+  align-items: start;
+  padding: 13px 14px;
+  border: 1px solid #e2d2bb;
+  border-radius: 11px;
+  background: #fbf5ea;
+}
+
+.ckp-pin-status-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: #b89c78;
+  box-shadow: 0 0 0 4px rgba(184, 156, 120, .12);
+}
+
+.ckp-pin-status strong,
+.ckp-pin-status span {
+  display: block;
+}
+
+.ckp-pin-status strong {
+  margin-bottom: 3px;
+  color: #4f3825;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.ckp-pin-status span {
+  color: #7c654f;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.ckp-pin-status.is-set {
+  border-color: #bdd8c5;
+  background: #eef7f0;
+}
+
+.ckp-pin-status.is-set .ckp-pin-status-dot {
+  background: #54906b;
+  box-shadow: 0 0 0 4px rgba(84, 144, 107, .12);
+}
+
+.ckp-pin-status.is-empty {
+  border-color: #e1ceb1;
+  background: #fff7e9;
+}
+
+.ckp-pin-status.is-error {
+  border-color: #e4beb9;
+  background: #fff1ef;
+}
+
+.ckp-pin-status.is-error .ckp-pin-status-dot {
+  background: #bb5e55;
+  box-shadow: 0 0 0 4px rgba(187, 94, 85, .12);
+}
+
+.ckp-pin-section {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #e5d6c1;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+.ckp-pin-section[hidden] {
+  display: none !important;
+}
+
+.ckp-pin-section-head > div {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.ckp-pin-step {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #efe0c8;
+  color: #65482f;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.ckp-pin-section h3 {
+  margin: 1px 0 3px;
+  color: #4c3523;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.ckp-pin-section-head p {
+  margin: 0;
+  color: #846d57;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.ckp-pin-form {
+  margin-top: 14px;
+}
+
+.ckp-pin-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ckp-pin-form label,
+.ckp-pin-verify-row label {
+  display: grid;
+  gap: 6px;
+  color: #59412f;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.ckp-pin-form input,
+.ckp-pin-verify-row input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid #d6c2a6;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #493321;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 13px;
+}
+
+.ckp-pin-form input:focus,
+.ckp-pin-verify-row input:focus {
+  border-color: #78a98d;
+  box-shadow: 0 0 0 3px rgba(120, 169, 141, .13);
+}
+
+.ckp-pin-save-actions {
+  margin-top: 14px;
+}
+
+.ckp-pin-result {
+  min-height: 0;
+  margin-top: 10px;
+  padding: 0;
+  border-radius: 8px;
+  line-height: 1.4;
+}
+
+.ckp-pin-result:not(:empty) {
+  min-height: 18px;
+  padding: 9px 11px;
+  border: 1px solid #ded0bd;
+  background: #faf4ea;
+}
+
+.ckp-pin-result.success:not(:empty) {
+  border-color: #bdd8c5;
+  background: #eef7f0;
+  color: #3f7653;
+}
+
+.ckp-pin-result.error:not(:empty) {
+  border-color: #e4beb9;
+  background: #fff1ef;
+  color: #a64a43;
+}
+
+.ckp-pin-verify-section {
+  background: #fbf8f2;
+}
+
+.ckp-pin-verify-row {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.ckp-pin-verify-btn {
+  min-width: 110px;
+  height: 42px;
+}
+
+.ckp-pin-security-note {
+  margin: 15px 2px 0;
+  padding-top: 13px;
+  border-top: 1px solid rgba(90, 70, 50, .13);
+  color: #826c58;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  .ckp-pin-dialog {
+    width: min(96vw, 560px);
+    padding: 18px;
+    max-height: 90dvh;
+  }
+
+  .ckp-pin-heading {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 11px;
+    padding-right: 32px;
+  }
+
+  .ckp-pin-heading .ckp-dialog-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ckp-pin-heading h2 {
+    font-size: 18px;
+  }
+
+  .ckp-pin-fields,
+  .ckp-pin-verify-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ckp-pin-verify-btn {
+    width: 100%;
+  }
+
+  .ckp-pin-save-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ckp-pin-save-actions button {
+    width: 100%;
+  }
+}

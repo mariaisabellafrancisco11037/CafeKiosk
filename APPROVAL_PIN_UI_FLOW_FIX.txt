@@ -1,0 +1,17 @@
+CAFEKIOSK APPROVAL PIN UI FLOW FIX
+===================================
+
+This build separates the two different Approval PIN actions so users do not confuse verification with saving.
+
+NEW FLOW
+1. Status banner: shows whether an approval PIN is already set.
+2. Set or replace approval PIN: New PIN -> Confirm new PIN -> Save/Replace PIN.
+   - Save messages appear only inside this section.
+3. Verify saved PIN: Current saved PIN -> Verify PIN.
+   - Verification messages appear only inside this section.
+   - This section is hidden when the account does not yet have a PIN.
+4. PIN inputs are restricted to numeric characters and 4-6 digits.
+5. Existing secure behavior remains: the PIN itself cannot be displayed because only a one-way bcrypt hash is stored.
+
+The latest atomic PIN save backend fix is preserved.
+The previous Inventory/Reports layout fixes are preserved.

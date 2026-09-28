@@ -1960,18 +1960,36 @@ exports.setApprovalPin = async (req, res) => {
     });
   }
 
+  let connection = null;
+  let transactionOpen = false;
+
   try {
     await ensureApprovalPinSchema();
 
-    const [accounts] = await pool.execute(
+    /*
+     * Keep save + read-back verification in ONE transaction/connection.
+     * Previously the UPDATE was autocommitted before the verification SELECT.
+     * That meant a temporary error during the SELECT could show a failure even
+     * though the new PIN had already been permanently saved.  The transaction
+     * makes the result unambiguous: success commits; any error rolls back.
+     */
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+    transactionOpen = true;
+
+    const [accounts] = await connection.execute(
       `SELECT user_id, full_name, username, role, status
          FROM users
         WHERE user_id = ? AND cafe_id = ?
-        LIMIT 1`,
+        LIMIT 1
+        FOR UPDATE`,
       [numericUserId, cafeId]
     );
+
     const account = accounts[0];
     if (!account || !['Admin', 'Manager'].includes(normalizeRole(account.role)) || String(account.status || '').toLowerCase() !== 'active') {
+      await connection.rollback();
+      transactionOpen = false;
       return res.status(409).json({
         success: false,
         code: 'APPROVAL_PIN_ACCOUNT_NOT_ACTIVE',
@@ -1980,21 +1998,27 @@ exports.setApprovalPin = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(pin, 10);
-    await pool.execute(
+    const [updateResult] = await connection.execute(
       `UPDATE users
           SET approval_pin_hash = ?, approval_pin_updated_at = NOW()
         WHERE user_id = ? AND cafe_id = ?`,
       [hash, numericUserId, cafeId]
     );
 
-    // Never claim success until the exact PIN can be read back and verified.
-    const [savedRows] = await pool.execute(
+    if (Number(updateResult?.affectedRows || 0) !== 1) {
+      const error = new Error('The Admin/Manager account was not updated.');
+      error.code = 'APPROVAL_PIN_UPDATE_MISSED';
+      throw error;
+    }
+
+    const [savedRows] = await connection.execute(
       `SELECT approval_pin_hash, approval_pin_updated_at
          FROM users
         WHERE user_id = ? AND cafe_id = ?
         LIMIT 1`,
       [numericUserId, cafeId]
     );
+
     const savedHash = String(savedRows[0]?.approval_pin_hash || '');
     const verified = Boolean(savedHash) && await bcrypt.compare(pin, savedHash);
     if (!verified) {
@@ -2003,6 +2027,11 @@ exports.setApprovalPin = async (req, res) => {
       throw error;
     }
 
+    await connection.commit();
+    transactionOpen = false;
+
+    // Audit logging is intentionally outside the transaction: an audit-log
+    // problem must never turn a successful PIN change into a false failure.
     await addAuditLog({
       cafeId,
       userId: numericUserId,
@@ -2023,6 +2052,15 @@ exports.setApprovalPin = async (req, res) => {
       message: 'Approval PIN saved and verified successfully.'
     });
   } catch (error) {
+    if (connection && transactionOpen) {
+      try {
+        await connection.rollback();
+      } catch (rollbackError) {
+        console.error('Approval PIN rollback error:', rollbackError);
+      }
+      transactionOpen = false;
+    }
+
     console.error('Set approval PIN error:', error);
     const schemaError = ['CAFEKIOSK_SCHEMA_MISSING', 'APPROVAL_PIN_SCHEMA_INCOMPLETE'].includes(error?.code);
     return res.status(500).json({
@@ -2032,6 +2070,8 @@ exports.setApprovalPin = async (req, res) => {
         ? 'Approval PIN database fields are not ready. Redeploy this version once so CafeKiosk can apply the PIN migration.'
         : 'Unable to save and verify the approval PIN right now.'
     });
+  } finally {
+    if (connection) connection.release();
   }
 };
 

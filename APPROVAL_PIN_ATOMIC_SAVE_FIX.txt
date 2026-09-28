@@ -1,0 +1,26 @@
+CafeKiosk Approval PIN - Atomic Save Fix
+========================================
+
+What was happening
+------------------
+The previous save endpoint used MySQL autocommit:
+1. UPDATE approval_pin_hash (already permanently saved)
+2. Run a second SELECT to verify it
+3. If the second operation failed temporarily, the UI returned
+   "Unable to save and verify..." even though step 1 had already committed.
+
+That is why Test Current PIN could accept the exact PIN after Save reported an error.
+
+What changed
+------------
+- PIN save + read-back verification now use one MySQL connection and transaction.
+- The transaction commits only after bcrypt confirms the stored hash.
+- Any server/database error before commit rolls the PIN change back.
+- The browser also performs one database-backed self-verification if the save
+  response is lost. If the PIN really exists in MySQL, it reports success.
+- No extra Railway environment variable is required for Approval PIN.
+
+Meaning of Test Current PIN
+---------------------------
+If Test Current PIN says the PIN is accepted, that PIN matches the bcrypt hash
+currently stored in the logged-in Admin/Manager's users.approval_pin_hash row.

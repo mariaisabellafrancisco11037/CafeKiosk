@@ -498,32 +498,133 @@
   }
 
 
+  function setPinStatus(hasPin, message) {
+    const status = document.getElementById('ckpPinStatus');
+    const title = document.getElementById('ckpPinStatusTitle');
+    const detail = document.getElementById('ckpPinStatusDetail');
+    const verifySection = document.getElementById('ckpPinVerifySection');
+    const submit = document.querySelector('#ckpPinForm button[type="submit"]');
+    const isLoading = hasPin === null;
+
+    if (status) {
+      status.classList.remove('is-error');
+      status.classList.toggle('is-set', hasPin === true);
+      status.classList.toggle('is-empty', hasPin === false);
+    }
+
+    if (title) {
+      title.textContent = isLoading
+        ? 'Checking PIN status…'
+        : hasPin
+          ? 'Approval PIN is set'
+          : 'No approval PIN set';
+    }
+
+    if (detail) {
+      detail.textContent = message || (
+        isLoading
+          ? 'Please wait while CafeKiosk checks this account.'
+          : hasPin
+            ? 'Your saved PIN is protected and cannot be displayed. You can verify it below or replace it with a new PIN.'
+            : 'Create a 4–6 digit PIN before Staff can request refund or void approval.'
+      );
+    }
+
+    if (verifySection) verifySection.hidden = hasPin !== true;
+    if (submit) submit.textContent = isLoading ? 'Save / Replace PIN' : hasPin ? 'Replace PIN' : 'Save PIN';
+  }
+
   function ensurePinModal() {
     let modal = document.getElementById('ckpPinModal');
     if (modal) return modal;
+
     modal = document.createElement('div');
     modal.id = 'ckpPinModal';
     modal.className = 'ckp-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = `<section class="ckp-dialog" role="dialog" aria-modal="true" aria-labelledby="ckpPinTitle">
+    modal.innerHTML = `<section class="ckp-dialog ckp-pin-dialog" role="dialog" aria-modal="true" aria-labelledby="ckpPinTitle">
       <button type="button" class="ckp-dialog-close" data-ckp-close-pin aria-label="Close">×</button>
-      <div class="ckp-dialog-icon">${PIN_ICON}</div>
-      <h2 id="ckpPinTitle">Refund & Void Approval PIN</h2>
-      <p class="ckp-dialog-subtitle">Set a 4-6 digit PIN that Staff can ask you for when a refund or void requires approval.</p>
-      <p class="ckp-dialog-subtitle"><strong>Security:</strong> CafeKiosk stores only a one-way hash, so an existing PIN cannot be displayed. If you forgot it, save a new PIN to replace it.</p>
-      <form id="ckpPinForm" class="ckp-form">
-        <label>New PIN<input name="pin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="new-password" required></label>
-        <label>Confirm PIN<input name="confirmPin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="new-password" required></label>
-        <div class="ckp-form-message" id="ckpPinMessage" aria-live="polite"></div>
-        <div class="ckp-dialog-actions"><button type="button" class="ckp-secondary" data-ckp-close-pin>Cancel</button><button type="submit" class="ckp-primary">Save / Replace PIN</button></div>
-      </form>
-      <div class="ckp-form" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(90,70,50,.16)">
-        <label>Test Current PIN<input id="ckpTestPin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="off" placeholder="Enter the PIN you remember"></label>
-        <div class="ckp-dialog-actions"><button type="button" class="ckp-secondary" id="ckpTestPinButton">Test PIN</button></div>
+
+      <div class="ckp-pin-heading">
+        <div class="ckp-dialog-icon">${PIN_ICON}</div>
+        <div>
+          <span class="ckp-eyebrow">SECURITY</span>
+          <h2 id="ckpPinTitle">Refund &amp; Void Approval PIN</h2>
+          <p class="ckp-dialog-subtitle">Create or replace the PIN Staff will request when a refund or void needs approval.</p>
+        </div>
       </div>
+
+      <div id="ckpPinStatus" class="ckp-pin-status" aria-live="polite">
+        <span class="ckp-pin-status-dot" aria-hidden="true"></span>
+        <div>
+          <strong id="ckpPinStatusTitle">Checking PIN status…</strong>
+          <span id="ckpPinStatusDetail">Please wait while CafeKiosk checks this account.</span>
+        </div>
+      </div>
+
+      <section class="ckp-pin-section" aria-labelledby="ckpPinSetHeading">
+        <div class="ckp-pin-section-head">
+          <div>
+            <span class="ckp-pin-step">1</span>
+            <div>
+              <h3 id="ckpPinSetHeading">Set or replace approval PIN</h3>
+              <p>Enter a new 4–6 digit PIN twice. Saving here replaces the previous PIN.</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="ckpPinForm" class="ckp-form ckp-pin-form">
+          <div class="ckp-pin-fields">
+            <label>New PIN
+              <input name="pin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="new-password" placeholder="4–6 digits" required>
+            </label>
+            <label>Confirm new PIN
+              <input name="confirmPin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="new-password" placeholder="Repeat PIN" required>
+            </label>
+          </div>
+
+          <div class="ckp-dialog-actions ckp-pin-save-actions">
+            <button type="button" class="ckp-secondary" data-ckp-close-pin>Cancel</button>
+            <button type="submit" class="ckp-primary">Save PIN</button>
+          </div>
+          <div class="ckp-form-message ckp-pin-result" id="ckpPinSaveMessage" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section id="ckpPinVerifySection" class="ckp-pin-section ckp-pin-verify-section" aria-labelledby="ckpPinVerifyHeading" hidden>
+        <div class="ckp-pin-section-head">
+          <div>
+            <span class="ckp-pin-step">2</span>
+            <div>
+              <h3 id="ckpPinVerifyHeading">Verify saved PIN</h3>
+              <p>Use this only when you want to check whether a PIN matches the one already saved.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ckp-pin-verify-row">
+          <label>Current saved PIN
+            <input id="ckpTestPin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" autocomplete="off" placeholder="Enter current PIN">
+          </label>
+          <button type="button" class="ckp-secondary ckp-pin-verify-btn" id="ckpTestPinButton">Verify PIN</button>
+        </div>
+        <div class="ckp-form-message ckp-pin-result" id="ckpPinVerifyMessage" aria-live="polite"></div>
+      </section>
+
+      <p class="ckp-pin-security-note"><strong>Security:</strong> CafeKiosk stores only a one-way hash. The existing PIN cannot be viewed or recovered; if it is forgotten, replace it with a new PIN while signed in.</p>
     </section>`;
+
     document.body.appendChild(modal);
-    modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('[data-ckp-close-pin]')) closePinModal(); });
+
+    modal.querySelectorAll('input[inputmode="numeric"]').forEach(input => {
+      input.addEventListener('input', () => {
+        input.value = String(input.value || '').replace(/\D/g, '').slice(0, 6);
+      });
+    });
+
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.closest('[data-ckp-close-pin]')) closePinModal();
+    });
     modal.querySelector('#ckpPinForm')?.addEventListener('submit', saveApprovalPin);
     modal.querySelector('#ckpTestPinButton')?.addEventListener('click', testCurrentApprovalPin);
     return modal;
@@ -533,41 +634,205 @@
     closeMenu();
     const modal = ensurePinModal();
     const form = modal.querySelector('#ckpPinForm');
-    const msg = modal.querySelector('#ckpPinMessage');
+    const saveMsg = modal.querySelector('#ckpPinSaveMessage');
+    const verifyMsg = modal.querySelector('#ckpPinVerifyMessage');
+    const testInput = modal.querySelector('#ckpTestPin');
+
     form?.reset();
-    if (msg) { msg.textContent = 'Checking PIN status...'; msg.className = 'ckp-form-message'; }
-    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    if (testInput) testInput.value = '';
+    if (saveMsg) { saveMsg.textContent = ''; saveMsg.className = 'ckp-form-message ckp-pin-result'; }
+    if (verifyMsg) { verifyMsg.textContent = ''; verifyMsg.className = 'ckp-form-message ckp-pin-result'; }
+
+    setPinStatus(null);
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+
     try {
-      const response = await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin`, {cache:'no-store'});
-      const data = await response.json().catch(()=>({}));
-      if (!response.ok || !data.success) throw new Error(data.message || 'Unable to read PIN status.');
-      if (msg) { msg.textContent = data.hasPin ? 'A secure PIN is set for this account. It cannot be displayed; test it below or save a new PIN to replace it.' : 'No approval PIN is set yet.'; msg.className = 'ckp-form-message'; }
-    } catch (error) { if (msg) { msg.textContent = error.message || 'Unable to read PIN status.'; msg.className = 'ckp-form-message error'; } }
-    setTimeout(()=>form?.querySelector('input')?.focus(),30);
-  }
-  function closePinModal(){ const m=document.getElementById('ckpPinModal'); if(!m)return; m.classList.remove('open');m.setAttribute('aria-hidden','true'); }
-  async function testCurrentApprovalPin(){
-    const input=document.getElementById('ckpTestPin'); const msg=document.getElementById('ckpPinMessage'); const btn=document.getElementById('ckpTestPinButton');
-    const pin=String(input?.value||'').trim();
-    if(!/^\d{4,6}$/.test(pin)){if(msg){msg.textContent='Enter the 4-6 digit PIN you want to test.';msg.className='ckp-form-message error';}return;}
-    if(btn){btn.disabled=true;btn.textContent='Testing...';}
-    try{
-      const response=await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin/verify`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin,scope:'self'})});
-      const data=await response.json().catch(()=>({}));
-      if(!response.ok||!data.success)throw new Error(data.message||'That PIN does not match.');
-      if(msg){msg.textContent='PIN accepted. This is the PIN currently saved for your account.';msg.className='ckp-form-message success';}
-    }catch(error){if(msg){msg.textContent=error.message||'That PIN does not match.';msg.className='ckp-form-message error';}}
-    finally{if(btn){btn.disabled=false;btn.textContent='Test PIN';}}
+      const response = await window.CafeAuth.apiFetch(
+        `${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin`,
+        { cache: 'no-store' }
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Unable to read PIN status.');
+      }
+      setPinStatus(Boolean(data.hasPin));
+    } catch (error) {
+      const status = modal.querySelector('#ckpPinStatus');
+      const title = modal.querySelector('#ckpPinStatusTitle');
+      const detail = modal.querySelector('#ckpPinStatusDetail');
+      if (status) {
+        status.classList.remove('is-set', 'is-empty');
+        status.classList.add('is-error');
+      }
+      if (title) title.textContent = 'Unable to check PIN status';
+      if (detail) detail.textContent = error.message || 'Try again in a moment.';
+      const submit = form?.querySelector('button[type="submit"]');
+      if (submit) submit.textContent = 'Save / Replace PIN';
+    }
+
+    setTimeout(() => form?.querySelector('input')?.focus(), 30);
   }
 
-  async function saveApprovalPin(event){
-    event.preventDefault(); const form=event.currentTarget; const msg=document.getElementById('ckpPinMessage'); const fd=new FormData(form); const pin=String(fd.get('pin')||''); const confirmPin=String(fd.get('confirmPin')||'');
-    if(!/^\d{4,6}$/.test(pin)){ if(msg){msg.textContent='PIN must contain 4 to 6 digits.';msg.className='ckp-form-message error';} return; }
-    if(pin!==confirmPin){ if(msg){msg.textContent='PIN confirmation does not match.';msg.className='ckp-form-message error';} return; }
-    const btn=form.querySelector('button[type="submit"]'); if(btn){btn.disabled=true;btn.textContent='Saving...';}
-    try{ const response=await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin,confirmPin})}); const data=await response.json().catch(()=>({})); if(!response.ok||!data.success)throw new Error(data.message||'Unable to save PIN.'); if(msg){msg.textContent=data.message;msg.className='ckp-form-message success';} form.reset(); }
-    catch(error){ if(msg){msg.textContent=error.message||'Unable to save PIN.';msg.className='ckp-form-message error';} }
-    finally{if(btn){btn.disabled=false;btn.textContent='Save / Replace PIN';}}
+  function closePinModal() {
+    const modal = document.getElementById('ckpPinModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  async function testCurrentApprovalPin() {
+    const input = document.getElementById('ckpTestPin');
+    const msg = document.getElementById('ckpPinVerifyMessage');
+    const btn = document.getElementById('ckpTestPinButton');
+    const pin = String(input?.value || '').trim();
+
+    if (!/^\d{4,6}$/.test(pin)) {
+      if (msg) {
+        msg.textContent = 'Enter your current 4–6 digit approval PIN.';
+        msg.className = 'ckp-form-message ckp-pin-result error';
+      }
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+    }
+    if (msg) {
+      msg.textContent = '';
+      msg.className = 'ckp-form-message ckp-pin-result';
+    }
+
+    try {
+      const response = await window.CafeAuth.apiFetch(
+        `${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin/verify`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin, scope: 'self' })
+        }
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'That PIN does not match the saved approval PIN.');
+      }
+
+      if (msg) {
+        msg.textContent = 'Correct — this matches your saved approval PIN.';
+        msg.className = 'ckp-form-message ckp-pin-result success';
+      }
+    } catch (error) {
+      if (msg) {
+        msg.textContent = error.message || 'That PIN does not match the saved approval PIN.';
+        msg.className = 'ckp-form-message ckp-pin-result error';
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Verify PIN';
+      }
+    }
+  }
+
+  async function saveApprovalPin(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const msg = document.getElementById('ckpPinSaveMessage');
+    const fd = new FormData(form);
+    const pin = String(fd.get('pin') || '').trim();
+    const confirmPin = String(fd.get('confirmPin') || '').trim();
+
+    if (!/^\d{4,6}$/.test(pin)) {
+      if (msg) {
+        msg.textContent = 'Use numbers only: enter a 4–6 digit PIN.';
+        msg.className = 'ckp-form-message ckp-pin-result error';
+      }
+      return;
+    }
+
+    if (pin !== confirmPin) {
+      if (msg) {
+        msg.textContent = 'The confirmation PIN does not match the new PIN.';
+        msg.className = 'ckp-form-message ckp-pin-result error';
+      }
+      return;
+    }
+
+    const btn = form.querySelector('button[type="submit"]');
+    const originalLabel = btn?.textContent || 'Save PIN';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+    }
+    if (msg) {
+      msg.textContent = '';
+      msg.className = 'ckp-form-message ckp-pin-result';
+    }
+
+    try {
+      const response = await window.CafeAuth.apiFetch(
+        `${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin, confirmPin })
+        }
+      );
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.success) {
+        const saveError = new Error(data.message || 'Unable to save PIN.');
+        saveError.code = data.code || '';
+        throw saveError;
+      }
+
+      setPinStatus(true);
+      if (msg) {
+        msg.textContent = 'Approval PIN saved successfully.';
+        msg.className = 'ckp-form-message ckp-pin-result success';
+      }
+      form.reset();
+    } catch (error) {
+      /*
+       * A response can be lost after MySQL commits (mobile connection drop,
+       * proxy reset, etc.). Do one authoritative database verification before
+       * reporting a failed save.
+       */
+      let confirmedInDatabase = false;
+
+      try {
+        const verifyResponse = await window.CafeAuth.apiFetch(
+          `${window.CafeAuth.API_ORIGIN}/api/auth/approval-pin/verify`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pin, scope: 'self' })
+          }
+        );
+        const verifyData = await verifyResponse.json().catch(() => ({}));
+        confirmedInDatabase = Boolean(verifyResponse.ok && verifyData.success);
+      } catch (_verifyError) {}
+
+      if (confirmedInDatabase) {
+        setPinStatus(true);
+        if (msg) {
+          msg.textContent = 'Approval PIN saved successfully.';
+          msg.className = 'ckp-form-message ckp-pin-result success';
+        }
+        form.reset();
+      } else if (msg) {
+        const suffix = error?.code ? ` (${error.code})` : '';
+        msg.textContent = `${error.message || 'Unable to save PIN.'}${suffix}`;
+        msg.className = 'ckp-form-message ckp-pin-result error';
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        const hasPin = document.getElementById('ckpPinStatus')?.classList.contains('is-set');
+        btn.textContent = hasPin ? 'Replace PIN' : originalLabel;
+      }
+    }
   }
 
   async function logout() {
