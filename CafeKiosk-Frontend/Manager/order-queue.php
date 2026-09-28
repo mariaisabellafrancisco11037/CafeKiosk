@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-status-stack-v2">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-live-table-gap-v3">
 </head>
 <body class="uniform-pos manager-order-queue-page">
   <div class="queue-app">
@@ -100,46 +100,43 @@
         </div>
       </section>
 
-      <!-- STATUS + LIVE ORDER: kept in one stack so no flexible grid spacer can appear -->
-      <div class="status-live-stack manager-status-live-stack">
-        <section class="status-tabs" aria-label="Order status summary">
-          <button class="status-tab pending active" data-status="Pending">
-            <span>PENDING</span>
-            <strong id="pendingCount">5</strong>
-          </button>
-          <button class="status-tab preparing" data-status="Preparing">
-            <span>PREPARING</span>
-            <strong id="preparingCount">4</strong>
-          </button>
-          <button class="status-tab completed" data-status="Completed">
-            <span>COMPLETED</span>
-            <strong id="completedCount">11</strong>
-          </button>
-        </section>
+      <section class="status-tabs" aria-label="Order status summary">
+        <button class="status-tab pending active" data-status="Pending">
+          <span>PENDING</span>
+          <strong id="pendingCount">5</strong>
+        </button>
+        <button class="status-tab preparing" data-status="Preparing">
+          <span>PREPARING</span>
+          <strong id="preparingCount">4</strong>
+        </button>
+        <button class="status-tab completed" data-status="Completed">
+          <span>COMPLETED</span>
+          <strong id="completedCount">11</strong>
+        </button>
+      </section>
 
-        <section class="live-order-card">
-          <div class="section-caption live-order-toolbar">
-            <span>Live Order</span>
-          </div>
+      <section class="live-order-card">
+        <div class="section-caption live-order-toolbar">
+          <span>Live Order</span>
+        </div>
 
-          <div class="table-wrap">
-            <table class="order-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Customer</th>
-                  <th>Time</th>
-                  <th>Source</th>
-                  <th>Serving</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="orderTableBody"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
+        <div class="table-wrap">
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Time</th>
+                <th>Source</th>
+                <th>Serving</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="orderTableBody"></tbody>
+          </table>
+        </div>
+      </section>
 
       <div class="pagination" aria-label="Pagination">
         <button class="page-btn active">1</button>
