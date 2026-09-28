@@ -5,29 +5,57 @@ let schemaReady = false;
 
 async function ensureApprovalPinSchema() {
   if (schemaReady) return;
-  try {
-    const [columns] = await dbPool.execute(
-      `SELECT COLUMN_NAME FROM information_schema.COLUMNS
-       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
-         AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at')`
-    );
-    const names = new Set(columns.map(row => String(row.COLUMN_NAME || '')));
-    if (!names.has('approval_pin_hash')) {
-      await dbPool.query('ALTER TABLE users ADD COLUMN approval_pin_hash VARCHAR(255) NULL');
-    }
-    if (!names.has('approval_pin_updated_at')) {
-      await dbPool.query('ALTER TABLE users ADD COLUMN approval_pin_updated_at DATETIME NULL');
-    }
-    schemaReady = true;
-  } catch (error) {
-    // A concurrent request may have added the column first. Re-check once.
-    if (error?.code === 'ER_DUP_FIELDNAME') {
-      schemaReady = true;
-      return;
-    }
+
+  const requiredColumns = [
+    ['approval_pin_hash', 'VARCHAR(255) NULL'],
+    ['approval_pin_updated_at', 'DATETIME NULL']
+  ];
+
+  const [tables] = await dbPool.execute(
+    `SELECT 1 FROM information_schema.TABLES
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' LIMIT 1`
+  );
+  if (!tables.length) {
+    const error = new Error('The users table is missing. Import the CafeKiosk database schema first.');
+    error.code = 'CAFEKIOSK_SCHEMA_MISSING';
     throw error;
   }
+
+  const [columns] = await dbPool.execute(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
+       AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at')`
+  );
+  const names = new Set(columns.map(row => String(row.COLUMN_NAME || '')));
+
+  for (const [columnName, definition] of requiredColumns) {
+    if (names.has(columnName)) continue;
+    try {
+      await dbPool.query(`ALTER TABLE users ADD COLUMN \`${columnName}\` ${definition}`);
+      names.add(columnName);
+    } catch (error) {
+      // Another request/deploy may have added the same field between our
+      // information_schema check and ALTER TABLE. Only ignore that race.
+      if (error?.code !== 'ER_DUP_FIELDNAME') throw error;
+      names.add(columnName);
+    }
+  }
+
+  const [verified] = await dbPool.execute(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
+       AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at')`
+  );
+  const verifiedNames = new Set(verified.map(row => String(row.COLUMN_NAME || '')));
+  if (!requiredColumns.every(([columnName]) => verifiedNames.has(columnName))) {
+    const error = new Error('Approval PIN database columns could not be prepared.');
+    error.code = 'APPROVAL_PIN_SCHEMA_INCOMPLETE';
+    throw error;
+  }
+
+  schemaReady = true;
 }
+
 
 function normalizePin(value) {
   return String(value || '').replace(/\D/g, '').slice(0, 6);

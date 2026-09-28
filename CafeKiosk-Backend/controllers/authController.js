@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { verifyCafeApprovalPin } = require('../services/approvalPinService');
+const { ensureApprovalPinSchema, verifyCafeApprovalPin } = require('../services/approvalPinService');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
@@ -1956,16 +1956,15 @@ exports.setApprovalPin = async (req, res) => {
   }
 
   try {
-    const connection = await pool.getConnection();
-    try {
-      await ensureAuthSignupSchema(connection);
-    } finally {
-      connection.release();
-    }
+    // PIN setup should not run the full signup/account schema upgrader.
+    // It only depends on the PIN columns, so keep this endpoint isolated from
+    // unrelated registration/invitation schema changes.
+    await ensureApprovalPinSchema();
+
     const hash = await bcrypt.hash(pin, 10);
     const [result] = await pool.execute(
       `UPDATE users
-          SET approval_pin_hash = ?, approval_pin_updated_at = NOW(), updated_at = NOW()
+          SET approval_pin_hash = ?, approval_pin_updated_at = NOW()
         WHERE user_id = ? AND cafe_id = ? AND role IN ('Admin','Manager') AND status = 'Active'`,
       [hash, numericUserId, req.user?.cafeId || 'cafe-1']
     );
@@ -1996,8 +1995,7 @@ exports.approvalPinStatus = async (req, res) => {
     return res.status(403).json({ success: false, message: 'Only an Admin or Manager can view approval PIN status.' });
   }
   try {
-    const connection = await pool.getConnection();
-    try { await ensureAuthSignupSchema(connection); } finally { connection.release(); }
+    await ensureApprovalPinSchema();
     const [rows] = await pool.execute(
       `SELECT approval_pin_hash IS NOT NULL AS has_pin, approval_pin_updated_at
          FROM users WHERE user_id = ? AND cafe_id = ? LIMIT 1`,
