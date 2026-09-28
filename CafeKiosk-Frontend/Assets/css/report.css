@@ -136,7 +136,7 @@ img, svg, canvas { display: block; }
   padding: 28px 24px 22px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
   overflow: auto;
 }
 
@@ -337,27 +337,27 @@ body.print-options-open { overflow: hidden; }
 .print-options-dialog {
   position: relative;
   z-index: 1;
-  width: min(560px, 100%);
-  max-height: min(720px, calc(100dvh - 40px));
+  width: min(460px, 100%);
+  max-height: min(620px, calc(100dvh - 40px));
   overflow: auto;
   border: 1px solid rgba(93, 66, 42, .22);
   border-radius: 16px;
   background: #fffaf1;
   box-shadow: 0 26px 70px rgba(55, 38, 24, .28);
-  padding: 22px;
+  padding: 17px;
 }
-.print-options-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
-.print-options-head h2 { margin: 1px 0 5px; font-size: 21px; }
-.print-options-head p { max-width: 440px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.print-options-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 11px; border-bottom: 1px solid var(--line-soft); }
+.print-options-head h2 { margin: 1px 0 4px; font-size: 18px; }
+.print-options-head p { max-width: 360px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .print-options-close { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 9px; border: 1px solid var(--line); background: #f8efdf; color: #735b43; font-size: 22px; line-height: 1; }
-.print-choice-list { display: flex; flex-direction: column; gap: 10px; padding: 18px 0 4px; }
+.print-choice-list { display: flex; flex-direction: column; gap: 7px; padding: 12px 0 2px; }
 .print-choice-card {
-  min-height: 78px;
+  min-height: 60px;
   display: grid;
-  grid-template-columns: 20px 42px minmax(0,1fr);
+  grid-template-columns: 18px 34px minmax(0,1fr);
   align-items: center;
-  gap: 12px;
-  padding: 13px 14px;
+  gap: 9px;
+  padding: 9px 10px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #fffdf8;
@@ -366,18 +366,18 @@ body.print-options-open { overflow: hidden; }
 }
 .print-choice-card:hover { background: #fbf4e7; }
 .print-choice-card.selected { border-color: rgba(76, 149, 111, .75); background: rgba(76, 149, 111, .07); box-shadow: 0 0 0 3px rgba(76, 149, 111, .09); }
-.print-choice-card input { width: 17px; height: 17px; accent-color: var(--green); }
-.print-choice-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; background: #f4ead9; color: #6c5037; }
+.print-choice-card input { width: 15px; height: 15px; accent-color: var(--green); }
+.print-choice-icon { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: #f4ead9; color: #6c5037; }
 .print-choice-card.selected .print-choice-icon { background: rgba(76,149,111,.15); color: var(--green-dark); }
-.print-choice-icon svg { width: 23px; height: 23px; }
+.print-choice-icon svg { width: 18px; height: 18px; }
 .print-choice-copy { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.print-choice-copy strong { font-size: 13.5px; }
-.print-choice-copy small { color: var(--muted); font-size: 11px; line-height: 1.35; }
-.print-transaction-picker { margin: -2px 0 2px 32px; padding: 12px; border: 1px solid var(--line-soft); border-radius: 10px; background: #fbf4e7; transition: opacity .15s ease; }
+.print-choice-copy strong { font-size: 12.5px; }
+.print-choice-copy small { color: var(--muted); font-size: 10px; line-height: 1.3; }
+.print-transaction-picker { margin: -1px 0 1px 27px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 8px; background: #fbf4e7; transition: opacity .15s ease; }
 .print-transaction-picker.is-disabled { opacity: .42; pointer-events: none; }
 .print-transaction-picker label { display: block; margin-bottom: 6px; color: var(--brown-2); font-size: 11px; font-weight: 750; }
-.print-transaction-picker select { width: 100%; height: 39px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; outline: none; }
-.print-options-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+.print-transaction-picker select { width: 100%; height: 34px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; background: #fff; outline: none; font-size: 11px; }
+.print-options-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line-soft); }
 .print-confirm-action { min-width: 112px; }
 .print-confirm-action svg { width: 16px; height: 16px; }
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Report & Analytics</title>
-  <link rel="stylesheet" href="../Assets/css/report.css">
+  <link rel="stylesheet" href="../Assets/css/report.css?v=compact-print-v2">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=33">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
@@ -175,7 +175,7 @@
     </main>
   </div>
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/report.js?v=print-options-v1"></script>
+  <script src="../Assets/js/report.js?v=compact-print-v2"></script>
 <script src="../Assets/js/report-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=33"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
