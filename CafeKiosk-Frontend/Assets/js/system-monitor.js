@@ -79,6 +79,7 @@
     el('onlineCafes').textContent = Number(data.summary?.onlineCafes || 0);
     el('needsAttention').textContent = Number(data.summary?.needsAttention || 0);
     el('activeConnections').textContent = Number(data.summary?.activeConnections || 0);
+    if (el('securityAlerts24h')) el('securityAlerts24h').textContent = Number(data.summary?.securityAlerts24h || 0);
 
     const backendOnline = data.system?.backend === 'Online';
     const databaseOnline = data.system?.database === 'Online';
@@ -123,7 +124,7 @@
     body.innerHTML = approvals.map((row) => `
       <tr>
         <td class="cafe-name-cell"><strong>${escapeHtml(row.cafeName)}</strong><span>${escapeHtml(row.cafeId)}</span></td>
-        <td class="owner-cell"><strong>${escapeHtml(row.ownerName || '—')}</strong><span>@${escapeHtml(row.ownerUsername || 'owner')}</span></td>
+        <td class="owner-cell"><strong>${escapeHtml(row.ownerName || '—')}</strong><span>Owner account</span></td>
         <td class="owner-cell"><strong>${escapeHtml(row.ownerEmail || row.cafeEmail || '—')}</strong><span>${escapeHtml(row.ownerPhone || '')}</span></td>
         <td>${escapeHtml(formatDate(row.requestedAt || row.createdAt))}</td>
         <td><span class="approval-state">Pending Review</span></td>
@@ -214,7 +215,7 @@
     const search = String(el('cafeSearchInput')?.value || '').trim().toLowerCase();
     const cafes = state.cafes.filter((cafe) => {
       if (!search) return true;
-      return [cafe.cafeName, cafe.cafeId, cafe.ownerName, cafe.ownerUsername]
+      return [cafe.cafeName, cafe.cafeId, cafe.ownerName]
         .some((value) => String(value || '').toLowerCase().includes(search));
     });
 
@@ -231,7 +232,7 @@
       return `
         <tr>
           <td class="cafe-name-cell"><strong>${escapeHtml(cafe.cafeName)}</strong><span>${escapeHtml(cafe.cafeId)}</span></td>
-          <td class="owner-cell"><strong>${escapeHtml(cafe.ownerName || '—')}</strong><span>${escapeHtml(cafe.ownerUsername || 'Owner account')}</span></td>
+          <td class="owner-cell"><strong>${escapeHtml(cafe.ownerName || '—')}</strong><span>Owner account</span></td>
           <td><span class="status-badge ${statusClass(cafe.overallStatus)}">${escapeHtml(cafe.overallStatus)}</span></td>
           <td><span class="device-badge ${posOnline ? 'device-online' : 'device-offline'}">${posOnline ? 'POS: Online' : 'POS: Offline'}</span></td>
           <td><span class="device-badge ${kioskOnline ? 'device-online' : 'device-offline'}" title="${kioskDeviceOnline ? 'Kiosk service online • live kiosk device connected' : kioskOnline ? 'Kiosk service online • waiting for a kiosk device connection' : 'Kiosk access is offline'}">${kioskOnline ? 'Kiosk: Online' : 'Kiosk: Offline'}</span></td>
@@ -433,7 +434,7 @@
       body.innerHTML = rows.length ? rows.map((row) => `
         <tr>
           <td><strong>${escapeHtml(row.cafeName)}</strong><span>${escapeHtml(row.cafeId)}</span></td>
-          <td><strong>${escapeHtml(row.ownerName || '—')}</strong><span>${escapeHtml(row.ownerUsername || '')}</span></td>
+          <td><strong>${escapeHtml(row.ownerName || '—')}</strong><span>Owner account</span></td>
           <td>${escapeHtml(row.reason)}</td>
           <td>${escapeHtml(row.deletedBy || 'System Administrator')}</td>
           <td>${escapeHtml(formatDate(row.deletedAt))}</td>

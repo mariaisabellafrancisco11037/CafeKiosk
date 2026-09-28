@@ -7,9 +7,13 @@ const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
 const { sendStaffInvitation, sendPasswordResetEmail, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
+const { createSecurityAlert, clientIp } = require('../services/securityAlertService');
 
 const { JWT_SECRET, isProduction } = require('../config/security');
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
+const LOGIN_LOCK_THRESHOLD = Math.max(3, Number(process.env.LOGIN_LOCK_THRESHOLD || 5));
+const LOGIN_WARNING_THRESHOLD = Math.min(LOGIN_LOCK_THRESHOLD - 1, Math.max(2, Number(process.env.LOGIN_WARNING_THRESHOLD || 3)));
+const LOGIN_LOCK_MINUTES = Math.max(5, Number(process.env.LOGIN_LOCK_MINUTES || 15));
 
 const COOKIE_NAMES = {
   admin: 'cafe_admin_token',
@@ -933,21 +937,48 @@ exports.login = async (req, res) => {
         message: `Too many failed sign-in attempts. Try again in about ${minutes} minute${minutes === 1 ? '' : 's'}, or use Forgot Password.`
       });
     }
+    if (lockUntil && Number.isFinite(lockUntil.getTime()) && lockUntil.getTime() <= Date.now()) {
+      account.failedAttempts = 0;
+      account.lockUntil = null;
+      try {
+        await pool.execute('UPDATE users SET failed_attempts=0, lock_until=NULL WHERE user_id=?', [account.userId]);
+      } catch (_) {}
+    }
 
     const passwordOK = await bcrypt.compare(password, account.passwordHash || '');
     if (!passwordOK) {
       const nextAttempts = Number(account.failedAttempts || 0) + 1;
-      const shouldLock = nextAttempts >= 5;
+      const shouldLock = nextAttempts >= LOGIN_LOCK_THRESHOLD;
+      const sourceIp = clientIp(req);
       try {
         if (shouldLock) {
+          const lockUntil = new Date(Date.now() + LOGIN_LOCK_MINUTES * 60 * 1000);
           await pool.execute(
-            'UPDATE users SET failed_attempts=?, lock_until=DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE user_id=?',
-            [nextAttempts, account.userId]
+            'UPDATE users SET failed_attempts=?, lock_until=? WHERE user_id=?',
+            [nextAttempts, lockUntil, account.userId]
           );
           await recordLoginAttempt(username, account.userId, 'Locked', req, account.cafeId);
+          await createSecurityAlert({
+            cafeId: account.cafeId,
+            alertType: 'ACCOUNT_BRUTE_FORCE_LOCK',
+            severity: 'high',
+            sourceIp,
+            dedupeMinutes: LOGIN_LOCK_MINUTES,
+            message: `Brute-force protection temporarily locked a cafe account after ${nextAttempts} failed sign-in attempts. Lock duration: ${LOGIN_LOCK_MINUTES} minutes.`
+          });
         } else {
           await pool.execute('UPDATE users SET failed_attempts=? WHERE user_id=?', [nextAttempts, account.userId]);
           await recordLoginAttempt(username, account.userId, 'Failed', req, account.cafeId);
+          if (nextAttempts === LOGIN_WARNING_THRESHOLD) {
+            await createSecurityAlert({
+              cafeId: account.cafeId,
+              alertType: 'REPEATED_LOGIN_FAILURES',
+              severity: 'medium',
+              sourceIp,
+              dedupeMinutes: 10,
+              message: `Repeated failed sign-in attempts detected. ${nextAttempts} consecutive failures have been recorded; the account will be temporarily locked if attempts continue.`
+            });
+          }
         }
       } catch (_) {}
 
@@ -955,7 +986,7 @@ exports.login = async (req, res) => {
         return res.status(429).json({
           success: false,
           code: 'ACCOUNT_TEMPORARILY_LOCKED',
-          message: 'Too many failed sign-in attempts. This account is temporarily locked for 10 minutes. You can also use Forgot Password.'
+          message: `Too many failed sign-in attempts. This account is temporarily locked for ${LOGIN_LOCK_MINUTES} minutes. You can also use Forgot Password.`
         });
       }
       return res.status(401).json({ success: false, message: 'Invalid User ID/email or password.' });

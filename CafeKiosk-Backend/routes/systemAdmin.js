@@ -6,13 +6,25 @@ const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
 const ensurePanelistUpgrades = require('../ensure-panelist-upgrades');
 const { addAuditLog } = require('../services/auditLogStore');
+const { makeRateLimit } = require('../middleware/securityRateLimit');
+const { createSecurityAlert, getRecentSecurityAlerts, clientIp } = require('../services/securityAlertService');
 const {
   SYSTEM_ADMIN_COOKIE,
   requireSystemAdminApi
 } = require('../middleware/systemAdminMiddleware');
 
 const router = express.Router();
-const { JWT_SECRET } = require('../config/security');
+const { JWT_SECRET, isProduction } = require('../config/security');
+
+const SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS = Math.max(3, Number(process.env.SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS || 5));
+const SYSTEM_ADMIN_WARNING_THRESHOLD = Math.min(SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS - 1, Math.max(2, Number(process.env.SYSTEM_ADMIN_WARNING_THRESHOLD || 3)));
+const SYSTEM_ADMIN_LOCK_MINUTES = Math.max(5, Number(process.env.SYSTEM_ADMIN_LOCK_MINUTES || 15));
+const systemAdminFailures = new Map();
+const systemAdminLoginLimiter = makeRateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 10,
+  message: 'Too many System Administrator login attempts. Please wait before trying again.'
+});
 
 function text(value) {
   return String(value ?? '').trim();
@@ -47,7 +59,7 @@ function safeEqual(left, right) {
 function cookieOptions(req) {
   return {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'strict',
     secure: Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
     maxAge: 8 * 60 * 60 * 1000,
     path: '/'
@@ -70,19 +82,80 @@ function systemAdminProfile() {
   };
 }
 
-router.post('/login', (req, res) => {
-  const expectedUser = process.env.SYSTEM_ADMIN_USER || 'systemadmin';
-  const expectedPassword = process.env.SYSTEM_ADMIN_PASSWORD || 'CafeMonitor_2026!';
+router.post('/login', systemAdminLoginLimiter, async (req, res) => {
+  const configuredUser = text(process.env.SYSTEM_ADMIN_USER);
+  const configuredPassword = String(process.env.SYSTEM_ADMIN_PASSWORD || '');
+
+  // Production must never fall back to publicly known/demo System Admin credentials.
+  if (isProduction() && (!configuredUser || !configuredPassword || configuredPassword.length < 12)) {
+    return res.status(503).json({
+      success: false,
+      message: 'System Administrator login is not securely configured. Set SYSTEM_ADMIN_USER and a 12+ character SYSTEM_ADMIN_PASSWORD in Railway Variables.'
+    });
+  }
+
+  const expectedUser = configuredUser || 'systemadmin';
+  const expectedPassword = configuredPassword || 'CafeMonitor_2026!';
   const username = text(req.body?.username);
   const password = String(req.body?.password || '');
+  const sourceIp = clientIp(req) || 'unknown';
+  const guardKey = `${sourceIp}|${username.toLowerCase() || 'unknown'}`;
+  const now = Date.now();
+  let guard = systemAdminFailures.get(guardKey) || { failures: 0, lockUntil: 0 };
+  if (guard.lockUntil && guard.lockUntil <= now) {
+    guard = { failures: 0, lockUntil: 0 };
+    systemAdminFailures.set(guardKey, guard);
+  }
 
-  if (!safeEqual(username.toLowerCase(), expectedUser.toLowerCase()) || !safeEqual(password, expectedPassword)) {
+  if (guard.lockUntil > now) {
+    const minutes = Math.max(1, Math.ceil((guard.lockUntil - now) / 60000));
+    return res.status(429).json({
+      success: false,
+      code: 'SYSTEM_ADMIN_TEMPORARILY_LOCKED',
+      message: `Too many failed System Administrator sign-in attempts. Try again in about ${minutes} minute${minutes === 1 ? '' : 's'}.`
+    });
+  }
+
+  const validUser = safeEqual(username.toLowerCase(), expectedUser.toLowerCase());
+  const validPassword = safeEqual(password, expectedPassword);
+  if (!validUser || !validPassword) {
+    guard.failures += 1;
+
+    if (guard.failures >= SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS) {
+      guard.lockUntil = now + SYSTEM_ADMIN_LOCK_MINUTES * 60 * 1000;
+      systemAdminFailures.set(guardKey, guard);
+      await createSecurityAlert({
+        alertType: 'SYSTEM_ADMIN_BRUTE_FORCE_LOCK',
+        severity: 'high',
+        sourceIp,
+        dedupeMinutes: SYSTEM_ADMIN_LOCK_MINUTES,
+        message: `Security Alert: repeated failed System Administrator sign-in attempts triggered a ${SYSTEM_ADMIN_LOCK_MINUTES}-minute temporary lock.`
+      });
+      return res.status(429).json({
+        success: false,
+        code: 'SYSTEM_ADMIN_TEMPORARILY_LOCKED',
+        message: `Too many failed System Administrator sign-in attempts. Login is temporarily locked for ${SYSTEM_ADMIN_LOCK_MINUTES} minutes.`
+      });
+    }
+
+    systemAdminFailures.set(guardKey, guard);
+    if (guard.failures === SYSTEM_ADMIN_WARNING_THRESHOLD) {
+      await createSecurityAlert({
+        alertType: 'SYSTEM_ADMIN_LOGIN_WARNING',
+        severity: 'medium',
+        sourceIp,
+        dedupeMinutes: 10,
+        message: `Security Alert: repeated failed attempts were detected against the System Administrator login. ${guard.failures} consecutive failures have been recorded from the same source.`
+      });
+    }
+
     return res.status(401).json({
       success: false,
       message: 'Invalid System Administrator credentials.'
     });
   }
 
+  systemAdminFailures.delete(guardKey);
   const user = systemAdminProfile();
   const token = jwt.sign(user, JWT_SECRET, { expiresIn: '8h' });
   res.cookie(SYSTEM_ADMIN_COOKIE, token, cookieOptions(req));
@@ -286,15 +359,7 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
              AND u.is_owner = 1
            ORDER BY u.user_id ASC
            LIMIT 1
-        ) AS owner_name,
-        (
-          SELECT u.username
-            FROM users u
-           WHERE u.cafe_id = c.cafe_id
-             AND u.is_owner = 1
-           ORDER BY u.user_id ASC
-           LIMIT 1
-        ) AS owner_username
+        ) AS owner_name
       FROM cafes c
       ORDER BY c.cafe_name ASC
     `);
@@ -347,7 +412,6 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
         cafeId,
         cafeName: row.cafe_name || cafeId,
         ownerName: row.owner_name || '—',
-        ownerUsername: row.owner_username || '',
         accountStatus: row.status || 'Active',
         approvalStatus: row.approval_status || 'Approved',
         approvalRequestedAt: row.approval_requested_at || null,
@@ -383,16 +447,30 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
     };
   }
 
+  const securityAlertRows = await getRecentSecurityAlerts({ hours: 24, limit: 20 });
+  const securityIssues = securityAlertRows.map((alert) => ({
+    cafeId: alert.cafe_id || '',
+    cafeName: alert.cafe_name || 'CafeKiosk Platform',
+    severity: alert.severity || 'medium',
+    message: `${alert.message}${alert.source_ip ? ` Source: ${alert.source_ip}` : ''}`,
+    lastActivity: alert.created_at,
+    type: 'security'
+  }));
+
   const issueSeverityRank = { high: 3, medium: 2, info: 1 };
-  let recentIssues = cafes
+  let recentIssues = [...securityIssues, ...cafes
     .flatMap((cafe) => cafe.issues.map((issue) => ({
       cafeId: cafe.cafeId,
       cafeName: cafe.cafeName,
       severity: issue.severity,
       message: issue.message,
       lastActivity: cafe.lastActivity
-    })))
-    .sort((a, b) => (issueSeverityRank[b.severity] || 0) - (issueSeverityRank[a.severity] || 0))
+    })))]
+    .sort((a, b) => {
+      const severityDiff = (issueSeverityRank[b.severity] || 0) - (issueSeverityRank[a.severity] || 0);
+      if (severityDiff) return severityDiff;
+      return new Date(b.lastActivity || 0).getTime() - new Date(a.lastActivity || 0).getTime();
+    })
     .slice(0, 12);
 
   if (!databaseOk) {
@@ -427,7 +505,8 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
       onlineCafes,
       needsAttention,
       pendingApprovals,
-      activeConnections
+      activeConnections,
+      securityAlerts24h: securityAlertRows.length
     },
     cafes,
     recentIssues
@@ -641,7 +720,6 @@ router.get('/approvals', requireSystemAdminApi, async (req, res) => {
              c.created_at AS createdAt,
              u.user_id AS ownerUserId,
              u.full_name AS ownerName,
-             u.username AS ownerUsername,
              u.email AS ownerEmail,
              u.phone AS ownerPhone,
              u.status AS ownerStatus
@@ -873,8 +951,7 @@ router.get('/deletion-log', requireSystemAdminApi, async (req, res) => {
     await ensureDeletionLogTable();
     const [rows] = await dbPool.execute(`
       SELECT deletion_id, cafe_id_snapshot AS cafeId, cafe_name_snapshot AS cafeName,
-             owner_name_snapshot AS ownerName, owner_username_snapshot AS ownerUsername,
-             owner_email_snapshot AS ownerEmail, deletion_reason AS reason,
+             owner_name_snapshot AS ownerName, deletion_reason AS reason,
              deleted_by AS deletedBy, deleted_at AS deletedAt
         FROM system_account_deletion_log
        ORDER BY deleted_at DESC

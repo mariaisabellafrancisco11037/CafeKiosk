@@ -6,7 +6,7 @@
   <title>CafeKiosk - System Monitor</title>
   <link rel="stylesheet" href="../Assets/css/dashboard.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=20260928-onboarding-v1">
+  <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=20260928-security-alerts-v2">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
@@ -75,6 +75,7 @@
         <article class="status-card"><div><span class="card-kicker">LIVE NOW</span><span class="card-label">Online Cafes</span></div><strong id="onlineCafes">—</strong></article>
         <article class="status-card"><div><span class="card-kicker">CHECK</span><span class="card-label">Needs Attention</span></div><strong id="needsAttention">—</strong></article>
         <article class="status-card"><div><span class="card-kicker">REALTIME</span><span class="card-label">Active Connections</span></div><strong id="activeConnections">—</strong></article>
+        <article class="status-card security-summary-card"><div><span class="card-kicker">SECURITY</span><span class="card-label">Alerts (24h)</span></div><strong id="securityAlerts24h">—</strong></article>
       </section>
 
       <section class="system-health-grid" aria-label="Platform service status">
@@ -139,7 +140,7 @@
       </section>
 
       <section class="monitor-panel issues-panel" id="issues">
-        <div class="monitor-panel-header"><div><span class="eyebrow">RECENT CHECKS</span><h2>System Issues</h2><p>Generated from connection status, delayed order processing and failed login activity.</p></div></div>
+        <div class="monitor-panel-header"><div><span class="eyebrow">SYSTEM &amp; SECURITY</span><h2>System &amp; Security Alerts</h2><p>Shows technical problems and suspicious sign-in activity detected by CafeKiosk protection.</p></div></div>
         <div class="issue-list" id="issueList"><div class="monitor-empty">Checking technical issues...</div></div>
       </section>
     </main>
@@ -217,7 +218,7 @@
   </div>
 
 
-  <script src="../Assets/js/system-monitor.js?v=20260928-onboarding-v1"></script>
+  <script src="../Assets/js/system-monitor.js?v=20260928-security-alerts-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 </body>
 </html>

@@ -38,3 +38,7 @@ Do not enable `ALLOW_FALLBACK_DEMO_ACCOUNTS` on Railway.
 ## What is intentionally still public
 
 A cafe's public Kiosk must show customers its menu and selling prices. Those values are public to anyone who has that cafe's Kiosk link. Internal sales history, inventory quantities, recipes, account data, and other cafes are not part of that public catalog.
+
+## Additional defense update: username minimization + brute-force warning
+
+The System Admin overview no longer returns cafe-owner usernames. Repeated login failures now trigger warning/high-severity records in `security_alerts`, and cafe accounts are temporarily locked after the configured threshold. The System Admin login has a separate temporary lock and rate limit. See `SECURITY_BRUTE_FORCE_AND_DATA_MINIMIZATION_README.md` for the exact thresholds and Railway variables.
