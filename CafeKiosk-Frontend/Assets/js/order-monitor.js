@@ -306,7 +306,7 @@ function convertOrder(order, index = 0) {
     discount,
     total,
     promotionName: order.promotionName || order.promotion?.name || "",
-    paymentMethod: order.paymentMethod || "Cash",
+    paymentMethod: order.paymentMethodLabel || order.payment_method_label || order.paymentMethod || "Cash",
     paymentStatus: order.paymentStatus || "",
     stations: Array.isArray(order.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [],
     stationStatuses: order.stationStatuses && typeof order.stationStatuses === "object" ? order.stationStatuses : {},

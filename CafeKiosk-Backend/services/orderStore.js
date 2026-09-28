@@ -16,6 +16,17 @@ function classifyPrepStation(category,name=''){
   if(foodWords.some(word=>text.includes(word)))return 'Food';
   return 'Food';
 }
+let chargeSchemaReady=false;
+async function ensureChargeSchema(){
+  if(chargeSchemaReady)return;
+  const [columns]=await pool.execute(`SELECT column_name FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='orders' AND column_name IN ('tax_amount','service_charge_amount','payment_method_label')`);
+  const have=new Set(columns.map(row=>String(row.column_name)));
+  if(!have.has('tax_amount')){try{await pool.query(`ALTER TABLE orders ADD COLUMN tax_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER discount_amount`);}catch(error){if(error?.code!=='ER_DUP_FIELDNAME')throw error;}}
+  if(!have.has('service_charge_amount')){try{await pool.query(`ALTER TABLE orders ADD COLUMN service_charge_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER tax_amount`);}catch(error){if(error?.code!=='ER_DUP_FIELDNAME')throw error;}}
+  if(!have.has('payment_method_label')){try{await pool.query(`ALTER TABLE orders ADD COLUMN payment_method_label VARCHAR(80) NULL AFTER payment_method`);}catch(error){if(error?.code!=='ER_DUP_FIELDNAME')throw error;}}
+  chargeSchemaReady=true;
+}
+
 let stationSchemaReady=false;
 async function ensureStationSchema(){
   if(stationSchemaReady)return;
@@ -44,6 +55,7 @@ async function syncOrderStations(conn,orderId,items=[]){
 }
 
 async function hydrateRows(rows){
+  await ensureChargeSchema();
   if(!rows.length)return [];
 
   // Resolve the authenticated creator's role so every POS order can expose a
@@ -95,7 +107,7 @@ async function hydrateRows(rows){
             : 'POS';
 
     return {
-      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[],stations:stationsForItems(itemMap.get(r.order_id)||[]),stationStatuses:stationMap.get(r.order_id)||{}
+      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentMethodLabel:r.payment_method_label||r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),taxAmount:num(r.tax_amount),serviceChargeAmount:num(r.service_charge_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[],stations:stationsForItems(itemMap.get(r.order_id)||[]),stationStatuses:stationMap.get(r.order_id)||{}
     };
   });
 }
@@ -119,11 +131,12 @@ async function insertItems(conn,orderId,items=[]){
 }
 
 async function createOrder(order){
+  await ensureChargeSchema();
   const existing=await findOrder(order.orderNumber);if(existing)return {order:existing,created:false};
   const conn=await pool.getConnection();try{await conn.beginTransaction();
     const uuid=(order.id&&/^[0-9a-f-]{36}$/i.test(String(order.id)))?String(order.id):null;
-    const [r]=await conn.execute(`INSERT INTO orders (order_uuid,cafe_id,order_number,source,created_by_user_id,customer_name,customer_eligibility,service_type,status,promotion_id,promotion_name_snapshot,subtotal,discount_amount,total_amount,payment_method,payment_status,payment_amount,cash_received,change_amount,created_at,updated_at,completed_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,[
-      uuid,order.cafeId,order.orderNumber,order.source,Number.isFinite(Number(order.createdByUserId))?Number(order.createdByUserId):null,order.customerName||'Walk-in Customer',eligibility(order.customerEligibility),order.serviceType||'Dine In',safeStatus(order.status),order.promotionId||null,order.promotionName||null,num(order.subtotal),num(order.discountAmount??order.discount),num(order.total),paymentMethod(order.paymentMethod),paymentStatus(order.paymentStatus),num(order.paymentAmount),num(order.cashReceived),num(order.change),order.createdAt?new Date(order.createdAt):new Date(),new Date(),order.status==='Completed'?new Date():null
+    const [r]=await conn.execute(`INSERT INTO orders (order_uuid,cafe_id,order_number,source,created_by_user_id,customer_name,customer_eligibility,service_type,status,promotion_id,promotion_name_snapshot,subtotal,discount_amount,tax_amount,service_charge_amount,total_amount,payment_method,payment_method_label,payment_status,payment_amount,cash_received,change_amount,created_at,updated_at,completed_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,[
+      uuid,order.cafeId,order.orderNumber,order.source,Number.isFinite(Number(order.createdByUserId))?Number(order.createdByUserId):null,order.customerName||'Walk-in Customer',eligibility(order.customerEligibility),order.serviceType||'Dine In',safeStatus(order.status),order.promotionId||null,order.promotionName||null,num(order.subtotal),num(order.discountAmount??order.discount),num(order.taxAmount),num(order.serviceChargeAmount),num(order.total),paymentMethod(order.paymentMethod),String(order.paymentMethodLabel||order.paymentMethod||'').slice(0,80)||null,paymentStatus(order.paymentStatus),num(order.paymentAmount),num(order.cashReceived),num(order.change),order.createdAt?new Date(order.createdAt):new Date(),new Date(),order.status==='Completed'?new Date():null
     ]);
     await insertItems(conn,r.insertId,order.items||[]);
     await syncOrderStations(conn,r.insertId,order.items||[]);
@@ -132,10 +145,11 @@ async function createOrder(order){
   }catch(e){await conn.rollback();throw e;}finally{conn.release();}}
 
 async function updateOrder(identifier,patch={}){
+  await ensureChargeSchema();
   const current=await findOrder(identifier);if(!current)return null;const conn=await pool.getConnection();try{await conn.beginTransaction();
     const status=patch.status?safeStatus(patch.status):current.status;
-    await conn.execute(`UPDATE orders SET customer_name=?,customer_eligibility=?,service_type=?,status=?,status_reason=?,promotion_id=?,promotion_name_snapshot=?,subtotal=?,discount_amount=?,total_amount=?,payment_method=?,payment_status=?,payment_amount=?,cash_received=?,change_amount=?,completed_at=?,updated_at=CURRENT_TIMESTAMP WHERE order_id=?`,[
-      patch.customerName??current.customerName,eligibility(patch.customerEligibility??current.customerEligibility),patch.serviceType??current.serviceType,status,patch.statusReason??patch.reason??null,patch.promotionId??current.promotionId??null,patch.promotionName??current.promotionName??null,num(patch.subtotal,current.subtotal),num(patch.discountAmount??patch.discount,current.discountAmount),num(patch.total,current.total),paymentMethod(patch.paymentMethod??current.paymentMethod),paymentStatus(patch.paymentStatus??current.paymentStatus),num(patch.paymentAmount,current.paymentAmount),num(patch.cashReceived,current.cashReceived),num(patch.change,current.change),status==='Completed'?new Date():null,Number(current.id)
+    await conn.execute(`UPDATE orders SET customer_name=?,customer_eligibility=?,service_type=?,status=?,status_reason=?,promotion_id=?,promotion_name_snapshot=?,subtotal=?,discount_amount=?,tax_amount=?,service_charge_amount=?,total_amount=?,payment_method=?,payment_method_label=?,payment_status=?,payment_amount=?,cash_received=?,change_amount=?,completed_at=?,updated_at=CURRENT_TIMESTAMP WHERE order_id=?`,[
+      patch.customerName??current.customerName,eligibility(patch.customerEligibility??current.customerEligibility),patch.serviceType??current.serviceType,status,patch.statusReason??patch.reason??null,patch.promotionId??current.promotionId??null,patch.promotionName??current.promotionName??null,num(patch.subtotal,current.subtotal),num(patch.discountAmount??patch.discount,current.discountAmount),num(patch.taxAmount,current.taxAmount),num(patch.serviceChargeAmount,current.serviceChargeAmount),num(patch.total,current.total),paymentMethod(patch.paymentMethod??current.paymentMethod),String((patch.paymentMethodLabel??current.paymentMethodLabel??patch.paymentMethod??current.paymentMethod??'')).slice(0,80)||null,paymentStatus(patch.paymentStatus??current.paymentStatus),num(patch.paymentAmount,current.paymentAmount),num(patch.cashReceived,current.cashReceived),num(patch.change,current.change),status==='Completed'?new Date():null,Number(current.id)
     ]);
     if(status!==current.status)await conn.execute('INSERT INTO order_status_history (order_id,changed_by_user_id,old_status,new_status,reason,source) VALUES (?,?,?,?,?,?)',[Number(current.id),Number.isFinite(Number(patch.changedByUserId))?Number(patch.changedByUserId):null,current.status,status,patch.reason||patch.statusReason||null,patch.source||'API']);
     if(Array.isArray(patch.items)){await conn.execute('DELETE FROM order_items WHERE order_id=?',[Number(current.id)]);await insertItems(conn,Number(current.id),patch.items);await syncOrderStations(conn,Number(current.id),patch.items);}
@@ -157,4 +171,4 @@ async function updateStationStatus(identifier,station,status,userId=null){
 async function resetOrders(){await pool.execute('DELETE FROM orders');return [];}
 async function readOrders(){return listOrders({});}
 async function ensureStore(){return true;}
-module.exports={ensureStore,readOrders,listOrders,findOrder,createOrder,updateOrder,updateStationStatus,classifyPrepStation,stationsForItems,ensureStationSchema,resetOrders};
+module.exports={ensureStore,readOrders,listOrders,findOrder,createOrder,updateOrder,updateStationStatus,classifyPrepStation,stationsForItems,ensureStationSchema,ensureChargeSchema,resetOrders};

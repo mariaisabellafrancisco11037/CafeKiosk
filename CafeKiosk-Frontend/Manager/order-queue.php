@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Manager Order Queue</title>
-  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-pin-v1">
+  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v2">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">

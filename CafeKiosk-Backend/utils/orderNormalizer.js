@@ -194,6 +194,14 @@ function normalizePaymentMethod(
         return "Card";
     }
 
+    if (
+        raw.includes("other") ||
+        raw.includes("maya") ||
+        raw.includes("bank")
+    ) {
+        return "Other";
+    }
+
     return "Cash";
 }
 
@@ -575,13 +583,29 @@ function normalizeOrderPayload(
             0
         );
 
+    const taxAmount =
+        roundMoney(
+            payload.taxAmount ??
+            payload.tax_amount ??
+            0
+        );
+
+    const serviceChargeAmount =
+        roundMoney(
+            payload.serviceChargeAmount ??
+            payload.service_charge_amount ??
+            0
+        );
+
     const total =
         roundMoney(
             payload.total ??
             Math.max(
                 0,
                 subtotal -
-                discountAmount
+                discountAmount +
+                taxAmount +
+                serviceChargeAmount
             )
         );
 
@@ -589,6 +613,13 @@ function normalizeOrderPayload(
         normalizePaymentMethod(
             payload.paymentMethod ??
             payload.payment
+        );
+
+    const paymentMethodLabel =
+        asText(
+            payload.paymentMethodLabel ??
+            payload.payment_method_label,
+            paymentMethod
         );
 
     const cashReceived =
@@ -672,6 +703,8 @@ function normalizeOrderPayload(
 
         paymentMethod,
 
+        paymentMethodLabel,
+
         paymentStatus:
             asText(
                 payload.paymentStatus ??
@@ -691,6 +724,10 @@ function normalizeOrderPayload(
 
         discount:
             discountAmount,
+
+        taxAmount,
+
+        serviceChargeAmount,
 
         total,
 

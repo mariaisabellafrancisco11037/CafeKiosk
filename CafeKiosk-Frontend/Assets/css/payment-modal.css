@@ -30,7 +30,7 @@
 .ck-payment-total-box { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 16px; padding:13px 15px; border-radius:14px; background:#f2f8f4; border:1px solid #dceadf; }
 .ck-payment-total-box span { color:#627267; font-weight:600; }
 .ck-payment-total-box strong { font-size:1.3rem; color:#285b45; }
-.ck-payment-methods { display:grid; grid-template-columns:repeat(3, 1fr); gap:9px; margin-bottom:16px; }
+.ck-payment-methods { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:9px; margin-bottom:16px; }
 .ck-payment-method { min-width:0; border:1px solid #e1d6cc; background:#fff; border-radius:15px; padding:12px 8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; color:#4b3a30; font-weight:700; font-size:.82rem; text-align:center; }
 .ck-payment-method:hover { border-color:#9bbdab; background:#fbfdfb; }
 .ck-payment-method.active { border-color:#6b9f83; box-shadow:0 0 0 3px rgba(107,159,131,.13); background:#f3faf6; color:#285b45; }

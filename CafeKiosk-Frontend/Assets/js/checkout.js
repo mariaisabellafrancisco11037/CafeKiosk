@@ -405,22 +405,14 @@ function displayDateTime() {
    --------------------------------------------------------- */
 
 function formatCurrency(amount) {
-
-    return new Intl.NumberFormat(
-        "en-PH",
-        {
-
-            style:
-                "currency",
-
-            currency:
-                "PHP"
-
-        }
-    ).format(
-        Number(amount) || 0
-    );
-
+    const numeric = Number(amount) || 0;
+    const code = String(sessionStorage.getItem("cafeCurrencyCode") || "PHP").trim().toUpperCase();
+    try {
+        return new Intl.NumberFormat("en-PH", { style: "currency", currency: code }).format(numeric);
+    } catch (_) {
+        const symbol = String(sessionStorage.getItem("cafeCurrencySymbol") || "₱");
+        return `${symbol}${numeric.toFixed(2)}`;
+    }
 }
 
 
@@ -1331,20 +1323,26 @@ function updateTotals(order) {
     );
 
 
-    /*
-       Discount
+    const backendOrder =
+        typeof getSavedBackendOrder === "function"
+            ? getSavedBackendOrder()
+            : null;
 
-       Currently zero because your current
-       CafeKiosk does not yet have an actual
-       discount system.
-    */
+    const discount =
+        Number(backendOrder?.discountAmount ?? backendOrder?.discount ?? 0) || 0;
 
-    const discount = 0;
+    const taxAmount =
+        Number(backendOrder?.taxAmount ?? backendOrder?.tax_amount ?? 0) || 0;
 
+    const serviceChargeAmount =
+        Number(backendOrder?.serviceChargeAmount ?? backendOrder?.service_charge_amount ?? 0) || 0;
 
     const total =
-        subtotal -
-        discount;
+        Number(
+            backendOrder?.total ??
+            backendOrder?.totalAmount ??
+            subtotal - discount + taxAmount + serviceChargeAmount
+        ) || 0;
 
 
     /* -----------------------------------------------------
@@ -1385,6 +1383,16 @@ function updateTotals(order) {
             );
 
     }
+
+    const taxRow = document.getElementById("receiptTaxRow");
+    const taxElement = document.getElementById("receiptTax");
+    if (taxRow) taxRow.hidden = !(taxAmount > 0);
+    if (taxElement) taxElement.textContent = formatCurrency(taxAmount);
+
+    const serviceRow = document.getElementById("receiptServiceRow");
+    const serviceElement = document.getElementById("receiptService");
+    if (serviceRow) serviceRow.hidden = !(serviceChargeAmount > 0);
+    if (serviceElement) serviceElement.textContent = formatCurrency(serviceChargeAmount);
 
 
     /* -----------------------------------------------------
@@ -2083,7 +2091,8 @@ function initializeReceipt() {
     if (paymentMethodElement) {
 
         paymentMethodElement.textContent =
-            paymentMethod === "GCash" ? "GCash / Online" : paymentMethod;
+            sessionStorage.getItem("paymentMethodLabel") ||
+            (paymentMethod === "GCash" ? "GCash / Online" : paymentMethod);
 
         paymentMethodElement.classList.remove(
             "payment-cash",
@@ -2153,6 +2162,13 @@ function initializeReceipt() {
             );
     }
 
+
+    const receiptFooter = document.getElementById("receiptFooter");
+    const receiptFooterText = String(sessionStorage.getItem("cafeReceiptFooter") || "").trim();
+    if (receiptFooter) {
+        receiptFooter.hidden = !receiptFooterText;
+        receiptFooter.textContent = receiptFooterText;
+    }
 
     /* -----------------------------------------------------
        DATE / TIME

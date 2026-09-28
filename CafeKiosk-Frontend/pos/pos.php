@@ -233,6 +233,15 @@
                 </strong>
             </div>
 
+            <div class="summary-row" id="taxRow" hidden>
+                <span id="taxLabel">Tax</span>
+                <strong id="taxAmount">₱0.00</strong>
+            </div>
+
+            <div class="summary-row" id="serviceChargeRow" hidden>
+                <span id="serviceChargeLabel">Service Charge</span>
+                <strong id="serviceChargeAmount">₱0.00</strong>
+            </div>
 
             <div class="summary-row total-row">
                 <span>Total</span>
@@ -274,6 +283,7 @@
                         <option value="Cash">Cash</option>
                         <option value="GCash">GCash / Online Payment</option>
                         <option value="Card">Card</option>
+                        <option value="Other">Other</option>
                     </select>
                     <input type="number" id="cashReceived" class="ck-payment-native-control" min="0" step="0.01" inputmode="decimal" autocomplete="off" aria-hidden="true" tabindex="-1">
                     <span id="paymentAmountLabel" class="ck-payment-native-control">Cash Received</span>
@@ -460,6 +470,7 @@
       <button type="button" class="ck-payment-method active" data-payment-method="Cash"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></span><span>Cash</span></button>
       <button type="button" class="ck-payment-method" data-payment-method="GCash"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg></span><span>GCash / Online</span></button>
       <button type="button" class="ck-payment-method" data-payment-method="Card"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg></span><span>Card</span></button>
+      <button type="button" class="ck-payment-method" data-payment-method="Other"><span class="ck-payment-method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="17" cy="12" r="2"/></svg></span><span>Other</span></button>
     </div>
     <div class="ck-payment-entry">
       <label id="paymentModalAmountLabel" for="paymentModalAmount">Cash Received</label>
@@ -483,7 +494,7 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=20260928-ux-v1"></script>
+<script src="/Assets/js/pos.js?v=20260928-settings-v1"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>

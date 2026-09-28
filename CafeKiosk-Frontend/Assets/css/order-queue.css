@@ -68,7 +68,7 @@ button{cursor:pointer}
 .queue-main{
   min-width:0;height:100dvh;padding:24px 24px 24px;
   display:grid;
-  grid-template-rows:60px 40px 52px minmax(0,1fr) 38px;
+  grid-template-rows:60px 40px auto 52px minmax(0,1fr) 38px;
   gap:12px;overflow:hidden;
 }
 .page-title-box{
@@ -1369,64 +1369,75 @@ button{cursor:pointer}
 }
 
 /* ============================================================
-   BEVERAGE / FOOD PREPARATION QUEUES + APPROVAL PIN FEEDBACK
+   COMPACT BEVERAGE / FOOD PREPARATION QUEUE FILTER
+   Keep this control compact so the live-order table owns the
+   remaining viewport height.
    ============================================================ */
 .station-switcher {
-  margin: 10px 0 12px;
-  padding: 11px 12px;
+  margin: 0;
+  padding: 7px 9px;
+  min-height: 48px;
   border: 1px solid rgba(94, 116, 100, .18);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, .78);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .72);
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 12px;
 }
 .station-switcher-label {
   display: block;
-  margin-bottom: 7px;
+  margin: 0;
   color: #6e6257;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: .08em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .station-tabs {
+  min-width: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 .station-tab {
-  min-height: 46px;
+  min-width: 0;
+  height: 34px;
   border: 1px solid #dfd8cf;
-  border-radius: 11px;
+  border-radius: 8px;
   background: #fff;
   color: #594d43;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 8px 10px;
+  gap: 6px;
+  padding: 0 9px;
   font: inherit;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   cursor: pointer;
   transition: .18s ease;
 }
 .station-tab:hover { border-color: #7ba88a; transform: translateY(-1px); }
-.station-tab.active { background: #4f8f6b; border-color: #4f8f6b; color: #fff; box-shadow: 0 5px 16px rgba(67, 120, 89, .2); }
+.station-tab.active { background: #4f8f6b; border-color: #4f8f6b; color: #fff; box-shadow: 0 4px 12px rgba(67, 120, 89, .18); }
 .station-tab.beverage.active { background: #5e8770; border-color: #5e8770; }
 .station-tab.food.active { background: #8a6c52; border-color: #8a6c52; }
 .station-tab strong {
-  min-width: 21px;
-  height: 21px;
-  padding: 0 6px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
   border-radius: 999px;
   display: inline-grid;
   place-items: center;
   background: #f0ece7;
   color: #66594d;
-  font-size: 10px;
+  font-size: 9px;
+  flex: 0 0 auto;
 }
 .station-tab.active strong { background: rgba(255,255,255,.2); color: #fff; }
-.station-icon { font-size: 15px; line-height: 1; }
-.station-help { margin: 7px 2px 0; color: #8b7d70; font-size: 9px; line-height: 1.35; }
+.station-icon { font-size: 13px; line-height: 1; flex: 0 0 auto; }
+.station-help { display: none; }
 .approval-pin-feedback { min-height: 18px; margin-top: 5px; font-size: 10px; font-weight: 700; color: #77695d; }
 .approval-pin-feedback.success { color: #2f7f54; }
 .approval-pin-feedback.error { color: #b84b4b; }
@@ -1444,7 +1455,18 @@ button{cursor:pointer}
   cursor: pointer;
 }
 @media (max-width: 760px) {
-  .station-tabs { grid-template-columns: 1fr; }
-  .station-tab { justify-content: flex-start; }
-  .station-tab strong { margin-left: auto; }
+  .station-switcher {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 8px;
+  }
+  .station-switcher-label { font-size: 8px; }
+  .station-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+  .station-tab { height: 38px; padding: 0 6px; gap: 4px; font-size: 9px; }
+  .station-icon { font-size: 12px; }
+  .station-tab strong { min-width: 18px; height: 18px; padding: 0 4px; font-size: 8px; }
+}
+@media (max-width: 430px) {
+  .station-tab { font-size: 8px; }
+  .station-icon { display: none; }
 }

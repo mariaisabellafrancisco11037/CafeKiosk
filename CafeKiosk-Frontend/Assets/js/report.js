@@ -133,8 +133,10 @@
       date: Number.isNaN(date.getTime()) ? null : date,
       items,
       total: orderTotal(order, items),
-      paymentMethod: order?.paymentMethod ?? order?.payment?.method ?? "Not recorded",
+      paymentMethod: order?.paymentMethodLabel ?? order?.payment_method_label ?? order?.paymentMethod ?? order?.payment?.method ?? "Not recorded",
       paymentAmount: Number(order?.paymentAmount ?? order?.payment_amount ?? order?.cashReceived ?? 0),
+      taxAmount: Number(order?.taxAmount ?? order?.tax_amount ?? 0),
+      serviceChargeAmount: Number(order?.serviceChargeAmount ?? order?.service_charge_amount ?? 0),
       customer:
         order?.customerName ??
         order?.customer ??
@@ -583,6 +585,7 @@
           <div><span>Amount Paid</span><strong>${esc(money(order.paymentAmount || order.total))}</strong></div>
         </div>
         ${printableItems(order)}
+        ${(order.taxAmount>0||order.serviceChargeAmount>0)?`<div class="charge-breakdown">${order.taxAmount>0?`<span>Tax <strong>${esc(money(order.taxAmount))}</strong></span>`:''}${order.serviceChargeAmount>0?`<span>Service Charge <strong>${esc(money(order.serviceChargeAmount))}</strong></span>`:''}</div>`:''}
         <div class="grand-total"><span>Total</span><strong>${esc(money(order.total))}</strong></div>
       </section>`;
   }

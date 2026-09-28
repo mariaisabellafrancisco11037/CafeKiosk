@@ -4,6 +4,7 @@ const router = express.Router();
 const { requireRole } = require('../middleware/authMiddleware');
 const kioskStore = require('../services/kioskAccessStore');
 const catalogStore = require('../services/catalogStore');
+const pool = require('../config/dbPool');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'cafekiosk-demo-secret';
 
@@ -65,10 +66,31 @@ router.get('/public/:slug/catalog', async (req, res, next) => {
     if (!info || info.cafeStatus !== 'Active' || !info.kioskEnabled) {
       return res.status(404).json({ success: false, message: 'This kiosk link is not active.' });
     }
-    const [categories, products] = await Promise.all([
+    const [categories, products, paymentRows, taxRows, preferenceRows] = await Promise.all([
       catalogStore.listCategories(info.cafeId),
-      catalogStore.list(info.cafeId)
+      catalogStore.list(info.cafeId),
+      pool.execute('SELECT method_name,display_name,is_enabled,sort_order FROM payment_methods WHERE cafe_id=? ORDER BY sort_order', [info.cafeId]).then(([rows]) => rows),
+      pool.execute('SELECT tax_rate_percent,service_charge_percent FROM tax_settings WHERE cafe_id=? LIMIT 1', [info.cafeId]).then(([rows]) => rows),
+      pool.execute('SELECT default_order_type,currency_code,currency_symbol,receipt_footer FROM system_preferences WHERE cafe_id=? LIMIT 1', [info.cafeId]).then(([rows]) => rows)
     ]);
+    const paymentDefaults = [
+      { methodName: 'Cash', displayName: 'Cash', isEnabled: true, sortOrder: 1 },
+      { methodName: 'GCash', displayName: 'GCash / Online', isEnabled: false, sortOrder: 2 },
+      { methodName: 'Card', displayName: 'Card', isEnabled: false, sortOrder: 3 },
+      { methodName: 'Other', displayName: 'Other', isEnabled: false, sortOrder: 4 }
+    ];
+    const byMethod = new Map((paymentRows || []).map(row => [String(row.method_name), row]));
+    const paymentMethods = paymentDefaults.map(def => {
+      const row = byMethod.get(def.methodName);
+      return {
+        methodName: def.methodName,
+        displayName: String(row?.display_name || def.displayName),
+        isEnabled: row ? Boolean(row.is_enabled) : def.isEnabled,
+        sortOrder: Number(row?.sort_order || def.sortOrder)
+      };
+    }).filter(method => method.isEnabled);
+    const tax = taxRows?.[0] || {};
+    const preference = preferenceRows?.[0] || {};
     return res.json({
       success: true,
       cafeId: info.cafeId,
@@ -76,7 +98,16 @@ router.get('/public/:slug/catalog', async (req, res, next) => {
       kioskSlug: info.kioskSlug,
       categories,
       count: products.length,
-      products
+      products,
+      paymentMethods,
+      checkout: {
+        tax: Number(tax.tax_rate_percent || 0),
+        service: Number(tax.service_charge_percent || 0),
+        defaultOrder: preference.default_order_type || 'Dine In',
+        currencyCode: preference.currency_code || 'PHP',
+        currencySymbol: preference.currency_symbol || '₱',
+        receiptFooter: preference.receipt_footer || ''
+      }
     });
   } catch (error) { next(error); }
 });

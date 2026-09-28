@@ -5,10 +5,23 @@
 let order = [];
 let selectedPaymentMethod = "Cash";
 let pendingKioskPaymentMethod = "Cash";
+let kioskCheckoutSettings = {
+  paymentMethods: [
+    { methodName: "Cash", displayName: "Cash", isEnabled: true },
+    { methodName: "GCash", displayName: "GCash / Online", isEnabled: true },
+    { methodName: "Card", displayName: "Card", isEnabled: true },
+    { methodName: "Other", displayName: "Other", isEnabled: false }
+  ],
+  tax: 0,
+  service: 0,
+  currencyCode: "PHP",
+  currencySymbol: "₱"
+};
 const KIOSK_PAYMENT_ICON_MARKUP = {
   Cash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg>`,
   GCash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg>`,
-  Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`
+  Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`,
+  Other: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="17" cy="12" r="2"/></svg>`
 };
 let currentCategory = "coffee";
 let pendingItem = null;
@@ -1083,7 +1096,7 @@ function renderMenu(category) {
 
       <h4>${item.name}</h4>
 
-      <p>₱${item.price}</p>
+      <p>${kioskMoney(item.price)}</p>
     `;
 
     grid.appendChild(
@@ -1243,7 +1256,7 @@ function showItemModal(
     );
 
   if (priceEl) {
-    priceEl.innerText = `₱${price}`;
+    priceEl.innerText = kioskMoney(price);
   }
 
   const categoryEl =
@@ -1452,7 +1465,7 @@ function renderItemModalOptions() {
             blocked
               ? "OUT OF STOCK"
               : Number(opt.price) > 0
-                ? `+ ₱${Number(opt.price).toFixed(2)}`
+                ? `+ ${kioskMoney(Number(opt.price))}`
                 : "Included";
 
           choice.innerHTML = `
@@ -1574,7 +1587,7 @@ function renderItemModalOptions() {
           blocked
             ? "OUT OF STOCK"
             : Number(opt.price) > 0
-              ? `+ ₱${Number(opt.price).toFixed(2)}`
+              ? `+ ${kioskMoney(Number(opt.price))}`
               : "Included";
 
         input.addEventListener(
@@ -1979,7 +1992,7 @@ function renderOrder() {
             </span>
 
             <span class="order-price">
-              ₱${itemTotal}
+              ${kioskMoney(itemTotal)}
             </span>
 
           </div>
@@ -2023,18 +2036,38 @@ function renderOrder() {
       "totalAmount"
     );
 
+  const promotionQuote =
+    window.CafePromotionClient?.quote
+      ? window.CafePromotionClient.quote(order, subtotal)
+      : { subtotal, discount: 0, total: subtotal, promo: null };
+
+  const discountedTotal = Math.max(0, Number(promotionQuote.total ?? subtotal) || 0);
+  const taxRate = Math.max(0, Number(kioskCheckoutSettings.tax || 0)) / 100;
+  const serviceRate = Math.max(0, Number(kioskCheckoutSettings.service || 0)) / 100;
+  const taxAmount = discountedTotal * taxRate;
+  const serviceChargeAmount = discountedTotal * serviceRate;
+  const finalTotal = discountedTotal + taxAmount + serviceChargeAmount;
+
   if (subtotalElement) {
-
-    subtotalElement.innerText =
-      `₱${subtotal}`;
-
+    subtotalElement.innerText = kioskMoney(subtotal);
   }
 
+  const taxRow = document.getElementById("kioskTaxRow");
+  const taxLabel = document.getElementById("kioskTaxLabel");
+  const taxValue = document.getElementById("kioskTaxAmount");
+  if (taxRow) taxRow.hidden = !(Number(kioskCheckoutSettings.tax || 0) > 0);
+  if (taxLabel) taxLabel.textContent = `Tax (${Number(kioskCheckoutSettings.tax || 0)}%)`;
+  if (taxValue) taxValue.textContent = kioskMoney(taxAmount);
+
+  const serviceRow = document.getElementById("kioskServiceChargeRow");
+  const serviceLabel = document.getElementById("kioskServiceChargeLabel");
+  const serviceValue = document.getElementById("kioskServiceChargeAmount");
+  if (serviceRow) serviceRow.hidden = !(Number(kioskCheckoutSettings.service || 0) > 0);
+  if (serviceLabel) serviceLabel.textContent = `Service Charge (${Number(kioskCheckoutSettings.service || 0)}%)`;
+  if (serviceValue) serviceValue.textContent = kioskMoney(serviceChargeAmount);
+
   if (totalElement) {
-
-    totalElement.innerText =
-      `₱${subtotal}`;
-
+    totalElement.innerText = kioskMoney(finalTotal);
   }
 
   if (
@@ -2051,13 +2084,53 @@ function renderOrder() {
 // PAYMENT METHOD
 // =====================================================
 
-function kioskPaymentMethodLabel(method) {
-  if (method === "GCash") return "GCash / Online";
-  return method === "Card" ? "Card" : "Cash";
+function enabledKioskPaymentMethods() {
+  return (kioskCheckoutSettings.paymentMethods || []).filter(method => method.isEnabled !== false);
 }
 
+function kioskPaymentMethodLabel(method) {
+  const match = (kioskCheckoutSettings.paymentMethods || []).find(item => item.methodName === method);
+  if (match?.displayName) return match.displayName;
+  if (method === "GCash") return "GCash / Online";
+  if (method === "Card") return "Card";
+  if (method === "Other") return "Other";
+  return "Cash";
+}
+
+function kioskMoney(value) {
+  const symbol = String(kioskCheckoutSettings.currencySymbol || "₱");
+  return `${symbol}${Number(value || 0).toFixed(2)}`;
+}
+
+function applyKioskPaymentConfig() {
+  const enabled = enabledKioskPaymentMethods();
+  const allowed = new Set(enabled.map(item => item.methodName));
+  const native = document.getElementById("paymentMethod");
+  if (native) {
+    Array.from(native.options).forEach(option => {
+      const method = (kioskCheckoutSettings.paymentMethods || []).find(item => item.methodName === option.value);
+      option.hidden = !allowed.has(option.value);
+      option.disabled = !allowed.has(option.value);
+      if (method?.displayName) option.textContent = method.displayName;
+    });
+  }
+  document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+    const methodName = button.dataset.paymentMethod;
+    const method = (kioskCheckoutSettings.paymentMethods || []).find(item => item.methodName === methodName);
+    button.hidden = !allowed.has(methodName);
+    const spans = button.querySelectorAll("span");
+    if (spans[1] && method?.displayName) spans[1].textContent = method.displayName;
+  });
+  if (!allowed.has(selectedPaymentMethod)) selectedPaymentMethod = enabled[0]?.methodName || "Cash";
+  pendingKioskPaymentMethod = selectedPaymentMethod;
+  if (native) native.value = selectedPaymentMethod;
+  updateKioskCashUI();
+  updateKioskPaymentSummary();
+}
+
+
 function updatePaymentMethod(value) {
-  selectedPaymentMethod = ["Cash", "GCash", "Card"].includes(value)
+  selectedPaymentMethod = ["Cash", "GCash", "Card", "Other"].includes(value)
     ? value
     : "Cash";
 
@@ -2146,7 +2219,7 @@ function updateKioskCashUI() {
 
   if (changeElement) {
     changeElement.textContent =
-      `₱${change.toFixed(2)}`;
+      kioskMoney(change);
   }
 
   sessionStorage.setItem(
@@ -2181,7 +2254,7 @@ function updateKioskPaymentSummary() {
   if (name) name.textContent = kioskPaymentMethodLabel(method);
   if (amountLabel) {
     amountLabel.textContent = paymentAmount > 0
-      ? `Paid ₱${paymentAmount.toFixed(2)}`
+      ? `Paid ${kioskMoney(paymentAmount)}`
       : "Tap to enter payment";
   }
 }
@@ -2197,7 +2270,7 @@ function updateKioskPaymentModalUI() {
   const changeBox = document.getElementById("paymentModalChange");
   const error = document.getElementById("paymentModalError");
 
-  if (totalEl) totalEl.textContent = `₱${total.toFixed(2)}`;
+  if (totalEl) totalEl.textContent = kioskMoney(total);
 
   document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
     const active = button.dataset.paymentMethod === method;
@@ -2208,31 +2281,27 @@ function updateKioskPaymentModalUI() {
   if (label) {
     label.textContent = method === "Cash"
       ? "Cash Received"
-      : method === "Card"
-        ? "Amount Paid by Card"
-        : "Amount Paid Online / GCash";
+      : `Amount Paid via ${kioskPaymentMethodLabel(method)}`;
   }
 
   if (hint) {
     hint.textContent = method === "Cash"
       ? "Enter the cash amount for this order. Change is calculated automatically."
-      : method === "Card"
-        ? "Enter the amount paid by card."
-        : "Enter the amount paid through GCash or online payment.";
+      : `Enter the amount paid through ${kioskPaymentMethodLabel(method)}.`;
   }
 
   if (changeBox) {
     changeBox.hidden = method !== "Cash";
     const strong = changeBox.querySelector("strong");
     const change = method === "Cash" && amount >= total ? amount - total : 0;
-    if (strong) strong.textContent = `₱${change.toFixed(2)}`;
+    if (strong) strong.textContent = kioskMoney(change);
   }
 
   if (error) error.textContent = "";
 }
 
 function selectKioskPaymentMethod(method, clearAmount = true) {
-  pendingKioskPaymentMethod = ["Cash", "GCash", "Card"].includes(method)
+  pendingKioskPaymentMethod = ["Cash", "GCash", "Card", "Other"].includes(method)
     ? method
     : "Cash";
   if (clearAmount) {
@@ -2253,7 +2322,7 @@ function showKioskPaymentModal() {
   if (!modal) return;
 
   const savedMethod = document.getElementById("paymentMethod")?.value || selectedPaymentMethod || "Cash";
-  selectedPaymentMethod = ["Cash", "GCash", "Card"].includes(savedMethod) ? savedMethod : "Cash";
+  selectedPaymentMethod = ["Cash", "GCash", "Card", "Other"].includes(savedMethod) ? savedMethod : "Cash";
   pendingKioskPaymentMethod = selectedPaymentMethod;
   if (input) input.value = sessionStorage.getItem("paymentAmount") || "";
 
@@ -2281,8 +2350,8 @@ function commitKioskPayment() {
   if (!Number.isFinite(amount) || amount < total) {
     if (error) {
       error.textContent = pendingKioskPaymentMethod === "Cash"
-        ? `Cash received must be at least ₱${total.toFixed(2)}.`
-        : `${kioskPaymentMethodLabel(pendingKioskPaymentMethod)} payment must be at least ₱${total.toFixed(2)}.`;
+        ? `Cash received must be at least ${kioskMoney(total)}.`
+        : `${kioskPaymentMethodLabel(pendingKioskPaymentMethod)} payment must be at least ${kioskMoney(total)}.`;
     }
     input?.focus();
     return;
@@ -2298,6 +2367,7 @@ function commitKioskPayment() {
   if (cashInput) cashInput.value = cashReceived.toFixed(2);
 
   sessionStorage.setItem("paymentMethod", selectedPaymentMethod);
+  sessionStorage.setItem("paymentMethodLabel", kioskPaymentMethodLabel(selectedPaymentMethod));
   sessionStorage.setItem("paymentAmount", amount.toFixed(2));
   sessionStorage.setItem("cashReceived", cashReceived.toFixed(2));
   sessionStorage.setItem("changeAmount", change.toFixed(2));
@@ -2367,7 +2437,7 @@ function showOrderModal() {
   ) {
 
     alert(
-      `Cash received must be at least ₱${cashState.total.toFixed(2)}.`
+      `Cash received must be at least ${kioskMoney(cashState.total)}.`
     );
 
     document
@@ -2543,7 +2613,7 @@ function showOrderModal() {
             </span>
 
             <span class="modal-order-total">
-              ₱${itemTotal}
+              ${kioskMoney(itemTotal)}
             </span>
 
           </div>
@@ -2780,7 +2850,7 @@ async function confirmOrder() {
       ) || 0
     );
 
-  const orderTotal =
+  const discountedTotal =
     Math.max(
       0,
       Number(
@@ -2788,6 +2858,17 @@ async function confirmOrder() {
         subtotal - discountAmount
       ) || 0
     );
+
+  const taxAmount =
+    discountedTotal *
+    (Math.max(0, Number(kioskCheckoutSettings.tax || 0)) / 100);
+
+  const serviceChargeAmount =
+    discountedTotal *
+    (Math.max(0, Number(kioskCheckoutSettings.service || 0)) / 100);
+
+  const orderTotal =
+    discountedTotal + taxAmount + serviceChargeAmount;
 
   const cashInput =
     document.getElementById(
@@ -2813,7 +2894,7 @@ async function confirmOrder() {
 
   if (paymentAmount < orderTotal) {
     alert(
-      `${kioskPaymentMethodLabel(selectedPaymentMethod)} payment must be at least ₱${orderTotal.toFixed(2)}.`
+      `${kioskPaymentMethodLabel(selectedPaymentMethod)} payment must be at least ${kioskMoney(orderTotal)}.`
     );
     showKioskPaymentModal();
     return;
@@ -2855,10 +2936,28 @@ async function confirmOrder() {
     paymentMethod:
       selectedPaymentMethod,
 
+    paymentMethodLabel:
+      kioskPaymentMethodLabel(selectedPaymentMethod),
+
     paymentAmount,
 
     paymentStatus:
       "Paid",
+
+    subtotal:
+      Number(subtotal.toFixed(2)),
+
+    discountAmount:
+      Number(discountAmount.toFixed(2)),
+
+    taxAmount:
+      Number(taxAmount.toFixed(2)),
+
+    serviceChargeAmount:
+      Number(serviceChargeAmount.toFixed(2)),
+
+    total:
+      Number(orderTotal.toFixed(2)),
 
     status:
       "Pending",
@@ -3262,7 +3361,7 @@ function cancelOrder() {
   order = [];
 
   selectedPaymentMethod =
-    "Cash";
+    enabledKioskPaymentMethods()[0]?.methodName || "Cash";
 
 
   // ===================================================
@@ -3281,6 +3380,8 @@ function cancelOrder() {
     "orderNumber"
   );
 
+  sessionStorage.removeItem("paymentMethodLabel");
+
   localStorage.removeItem(
     "order"
   );
@@ -3296,10 +3397,7 @@ function cancelOrder() {
     );
 
   if (paymentMethod) {
-
-    paymentMethod.value =
-      "Cash";
-
+    paymentMethod.value = selectedPaymentMethod;
   }
 
   const cashInput =
@@ -3543,7 +3641,7 @@ function searchMenuItems() {
         </h4>
 
         <p>
-          ₱${item.price}
+          ${kioskMoney(item.price)}
         </p>
       `;
 
@@ -3603,6 +3701,16 @@ async function loadMysqlProductCatalog() {
     const payload = await response.json();
     const categories = Array.isArray(payload.categories) ? payload.categories : [];
     const products = Array.isArray(payload.products) ? payload.products : [];
+    const configuredMethods = Array.isArray(payload.paymentMethods) ? payload.paymentMethods : [];
+    kioskCheckoutSettings = {
+      ...kioskCheckoutSettings,
+      ...(payload.checkout || {}),
+      paymentMethods: configuredMethods.length ? configuredMethods : kioskCheckoutSettings.paymentMethods
+    };
+    sessionStorage.setItem("cafeCurrencyCode", String(kioskCheckoutSettings.currencyCode || "PHP"));
+    sessionStorage.setItem("cafeCurrencySymbol", String(kioskCheckoutSettings.currencySymbol || "₱"));
+    sessionStorage.setItem("cafeReceiptFooter", String(kioskCheckoutSettings.receiptFooter || ""));
+    applyKioskPaymentConfig();
     const isDemo = String(payload.cafeId || cafeId) === "cafe-1";
 
     // Only the Demo Cafe may fall back to the bundled sample catalog. Every

@@ -87,6 +87,16 @@
                     <strong id="discount">₱0.00</strong>
                 </div>
 
+                <div class="total-row" id="receiptTaxRow" hidden>
+                    <span>Tax</span>
+                    <strong id="receiptTax">₱0.00</strong>
+                </div>
+
+                <div class="total-row" id="receiptServiceRow" hidden>
+                    <span>Service Charge</span>
+                    <strong id="receiptService">₱0.00</strong>
+                </div>
+
                 <div class="divider"></div>
 
                 <div class="total-row grand-total">
@@ -95,6 +105,8 @@
                 </div>
 
             </div>
+
+            <p id="receiptFooter" hidden style="margin:14px 0 0;text-align:center;color:#7f6c5d;font-size:12px;line-height:1.45"></p>
 
         </section>
 
@@ -175,7 +187,7 @@
 
 
     <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/checkout.js?v=payment-modal-v1"></script>
+<script src="/Assets/js/checkout.js?v=20260928-settings-v1"></script>
 
 <script src="/Assets/js/checkout-discount.js"></script>
   <script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>

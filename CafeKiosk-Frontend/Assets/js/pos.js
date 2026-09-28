@@ -560,15 +560,84 @@ let selectedPaymentMethod =
 let pendingPaymentMethod =
     "Cash";
 
+let checkoutSettings = {
+    paymentMethods: [
+        { methodName: "Cash", displayName: "Cash", isEnabled: true },
+        { methodName: "GCash", displayName: "GCash / Online", isEnabled: true },
+        { methodName: "Card", displayName: "Card", isEnabled: true },
+        { methodName: "Other", displayName: "Other", isEnabled: false }
+    ],
+    defaultOrder: "Dine In",
+    currencyCode: "PHP",
+    currencySymbol: "₱",
+    tax: 0,
+    service: 0
+};
+
 const PAYMENT_ICON_MARKUP = {
     Cash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg>`,
     GCash: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4M10 17.5h4"/><path d="M18.5 7.5c1.2.8 2 2.2 2 3.8s-.8 3-2 3.8"/></svg>`,
-    Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`
+    Card: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 9.5h19M6 15h4"/></svg>`,
+    Other: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="17" cy="12" r="2"/></svg>`
 };
 
+function enabledPaymentMethods() {
+    return (checkoutSettings.paymentMethods || []).filter(method => method.isEnabled !== false);
+}
+
 function paymentMethodLabel(method) {
+    const match = (checkoutSettings.paymentMethods || []).find(item => item.methodName === method);
+    if (match?.displayName) return match.displayName;
     if (method === "GCash") return "GCash / Online";
-    return method === "Card" ? "Card" : "Cash";
+    if (method === "Card") return "Card";
+    if (method === "Other") return "Other";
+    return "Cash";
+}
+
+function applyPaymentMethodConfig() {
+    const enabled = enabledPaymentMethods();
+    const allowed = new Set(enabled.map(item => item.methodName));
+    const select = $("paymentMethod");
+    if (select) {
+        Array.from(select.options).forEach(option => {
+            const method = (checkoutSettings.paymentMethods || []).find(item => item.methodName === option.value);
+            option.hidden = !allowed.has(option.value);
+            option.disabled = !allowed.has(option.value);
+            if (method?.displayName) option.textContent = method.displayName;
+        });
+    }
+    document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
+        const methodName = button.dataset.paymentMethod;
+        const method = (checkoutSettings.paymentMethods || []).find(item => item.methodName === methodName);
+        button.hidden = !allowed.has(methodName);
+        const spans = button.querySelectorAll("span");
+        if (spans[1] && method?.displayName) spans[1].textContent = method.displayName;
+    });
+    if (!allowed.has(selectedPaymentMethod)) selectedPaymentMethod = enabled[0]?.methodName || "Cash";
+    pendingPaymentMethod = selectedPaymentMethod;
+    if (select) select.value = selectedPaymentMethod;
+    const service = $("serviceType");
+    if (service && !service.dataset.userSelected) {
+        service.value = checkoutSettings.defaultOrder === "Take Out" ? "Takeout" : "Dine In";
+    }
+    updatePaymentFields();
+}
+
+async function loadCheckoutSettings() {
+    try {
+        const response = await authenticatedFetch(`${API_URL}/api/settings/payment-options`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        const methods = Array.isArray(payload.paymentMethods) ? payload.paymentMethods : [];
+        checkoutSettings = {
+            ...checkoutSettings,
+            ...(payload.checkout || {}),
+            paymentMethods: methods.length ? methods : checkoutSettings.paymentMethods
+        };
+    } catch (error) {
+        console.warn("Cafe checkout settings unavailable; using local defaults.", error);
+    }
+    applyPaymentMethodConfig();
 }
 
 
@@ -577,7 +646,8 @@ function paymentMethodLabel(method) {
 // =========================================================
 
 function money(value) {
-    return `₱${Number(value || 0).toFixed(2)}`;
+    const symbol = String(checkoutSettings.currencySymbol || "₱");
+    return `${symbol}${Number(value || 0).toFixed(2)}`;
 }
 
 
@@ -2379,15 +2449,30 @@ function calculateCart() {
         subtotal *
         discountRate;
 
+    const discountedSubtotal =
+        Math.max(0, subtotal - discount);
+
+    const taxRate =
+        Math.max(0, Number(checkoutSettings.tax || 0)) / 100;
+
+    const serviceRate =
+        Math.max(0, Number(checkoutSettings.service || 0)) / 100;
+
+    const tax =
+        discountedSubtotal * taxRate;
+
+    const serviceCharge =
+        discountedSubtotal * serviceRate;
 
     const total =
-        subtotal -
-        discount;
+        discountedSubtotal + tax + serviceCharge;
 
 
     return {
         subtotal,
         discount,
+        tax,
+        serviceCharge,
         total
     };
 
@@ -2414,6 +2499,20 @@ function updateCartTotals() {
         `-${money(
             totals.discount
         )}`;
+
+    const taxRow = $("taxRow");
+    const taxAmount = $("taxAmount");
+    const taxLabel = $("taxLabel");
+    if (taxRow) taxRow.hidden = !(Number(checkoutSettings.tax || 0) > 0);
+    if (taxAmount) taxAmount.textContent = money(totals.tax);
+    if (taxLabel) taxLabel.textContent = `Tax (${Number(checkoutSettings.tax || 0)}%)`;
+
+    const serviceRow = $("serviceChargeRow");
+    const serviceAmount = $("serviceChargeAmount");
+    const serviceLabel = $("serviceChargeLabel");
+    if (serviceRow) serviceRow.hidden = !(Number(checkoutSettings.service || 0) > 0);
+    if (serviceAmount) serviceAmount.textContent = money(totals.serviceCharge);
+    if (serviceLabel) serviceLabel.textContent = `Service Charge (${Number(checkoutSettings.service || 0)}%)`;
 
 
     $("total").textContent =
@@ -2507,11 +2606,9 @@ function updatePaymentFields() {
 
     if (amountLabel) {
         amountLabel.textContent =
-            payment === "Card"
-                ? "Amount Paid by Card"
-                : payment === "GCash"
-                    ? "Amount Paid Online / GCash"
-                    : "Cash Received";
+            payment === "Cash"
+                ? "Cash Received"
+                : `Amount Paid via ${paymentMethodLabel(payment)}`;
     }
 
     if (changeRow) {
@@ -2558,17 +2655,13 @@ function updatePOSPaymentModalUI() {
     if (label) {
         label.textContent = method === "Cash"
             ? "Cash Received"
-            : method === "Card"
-                ? "Amount Paid by Card"
-                : "Amount Paid Online / GCash";
+            : `Amount Paid via ${paymentMethodLabel(method)}`;
     }
 
     if (hint) {
         hint.textContent = method === "Cash"
             ? "Enter the cash handed to you by the customer. Change is calculated automatically."
-            : method === "Card"
-                ? "Enter the amount successfully charged to the customer's card."
-                : "Enter the amount successfully received through GCash or online payment.";
+            : `Enter the amount successfully received through ${paymentMethodLabel(method)}.`;
     }
 
     if (changeBox) {
@@ -2584,7 +2677,7 @@ function updatePOSPaymentModalUI() {
 }
 
 function selectPOSPaymentMethod(method, clearAmount = true) {
-    const normalized = ["Cash", "GCash", "Card"].includes(method) ? method : "Cash";
+    const normalized = ["Cash", "GCash", "Card", "Other"].includes(method) ? method : "Cash";
     pendingPaymentMethod = normalized;
     if (clearAmount && $("paymentModalAmount")) $("paymentModalAmount").value = "";
     updatePOSPaymentModalUI();
@@ -2759,6 +2852,9 @@ async function confirmPOSOrder() {
 
         paymentMethod,
 
+        paymentMethodLabel:
+            paymentMethodLabel(paymentMethod),
+
         paymentAmount:
             Number(paymentAmount.toFixed(2)),
 
@@ -2780,6 +2876,22 @@ async function confirmPOSOrder() {
         discountAmount:
             Number(
                 totals.discount
+                    .toFixed(
+                        2
+                    )
+            ),
+
+        taxAmount:
+            Number(
+                totals.tax
+                    .toFixed(
+                        2
+                    )
+            ),
+
+        serviceChargeAmount:
+            Number(
+                totals.serviceCharge
                     .toFixed(
                         2
                     )
@@ -3271,6 +3383,10 @@ function setupEvents() {
         updatePaymentFields();
     });
 
+    $("serviceType")?.addEventListener("change", event => {
+        event.target.dataset.userSelected = "true";
+    });
+
     $("paymentSummaryButton")?.addEventListener("click", openPOSPaymentModal);
     $("checkoutButton")?.addEventListener("click", openPOSPaymentModal);
 
@@ -3518,6 +3634,7 @@ document.addEventListener(
     async () => {
 
         await loadMysqlProductCatalog();
+        await loadCheckoutSettings();
 
         setupEvents();
         enhanceServiceTypePicker();
