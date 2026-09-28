@@ -68,7 +68,7 @@ button{cursor:pointer}
 .queue-main{
   min-width:0;height:100dvh;padding:24px 24px 24px;
   display:grid;
-  grid-template-rows:60px 40px auto 52px minmax(0,1fr) 38px;
+  grid-template-rows:60px 40px 52px minmax(0,1fr) 38px;
   gap:12px;overflow:hidden;
 }
 .page-title-box{
@@ -1469,4 +1469,191 @@ button{cursor:pointer}
 @media (max-width: 430px) {
   .station-tab { font-size: 8px; }
   .station-icon { display: none; }
+}
+
+
+/* ============================================================
+   ORDER QUEUE LAYOUT V3
+   Station selection now lives inside the Live Order header.
+   This removes the extra preparation row that previously pushed
+   and collapsed the live-order table on desktop layouts.
+   ============================================================ */
+.queue-main{
+  grid-template-rows:60px 40px 52px minmax(0,1fr) 38px;
+}
+.live-order-toolbar{
+  justify-content:space-between;
+  gap:12px;
+  min-width:0;
+  padding-right:8px;
+}
+.station-tabs-inline{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  min-width:0;
+  flex-wrap:nowrap;
+}
+.station-tabs-inline .station-tab{
+  width:auto;
+  min-width:64px;
+  height:28px;
+  padding:0 8px;
+  gap:4px;
+  border-radius:7px;
+  font-size:9px;
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+.station-tabs-inline .station-tab:nth-child(2){min-width:96px;}
+.station-tabs-inline .station-tab strong{
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  font-size:8px;
+}
+.station-tabs-inline .station-icon{font-size:11px;}
+.station-switcher{display:none!important;}
+.live-order-card{min-height:0;height:100%;}
+.table-wrap{height:100%;min-height:0;overflow:auto;}
+
+@media (max-width:1100px){
+  .queue-main{
+    grid-template-rows:60px auto 52px minmax(420px,1fr) 38px;
+  }
+  .filters-row{grid-auto-rows:40px;}
+}
+@media (max-width:850px){
+  .queue-main{display:flex;flex-direction:column;height:auto;overflow:visible;}
+  .live-order-card{height:auto;min-height:520px;}
+  .live-order-toolbar{min-height:48px;height:auto;flex-wrap:wrap;padding:7px 8px 7px 16px;}
+  .station-tabs-inline{width:100%;justify-content:flex-start;overflow-x:auto;padding-bottom:1px;}
+  .station-tabs-inline .station-tab{height:32px;}
+}
+@media (max-width:520px){
+  .station-tabs-inline .station-tab{min-width:58px;padding:0 6px;}
+  .station-tabs-inline .station-tab:nth-child(2){min-width:84px;}
+  .station-tabs-inline .station-icon{display:inline;}
+}
+
+/* ============================================================
+   ORDER QUEUE LAYOUT V4 — strict vertical flow
+   Filters, preparation queue, status cards, live table, pagination.
+   Prevents preparation controls from overlapping filters and removes
+   the flexible blank spacer that previously appeared above the table.
+   ============================================================ */
+.queue-main{
+  grid-template-rows:60px 40px 48px 52px minmax(0,1fr) 38px;
+  gap:10px;
+}
+.station-switcher{
+  display:grid!important;
+  height:48px;
+  min-height:48px;
+  padding:5px 8px;
+  grid-template-columns:120px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+  overflow:hidden;
+}
+.station-switcher-label{
+  padding-left:4px;
+  font-size:8px;
+  line-height:1.1;
+}
+.station-switcher .station-tabs{
+  height:36px;
+  align-items:stretch;
+}
+.station-switcher .station-tab{
+  height:36px;
+}
+.live-order-toolbar{
+  justify-content:flex-start;
+  min-height:42px;
+  padding:0 16px;
+}
+.station-tabs-inline{display:none!important;}
+.live-order-card{
+  min-height:0!important;
+  height:100%!important;
+  align-self:stretch;
+}
+.table-wrap{
+  min-height:0!important;
+  height:auto!important;
+  overflow:auto!important;
+}
+.status-tabs{min-height:52px;align-self:stretch;}
+.filters-row{min-height:40px;align-self:stretch;position:relative;z-index:2;}
+.station-switcher{position:relative;z-index:1;}
+
+/* uniform-theme.js removes the old page title from the visible layout and
+   adds .cku-content. Five visible queue rows remain, so define all five. */
+body.cku-v2 .queue-main.cku-content{
+  display:grid!important;
+  grid-template-rows:40px 48px 52px minmax(0,1fr) 38px!important;
+  gap:10px!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+body.cku-v2 .queue-main.cku-content > .filters-row,
+body.cku-v2 .queue-main.cku-content > .station-switcher,
+body.cku-v2 .queue-main.cku-content > .status-tabs,
+body.cku-v2 .queue-main.cku-content > .pagination{
+  min-height:0!important;
+  margin:0!important;
+}
+body.cku-v2 .queue-main.cku-content > .live-order-card{
+  min-height:0!important;
+  height:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+body.cku-v2 .live-order-card .table-wrap{
+  min-height:0!important;
+  height:100%!important;
+  overflow:auto!important;
+}
+
+@media (max-width:1100px){
+  .queue-main{
+    grid-template-rows:60px auto 48px 52px minmax(0,1fr) 38px;
+  }
+  body.cku-v2 .queue-main.cku-content{
+    grid-template-rows:auto 48px 52px minmax(0,1fr) 38px!important;
+  }
+}
+@media (max-width:850px){
+  .queue-main,
+  body.cku-v2 .queue-main.cku-content{
+    display:flex!important;
+    flex-direction:column!important;
+    height:auto!important;
+    min-height:100dvh!important;
+    overflow:visible!important;
+    gap:10px!important;
+  }
+  .filters-row{flex:0 0 auto;}
+  .station-switcher{
+    flex:0 0 auto;
+    height:auto;
+    min-height:48px;
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .station-switcher-label{padding-left:2px;}
+  .status-tabs{flex:0 0 auto;}
+  .live-order-card,
+  body.cku-v2 .queue-main.cku-content > .live-order-card{
+    flex:1 1 auto;
+    height:auto!important;
+    min-height:480px!important;
+  }
+  .pagination{flex:0 0 38px;}
+}
+@media (max-width:520px){
+  .station-switcher .station-tab{font-size:8px;padding:0 5px;}
+  .station-switcher .station-icon{display:inline;}
 }

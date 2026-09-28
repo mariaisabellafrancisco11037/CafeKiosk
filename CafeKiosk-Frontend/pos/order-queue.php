@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Order Queue</title>
-  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v2">
+  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v4">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
+  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-queue-v4">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
@@ -81,27 +81,25 @@
         </div>
       </section>
 
-
-      <section class="station-switcher" aria-label="Preparation station">
+      <section class="station-switcher" aria-label="Preparation queue filter">
         <span class="station-switcher-label">Preparation Queue</span>
-        <div class="station-tabs" role="tablist" aria-label="Separate beverage and food queues">
-          <button type="button" class="station-tab active" data-station="all" role="tab">
+        <div class="station-tabs" role="tablist" aria-label="Preparation queue filter">
+          <button type="button" class="station-tab active" data-station="all" role="tab" title="Show all orders">
             <span class="station-icon" aria-hidden="true">▦</span>
             <span>All Orders</span>
             <strong id="allStationCount">0</strong>
           </button>
-          <button type="button" class="station-tab beverage" data-station="Beverage" role="tab">
+          <button type="button" class="station-tab beverage" data-station="Beverage" role="tab" title="Show beverage preparation queue">
             <span class="station-icon" aria-hidden="true">☕</span>
             <span>Beverages</span>
             <strong id="beverageStationCount">0</strong>
           </button>
-          <button type="button" class="station-tab food" data-station="Food" role="tab">
+          <button type="button" class="station-tab food" data-station="Food" role="tab" title="Show food preparation queue">
             <span class="station-icon" aria-hidden="true">🍽</span>
             <span>Food</span>
             <strong id="foodStationCount">0</strong>
           </button>
         </div>
-        <p class="station-help">Mixed orders appear in both preparation queues, but each station sees only its own items.</p>
       </section>
 
       <section class="status-tabs" aria-label="Order status summary">
@@ -120,7 +118,9 @@
       </section>
 
       <section class="live-order-card">
-        <div class="section-caption">Live Order</div>
+        <div class="section-caption live-order-toolbar">
+          <span>Live Order</span>
+        </div>
 
         <div class="table-wrap">
           <table class="order-table">
