@@ -44,6 +44,13 @@ async function start() {
       console.log('🟢 Railway database check completed.');
 
       try {
+        await require('./CafeKiosk-Backend/services/approvalPinService').ensureApprovalPinSchema();
+        console.log('🔐 Admin/Manager approval PIN database fields ready.');
+      } catch (pinSchemaError) {
+        console.error(`⚠️  Approval PIN schema failed: ${pinSchemaError.code || 'PIN_SCHEMA_ERROR'} - ${pinSchemaError.message}`);
+      }
+
+      try {
         const upgradeResult = await require('./CafeKiosk-Backend/ensure-panelist-upgrades')();
         console.log('🟢 Panelist-requested security/account schema ready.', upgradeResult?.added?.length ? `Added: ${upgradeResult.added.join(', ')}` : '');
       } catch (upgradeError) {

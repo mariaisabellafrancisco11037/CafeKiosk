@@ -209,29 +209,6 @@
     return [...map.values()].sort((a, b) => b.qty - a.qty || b.sales - a.sales);
   }
 
-  function countBy(getter) {
-    const map = new Map();
-    filteredOrders.forEach(order => {
-      const key = String(getter(order) || "Unknown");
-      map.set(key, (map.get(key) || 0) + 1);
-    });
-    return [...map.entries()].sort((a, b) => b[1] - a[1]);
-  }
-
-  function renderBreakdown(id, rows, formatter = value => value) {
-    const element = $(id);
-    if (!element) return;
-
-    element.innerHTML = rows.length
-      ? rows.slice(0, 6).map(([key, value]) => `
-          <div class="breakdown-row">
-            <span title="${esc(key)}">${esc(key)}</span>
-            <strong>${esc(formatter(value))}</strong>
-          </div>
-        `).join("")
-      : `<div class="empty-state">No data.</div>`;
-  }
-
   function renderMetrics() {
     const completedList = completed(filteredOrders);
     const products = productStats();
@@ -414,10 +391,6 @@
   function render() {
     renderMetrics();
     renderHistory();
-    renderBreakdown("sourceBreakdown", countBy(order => order.sourceLabel || order.source));
-    renderBreakdown("statusBreakdown", countBy(order => order.status));
-    renderBreakdown("paymentBreakdown", countBy(order => order.paymentMethod));
-    renderBreakdown("productBreakdown", productStats().map(product => [product.name, product.qty]));
     drawChart();
 
     if ($("reportStatus")) {

@@ -109,16 +109,6 @@
         </article>
       </section>
 
-      <section class="analytics-panel panel-card">
-        <div class="section-head"><div><h2>Analytics Breakdown</h2><p>Actual order data grouped by source, status and payment method.</p></div></div>
-        <div class="analytics-grid">
-          <div class="analytics-box"><h3>Order Sources</h3><div id="sourceBreakdown"></div></div>
-          <div class="analytics-box"><h3>Order Status</h3><div id="statusBreakdown"></div></div>
-          <div class="analytics-box"><h3>Payment Methods</h3><div id="paymentBreakdown"></div></div>
-          <div class="analytics-box"><h3>Top Products</h3><div id="productBreakdown"></div></div>
-        </div>
-      </section>
-
       <div class="print-options-modal" id="printOptionsModal" aria-hidden="true">
         <div class="print-options-backdrop" data-close-print-options></div>
         <section class="print-options-dialog" role="dialog" aria-modal="true" aria-labelledby="printOptionsTitle">
@@ -168,7 +158,7 @@
     </main>
   </div>
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/report.js?v=compact-print-v2"></script>
+  <script src="../Assets/js/report.js?v=no-analytics-breakdown-v3"></script>
 <script src="../Assets/js/report-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

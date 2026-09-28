@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { ensureApprovalPinSchema, verifyCafeApprovalPin } = require('../services/approvalPinService');
+const { ensureApprovalPinSchema, getUserApprovalPinStatus, verifyUserApprovalPin, verifyCafeApprovalPin } = require('../services/approvalPinService');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
@@ -1938,41 +1938,73 @@ exports.changePassword = async (req, res) => {
 exports.setApprovalPin = async (req, res) => {
   const role = normalizeRole(req.user?.role);
   if (!['Admin', 'Manager'].includes(role)) {
-    return res.status(403).json({ success: false, message: 'Only an Admin or Manager can set an approval PIN.' });
+    return res.status(403).json({ success: false, code: 'APPROVAL_PIN_ROLE_FORBIDDEN', message: 'Only an Admin or Manager can set an approval PIN.' });
   }
 
   const pin = String(req.body?.pin || '').trim();
   const confirmPin = String(req.body?.confirmPin || '').trim();
   if (!/^\d{4,6}$/.test(pin)) {
-    return res.status(400).json({ success: false, message: 'PIN must contain 4 to 6 digits.' });
+    return res.status(400).json({ success: false, code: 'APPROVAL_PIN_FORMAT', message: 'PIN must contain 4 to 6 digits.' });
   }
   if (pin !== confirmPin) {
-    return res.status(400).json({ success: false, message: 'PIN confirmation does not match.' });
+    return res.status(400).json({ success: false, code: 'APPROVAL_PIN_CONFIRM_MISMATCH', message: 'PIN confirmation does not match.' });
   }
 
   const numericUserId = Number(req.user?.userId);
-  if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
-    return res.status(400).json({ success: false, message: 'A database-backed Admin or Manager account is required.' });
+  const cafeId = String(req.user?.cafeId || '').trim();
+  if (!Number.isFinite(numericUserId) || numericUserId <= 0 || !cafeId) {
+    return res.status(400).json({
+      success: false,
+      code: 'APPROVAL_PIN_ACCOUNT_REQUIRED',
+      message: 'Please log out and log back in with your database-backed Admin or Manager account, then set the PIN again.'
+    });
   }
 
   try {
-    // PIN setup should not run the full signup/account schema upgrader.
-    // It only depends on the PIN columns, so keep this endpoint isolated from
-    // unrelated registration/invitation schema changes.
     await ensureApprovalPinSchema();
 
+    const [accounts] = await pool.execute(
+      `SELECT user_id, full_name, username, role, status
+         FROM users
+        WHERE user_id = ? AND cafe_id = ?
+        LIMIT 1`,
+      [numericUserId, cafeId]
+    );
+    const account = accounts[0];
+    if (!account || !['Admin', 'Manager'].includes(normalizeRole(account.role)) || String(account.status || '').toLowerCase() !== 'active') {
+      return res.status(409).json({
+        success: false,
+        code: 'APPROVAL_PIN_ACCOUNT_NOT_ACTIVE',
+        message: 'Your current session does not match an active Admin/Manager database account. Log out, log back in, and try again.'
+      });
+    }
+
     const hash = await bcrypt.hash(pin, 10);
-    const [result] = await pool.execute(
+    await pool.execute(
       `UPDATE users
           SET approval_pin_hash = ?, approval_pin_updated_at = NOW()
-        WHERE user_id = ? AND cafe_id = ? AND role IN ('Admin','Manager') AND status = 'Active'`,
-      [hash, numericUserId, req.user?.cafeId || 'cafe-1']
+        WHERE user_id = ? AND cafe_id = ?`,
+      [hash, numericUserId, cafeId]
     );
-    if (!result.affectedRows) {
-      return res.status(404).json({ success: false, message: 'Active Admin/Manager account was not found.' });
+
+    // Never claim success until the exact PIN can be read back and verified.
+    const [savedRows] = await pool.execute(
+      `SELECT approval_pin_hash, approval_pin_updated_at
+         FROM users
+        WHERE user_id = ? AND cafe_id = ?
+        LIMIT 1`,
+      [numericUserId, cafeId]
+    );
+    const savedHash = String(savedRows[0]?.approval_pin_hash || '');
+    const verified = Boolean(savedHash) && await bcrypt.compare(pin, savedHash);
+    if (!verified) {
+      const error = new Error('The PIN could not be verified after it was stored.');
+      error.code = 'APPROVAL_PIN_PERSISTENCE_FAILED';
+      throw error;
     }
+
     await addAuditLog({
-      cafeId: req.user?.cafeId || 'cafe-1',
+      cafeId,
       userId: numericUserId,
       userName: req.user?.displayName || req.user?.username || role,
       username: req.user?.username || '',
@@ -1982,10 +2014,24 @@ exports.setApprovalPin = async (req, res) => {
       details: `${role} updated their refund/void approval PIN.`,
       source: 'Profile'
     }).catch(() => {});
-    return res.json({ success: true, message: 'Approval PIN saved successfully.' });
+
+    return res.json({
+      success: true,
+      hasPin: true,
+      role,
+      updatedAt: savedRows[0]?.approval_pin_updated_at || null,
+      message: 'Approval PIN saved and verified successfully.'
+    });
   } catch (error) {
     console.error('Set approval PIN error:', error);
-    return res.status(500).json({ success: false, message: 'Unable to save the approval PIN right now.' });
+    const schemaError = ['CAFEKIOSK_SCHEMA_MISSING', 'APPROVAL_PIN_SCHEMA_INCOMPLETE'].includes(error?.code);
+    return res.status(500).json({
+      success: false,
+      code: error?.code || 'APPROVAL_PIN_SAVE_FAILED',
+      message: schemaError
+        ? 'Approval PIN database fields are not ready. Redeploy this version once so CafeKiosk can apply the PIN migration.'
+        : 'Unable to save and verify the approval PIN right now.'
+    });
   }
 };
 
@@ -1995,15 +2041,20 @@ exports.approvalPinStatus = async (req, res) => {
     return res.status(403).json({ success: false, message: 'Only an Admin or Manager can view approval PIN status.' });
   }
   try {
-    await ensureApprovalPinSchema();
-    const [rows] = await pool.execute(
-      `SELECT approval_pin_hash IS NOT NULL AS has_pin, approval_pin_updated_at
-         FROM users WHERE user_id = ? AND cafe_id = ? LIMIT 1`,
-      [Number(req.user?.userId), req.user?.cafeId || 'cafe-1']
-    );
-    return res.json({ success: true, hasPin: Boolean(rows[0]?.has_pin), updatedAt: rows[0]?.approval_pin_updated_at || null });
+    const status = await getUserApprovalPinStatus(req.user?.cafeId, req.user?.userId);
+    if (!status.found) {
+      return res.status(404).json({ success: false, code: 'APPROVAL_PIN_ACCOUNT_NOT_FOUND', message: 'Your Admin/Manager database account was not found.' });
+    }
+    return res.json({
+      success: true,
+      hasPin: status.hasPin,
+      updatedAt: status.updatedAt,
+      role: status.role,
+      recoverable: false
+    });
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'Unable to read approval PIN status.' });
+    console.error('Approval PIN status error:', error);
+    return res.status(500).json({ success: false, code: error?.code || 'APPROVAL_PIN_STATUS_FAILED', message: 'Unable to read approval PIN status.' });
   }
 };
 
@@ -2013,21 +2064,24 @@ exports.verifyApprovalPin = async (req, res) => {
     return res.status(403).json({ success: false, message: 'An authenticated cafe account is required.' });
   }
   try {
-    // Admin/Manager sessions may verify a configured PIN too, which is useful
-    // when testing the setup from Profile. Staff uses this before submitting
-    // a protected refund/void action.
-    const result = await verifyCafeApprovalPin(req.user?.cafeId || 'cafe-1', req.body?.pin);
+    const selfOnly = String(req.body?.scope || '').toLowerCase() === 'self';
+    const result = selfOnly && ['Admin', 'Manager'].includes(role)
+      ? await verifyUserApprovalPin(req.user?.cafeId, req.user?.userId, req.body?.pin)
+      : await verifyCafeApprovalPin(req.user?.cafeId, req.body?.pin);
+
     if (!result.valid) {
       return res.status(403).json({ success: false, code: result.code, message: result.message });
     }
     return res.json({
       success: true,
-      message: `Approved by ${result.approver?.role || 'supervisor'} ${result.approver?.name || ''}`.trim(),
+      message: selfOnly
+        ? 'This PIN matches the PIN saved on your account.'
+        : `Approved by ${result.approver?.role || 'supervisor'} ${result.approver?.name || ''}`.trim(),
       approver: result.approver
     });
   } catch (error) {
     console.error('Verify approval PIN error:', error);
-    return res.status(500).json({ success: false, message: 'Unable to verify the approval PIN right now.' });
+    return res.status(500).json({ success: false, code: error?.code || 'APPROVAL_PIN_VERIFY_FAILED', message: 'Unable to verify the approval PIN right now.' });
   }
 };
 

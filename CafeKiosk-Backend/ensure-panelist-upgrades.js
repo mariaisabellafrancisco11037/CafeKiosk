@@ -40,6 +40,15 @@ async function ensurePanelistUpgrades() {
     if (await addColumn(connection, 'cafes', 'approved_by', 'VARCHAR(150) NULL AFTER approved_at')) added.push('cafes.approved_by');
     if (await addColumn(connection, 'cafes', 'rejection_reason', 'VARCHAR(1000) NULL AFTER approved_by')) added.push('cafes.rejection_reason');
 
+    // Existing Railway databases may predate Approval PIN support.
+    if (await addColumn(connection, 'users', 'approval_pin_hash', 'VARCHAR(255) NULL')) added.push('users.approval_pin_hash');
+    if (await addColumn(connection, 'users', 'approval_pin_updated_at', 'DATETIME NULL')) added.push('users.approval_pin_updated_at');
+
+    // Older databases may only allow Admin/Staff in the role enum.
+    try {
+      await connection.query("ALTER TABLE users MODIFY COLUMN role ENUM('Admin','Staff','Manager') NOT NULL DEFAULT 'Staff'");
+    } catch (_) {}
+
     if (await tableExists(connection, 'orders')) {
       if (await addColumn(connection, 'orders', 'payment_amount', 'DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER payment_status')) added.push('orders.payment_amount');
       await connection.execute(`

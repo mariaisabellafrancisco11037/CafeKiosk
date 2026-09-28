@@ -932,6 +932,10 @@ function renderActivity() {
     list.innerHTML =
       `<div class="activity-item"><strong>No stock movements yet</strong><span>Orders and manual stock changes will appear here.</span></div>`;
 
+    window.requestAnimationFrame(
+      refreshActivitySlider
+    );
+
     return;
   }
 
@@ -1010,6 +1014,119 @@ function renderActivity() {
       .join(
         ""
       );
+
+  window.requestAnimationFrame(
+    refreshActivitySlider
+  );
+}
+
+
+function refreshActivitySlider() {
+
+  const list =
+    $("activityList");
+
+  const slider =
+    $("activitySlider");
+
+  const wrap =
+    $("activitySliderWrap");
+
+
+  if (
+    !list ||
+    !slider ||
+    !wrap
+  ) {
+    return;
+  }
+
+
+  const maxScroll =
+    Math.max(
+      0,
+      Math.round(
+        list.scrollWidth -
+        list.clientWidth
+      )
+    );
+
+
+  slider.max =
+    String(
+      maxScroll
+    );
+
+
+  slider.value =
+    String(
+      Math.min(
+        maxScroll,
+        Math.round(
+          list.scrollLeft
+        )
+      )
+    );
+
+
+  wrap.classList.toggle(
+    "is-disabled",
+    maxScroll <= 1
+  );
+}
+
+
+function setupActivitySlider() {
+
+  const list =
+    $("activityList");
+
+  const slider =
+    $("activitySlider");
+
+
+  if (
+    !list ||
+    !slider
+  ) {
+    return;
+  }
+
+
+  slider.addEventListener(
+    "input",
+    () => {
+      list.scrollLeft =
+        Number(
+          slider.value
+        ) || 0;
+    }
+  );
+
+
+  list.addEventListener(
+    "scroll",
+    () => {
+      slider.value =
+        String(
+          Math.round(
+            list.scrollLeft
+          )
+        );
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  window.addEventListener(
+    "resize",
+    refreshActivitySlider
+  );
+
+
+  refreshActivitySlider();
 }
 
 
@@ -2463,6 +2580,9 @@ document.addEventListener(
 
 
     setupEvents();
+
+
+    setupActivitySlider();
 
 
     /*

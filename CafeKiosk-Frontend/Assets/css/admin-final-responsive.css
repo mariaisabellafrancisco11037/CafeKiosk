@@ -647,3 +647,384 @@ body.uniform-pos .status-tabs,
     border-radius: 999px !important;
   }
 }
+
+
+/* =========================================================
+   INVENTORY STOCK MOVEMENTS — MOBILE DRAG SLIDER V3
+   Only affects the Inventory page on phone-sized screens.
+   Desktop stays unchanged.
+========================================================= */
+.activity-slider-wrap {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* Keep the Inventory page in natural vertical flow so the
+     Stock Movements section can always be reached by scrolling. */
+  body.uniform-admin.cku-v2 .inventory-main.cku-content,
+  body.uniform-admin .inventory-main {
+    height: auto !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  body.uniform-admin.cku-v2 .inventory-dashboard,
+  body.uniform-admin .inventory-dashboard {
+    height: auto !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin.cku-v2 .activity-panel,
+  body.uniform-admin .activity-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 12px !important;
+    display: block !important;
+    overflow: hidden !important;
+  }
+
+  body.uniform-admin .activity-mobile-scroll-hint {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* One horizontal movement rail. The list itself can still be
+     swiped normally; the range control below is the visible slider. */
+  body.uniform-admin.cku-v2 .activity-list,
+  body.uniform-admin .activity-list {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 102px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 0 4px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 9px !important;
+    align-items: stretch !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-inline: contain !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: none !important;
+  }
+
+  body.uniform-admin .activity-list::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+
+  body.uniform-admin.cku-v2 .activity-item,
+  body.uniform-admin .activity-item {
+    flex: 0 0 min(78vw, 300px) !important;
+    width: min(78vw, 300px) !important;
+    min-width: min(78vw, 300px) !important;
+    max-width: min(78vw, 300px) !important;
+    min-height: 96px !important;
+    height: auto !important;
+    padding: 10px 11px !important;
+    scroll-snap-align: start !important;
+  }
+
+  body.uniform-admin .activity-item strong,
+  body.uniform-admin .activity-item span {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.uniform-admin .activity-slider-wrap {
+    width: 100% !important;
+    margin-top: 9px !important;
+    padding: 8px 10px 9px !important;
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 10px !important;
+    border: 1px solid rgba(79, 128, 95, .22) !important;
+    border-radius: 8px !important;
+    background: rgba(79, 128, 95, .07) !important;
+  }
+
+  body.uniform-admin .activity-slider-label {
+    color: #665646 !important;
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+  }
+
+  body.uniform-admin .activity-slider {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 22px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    accent-color: #4f805f !important;
+    cursor: ew-resize !important;
+    touch-action: pan-x !important;
+  }
+
+  body.uniform-admin .activity-slider-wrap.is-disabled {
+    opacity: .5 !important;
+  }
+
+  body.uniform-admin .activity-slider-wrap.is-disabled .activity-slider {
+    pointer-events: none !important;
+  }
+}
+
+
+/* =========================================================
+   INVENTORY TOUCH / DESKTOP-SITE PHONE FIX V4
+   Chrome "Desktop site" reports a desktop-like viewport, so
+   width-only mobile queries do not fire. This block also uses
+   coarse-pointer detection and makes the page itself the vertical
+   scroll owner. Stock Movements gets a persistent range slider.
+========================================================= */
+@media (max-width: 1100px), (hover: none) and (pointer: coarse) {
+  html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.uniform-admin.inventory-page,
+  body.uniform-admin.inventory-page.cku-v2 {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  body.uniform-admin.inventory-page .inventory-shell,
+  body.uniform-admin.inventory-page.cku-v2 .inventory-shell.cku-shell {
+    height: auto !important;
+    min-height: 100dvh !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin.inventory-page .inventory-main,
+  body.uniform-admin.inventory-page.cku-v2 .inventory-main.cku-content {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  body.uniform-admin.inventory-page .inventory-dashboard {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin.inventory-page .inventory-panel,
+  body.uniform-admin.inventory-page .inventory-content-grid,
+  body.uniform-admin.inventory-page .inventory-list-panel,
+  body.uniform-admin.inventory-page .activity-panel {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 12px !important;
+    display: block !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-mobile-scroll-hint {
+    display: flex !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+    padding: 8px 10px !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    border: 1px solid rgba(79,128,95,.22) !important;
+    border-radius: 8px !important;
+    background: rgba(79,128,95,.07) !important;
+    color: #665646 !important;
+    font-size: 10px !important;
+    font-weight: 650 !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider-wrap {
+    width: 100% !important;
+    margin: 0 0 10px !important;
+    padding: 9px 10px !important;
+    display: grid !important;
+    grid-template-columns: auto minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 10px !important;
+    border: 1px solid rgba(79,128,95,.34) !important;
+    border-radius: 9px !important;
+    background: #f5efe4 !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider-label {
+    color: #5f503f !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    cursor: ew-resize !important;
+    touch-action: pan-x !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider::-webkit-slider-runnable-track {
+    height: 8px !important;
+    border-radius: 999px !important;
+    background: #dfd2be !important;
+    box-shadow: inset 0 0 0 1px rgba(93,66,42,.10) !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 24px !important;
+    height: 24px !important;
+    margin-top: -8px !important;
+    border: 3px solid #f8f1e6 !important;
+    border-radius: 50% !important;
+    background: #4f805f !important;
+    box-shadow: 0 1px 4px rgba(55,79,61,.28) !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider::-moz-range-track {
+    height: 8px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #dfd2be !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-slider::-moz-range-thumb {
+    width: 20px !important;
+    height: 20px !important;
+    border: 3px solid #f8f1e6 !important;
+    border-radius: 50% !important;
+    background: #4f805f !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-list {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 112px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 0 12px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 9px !important;
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-gutter: stable !important;
+    scrollbar-width: auto !important;
+    scrollbar-color: #4f805f #e4d8c6 !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-list::-webkit-scrollbar {
+    display: block !important;
+    height: 12px !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-list::-webkit-scrollbar-track {
+    background: #e4d8c6 !important;
+    border-radius: 999px !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-list::-webkit-scrollbar-thumb {
+    min-width: 36px !important;
+    background: #4f805f !important;
+    border: 2px solid #e4d8c6 !important;
+    border-radius: 999px !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-item {
+    flex: 0 0 clamp(230px, 72vw, 310px) !important;
+    width: clamp(230px, 72vw, 310px) !important;
+    min-width: clamp(230px, 72vw, 310px) !important;
+    max-width: clamp(230px, 72vw, 310px) !important;
+    min-height: 96px !important;
+    height: auto !important;
+    padding: 10px 11px !important;
+    scroll-snap-align: start !important;
+  }
+
+  body.uniform-admin.inventory-page .activity-item strong,
+  body.uniform-admin.inventory-page .activity-item span {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+/* Desktop-site mode on phones commonly reports ~980px. Let the shell grow
+   with its content instead of trapping touch scrolling inside a 100dvh row. */
+@media (min-width: 761px) and (max-width: 1100px),
+       (min-width: 761px) and (hover: none) and (pointer: coarse) {
+  body.uniform-admin.inventory-page.cku-v2 .inventory-shell.cku-shell {
+    grid-template-rows: var(--cku-topbar-height) auto !important;
+    align-items: start !important;
+  }
+
+  body.uniform-admin.inventory-page.cku-v2 .cku-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    align-self: start !important;
+    height: 100dvh !important;
+  }
+
+  body.uniform-admin.inventory-page.cku-v2 .cku-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+  }
+
+  body.uniform-admin.inventory-page.cku-v2 .inventory-main.cku-content {
+    grid-row: 2 !important;
+    overflow-y: visible !important;
+  }
+}

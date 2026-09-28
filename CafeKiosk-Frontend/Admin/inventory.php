@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-admin-order-inventory-final-v2">
+  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-inventory-touch-scroll-v4">
 </head>
-<body class="uniform-admin">
+<body class="uniform-admin inventory-page">
   <div class="inventory-shell">
     <!-- ADMIN SIDEBAR - SAME AS MENU MANAGEMENT -->
     <aside class="staff-sidebar">
@@ -290,6 +290,21 @@
             <span>Drag sideways to view stock movements</span>
             <strong>↔</strong>
           </div>
+
+          <div class="activity-slider-wrap" id="activitySliderWrap">
+            <span class="activity-slider-label">Drag bar ← →</span>
+            <input
+              id="activitySlider"
+              class="activity-slider"
+              type="range"
+              min="0"
+              max="0"
+              value="0"
+              step="1"
+              aria-label="Scroll through stock movements"
+            >
+          </div>
+
           <div id="activityList" class="activity-list"></div>
         </section>
       </section>
