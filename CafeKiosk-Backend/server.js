@@ -11,6 +11,7 @@ const { JWT_SECRET, isProduction } = require("./config/security");
 const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
 const dbPool = require("./config/dbPool");
+const { makeRateLimit } = require("./middleware/securityRateLimit");
 
 const {
     requirePageRole,
@@ -18,7 +19,8 @@ const {
     activeDatabaseAccount
 } = require("./middleware/authMiddleware");
 const {
-    requireSystemAdminPage
+    requireSystemAdminPage,
+    requireSystemAdminApi
 } = require("./middleware/systemAdminMiddleware");
 
 const app = express();
@@ -476,6 +478,18 @@ app.use((req, res, next) => {
     res.setHeader("Referrer-Policy", "same-origin");
     res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
     res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+    res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+    res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+    res.setHeader("Origin-Agent-Cluster", "?1");
+
+    // Baseline CSP compatible with the current CafeKiosk UI. Inline styles/scripts
+    // are still allowed because several existing PHP-template pages use them, but
+    // external scripts, plugins, frames and foreign form targets are blocked.
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; manifest-src 'self'; worker-src 'self' blob:"
+    );
+
     if (isProduction()) {
         res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
     }
@@ -484,6 +498,66 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: "256kb" }));
 app.use(express.urlencoded({ extended: true, limit: "128kb" }));
+
+// Avoid caching API responses that may contain account, order, inventory or
+// monitoring data. Public static assets still keep normal browser caching.
+app.use("/api", (req, res, next) => {
+    res.setHeader("Cache-Control", "no-store, max-age=0");
+    res.setHeader("Pragma", "no-cache");
+    next();
+});
+
+// Broad abuse ceiling. Sensitive endpoints (login, recovery, PIN) also have
+// much stricter endpoint-specific limits.
+const globalApiLimiter = makeRateLimit({
+    windowMs: 60 * 1000,
+    max: 600,
+    message: "Too many requests. Please wait a moment and try again."
+});
+app.use("/api", globalApiLimiter);
+
+function requestOriginAllowed(req, origin) {
+    if (!origin) return false;
+    try {
+        const parsed = new URL(origin);
+        const requestHost = String(req.get("host") || "").toLowerCase();
+        if (parsed.host.toLowerCase() === requestHost) return true;
+    } catch (_) {}
+    return corsOriginAllowed(origin);
+}
+
+function authenticatedCookiePresent(req) {
+    const cookie = String(req.headers?.cookie || "");
+    return /(?:^|;\s*)(?:cafe_admin_token|cafe_manager_token|cafe_staff_token|cafe_system_admin_token)=/.test(cookie);
+}
+
+// Cookie-authenticated state-changing requests must originate from the same
+// CafeKiosk site (or an explicitly allowed development origin). This is an
+// additional CSRF layer on top of SameSite=Strict cookies.
+app.use("/api", (req, res, next) => {
+    if (["GET", "HEAD", "OPTIONS"].includes(String(req.method || "").toUpperCase())) return next();
+    if (!authenticatedCookiePresent(req)) return next();
+
+    const origin = String(req.get("origin") || "").trim();
+    if (origin && requestOriginAllowed(req, origin)) return next();
+
+    const referer = String(req.get("referer") || "").trim();
+    if (referer) {
+        try {
+            const refererOrigin = new URL(referer).origin;
+            if (requestOriginAllowed(req, refererOrigin)) return next();
+        } catch (_) {}
+    }
+
+    // Local scripts/tools remain convenient during development, while production
+    // browser sessions fail closed if no trusted origin evidence is present.
+    if (!isProduction() && !origin && !referer) return next();
+    return res.status(403).json({
+        success: false,
+        code: "CROSS_SITE_REQUEST_BLOCKED",
+        message: "This request was blocked by CafeKiosk cross-site request protection."
+    });
+});
 
 
 // =====================================================
@@ -506,14 +580,20 @@ const io = new Server(
     server,
     {
         cors: {
-            origin: true,
+            origin(origin, callback) {
+                return callback(null, corsOriginAllowed(origin));
+            },
             credentials: true,
-
-            methods: [
-                "GET",
-                "POST",
-                "PATCH"
-            ]
+            methods: ["GET", "POST", "PATCH"]
+        },
+        allowRequest(req, callback) {
+            const origin = String(req.headers?.origin || "").trim();
+            if (!origin) return callback(null, !isProduction());
+            try {
+                const host = String(req.headers?.host || "").toLowerCase();
+                if (new URL(origin).host.toLowerCase() === host) return callback(null, true);
+            } catch (_) {}
+            return callback(null, corsOriginAllowed(origin));
         }
     }
 );
@@ -588,7 +668,7 @@ io.use(async (socket, next) => {
         return next(new Error('Unauthorized socket session'));
     }
 
-    const account = await activeDatabaseAccount(claims);
+    const account = await activeDatabaseAccount({ ...claims, _rawToken: token });
     if (!account.ok || !account.user) {
         console.log('🔒 Socket server-session rejected:', account.message || 'invalid session');
         return next(new Error('Unauthorized socket session'));
@@ -1653,47 +1733,21 @@ app.get(
     "/health",
     (req, res) => {
 
+        if (isProduction()) {
+            return res.json({ status: "ok" });
+        }
+
         res.json({
             status: "ok",
-
-            message:
-                "CafeKiosk backend is running.",
-
-            websocket:
-                "enabled",
-
-            kiosk:
-                fs.existsSync(
-                    KIOSK_FILE
-                ),
-
-            pos:
-                fs.existsSync(
-                    POS_FILE
-                ),
-
-            orderQueue:
-                fs.existsSync(
-                    ORDER_QUEUE_FILE
-                ),
-
-            staffDashboard:
-                fs.existsSync(
-                    STAFF_DASHBOARD_FILE
-                ),
-
-            managerPos:
-                fs.existsSync(
-                    MANAGER_POS_FILE
-                ),
-
-            managerOrderQueue:
-                fs.existsSync(
-                    MANAGER_ORDER_QUEUE_FILE
-                ),
-
-            databaseConfigured:
-                process.env.CAFEKIOSK_DATABASE_UNAVAILABLE !== "1"
+            message: "CafeKiosk backend is running.",
+            websocket: "enabled",
+            kiosk: fs.existsSync(KIOSK_FILE),
+            pos: fs.existsSync(POS_FILE),
+            orderQueue: fs.existsSync(ORDER_QUEUE_FILE),
+            staffDashboard: fs.existsSync(STAFF_DASHBOARD_FILE),
+            managerPos: fs.existsSync(MANAGER_POS_FILE),
+            managerOrderQueue: fs.existsSync(MANAGER_ORDER_QUEUE_FILE),
+            databaseConfigured: process.env.CAFEKIOSK_DATABASE_UNAVAILABLE !== "1"
         });
 
     }
@@ -1705,6 +1759,7 @@ app.get(
 // =====================================================
 app.get(
     "/api/db-health",
+    ...(isProduction() ? [requireSystemAdminApi] : []),
     async (req, res) => {
         try {
             const [serverRows] = await dbPool.query(
@@ -1745,6 +1800,7 @@ app.get(
 
 app.get(
     "/api/network-info",
+    ...(isProduction() ? [requireSystemAdminApi] : []),
     (req, res) => {
         const localOnly = BIND_HOST === "127.0.0.1" || BIND_HOST.toLowerCase() === "localhost" || BIND_HOST === "::1";
         const addresses = localOnly ? [] : getLanIpv4Addresses();
@@ -1952,7 +2008,7 @@ app.use(
 
         console.log(
             "❌ Route not found:",
-            req.originalUrl
+            req.path
         );
 
 

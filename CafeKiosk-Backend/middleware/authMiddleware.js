@@ -12,6 +12,7 @@
 //   be verified.
 // ============================================================
 
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const dbPool = require('../config/dbPool');
 const { JWT_SECRET } = require('../config/security');
@@ -47,6 +48,17 @@ function verifyJwt(token) {
   catch (_) { return null; }
 }
 
+function tokenDigest(token) {
+  return crypto.createHash('sha256').update(String(token || '')).digest('hex');
+}
+
+function safeEqualText(left, right) {
+  const a = Buffer.from(String(left || ''));
+  const b = Buffer.from(String(right || ''));
+  if (!a.length || a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
 // Retained only for compatibility with modules that import the helper.
 // Cafe user authentication intentionally does NOT consume Bearer tokens.
 function getBearerToken(req) {
@@ -76,8 +88,9 @@ function decodeRequestUser(req, preferredRoles = []) {
   for (const role of ['admin', 'manager', 'staff']) if (!order.includes(role)) order.push(role);
 
   for (const role of order) {
-    const claims = verifyJwt(getRoleCookieToken(req, role));
-    if (claims) return { ...claims, _cookieRole: role };
+    const rawToken = getRoleCookieToken(req, role);
+    const claims = verifyJwt(rawToken);
+    if (claims) return { ...claims, _cookieRole: role, _rawToken: rawToken };
   }
   return null;
 }
@@ -126,7 +139,7 @@ async function activeDatabaseAccount(claims) {
           u.is_owner, u.status AS user_status,
           c.cafe_name, c.status AS cafe_status,
           c.approval_status, c.rejection_reason,
-          s.session_id, s.expires_at, s.revoked_at
+          s.session_id, s.token_hash, s.expires_at, s.revoked_at
        FROM users u
        JOIN cafes c ON c.cafe_id = u.cafe_id
        JOIN user_sessions s ON s.user_id = u.user_id
@@ -141,6 +154,16 @@ async function activeDatabaseAccount(claims) {
     }
 
     const row = rows[0];
+
+    // Bind the database session to the exact signed JWT that was issued at login.
+    // A copied/altered token, a token from a different server session, or a session
+    // row with a missing token hash is rejected instead of being treated as valid.
+    const presentedToken = String(claims?._rawToken || '');
+    const storedTokenHash = String(row.token_hash || '');
+    if (!presentedToken || !storedTokenHash || !safeEqualText(tokenDigest(presentedToken), storedTokenHash)) {
+      return { ok: false, status: 401, code: 'SESSION_TOKEN_MISMATCH', message: 'This login session is no longer valid. Please log in again.' };
+    }
+
     if (row.revoked_at) {
       return { ok: false, status: 401, code: 'SESSION_REVOKED', message: 'This login session has been revoked. Please log in again.' };
     }

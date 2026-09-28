@@ -39,7 +39,7 @@ function upperMethod(req) {
 }
 
 function requestPath(req) {
-  return text(req?.originalUrl || req?.url || req?.path || "");
+  return text(req?.path || "");
 }
 
 function lowerPath(req) {
@@ -160,6 +160,18 @@ function inferCafeId(req, user) {
 }
 
 function inferRequestUser(req) {
+  // Route authentication middleware has already replaced browser claims with
+  // the current database-backed user. Prefer that verified identity whenever
+  // it is available so audit records cannot be attributed using client data.
+  if (req?.user) {
+    return {
+      userId: text(firstValue(req.user.userId, req.user.id, req.user.username)),
+      user: text(firstValue(req.user.displayName, req.user.username, req.user.userId, req.user.role, "User")),
+      role: text(firstValue(req.user.role, "User")),
+      cafeId: text(firstValue(req.user.cafeId, "cafe-1"))
+    };
+  }
+
   try {
     const decoded = decodeRequestUser(req);
 

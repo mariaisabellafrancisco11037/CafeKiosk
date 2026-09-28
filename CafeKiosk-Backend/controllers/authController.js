@@ -365,7 +365,8 @@ function cookieOptions(req) {
     sameSite: 'strict',
     secure: isProduction() || Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
     maxAge: SESSION_HOURS * 60 * 60 * 1000,
-    path: '/'
+    path: '/',
+    priority: 'high'
   };
 }
 
@@ -536,7 +537,7 @@ function auditUserStatusChange(req, target, oldStatus, newStatus, reason) {
     entityId: String(target.user_id),
     source: 'Admin User Management',
     method: req.method || 'PATCH',
-    path: req.originalUrl || req.path || '',
+    path: req.path || '',
     ip: req.ip || '',
     statusCode: 200,
     success: true
@@ -725,7 +726,7 @@ exports.createUser = async (req, res) => {
         entityId: String(result.insertId),
         source: 'Admin User Management',
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         ip: req.ip || '',
         statusCode: 201,
         success: true
@@ -812,7 +813,7 @@ exports.updateUser = async (req, res) => {
         entityId: String(targetId),
         source: 'Admin User Management',
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         ip: req.ip || '',
         statusCode: 200,
         success: true
@@ -1215,7 +1216,7 @@ exports.requestPasswordReset = async (req, res) => {
           entityId: String(user.user_id),
           source: 'Forgot Password',
           method: req.method,
-          path: req.originalUrl,
+          path: req.path,
           ip: req.ip || '',
           statusCode: 200,
           success: true
@@ -1354,7 +1355,7 @@ exports.resetPassword = async (req, res) => {
         entityId: String(user.user_id),
         source: 'Forgot Password',
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         ip: req.ip || '',
         statusCode: 200,
         success: true
@@ -1929,7 +1930,7 @@ exports.changeUserId = async (req, res) => {
         entityId: String(numericUserId),
         source: 'Owner Profile',
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         ip: req.ip || '',
         statusCode: 200,
         success: true

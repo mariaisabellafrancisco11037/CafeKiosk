@@ -54,11 +54,8 @@ const API_URL =
   resolveBackendOrigin();
 
 function getAuthToken() {
-  return (
-    window.CafeAuth?.token ||
-    localStorage.getItem("cafeAuthToken") ||
-    ""
-  );
+  // Authentication is HttpOnly-cookie only. JavaScript never reads a JWT.
+  return "";
 }
 
 function activeQueueRole() {
@@ -154,11 +151,6 @@ async function authenticatedFetch(url, options = {}) {
   }
 
   const headers = new Headers(options.headers || {});
-  const token = getAuthToken();
-
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
 
   return fetch(url, {
     ...options,

@@ -31,7 +31,9 @@ function getBearerToken(req) {
 
 function decodeSystemAdmin(req) {
   const cookies = parseCookies(req.headers?.cookie);
-  const token = getBearerToken(req) || cookies[SYSTEM_ADMIN_COOKIE] || '';
+  // System Administrator authentication is cookie-only. Browser-readable or
+  // manually supplied Bearer tokens are not accepted for this privileged role.
+  const token = cookies[SYSTEM_ADMIN_COOKIE] || '';
   if (!token) return null;
 
   try {

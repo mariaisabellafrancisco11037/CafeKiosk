@@ -5,8 +5,12 @@ const { requireRole } = require('../middleware/authMiddleware');
 const kioskStore = require('../services/kioskAccessStore');
 const catalogStore = require('../services/catalogStore');
 const pool = require('../config/dbPool');
+const { makeRateLimit } = require('../middleware/securityRateLimit');
 
 const { JWT_SECRET } = require('../config/security');
+
+const kioskLookupLimiter = makeRateLimit({ windowMs: 5 * 60 * 1000, max: 120, message: 'Too many kiosk lookup requests. Please wait before trying again.' });
+const kioskSetupLimiter = makeRateLimit({ windowMs: 10 * 60 * 1000, max: 30, message: 'Too many kiosk setup attempts. Please wait before trying again.' });
 
 function setupCafeId(token) {
   if (!token) return '';
@@ -18,7 +22,7 @@ function setupCafeId(token) {
   }
 }
 
-router.get('/check', async (req, res, next) => {
+router.get('/check', kioskLookupLimiter, async (req, res, next) => {
   try {
     const checked = kioskStore.validateSlug(req.query.slug);
     if (!checked.valid) {
@@ -35,7 +39,7 @@ router.get('/check', async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.post('/setup', async (req, res, next) => {
+router.post('/setup', kioskSetupLimiter, async (req, res, next) => {
   try {
     const cafeId = setupCafeId(req.body?.setupToken);
     if (!cafeId) {
@@ -50,7 +54,7 @@ router.post('/setup', async (req, res, next) => {
   }
 });
 
-router.get('/public/:slug', async (req, res, next) => {
+router.get('/public/:slug', kioskLookupLimiter, async (req, res, next) => {
   try {
     const info = await kioskStore.getBySlug(req.params.slug);
     if (!info || info.cafeStatus !== 'Active' || !info.kioskEnabled) {
@@ -60,7 +64,7 @@ router.get('/public/:slug', async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.get('/public/:slug/catalog', async (req, res, next) => {
+router.get('/public/:slug/catalog', kioskLookupLimiter, async (req, res, next) => {
   try {
     const info = await kioskStore.getBySlug(req.params.slug);
     if (!info || info.cafeStatus !== 'Active' || !info.kioskEnabled) {

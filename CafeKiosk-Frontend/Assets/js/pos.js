@@ -55,15 +55,8 @@ const API_URL =
 
 
 function getAuthToken() {
-
-    return (
-        window.CafeAuth?.token ||
-        localStorage.getItem(
-            "cafeAuthToken"
-        ) ||
-        ""
-    );
-
+  // Authentication is HttpOnly-cookie only. JavaScript never reads a JWT.
+  return "";
 }
 
 

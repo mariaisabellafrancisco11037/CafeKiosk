@@ -46,13 +46,8 @@ const API_URL = resolveBackendOrigin();
 const PAGE_SIZE = 6;
 
 function getAuthToken() {
-  return (
-    window.CafeAuth?.token ||
-    localStorage.getItem(
-      "cafeAuthToken"
-    ) ||
-    ""
-  );
+  // Authentication is HttpOnly-cookie only. JavaScript never reads a JWT.
+  return "";
 }
 
 async function authenticatedFetch(

@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);let s={};let kioskInfo=null;
 function api(){if(location.protocol==='http:'||location.protocol==='https:'){const p=location.port;if(!p||p==='80'||p==='443'||p==='5000')return location.origin;return `${location.protocol}//${location.hostname}:5000`;}return 'http://localhost:5000';}
-async function af(url,opt={}){if(window.CafeAuth?.apiFetch)return window.CafeAuth.apiFetch(url,opt);const h=new Headers(opt.headers||{});const t=localStorage.getItem('cafeAdminAuthToken')||localStorage.getItem('cafeAuthToken')||sessionStorage.getItem('cafeAuthToken');if(t)h.set('Authorization',`Bearer ${t}`);return fetch(url,{...opt,credentials:'include',headers:h});}
+async function af(url,opt={}){if(window.CafeAuth?.apiFetch)return window.CafeAuth.apiFetch(url,opt);const h=new Headers(opt.headers||{});return fetch(url,{...opt,credentials:'include',headers:h});}
 function attr(v){return String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'})[c]||c);}
 function field(label,key,type='text',extra=''){return `<div class="ck-field"><label>${label}</label><input class="ck-input" data-k="${key}" type="${type}" value="${attr(s[key]??'')}" ${extra}></div>`;}
 function close(){const m=$('settingsModal');if(m)m.classList.remove('open');}

@@ -31,13 +31,7 @@
     if (window.CafeAuth?.apiFetch) return window.CafeAuth.apiFetch(url, options);
 
     const headers = new Headers(options.headers || {});
-    const token =
-      window.CafeAuth?.token ||
-      localStorage.getItem("cafeAdminAuthToken") ||
-      sessionStorage.getItem("cafeAuthToken") ||
-      "";
-
-    if (token) headers.set("Authorization", `Bearer ${token}`);
+    // Authentication is carried only by the HttpOnly cookie.
 
     return fetch(url, {
       ...options,

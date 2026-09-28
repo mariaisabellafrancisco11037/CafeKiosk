@@ -535,31 +535,18 @@ function availabilityKey(name, category) {
 }
 
 function getAuthToken() {
-    return (
-        window.CafeAuth?.token ||
-        localStorage.getItem(
-            "cafeAuthToken"
-        ) ||
-        ""
-    );
+  // Authentication is HttpOnly-cookie only. JavaScript never reads a JWT.
+  return "";
 }
 
 let availabilitySyncTimer =
     null;
 
 async function syncAvailabilityToBackend() {
-    const token =
-        getAuthToken();
-
     const headers = {
         "Content-Type":
             "application/json"
     };
-
-    if (token) {
-        headers.Authorization =
-            `Bearer ${token}`;
-    }
 
     const items =
         products.map(
@@ -2606,11 +2593,6 @@ function adminApiHeaders() {
 
     const token =
         getAuthToken();
-
-    if (token) {
-        headers.Authorization =
-            `Bearer ${token}`;
-    }
 
     return headers;
 }

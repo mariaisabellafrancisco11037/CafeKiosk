@@ -7,6 +7,8 @@ const { makeRateLimit } = require('../middleware/securityRateLimit');
 const loginLimiter = makeRateLimit({ windowMs: 10 * 60 * 1000, max: 12, message: 'Too many login attempts. Please wait before trying again.' });
 const pinLimiter = makeRateLimit({ windowMs: 5 * 60 * 1000, max: 20, message: 'Too many PIN attempts. Please wait before trying again.' });
 const recoveryLimiter = makeRateLimit({ windowMs: 15 * 60 * 1000, max: 8, message: 'Too many recovery attempts. Please wait before trying again.' });
+const signupLimiter = makeRateLimit({ windowMs: 15 * 60 * 1000, max: 6, message: 'Too many signup attempts. Please wait before trying again.' });
+const inviteCheckLimiter = makeRateLimit({ windowMs: 10 * 60 * 1000, max: 30, message: 'Too many invitation checks. Please wait before trying again.' });
 
 router.get('/health', controller.health);
 router.post('/login', loginLimiter, controller.login);
@@ -29,9 +31,9 @@ router.post('/forgot-password', recoveryLimiter, controller.requestPasswordReset
 router.get('/password-reset/validate', controller.validatePasswordReset);
 router.post('/password-reset', recoveryLimiter, controller.resetPassword);
 
-router.post('/signup/owner', controller.ownerSignup);
-router.get('/invites/validate', controller.validateInvite);
-router.post('/signup/staff', controller.staffSignup);
+router.post('/signup/owner', signupLimiter, controller.ownerSignup);
+router.get('/invites/validate', inviteCheckLimiter, controller.validateInvite);
+router.post('/signup/staff', signupLimiter, controller.staffSignup);
 router.post('/invites', requireRole('Admin'), controller.createInvite);
 
 // Database-backed user management. Status changes are audited and a

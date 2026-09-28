@@ -60,9 +60,10 @@ function cookieOptions(req) {
   return {
     httpOnly: true,
     sameSite: 'strict',
-    secure: Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
+    secure: isProduction() || Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https'),
     maxAge: 8 * 60 * 60 * 1000,
-    path: '/'
+    path: '/',
+    priority: 'high'
   };
 }
 
@@ -335,8 +336,8 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
     // Keep older Railway/local databases compatible with the current approval and kiosk schema.
     await ensurePanelistUpgrades();
     await kioskAccessStore.ensureSchema();
-    const [dbRows] = await dbPool.query('SELECT DATABASE() AS databaseName, VERSION() AS version, NOW() AS serverTime');
-    databaseInfo = dbRows[0] || null;
+    await dbPool.query('SELECT 1');
+    databaseInfo = { status: 'Online' };
 
     const [cafeRows] = await dbPool.query(`
       SELECT
@@ -440,11 +441,7 @@ router.get('/overview', requireSystemAdminApi, async (req, res) => {
     }));
   } catch (error) {
     databaseOk = false;
-    databaseInfo = {
-      databaseName: process.env.DB_NAME || 'cafekiosk',
-      code: error.code || 'DB_ERROR',
-      message: error.message
-    };
+    databaseInfo = { status: 'Offline' };
   }
 
   const securityAlertRows = await getRecentSecurityAlerts({ hours: 24, limit: 20 });

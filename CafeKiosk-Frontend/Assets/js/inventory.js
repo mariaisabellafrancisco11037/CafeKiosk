@@ -57,14 +57,8 @@ const INVENTORY_LIVE_API =
 // ============================================================
 
 function getAuthToken() {
-
-  return (
-    window.CafeAuth?.token ||
-    localStorage.getItem(
-      "cafeAuthToken"
-    ) ||
-    ""
-  );
+  // Authentication is HttpOnly-cookie only. JavaScript never reads a JWT.
+  return "";
 }
 
 
