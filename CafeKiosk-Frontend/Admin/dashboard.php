@@ -298,7 +298,7 @@
 
   <!-- Existing CafeKiosk authentication helper -->
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/dashboard.js?v=pos-source-v1"></script>
+  <script src="../Assets/js/dashboard.js?v=dashboard-restored-20260929-v1"></script>
 <script src="../Assets/js/dashboard-products.js"></script>
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
