@@ -297,7 +297,7 @@
   </div>
 
   <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/order-queue.js?v=station-pin-v2"></script>
+  <script src="../Assets/js/order-queue.js?v=sync-recovery-20260929"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>

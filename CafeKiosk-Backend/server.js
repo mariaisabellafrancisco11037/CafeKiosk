@@ -429,27 +429,41 @@ app.use(
 // END CAFEKIOSK_PHP_EXTENSION_COMPAT_V1
 // =====================================================
 
+function normalizedOrigin(value) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    try { return new URL(text).origin; }
+    catch (_) { return text.replace(/\/$/, ""); }
+}
+
 const configuredCorsOrigins = new Set(
     String(process.env.CORS_ALLOWED_ORIGINS || "")
         .split(",")
-        .map(value => value.trim())
+        .map(normalizedOrigin)
         .filter(Boolean)
 );
 
+// Known CafeKiosk production hostnames are safe defaults. Environment values
+// remain the preferred configuration. This prevents a custom-domain deployment
+// from losing realtime connectivity merely because an origin variable is absent.
 for (const value of [
+    "https://cafekiosk.site",
+    "https://www.cafekiosk.site",
     process.env.PUBLIC_BASE_URL,
     process.env.APP_BASE_URL,
     process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : ""
 ]) {
-    if (value) configuredCorsOrigins.add(String(value).replace(/\/$/, ""));
+    const origin = normalizedOrigin(value);
+    if (origin) configuredCorsOrigins.add(origin);
 }
 
 function corsOriginAllowed(origin) {
     if (!origin) return true;
-    if (configuredCorsOrigins.has(origin)) return true;
+    const normalized = normalizedOrigin(origin);
+    if (configuredCorsOrigins.has(normalized)) return true;
     if (!isProduction()) {
         try {
-            const url = new URL(origin);
+            const url = new URL(normalized);
             const host = url.hostname;
             if (host === "localhost" || host === "127.0.0.1" ||
                 /^192\.168\./.test(host) || /^10\./.test(host) ||
@@ -459,6 +473,13 @@ function corsOriginAllowed(origin) {
         } catch (_) {}
     }
     return false;
+}
+
+function requestPublicHost(req) {
+    const forwarded = String(req.headers?.["x-forwarded-host"] || "")
+        .split(",")[0]
+        .trim();
+    return (forwarded || String(req.get("host") || "")).toLowerCase();
 }
 
 app.use(
@@ -520,7 +541,7 @@ function requestOriginAllowed(req, origin) {
     if (!origin) return false;
     try {
         const parsed = new URL(origin);
-        const requestHost = String(req.get("host") || "").toLowerCase();
+        const requestHost = requestPublicHost(req);
         if (parsed.host.toLowerCase() === requestHost) return true;
     } catch (_) {}
     return corsOriginAllowed(origin);
@@ -580,9 +601,10 @@ const io = new Server(
     server,
     {
         cors: {
-            origin(origin, callback) {
-                return callback(null, corsOriginAllowed(origin));
-            },
+            // The handshake itself is enforced by allowRequest below. Echoing
+            // the browser Origin here avoids a second conflicting CORS decision
+            // during Socket.IO polling/websocket upgrades behind Railway proxies.
+            origin: true,
             credentials: true,
             methods: ["GET", "POST", "PATCH"]
         },
@@ -590,7 +612,10 @@ const io = new Server(
             const origin = String(req.headers?.origin || "").trim();
             if (!origin) return callback(null, !isProduction());
             try {
-                const host = String(req.headers?.host || "").toLowerCase();
+                const forwarded = String(req.headers?.["x-forwarded-host"] || "")
+                    .split(",")[0]
+                    .trim();
+                const host = (forwarded || String(req.headers?.host || "")).toLowerCase();
                 if (new URL(origin).host.toLowerCase() === host) return callback(null, true);
             } catch (_) {}
             return callback(null, corsOriginAllowed(origin));
