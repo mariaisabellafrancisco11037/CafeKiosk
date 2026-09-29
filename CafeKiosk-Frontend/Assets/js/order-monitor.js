@@ -1009,29 +1009,6 @@ function bindAdminSocketEvents(
 }
 
 
-function makeRealtimeAuthProvider(role) {
-  if (window.CafeAuth?.socketAuthProvider) {
-    return window.CafeAuth.socketAuthProvider(role);
-  }
-  return callback => {
-    fetch(`${API_URL}/api/auth/socket-ticket`, {
-      method: 'GET',
-      credentials: 'include',
-      cache: 'no-store',
-      headers: { 'Accept': 'application/json', 'X-Cafe-Role': String(role || '').toLowerCase() }
-    })
-      .then(async response => {
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || !data.ticket) throw new Error(data.message || 'Realtime authorization failed.');
-        callback({ role, ticket: data.ticket });
-      })
-      .catch(error => {
-        console.warn('Realtime ticket unavailable; trying cookie fallback:', error.message);
-        callback({ role });
-      });
-  };
-}
-
 async function startRealtimeConnection() {
 
   setConnection(
@@ -1079,7 +1056,7 @@ async function startRealtimeConnection() {
         API_URL,
         {
 
-          auth: makeRealtimeAuthProvider("admin"),
+          auth: { role: "admin" },
 
           withCredentials:
             true,

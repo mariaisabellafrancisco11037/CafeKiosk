@@ -7,7 +7,6 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { Server } = require("socket.io");
-const socketTicketService = require("./services/socketTicketService");
 const { JWT_SECRET, isProduction } = require("./config/security");
 const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
@@ -608,18 +607,6 @@ const io = new Server(
             origin: true,
             credentials: true,
             methods: ["GET", "POST", "PATCH"]
-        },
-        allowRequest(req, callback) {
-            const origin = String(req.headers?.origin || "").trim();
-            if (!origin) return callback(null, !isProduction());
-            try {
-                const forwarded = String(req.headers?.["x-forwarded-host"] || "")
-                    .split(",")[0]
-                    .trim();
-                const host = (forwarded || String(req.headers?.host || "")).toLowerCase();
-                if (new URL(origin).host.toLowerCase() === host) return callback(null, true);
-            } catch (_) {}
-            return callback(null, corsOriginAllowed(origin));
         }
     }
 );
@@ -667,39 +654,13 @@ function socketCookieForRole(role) {
 
 io.use(async (socket, next) => {
     const selectedRole = String(socket.handshake.auth?.role || '').trim().toLowerCase();
-
-    // Preferred production path: the browser first obtains a one-time opaque
-    // ticket through /api/auth/socket-ticket using its HttpOnly login cookie.
-    // The real JWT never becomes readable by JavaScript.
-    const presentedTicket = String(socket.handshake.auth?.ticket || '').trim();
-    if (presentedTicket) {
-        const ticketRecord = socketTicketService.consume(presentedTicket);
-        if (!ticketRecord) {
-            return next(new Error('Realtime ticket expired. Reconnecting...'));
-        }
-
-        const account = await activeDatabaseAccount(ticketRecord.claims);
-        if (!account.ok || !account.user) {
-            console.log('🔒 Socket ticket session rejected:', account.message || 'invalid session');
-            return next(new Error('Unauthorized socket session'));
-        }
-
-        if (selectedRole && socketCookieForRole(selectedRole) &&
-            String(account.user.role || '').toLowerCase() !== selectedRole) {
-            return next(new Error('Realtime role does not match the active login.'));
-        }
-
-        socket.user = account.user;
-        socket.authClaims = ticketRecord.claims;
-        return next();
-    }
-
-    // Cookie fallback keeps LAN/older pages compatible. The browser never sends
-    // a readable JWT from Web Storage.
     const cookieHeader = socket.handshake.headers?.cookie;
     const selectedCookie = socketCookieForRole(selectedRole);
+
     let token = selectedCookie ? readSocketCookie(cookieHeader, selectedCookie) : null;
 
+    // Compatibility for pages that do not explicitly send a role selector.
+    // Authentication still comes only from signed HttpOnly cookies.
     if (!token && !selectedCookie) {
         token =
             readSocketCookie(cookieHeader, 'cafe_admin_token') ||
@@ -707,8 +668,11 @@ io.use(async (socket, next) => {
             readSocketCookie(cookieHeader, 'cafe_staff_token');
     }
 
+    // Public kiosk sockets are allowed to connect without a cafe-user login.
+    // Their cafe is authorized later by the active kiosk slug in join-kiosk.
     if (!token) {
         socket.user = null;
+        socket.authClaims = null;
         return next();
     }
 
@@ -716,7 +680,7 @@ io.use(async (socket, next) => {
     try {
         claims = require('jsonwebtoken').verify(token, JWT_SECRET);
     } catch (error) {
-        console.log('🔒 Socket auth rejected:', error.message);
+        console.log('🔒 Invalid realtime authentication cookie:', error.message);
         return next(new Error('Unauthorized socket session'));
     }
 
@@ -724,6 +688,11 @@ io.use(async (socket, next) => {
     if (!account.ok || !account.user) {
         console.log('🔒 Socket server-session rejected:', account.message || 'invalid session');
         return next(new Error('Unauthorized socket session'));
+    }
+
+    if (selectedRole && socketCookieForRole(selectedRole) &&
+        String(account.user.role || '').toLowerCase() !== selectedRole) {
+        return next(new Error('Realtime role does not match the active login.'));
     }
 
     socket.user = account.user;
