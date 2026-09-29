@@ -2111,6 +2111,29 @@ function bindSocketEvents(socket) {
   }
 }
 
+function makeRealtimeAuthProvider(role) {
+  if (window.CafeAuth?.socketAuthProvider) {
+    return window.CafeAuth.socketAuthProvider(role);
+  }
+  return callback => {
+    fetch(`${API_URL}/api/auth/socket-ticket`, {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json', 'X-Cafe-Role': String(role || '').toLowerCase() }
+    })
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.ticket) throw new Error(data.message || 'Realtime authorization failed.');
+        callback({ role, ticket: data.ticket });
+      })
+      .catch(error => {
+        console.warn('Realtime ticket unavailable; trying cookie fallback:', error.message);
+        callback({ role });
+      });
+  };
+}
+
 function setupSocket() {
   setLiveState(
     "connecting",
@@ -2184,9 +2207,7 @@ function setupSocket() {
   queueSocket = window.io(
     API_URL,
     {
-      auth: {
-        role: String(sessionStorage.getItem("cafeActiveRole") || "staff").toLowerCase()
-      },
+      auth: makeRealtimeAuthProvider(activeQueueRole()),
 
       withCredentials: true,
 

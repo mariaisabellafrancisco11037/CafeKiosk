@@ -615,6 +615,34 @@
     }
 
 
+    async function requestSocketTicket(role = activeRole) {
+        const response = await fetch(`${API_ORIGIN}/api/auth/socket-ticket`, {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+            headers: {
+                'Accept': 'application/json',
+                'X-Cafe-Role': String(role || activeRole || '').toLowerCase()
+            }
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.ticket) {
+            throw new Error(data.message || 'Unable to authorize realtime connection.');
+        }
+        return data.ticket;
+    }
+
+    function socketAuthProvider(role = activeRole) {
+        return callback => {
+            requestSocketTicket(role)
+                .then(ticket => callback({ role, ticket }))
+                .catch(error => {
+                    console.warn('Realtime ticket unavailable; trying secure cookie fallback:', error.message);
+                    callback({ role });
+                });
+        };
+    }
+
     function connectSocketNow() {
 
         if (
@@ -637,9 +665,7 @@
 
                     // The role is only a cookie selector; the server still
                     // verifies the signed HttpOnly cookie and live DB role.
-                    auth: {
-                        role: activeRole
-                    },
+                    auth: socketAuthProvider(activeRole),
 
                     withCredentials:
                         true,
@@ -808,6 +834,9 @@
 
         refreshCafeIdentity,
         renderCafeIdentity,
+
+        requestSocketTicket,
+        socketAuthProvider,
 
         API_ORIGIN
 

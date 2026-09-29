@@ -43,6 +43,7 @@ router.post('/users', requireRole('Admin'), controller.createUser);
 router.patch('/users/:userId', requireRole('Admin'), controller.updateUser);
 router.patch('/users/:userId/status', requireRole('Admin'), controller.updateUserStatus);
 
+router.get('/socket-ticket', verifyToken, controller.socketTicket);
 router.get('/me', verifyToken, controller.me);
 router.post('/change-user-id', verifyToken, controller.changeUserId);
 router.post('/change-password', verifyToken, controller.changePassword);

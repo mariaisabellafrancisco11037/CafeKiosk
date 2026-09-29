@@ -7,6 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { Server } = require("socket.io");
+const socketTicketService = require("./services/socketTicketService");
 const { JWT_SECRET, isProduction } = require("./config/security");
 const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
@@ -665,14 +666,40 @@ function socketCookieForRole(role) {
 }
 
 io.use(async (socket, next) => {
-    const cookieHeader = socket.handshake.headers?.cookie;
     const selectedRole = String(socket.handshake.auth?.role || '').trim().toLowerCase();
-    const selectedCookie = socketCookieForRole(selectedRole);
 
+    // Preferred production path: the browser first obtains a one-time opaque
+    // ticket through /api/auth/socket-ticket using its HttpOnly login cookie.
+    // The real JWT never becomes readable by JavaScript.
+    const presentedTicket = String(socket.handshake.auth?.ticket || '').trim();
+    if (presentedTicket) {
+        const ticketRecord = socketTicketService.consume(presentedTicket);
+        if (!ticketRecord) {
+            return next(new Error('Realtime ticket expired. Reconnecting...'));
+        }
+
+        const account = await activeDatabaseAccount(ticketRecord.claims);
+        if (!account.ok || !account.user) {
+            console.log('🔒 Socket ticket session rejected:', account.message || 'invalid session');
+            return next(new Error('Unauthorized socket session'));
+        }
+
+        if (selectedRole && socketCookieForRole(selectedRole) &&
+            String(account.user.role || '').toLowerCase() !== selectedRole) {
+            return next(new Error('Realtime role does not match the active login.'));
+        }
+
+        socket.user = account.user;
+        socket.authClaims = ticketRecord.claims;
+        return next();
+    }
+
+    // Cookie fallback keeps LAN/older pages compatible. The browser never sends
+    // a readable JWT from Web Storage.
+    const cookieHeader = socket.handshake.headers?.cookie;
+    const selectedCookie = socketCookieForRole(selectedRole);
     let token = selectedCookie ? readSocketCookie(cookieHeader, selectedCookie) : null;
 
-    // Compatibility for older page scripts that have not supplied a selector.
-    // This still uses HttpOnly cookies only; browser-provided JWTs are ignored.
     if (!token && !selectedCookie) {
         token =
             readSocketCookie(cookieHeader, 'cafe_admin_token') ||

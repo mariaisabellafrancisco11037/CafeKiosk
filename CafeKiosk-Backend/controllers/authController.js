@@ -15,6 +15,8 @@ const LOGIN_LOCK_THRESHOLD = Math.max(3, Number(process.env.LOGIN_LOCK_THRESHOLD
 const LOGIN_WARNING_THRESHOLD = Math.min(LOGIN_LOCK_THRESHOLD - 1, Math.max(2, Number(process.env.LOGIN_WARNING_THRESHOLD || 3)));
 const LOGIN_LOCK_MINUTES = Math.max(5, Number(process.env.LOGIN_LOCK_MINUTES || 15));
 
+const socketTicketService = require('../services/socketTicketService');
+
 const COOKIE_NAMES = {
   admin: 'cafe_admin_token',
   manager: 'cafe_manager_token',
@@ -1746,6 +1748,27 @@ exports.staffSignup = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Unable to create the staff account.' });
   } finally {
     connection.release();
+  }
+};
+
+exports.socketTicket = async (req, res) => {
+  try {
+    const issued = socketTicketService.issue({
+      user: req.user,
+      claims: req.authClaims
+    });
+    res.setHeader('Cache-Control', 'no-store');
+    return res.json({
+      success: true,
+      ticket: issued.ticket,
+      expiresInMs: issued.expiresInMs
+    });
+  } catch (error) {
+    console.error('Unable to issue realtime socket ticket:', error.message);
+    return res.status(401).json({
+      success: false,
+      message: 'A current login session is required for realtime access.'
+    });
   }
 };
 
