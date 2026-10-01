@@ -17,6 +17,62 @@ const DATA_DIR = path.resolve(__dirname, "../data");
 const DATA_FILE = path.join(DATA_DIR, "recipe-inventory.json");
 
 let writeQueue = Promise.resolve();
+let cafe1BlankInventoryMigrationChecked = false;
+
+// One-time cleanup for the new-account baseline requested for cafe-1.
+// This removes legacy/sample inventory that older builds accidentally attached
+// to cafe-1, while a persistent marker prevents future deployments from
+// deleting ingredients that the owner imports afterward.
+async function ensureCafe1StartsBlankOnce() {
+    if (cafe1BlankInventoryMigrationChecked) return;
+    cafe1BlankInventoryMigrationChecked = true;
+
+    await appStateStore.ensureTable();
+    const marker = await appStateStore.getState(
+        "cafe-1",
+        "inventory-blank-baseline-20261001",
+        null
+    );
+    if (marker) return;
+
+    const connection = await dbPool.getConnection();
+    try {
+        await connection.beginTransaction();
+        await connection.execute(
+            `DELETE pri FROM product_recipe_ingredients pri
+             JOIN products p ON p.product_id = pri.product_id
+             WHERE p.cafe_id = ?`,
+            ["cafe-1"]
+        );
+        await connection.execute(
+            `DELETE FROM inventory_movements WHERE cafe_id = ?`,
+            ["cafe-1"]
+        ).catch(() => {});
+        await connection.execute(
+            `DELETE FROM ingredients WHERE cafe_id = ?`,
+            ["cafe-1"]
+        );
+        await connection.execute(
+            `INSERT INTO app_state (cafe_id, state_key, payload)
+             VALUES (?, 'recipe-inventory', ?)
+             ON DUPLICATE KEY UPDATE payload=VALUES(payload), updated_at=CURRENT_TIMESTAMP`,
+            ["cafe-1", JSON.stringify({ ingredients: [], recipes: [], consumptionByOrder: {}, adjustments: [] })]
+        );
+        await connection.execute(
+            `INSERT INTO app_state (cafe_id, state_key, payload)
+             VALUES (?, 'inventory-blank-baseline-20261001', ?)
+             ON DUPLICATE KEY UPDATE payload=VALUES(payload), updated_at=CURRENT_TIMESTAMP`,
+            ["cafe-1", JSON.stringify({ applied: true })]
+        );
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        cafe1BlankInventoryMigrationChecked = false;
+        throw error;
+    } finally {
+        connection.release();
+    }
+}
 
 const SAMPLE_INGREDIENTS = [
     {
@@ -11066,6 +11122,7 @@ function customizationIncludes(customizations, optionValue) {
 
 async function ensureStore() {
     await appStateStore.ensureTable();
+    await ensureCafe1StartsBlankOnce();
 }
 
 async function readStore(cafeId = "cafe-1") {
