@@ -43,8 +43,10 @@ module.exports = async function initializeRailwayDatabase() {
 
   try {
     await connection.query('SELECT 1');
+    // Production safety: once CafeKiosk has been initialized, never replay the
+    // full schema during a deployment. Existing tenant/product/order data is authoritative.
     if (await tableExists(connection, 'cafes')) {
-      return { initialized: false, database: config.database };
+      return { initialized: false, database: config.database, reason: 'existing-database-preserved' };
     }
 
     if (String(process.env.AUTO_INIT_DB || 'true').toLowerCase() === 'false') {

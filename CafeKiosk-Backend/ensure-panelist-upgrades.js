@@ -102,19 +102,26 @@ async function ensurePanelistUpgrades() {
     `);
     await connection.execute(`UPDATE users SET status='Active' WHERE cafe_id='cafe-1' AND status='Pending'`);
 
-    // Adviser demo requirement: sync Demo Cafe product photos by product name.
+    // Never overwrite an owner/admin-selected product image during deployment.
+    // The bundled Demo Cafe image is only a fallback for rows that truly have no image.
+    // This is important because imported images are persisted in products.image_path and
+    // must survive GitHub/Railway redeployments.
     if (await tableExists(connection, 'products')) {
       try {
         const demoCatalog = require('./data/demo-cafe-catalog.json');
         for (const product of (demoCatalog.products || [])) {
           if (!product?.name || !product?.image) continue;
           await connection.execute(
-            `UPDATE products SET image_path=? WHERE cafe_id='cafe-1' AND LOWER(product_name)=LOWER(?)`,
+            `UPDATE products
+                SET image_path=?
+              WHERE cafe_id='cafe-1'
+                AND LOWER(product_name)=LOWER(?)
+                AND (image_path IS NULL OR TRIM(image_path)='')`,
             [String(product.image), String(product.name)]
           );
         }
       } catch (error) {
-        console.warn('Demo product image sync skipped:', error.message);
+        console.warn('Demo product image fallback skipped:', error.message);
       }
     }
 

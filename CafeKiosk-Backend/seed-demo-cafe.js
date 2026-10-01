@@ -133,23 +133,15 @@ async function ensureCategoriesAndProducts() {
       productId = Number(existing[0].product_id);
       const category = demo.categories.find(row => row.key === product.categoryKey);
 
-      // The Demo Cafe is a controlled showcase tenant. Restore the complete
-      // sample catalog on every startup so accidental edits/deactivation do
-      // not make menu items disappear from POS/Kiosk during demonstrations.
+      // Existing Demo Cafe rows are user data once the system is running.
+      // Deployment/startup must never reset their price, image, availability,
+      // category, or sort order. Only fill an image when the row has none at all.
       await pool.execute(
         `UPDATE products
-            SET category_id=?,
-                base_price=?,
-                image_path=?,
-                manual_availability='Available',
-                is_active=1,
-                sort_order=?
+            SET image_path=COALESCE(NULLIF(image_path, ''), ?)
           WHERE product_id=? AND cafe_id=?`,
         [
-          categoryId,
-          Number(product.price || 0),
           product.image || category?.image || '/Assets/images/logo.png',
-          Number(product.sortOrder || 0),
           productId,
           CAFE_ID
         ]

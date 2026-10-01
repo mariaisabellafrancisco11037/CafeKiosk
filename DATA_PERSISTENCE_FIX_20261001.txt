@@ -1,0 +1,17 @@
+CafeKiosk data persistence fix - 2026-10-01
+
+1. Imported/admin-selected product images remain in products.image_path.
+2. Demo Cafe startup no longer overwrites existing product images, prices,
+   availability, category assignments, or sort order.
+3. Panelist startup upgrade no longer replaces Demo Cafe images on every deploy;
+   bundled images are used only when image_path is NULL/blank.
+4. Railway initialization skips full schema execution whenever the CafeKiosk
+   database is already initialized (cafes table exists).
+5. POS loads /api/catalog for the authenticated cafe and receives product.image.
+6. Kiosk loads /api/kiosk-access/public/:slug/catalog and receives the same
+   database-backed product.image for that cafe.
+7. Product image updates use cafe_id + product_id, so updating an image does not
+   recreate the product or erase its other catalog fields.
+
+Important: do not manually run schema.sql against a populated production database.
+Use additive migrations for future schema changes.
