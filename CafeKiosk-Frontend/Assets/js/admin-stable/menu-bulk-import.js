@@ -255,8 +255,7 @@
   }
 
   async function linkCustomizationIngredients(rows, catalogProducts) {
-    const linked = rows.filter(row => row.ingredientName && row.ingredientAmount > 0);
-    if (!linked.length) return;
+    if (!rows.length) return;
 
     const inventoryPayload = await fetchJson(`${apiUrl()}/api/menu-availability/config`, { cache: "no-store" });
     const inventory = Array.isArray(inventoryPayload.ingredients) ? inventoryPayload.ingredients : [];
@@ -264,15 +263,59 @@
     const productByName = new Map((catalogProducts || []).map(p => [normalizeName(p.name), p]));
     const grouped = new Map();
 
-    for (const row of linked) {
+    // A normal 5-column Item Customizations CSV is enough to create Optional / Add-on
+    // recipe rows. Extra ingredient_name / ingredient_amount columns remain supported
+    // and take priority when supplied. Neutral choices intentionally consume nothing.
+    const noIngredientOptions = new Set(["no dip", "no topping", "none", "plain", "solo", "no add-on", "no addon"]);
+    const aliases = {
+      "biscoff": ["biscoff spread", "biscoff"],
+      "strawberry": ["strawberry topping", "strawberry"],
+      "blueberry": ["blueberry topping", "blueberry"],
+      "skippy": ["skippy peanut butter", "peanut butter", "skippy"],
+      "maple": ["maple syrup", "maple"],
+      "cheese": ["cheese powder / sauce", "cheese sauce", "cheese powder", "cheese"],
+      "sour cream": ["sour cream powder", "sour cream"],
+      "spicy": ["spicy seasoning", "spicy"],
+      "with fries": ["french fries", "fries"]
+    };
+    const defaultAmounts = {
+      "biscoff": 20, "nutella": 20, "strawberry": 20, "blueberry": 20,
+      "skippy": 20, "maple": 20, "butter": 10, "cheese": 20,
+      "sour cream": 12, "spicy": 8, "with fries": 100
+    };
+
+    function resolveIngredient(row) {
+      if (row.ingredientName) return ingredientByName.get(normalizeName(row.ingredientName)) || null;
+      const optionKey = normalizeName(row.option);
+      const candidates = aliases[optionKey] || [row.option];
+      for (const candidate of candidates) {
+        const exact = ingredientByName.get(normalizeName(candidate));
+        if (exact) return exact;
+      }
+      // Conservative fallback: only accept a unique inventory name containing the option name.
+      const partial = inventory.filter(item => {
+        const n = normalizeName(item.name);
+        return optionKey.length >= 4 && (n.includes(optionKey) || optionKey.includes(n));
+      });
+      return partial.length === 1 ? partial[0] : null;
+    }
+
+    for (const row of rows) {
+      const optionKey = normalizeName(row.option);
+      if (!row.option || noIngredientOptions.has(optionKey)) continue;
       const product = productByName.get(normalizeName(row.menuItem));
       if (!product) throw new Error(`Customization CSV line ${row.__line}: menu item “${row.menuItem}” was not found.`);
-      const ingredient = ingredientByName.get(normalizeName(row.ingredientName));
-      if (!ingredient) throw new Error(`Customization CSV line ${row.__line}: Inventory ingredient “${row.ingredientName}” was not found. Import Inventory first.`);
+      const ingredient = resolveIngredient(row);
+      if (!ingredient) {
+        // The customization itself is still imported. We only omit inventory usage when
+        // no safe ingredient match exists, avoiding deductions from the wrong stock item.
+        continue;
+      }
+      const amount = row.ingredientAmount > 0 ? row.ingredientAmount : (defaultAmounts[optionKey] || 1);
       const category = normalizeCatalogCategory(product.categoryKey || product.category);
       const key = `${normalizeName(product.name)}::${normalizeName(category)}`;
       if (!grouped.has(key)) grouped.set(key, { product, category, rows: [] });
-      grouped.get(key).rows.push({ row, ingredient });
+      grouped.get(key).rows.push({ row: { ...row, ingredientAmount: amount }, ingredient });
     }
 
     for (const entry of grouped.values()) {
