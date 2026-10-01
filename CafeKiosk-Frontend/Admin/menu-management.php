@@ -401,8 +401,8 @@
     </div>
   </div>
 
-  <script src="../Assets/js/admin-stable/menu-management.js?v=sizes-ingredients-dragdrop-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-flex-config.js?v=sizes-ingredients-dragdrop-fix-20261001"></script>
+  <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-sizes-restored-20261001"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=cup-sizes-restored-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
