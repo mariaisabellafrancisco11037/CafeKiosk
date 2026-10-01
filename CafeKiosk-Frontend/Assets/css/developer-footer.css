@@ -3,3 +3,8 @@ html,body{min-height:100%;}
 body.kiosk-home{min-height:100vh!important;display:flex!important;flex-direction:column!important;}
 body.kiosk-home>.container{flex:0 0 auto;}
 body.kiosk-home>.cafekiosk-developer-footer{margin-top:auto!important;flex:0 0 auto;}
+
+/* 2026-10-01 kiosk landing: footer must sit at the viewport bottom, never mid-screen. */
+body.kiosk-home{padding-bottom:52px!important;}
+body.kiosk-home>.cafekiosk-developer-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;margin:0!important;z-index:100!important;}
+@media(max-width:640px){body.kiosk-home{padding-bottom:48px!important;}}

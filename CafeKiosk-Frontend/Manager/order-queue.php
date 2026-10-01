@@ -14,7 +14,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-match-staff-v4">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-bottom-v7">
   <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 <body class="uniform-pos manager-order-queue-page">
@@ -150,11 +150,6 @@
 
     <!-- RIGHT SIDE -->
     <aside class="queue-right">
-      <button id="staffButton" class="staff-profile" type="button">
-        <span class="profile-icon" aria-hidden="true"><span></span></span>
-        <strong>CafeKiosk Manager</strong>
-      </button>
-
       <label class="order-search">
         <span class="search-symbol" aria-hidden="true"></span>
         <input id="orderSearch" name="cafekiosk_pos_order_search" type="search" placeholder="Search orders..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" readonly>
@@ -301,7 +296,7 @@
   <script src="../Assets/js/auth-session.js?v=live-cookie-realtime-v1"></script>
   <script src="../Assets/js/order-queue.js?v=live-cookie-realtime-v1"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-profile-single-v8"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
