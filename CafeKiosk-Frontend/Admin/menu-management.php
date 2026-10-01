@@ -406,7 +406,7 @@
   </div>
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-management.js?v=image-db-real-fix-20261001"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=faster-image-upload-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>

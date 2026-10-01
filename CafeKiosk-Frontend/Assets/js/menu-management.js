@@ -678,7 +678,7 @@ async function optimizeProductImageDataUrl(source) {
     }
 
     if (
-        value.length <= 165000 &&
+        value.length <= 105000 &&
         value.startsWith("data:image/jpeg")
     ) {
         return value;
@@ -690,10 +690,10 @@ async function optimizeProductImageDataUrl(source) {
         );
 
     let maxDimension =
-        720;
+        560;
 
     let quality =
-        0.78;
+        0.70;
 
     let result =
         value;
@@ -773,21 +773,21 @@ async function optimizeProductImageDataUrl(source) {
 
         if (
             result.length <=
-            165000
+            105000
         ) {
             return result;
         }
 
         if (
             quality >
-            0.52
+            0.50
         ) {
             quality -=
-                0.08;
+                0.07;
         } else {
             maxDimension =
                 Math.max(
-                    480,
+                    420,
                     Math.round(
                         maxDimension *
                         0.82
@@ -798,7 +798,7 @@ async function optimizeProductImageDataUrl(source) {
 
     if (
         result.length >
-        185000
+        150000
     ) {
         throw new Error(
             "The selected image is still too large after optimization."
@@ -1699,6 +1699,11 @@ function showForm(
 
     clearImagePreview();
 
+    productImageWasChanged = false;
+    productImageOptimizationPending = false;
+    optimizedProductImageDataUrl = "";
+    productImageOptimizationPromise = Promise.resolve("");
+
 
     resetRecipeBuilder();
 
@@ -1879,6 +1884,11 @@ const imageDropZone =
         'label.image-drop[for="productImage"]'
     );
 
+let productImageWasChanged = false;
+let productImageOptimizationPending = false;
+let optimizedProductImageDataUrl = "";
+let productImageOptimizationPromise = Promise.resolve("");
+
 function previewProductImageFile(file) {
     if (!file) {
         return;
@@ -1889,14 +1899,25 @@ function previewProductImageFile(file) {
         return;
     }
 
+    productImageWasChanged = true;
+    optimizedProductImageDataUrl = "";
+    productImageOptimizationPending = true;
+
     const reader =
         new FileReader();
 
     reader.onload =
         event => {
 
+            const originalDataUrl =
+                String(
+                    event.target.result ||
+                    ""
+                );
+
+            // Show the selected image immediately. No blocking loading screen.
             imagePreview.src =
-                event.target.result;
+                originalDataUrl;
 
             imagePreview.style.display =
                 "block";
@@ -1904,14 +1925,55 @@ function previewProductImageFile(file) {
             imagePlaceholder.style.display =
                 "none";
 
+            markProductImageReady(
+                `${file.name || "Image"} selected. CafeKiosk is preparing it in the background.`
+            );
+
+            // Compress while the owner continues editing the form.
+            productImageOptimizationPromise =
+                optimizeProductImageDataUrl(
+                    originalDataUrl
+                )
+                .then(
+                    optimized => {
+                        optimizedProductImageDataUrl =
+                            optimized;
+
+                        imagePreview.src =
+                            optimized;
+
+                        productImageOptimizationPending =
+                            false;
+
+                        markProductImageReady(
+                            file.name ||
+                            ""
+                        );
+
+                        return optimized;
+                    }
+                )
+                .catch(
+                    error => {
+                        console.warn(
+                            "Background image optimization failed.",
+                            error
+                        );
+
+                        optimizedProductImageDataUrl =
+                            originalDataUrl;
+
+                        productImageOptimizationPending =
+                            false;
+
+                        return originalDataUrl;
+                    }
+                );
+
         };
 
     reader.readAsDataURL(
         file
-    );
-
-    markProductImageReady(
-        file.name || ""
     );
 }
 
@@ -2130,10 +2192,7 @@ productForm.addEventListener(
         event.preventDefault();
 
         const hasProductImage =
-            Boolean(
-                imagePreview?.src &&
-                imagePreview.src !== window.location.href
-            );
+            productImageWasChanged;
 
         setProductSaveLoading(
             "Saving product...",
@@ -2169,6 +2228,10 @@ productForm.addEventListener(
 
 
         let preparedImage =
+            optimizedProductImageDataUrl
+
+            ||
+
             imagePreview.src
 
             ||
@@ -2180,35 +2243,38 @@ productForm.addEventListener(
             "";
 
         if (
+            productImageWasChanged &&
+            productImageOptimizationPending
+        ) {
+            setProductSaveLoading(
+                "Finishing image...",
+                "Just a moment while CafeKiosk finishes preparing the image."
+            );
+
+            preparedImage =
+                await productImageOptimizationPromise;
+
+            imagePreview.src =
+                preparedImage;
+        } else if (
+            productImageWasChanged &&
             String(
                 preparedImage
             ).startsWith(
                 "data:image/"
-            )
+            ) &&
+            !optimizedProductImageDataUrl
         ) {
-            setProductSaveLoading(
-                "Optimizing image...",
-                "CafeKiosk is resizing the attached image so it can be stored safely in the database."
-            );
-
-            try {
-                preparedImage =
-                    await optimizeProductImageDataUrl(
-                        preparedImage
-                    );
-
-                imagePreview.src =
-                    preparedImage;
-            } catch (error) {
-                hideProductSaveLoading();
-
-                alert(
-                    error.message ||
-                    "The selected image could not be prepared for database saving."
+            preparedImage =
+                await optimizeProductImageDataUrl(
+                    preparedImage
                 );
 
-                return;
-            }
+            optimizedProductImageDataUrl =
+                preparedImage;
+
+            imagePreview.src =
+                preparedImage;
         }
 
 
@@ -2358,6 +2424,7 @@ productForm.addEventListener(
 
 
         if (
+            productImageWasChanged &&
             String(
                 product.image ||
                 ""
@@ -2389,7 +2456,7 @@ productForm.addEventListener(
 
         setProductSaveLoading(
             "Saved successfully",
-            String(product.image || "").startsWith("data:image/")
+            productImageWasChanged
                 ? "The product image and product information are now saved in the database."
                 : "The product information is now saved in the database."
         );
@@ -2400,7 +2467,7 @@ productForm.addEventListener(
                 hideProductSaveLoading();
                 showMenu();
             },
-            650
+            180
         );
 
     }
