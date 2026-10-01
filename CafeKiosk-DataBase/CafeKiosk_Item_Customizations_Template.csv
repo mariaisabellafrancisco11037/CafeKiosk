@@ -1,0 +1,4 @@
+﻿menu_item,customization_group,option,additional_price,selection_required,ingredient_name,ingredient_amount
+Croffle,Dip,No Dip,0,false,,
+Croffle,Dip,Biscoff,20,false,Biscoff Spread,20
+Croffle,Dip,Nutella,20,false,Nutella,20

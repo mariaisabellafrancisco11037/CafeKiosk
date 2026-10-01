@@ -1,0 +1,14 @@
+CafeKiosk customization ingredient linkage
+
+Item Customizations CSV now supports two optional columns:
+ingredient_name,ingredient_amount
+
+When supplied, the importer links that customization option to the selected Inventory ingredient as an Optional / Add-on recipe row in Ingredient Usage per Base Serving.
+
+Example:
+Croffle,Dip,Biscoff,20,false,Biscoff Spread,20
+
+The ingredient is deducted only when Biscoff is selected. Base recipe ingredients remain required and are deducted on every sale. Existing 5-column customization CSV files remain supported.
+
+Menu ingredient syntax also accepts option/optional/add-on/addon, but an option name is still required for an optional row, e.g.:
+Biscoff Spread:20:optional:Biscoff

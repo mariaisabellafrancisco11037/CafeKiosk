@@ -168,7 +168,8 @@
       const bits = part.split(":").map(x => x.trim());
       const name = bits[0] || "";
       const amount = Number(bits[1]);
-      const mode = String(bits[2] || "required").toLowerCase() === "option" ? "option" : "required";
+      const usageWord = String(bits[2] || "required").toLowerCase();
+      const mode = (usageWord === "option" || usageWord === "optional" || usageWord === "add-on" || usageWord === "addon") ? "option" : "required";
       const optionValue = bits[3] || "";
       if (!name || !Number.isFinite(amount) || amount <= 0) {
         throw new Error(`Invalid ingredient “${part}”. Use Ingredient:Amount:required.`);
@@ -207,10 +208,10 @@
 
   function downloadCustomizationTemplate() {
     const csv = [
-      ["menu_item","customization_group","option","additional_price","selection_required"],
-      ["Croffle","Dip","No Dip","0","false"],
-      ["Croffle","Dip","Biscoff","20","false"],
-      ["Croffle","Dip","Nutella","20","false"]
+      ["menu_item","customization_group","option","additional_price","selection_required","ingredient_name","ingredient_amount"],
+      ["Croffle","Dip","No Dip","0","false","",""],
+      ["Croffle","Dip","Biscoff","20","false","Biscoff Spread","20"],
+      ["Croffle","Dip","Nutella","20","false","Nutella","20"]
     ].map(row => row.map(csvEscape).join(",")).join("\r\n");
     const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
     const a=document.createElement("a"); a.href=url; a.download="CafeKiosk_Item_Customizations_Template.csv";
@@ -224,6 +225,8 @@
       option: String(row.option || row.option_name || row.value || "").trim(),
       additionalPrice: Math.max(0, Number(row.additional_price || row.price || 0) || 0),
       required: /^(1|true|yes|required)$/i.test(String(row.selection_required || row.required || "")),
+      ingredientName: String(row.ingredient_name || row.inventory_ingredient || row.ingredient || "").trim(),
+      ingredientAmount: Number(row.ingredient_amount || row.usage_amount || row.amount || 0) || 0,
       __line: row.__line
     })).filter(row => row.menuItem || row.option);
   }
@@ -248,6 +251,43 @@
       const productConfig={...existing,productName:entry.product.name,category:entry.product.categoryKey||entry.product.category,customizations:[...entry.groups.values()],updatedAt:new Date().toISOString()};
       const payload=await fetchJson(`${apiUrl()}/api/menu-config/product`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({productKey:key,previousKey:key,productConfig})});
       if(payload.config) menuConfig=payload.config;
+    }
+  }
+
+  async function linkCustomizationIngredients(rows, catalogProducts) {
+    const linked = rows.filter(row => row.ingredientName && row.ingredientAmount > 0);
+    if (!linked.length) return;
+
+    const inventoryPayload = await fetchJson(`${apiUrl()}/api/menu-availability/config`, { cache: "no-store" });
+    const inventory = Array.isArray(inventoryPayload.ingredients) ? inventoryPayload.ingredients : [];
+    const ingredientByName = new Map(inventory.map(item => [normalizeName(item.name), item]));
+    const productByName = new Map((catalogProducts || []).map(p => [normalizeName(p.name), p]));
+    const grouped = new Map();
+
+    for (const row of linked) {
+      const product = productByName.get(normalizeName(row.menuItem));
+      if (!product) throw new Error(`Customization CSV line ${row.__line}: menu item “${row.menuItem}” was not found.`);
+      const ingredient = ingredientByName.get(normalizeName(row.ingredientName));
+      if (!ingredient) throw new Error(`Customization CSV line ${row.__line}: Inventory ingredient “${row.ingredientName}” was not found. Import Inventory first.`);
+      const category = normalizeCatalogCategory(product.categoryKey || product.category);
+      const key = `${normalizeName(product.name)}::${normalizeName(category)}`;
+      if (!grouped.has(key)) grouped.set(key, { product, category, rows: [] });
+      grouped.get(key).rows.push({ row, ingredient });
+    }
+
+    for (const entry of grouped.values()) {
+      const recipePayload = await fetchJson(`${apiUrl()}/api/menu-availability/recipe?name=${encodeURIComponent(entry.product.name)}&category=${encodeURIComponent(entry.category)}`, { cache: "no-store" });
+      const current = Array.isArray(recipePayload.recipe?.ingredients) ? recipePayload.recipe.ingredients.map(x => ({ ...x })) : [];
+      for (const { row, ingredient } of entry.rows) {
+        const optionNorm = normalizeName(row.option);
+        const idx = current.findIndex(x => x.mode === "option" && normalizeName(x.optionValue) === optionNorm);
+        const link = { ingredientId: ingredient.id, amount: row.ingredientAmount, mode: "option", optionValue: row.option, scaleWithSize: true };
+        if (idx >= 0) current[idx] = link; else current.push(link);
+      }
+      await fetchJson(`${apiUrl()}/api/menu-availability/recipe`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemName: entry.product.name, category: entry.category, ingredients: current })
+      });
     }
   }
 
@@ -848,6 +888,8 @@
       if (state.customizationRows.length) {
         const configPayload = await fetchJson(`${apiUrl()}/api/menu-config`, { cache: "no-store" });
         await saveCustomizationRows(state.customizationRows, configPayload.config || {products:{},categoryDefaults:{}}, resultProducts);
+        setProgress(44, "Linking customization add-ons to ingredient usage…");
+        await linkCustomizationIngredients(state.customizationRows, resultProducts);
       }
       const productMap = new Map(resultProducts.map(p => [productMatchKey(p.name, p.categoryKey || p.category), p]));
       const imageJobs = validRows.filter(row => row.imageEntry).map(row => {
