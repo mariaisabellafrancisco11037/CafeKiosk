@@ -11068,17 +11068,19 @@ async function ensureStore() {
     await appStateStore.ensureTable();
 }
 
-async function readStore() {
+async function readStore(cafeId = "cafe-1") {
     await ensureStore();
-    const cafe = await appStateStore.getState("cafe-1", "recipe-inventory", null);
-    if (cafe && typeof cafe === "object") return { "cafe-1": cafe };
+    const id = normalizeCafeId(cafeId);
+    const cafe = await appStateStore.getState(id, "recipe-inventory", null);
+    if (cafe && typeof cafe === "object") return { [id]: cafe };
     return {};
 }
 
-async function atomicWrite(data) {
+async function atomicWrite(data, cafeId = "cafe-1") {
     await ensureStore();
-    const cafe = data && typeof data === "object" ? (data["cafe-1"] || {}) : {};
-    await appStateStore.setState("cafe-1", "recipe-inventory", cafe);
+    const id = normalizeCafeId(cafeId);
+    const cafe = data && typeof data === "object" ? (data[id] || {}) : {};
+    await appStateStore.setState(id, "recipe-inventory", cafe);
 
     // Keep the normalized ingredients table in sync so Workbench, reports,
     // and future modules see the same current stock as the runtime store.
@@ -11090,7 +11092,7 @@ async function atomicWrite(data) {
              ON DUPLICATE KEY UPDATE ingredient_name=VALUES(ingredient_name), ingredient_category=VALUES(ingredient_category),
                unit=VALUES(unit), current_stock=VALUES(current_stock), low_stock_threshold=VALUES(low_stock_threshold), status='Active'`,
             [
-                "cafe-1",
+                id,
                 String(ingredient.id || ingredient.name).slice(0, 120),
                 String(ingredient.name),
                 String(ingredient.category || "Other"),
@@ -11102,13 +11104,14 @@ async function atomicWrite(data) {
     }
 }
 
-function queueMutation(mutator) {
+function queueMutation(cafeId, mutator) {
+    const id = normalizeCafeId(cafeId);
     const job = writeQueue
         .catch(() => {})
         .then(async () => {
-            const store = await readStore();
+            const store = await readStore(id);
             const result = await mutator(store);
-            await atomicWrite(store);
+            await atomicWrite(store, id);
             return result;
         });
 
@@ -11393,7 +11396,7 @@ function publicIngredient(ingredient) {
 
 async function getAdminConfig(cafeId) {
     const store =
-        await readStore();
+        await readStore(cafeId);
 
     const cafe =
         getCafeContainer(
@@ -11510,7 +11513,7 @@ async function getDashboard(cafeId) {
 }
 
 async function createIngredient(cafeId, payload) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
         const name = String(payload?.name || "").trim();
         const unit = normalizeUnit(payload?.unit);
@@ -11589,7 +11592,7 @@ async function createIngredient(cafeId, payload) {
 
 
 async function seedSampleIngredients(cafeId) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
 
         cafe.ingredients =
@@ -11827,7 +11830,7 @@ async function seedSampleIngredients(cafeId) {
 }
 
 async function updateIngredient(cafeId, ingredientId, patch) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
         const ingredient = cafe.ingredients.find(item => item.id === ingredientId);
         if (!ingredient) {
@@ -11867,7 +11870,7 @@ async function updateIngredient(cafeId, ingredientId, patch) {
 }
 
 async function deleteIngredient(cafeId, ingredientId) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
         const ingredient = cafe.ingredients.find(item => item.id === ingredientId);
         if (!ingredient) {
@@ -11894,7 +11897,7 @@ async function deleteIngredient(cafeId, ingredientId) {
 }
 
 async function adjustIngredient(cafeId, ingredientId, payload) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
         const ingredient = cafe.ingredients.find(item => item.id === ingredientId);
         if (!ingredient) {
@@ -11997,7 +12000,7 @@ function normalizeRecipeRow(row, cafe) {
 }
 
 async function saveRecipe(cafeId, payload) {
-    return queueMutation(store => {
+    return queueMutation(cafeId, store => {
         const cafe = getCafeContainer(store, cafeId);
         const itemName = String(payload?.itemName || "").trim();
         const category = normalizeCategory(payload?.category);
@@ -12135,7 +12138,7 @@ function buildStatusForCafe(cafe) {
 }
 
 async function getInventoryStatus(cafeId) {
-    const store = await readStore();
+    const store = await readStore(cafeId);
     const cafe = getCafeContainer(store, cafeId);
     return buildStatusForCafe(cafe);
 }
@@ -12192,8 +12195,9 @@ function computeOrderRequirements(cafe, order) {
 }
 
 async function consumeOrder(order) {
-    return queueMutation(store => {
-        const cafeId = normalizeCafeId(order?.cafeId);
+    const cafeId = normalizeCafeId(order?.cafeId);
+    return queueMutation(cafeId, store => {
+        
         const cafe = getCafeContainer(store, cafeId);
         const orderKey = String(order?.orderNumber || order?.id || "").trim();
         if (!orderKey) {
@@ -12274,8 +12278,9 @@ async function consumeOrder(order) {
 }
 
 async function restoreOrder(order, reason = "Order void/refund") {
-    return queueMutation(store => {
-        const cafeId = normalizeCafeId(order?.cafeId);
+    const cafeId = normalizeCafeId(order?.cafeId);
+    return queueMutation(cafeId, store => {
+        
         const cafe = getCafeContainer(store, cafeId);
         const candidateKeys = [order?.orderNumber, order?.id, order?.orderId]
             .filter(Boolean)
@@ -12318,8 +12323,9 @@ async function restoreOrder(order, reason = "Order void/refund") {
 }
 
 async function reconcileOrder(order) {
-    return queueMutation(store => {
-        const cafeId = normalizeCafeId(order?.cafeId);
+    const cafeId = normalizeCafeId(order?.cafeId);
+    return queueMutation(cafeId, store => {
+        
         const cafe = getCafeContainer(store, cafeId);
         const candidateKeys = [order?.orderNumber, order?.id, order?.orderId]
             .filter(Boolean)
