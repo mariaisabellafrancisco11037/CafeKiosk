@@ -5,7 +5,7 @@ const { ensureApprovalPinSchema, getUserApprovalPinStatus, verifyUserApprovalPin
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
-const { sendStaffInvitation, sendPasswordResetEmail, sendCafeRegistrationNotification, getEmailConfig } = require('../services/emailService');
+const { sendStaffInvitation, sendPasswordResetEmail, sendCafeRegistrationNotification, sendOwnerVerificationEmail, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
 const { createSecurityAlert, clientIp } = require('../services/securityAlertService');
 const { ensureSessionSchema, createSession, attachTokenHash, revokeSession, revokeAllUserSessions, SESSION_HOURS } = require('../services/authSessionService');
@@ -144,6 +144,8 @@ async function ensureAuthSignupSchema(connection) {
   await addColumnIfMissing(connection, 'users', 'phone', 'VARCHAR(40) NULL');
   await addColumnIfMissing(connection, 'users', 'is_owner', 'TINYINT(1) NOT NULL DEFAULT 0');
   await addColumnIfMissing(connection, 'users', 'email_verified_at', 'DATETIME NULL');
+  await addColumnIfMissing(connection, 'users', 'owner_verify_token_hash', 'CHAR(64) NULL');
+  await addColumnIfMissing(connection, 'users', 'owner_verify_expires_at', 'DATETIME NULL');
   await addColumnIfMissing(connection, 'users', 'must_change_password', 'TINYINT(1) NOT NULL DEFAULT 0');
   await addColumnIfMissing(connection, 'users', 'updated_at', 'DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
   await addColumnIfMissing(connection, 'users', 'approval_pin_hash', 'VARCHAR(255) NULL');
@@ -1424,6 +1426,8 @@ exports.ownerSignup = async (req, res) => {
     if (!cafeId) throw new Error('Could not generate a unique Cafe ID.');
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const ownerVerifyToken = crypto.randomBytes(32).toString('hex');
+    const ownerVerifyHash = sha256(ownerVerifyToken);
 
     await connection.execute(
       `INSERT INTO cafes
@@ -1438,9 +1442,9 @@ exports.ownerSignup = async (req, res) => {
 
     const [userResult] = await connection.execute(
       `INSERT INTO users
-       (cafe_id, full_name, username, email, phone, password_hash, role, is_owner, status, email_verified_at)
-       VALUES (?, ?, ?, ?, ?, ?, 'Admin', 1, 'Pending', NOW())`,
-      [cafeId, fullName, username, email, phone || null, passwordHash]
+       (cafe_id, full_name, username, email, phone, password_hash, role, is_owner, status, email_verified_at, owner_verify_token_hash, owner_verify_expires_at)
+       VALUES (?, ?, ?, ?, ?, ?, 'Admin', 1, 'Pending', NULL, ?, DATE_ADD(NOW(), INTERVAL 30 MINUTE))`,
+      [cafeId, fullName, username, email, phone || null, passwordHash, ownerVerifyHash]
     );
 
     // A newly registered cafe intentionally starts with an empty catalog.
@@ -1465,13 +1469,16 @@ exports.ownerSignup = async (req, res) => {
 
     await connection.commit();
 
-    const adminNotification = await sendCafeRegistrationNotification({ cafeName, ownerName: fullName, ownerEmail: email, ownerPhone: phone, cafeId, requestedAt: new Date().toISOString() }).catch(error => ({sent:false,error:error?.message||'Notification failed.'}));
+    const publicBaseUrl = safeText(process.env.PUBLIC_APP_URL || process.env.APP_URL || 'https://cafekiosk.site').replace(/\/$/, '');
+    const verifyUrl = `${publicBaseUrl}/api/auth/verify-owner-email?token=${encodeURIComponent(ownerVerifyToken)}`;
+    const verificationEmail = await sendOwnerVerificationEmail({ to: email, cafeName, ownerName: fullName, verifyUrl }).catch(error => ({sent:false,error:error?.message||'Verification email failed.'}));
 
     return res.status(201).json({
       success: true,
       pendingApproval: true,
-      adminNotificationSent: Boolean(adminNotification?.sent),
-      message: 'Registration submitted. A System Administrator must approve this cafe account before the owner can sign in.',
+      emailVerificationRequired: true,
+      verificationEmailSent: Boolean(verificationEmail?.sent),
+      message: verificationEmail?.sent ? 'Registration submitted. Check your email and click Verify & Activate Cafe Account within 30 minutes.' : 'Registration was saved, but the verification email could not be sent. Please contact CafeKiosk support.',
       cafeId,
       userId: userResult.insertId,
       kioskSlug,
@@ -1489,6 +1496,34 @@ exports.ownerSignup = async (req, res) => {
   } finally {
     connection.release();
   }
+};
+
+exports.verifyOwnerEmail = async (req, res) => {
+  const token = safeText(req.query?.token);
+  const loginUrl = '/admin-login';
+  const render = (ok, message) => res.status(ok ? 200 : 400).send(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>CafeKiosk Email Verification</title></head><body style="margin:0;font-family:Arial,sans-serif;background:#f5f1e8;color:#2f2a24;display:grid;place-items:center;min-height:100vh"><main style="width:min(520px,90vw);background:#fff;border:1px solid #e4dac8;border-radius:18px;padding:32px;text-align:center;box-shadow:0 12px 35px rgba(0,0,0,.08)"><h1 style="color:#234a3b">${ok ? 'Email verified' : 'Verification failed'}</h1><p>${message}</p>${ok ? `<a href="${loginUrl}" style="display:inline-block;margin-top:14px;background:#4f9872;color:#fff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:700">Sign in to CafeKiosk</a>` : ''}<p style="margin-top:28px;font-size:12px;color:#7a6e61">Powered by CafeKiosk</p></main></body></html>`);
+  if (!/^[a-f0-9]{64}$/i.test(token)) return render(false, 'This verification link is invalid.');
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return render(false, 'CafeKiosk could not connect to the database.');
+  try {
+    await ensureAuthSignupSchema(connection);
+    await connection.beginTransaction();
+    const hash = sha256(token);
+    const [rows] = await connection.execute(`SELECT u.user_id,u.cafe_id,u.email_verified_at,u.owner_verify_expires_at,c.cafe_name FROM users u JOIN cafes c ON c.cafe_id=u.cafe_id WHERE u.is_owner=1 AND u.owner_verify_token_hash=? LIMIT 1 FOR UPDATE`, [hash]);
+    if (!rows.length) { await connection.rollback(); return render(false, 'This verification link is invalid or has already been used.'); }
+    const owner = rows[0];
+    if (owner.email_verified_at) { await connection.rollback(); return render(false, 'This verification link has already been used.'); }
+    if (!owner.owner_verify_expires_at || new Date(owner.owner_verify_expires_at).getTime() < Date.now()) { await connection.rollback(); return render(false, 'This verification link has expired.'); }
+    await connection.execute(`UPDATE users SET email_verified_at=NOW(), status='Active', owner_verify_token_hash=NULL, owner_verify_expires_at=NULL WHERE user_id=?`, [owner.user_id]);
+    await connection.execute(`UPDATE cafes SET approval_status='Approved', status='Active', approved_at=NOW(), approved_by='Owner email verification', rejection_reason=NULL WHERE cafe_id=?`, [owner.cafe_id]);
+    await connection.execute(`INSERT INTO cafe_approval_history (cafe_id,cafe_name_snapshot,owner_name_snapshot,owner_email_snapshot,old_status,new_status,reason,changed_by,changed_from_ip) SELECT c.cafe_id,c.cafe_name,u.full_name,u.email,'Pending','Approved','Verified registered owner email','Owner email verification',? FROM cafes c JOIN users u ON u.cafe_id=c.cafe_id AND u.user_id=?`, [String(req.ip || req.socket?.remoteAddress || '').slice(0,45)||null, owner.user_id]);
+    await connection.commit();
+    return render(true, 'Your email has been confirmed and your cafe owner account is now active.');
+  } catch (error) {
+    try { await connection.rollback(); } catch (_) {}
+    console.error('Owner email verification error:', error);
+    return render(false, 'CafeKiosk could not verify this link. Please try again.');
+  } finally { connection.release(); }
 };
 
 exports.createInvite = async (req, res) => {

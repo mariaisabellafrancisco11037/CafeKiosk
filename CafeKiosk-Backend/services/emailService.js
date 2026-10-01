@@ -280,6 +280,35 @@ async function sendResendEmail({ to, subject, html, text, senderName, replyTo })
   }
 }
 
+
+function buildOwnerVerificationEmail(options = {}) {
+  const cafeName = clean(options.cafeName) || 'Your Cafe';
+  const ownerName = clean(options.ownerName) || 'Cafe Owner';
+  const verifyUrl = clean(options.verifyUrl);
+  const subject = `Verify your CafeKiosk cafe account - ${cafeName}`;
+  const text = [
+    `Hello ${ownerName},`, '',
+    `We received a request to create the CafeKiosk account for ${cafeName}.`,
+    'Verify your email address to activate the cafe owner account.',
+    verifyUrl ? `Verify & activate: ${verifyUrl}` : '', '',
+    'This verification link expires in 30 minutes and can only be used once.',
+    'If you did not create this account, ignore this email.', '',
+    'Powered by CafeKiosk'
+  ].filter(Boolean).join('\\n');
+  const button = verifyUrl ? `<p style="margin:24px 0"><a href="${escapeHtml(verifyUrl)}" style="display:inline-block;background:#4f9872;color:#fff;text-decoration:none;padding:13px 22px;border-radius:10px;font-weight:700">Verify &amp; Activate Cafe Account</a></p>` : '';
+  const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;background:#f5f1e8;padding:24px;color:#2f2a24"><div style="max-width:620px;margin:auto;background:#fff;border:1px solid #e4dac8;border-radius:16px;overflow:hidden"><div style="background:#234a3b;color:#fff;padding:22px 26px"><strong style="font-size:22px">Confirm Your CafeKiosk Registration</strong></div><div style="padding:26px"><p>Hello ${escapeHtml(ownerName)},</p><p>We received a request to create the CafeKiosk account for <strong>${escapeHtml(cafeName)}</strong>.</p><p>Verify your email address to activate the cafe owner account.</p>${button}<p style="color:#7a6e61;font-size:13px">This link expires in 30 minutes and can only be used once. If you did not create this account, ignore this email.</p><p style="margin-top:24px"><strong>Powered by CafeKiosk</strong></p></div></div></body></html>`;
+  return { subject, text, html };
+}
+
+async function sendOwnerVerificationEmail(options = {}) {
+  const recipient = clean(options.to).toLowerCase();
+  if (!isEmail(recipient)) return { sent:false, configured:false, error:'The cafe owner email address is invalid.' };
+  const content = buildOwnerVerificationEmail(options);
+  // Owner verification deliberately uses Resend so existing Gmail SMTP remains
+  // dedicated to staff/manager invitation delivery.
+  return sendResendEmail({to:recipient, subject:content.subject, html:content.html, text:content.text, senderName:'CafeKiosk'});
+}
+
 function buildCafeRegistrationNotification(options = {}) {
   const cafeName=clean(options.cafeName)||'New Cafe', ownerName=clean(options.ownerName)||'Cafe Owner', ownerEmail=clean(options.ownerEmail), ownerPhone=clean(options.ownerPhone), cafeId=clean(options.cafeId);
   const subject=`CafeKiosk approval required: ${cafeName}`;
@@ -356,6 +385,8 @@ async function sendPasswordResetEmail(options) {
 module.exports = {
   getEmailConfig,
   sendStaffInvitation,
+  sendOwnerVerificationEmail,
+  buildOwnerVerificationEmail,
   sendCafeRegistrationNotification,
   buildCafeRegistrationNotification,
   sendCafeApprovalEmail,

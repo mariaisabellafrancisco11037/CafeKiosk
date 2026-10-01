@@ -1,0 +1,18 @@
+CafeKiosk Owner Email Verification
+
+New owner signup flow:
+1. Owner registers with their own email address.
+2. Account/cafe remain Pending and Inactive.
+3. CafeKiosk sends a Resend verification email to that exact registered owner email.
+4. Verification link is single-use and expires after 30 minutes.
+5. Clicking Verify & Activate validates the hashed token, marks the email verified, activates the owner, and approves/activates the cafe.
+6. The owner is then shown a Sign in to CafeKiosk button.
+
+Required Railway variables:
+RESEND_API_KEY=<private key>
+RESEND_FROM_EMAIL=invites@cafekiosk.site
+RESEND_FROM_NAME=CafeKiosk
+APP_URL=https://cafekiosk.site
+
+Existing SMTP_* Gmail settings are not changed by this feature.
+Owner verification explicitly uses Resend.
