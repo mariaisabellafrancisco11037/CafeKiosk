@@ -143,11 +143,21 @@
     );
 
     if (optionalIngredients.length) {
-      fields.push({
-        key: "addons",
-        label: "Optional Add-ons",
-        type: "checkbox",
-        options: optionalIngredients
+      fields.push({ key: "addons", label: "Optional Add-ons", type: "checkbox", options: optionalIngredients });
+    }
+
+    const customGroups = Array.isArray(product?.customizations) ? product.customizations : [];
+    for (const group of customGroups) {
+      const options = uniqueOptions((Array.isArray(group?.options) ? group.options : []).map(option => ({
+        label: String(option?.label || option?.value || "").trim(),
+        value: String(option?.value || option?.label || "").trim(),
+        price: Math.max(0, Number(option?.price ?? option?.additionalPrice ?? 0) || 0)
+      })).filter(option => option.label));
+      if (options.length) fields.push({
+        key: String(group?.key || group?.label || "customization").toLowerCase().replace(/[^a-z0-9]+/g,"-"),
+        label: String(group?.label || "Customization"),
+        type: group?.type === "radio" || group?.required ? "radio" : "checkbox",
+        options
       });
     }
 

@@ -46,3 +46,12 @@ MULTI-ZIP IMPORT (NEW)
 - Example: select Coffee_1_10.zip + Coffee_11_20.zip + ... + Dessert_171_180.zip, then click Prepare Preview once.
 - Duplicate filenames are skipped deterministically (the first selected copy is kept) and listed in the preview notes.
 - Loose PNG/JPG/WebP images can still be selected together with the ZIP batches.
+
+
+SYSTEM-WIDE BULK PRODUCTIVITY UPDATE (2026-10-01)
+- Inventory Monitor now has Bulk Import for ingredient CSV files.
+- Existing ingredients are updated by name; new ingredients are created; no rows are deleted.
+- Menu importer now accepts an Item Customizations CSV for item-specific dips, toppings, flavors, and paid options.
+- Customizations are stored under each product's menu configuration instead of becoming fake menu products.
+- Menu image import remains multi-ZIP and tenant-scoped through authenticated backend APIs.
+- Stable order/payment/refund/audit flows were intentionally not bulk-import enabled.

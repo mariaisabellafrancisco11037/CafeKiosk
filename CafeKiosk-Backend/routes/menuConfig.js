@@ -18,6 +18,17 @@ function publicConfig(config={}){
         priceAdd:Math.max(0,Number(size?.priceAdd??size?.price??0)||0),
         multiplier:Math.max(0.01,Number(size?.multiplier??1)||1)
       })):[],
+      customizations:Array.isArray(value?.customizations)?value.customizations.map(group=>({
+        key:String(group?.key||"customization"),
+        label:String(group?.label||"Customization"),
+        type:group?.type==="radio"?"radio":"checkbox",
+        required:group?.required===true,
+        options:Array.isArray(group?.options)?group.options.map(option=>({
+          label:String(option?.label||option?.value||""),
+          value:String(option?.value||option?.label||""),
+          price:Math.max(0,Number(option?.price??option?.additionalPrice??0)||0)
+        })).filter(option=>option.label):[]
+      })):[],
       updatedAt:value?.updatedAt||null
     };
   }

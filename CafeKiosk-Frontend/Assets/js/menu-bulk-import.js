@@ -12,6 +12,7 @@
     zipFiles: [],
     zipDetails: [],
     duplicateImageNames: [],
+    customizationRows: [],
     plan: null,
     busy: false
   };
@@ -204,6 +205,52 @@
     URL.revokeObjectURL(url);
   }
 
+  function downloadCustomizationTemplate() {
+    const csv = [
+      ["menu_item","customization_group","option","additional_price","selection_required"],
+      ["Croffle","Dip","No Dip","0","false"],
+      ["Croffle","Dip","Biscoff","20","false"],
+      ["Croffle","Dip","Nutella","20","false"]
+    ].map(row => row.map(csvEscape).join(",")).join("\r\n");
+    const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+    const a=document.createElement("a"); a.href=url; a.download="CafeKiosk_Item_Customizations_Template.csv";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  }
+
+  function parseCustomizationCsv(text) {
+    return parseCsv(text).map(row => ({
+      menuItem: String(row.menu_item || row.item_name || row.product || row.name || "").trim(),
+      group: String(row.customization_group || row.group || "Add-ons").trim() || "Add-ons",
+      option: String(row.option || row.option_name || row.value || "").trim(),
+      additionalPrice: Math.max(0, Number(row.additional_price || row.price || 0) || 0),
+      required: /^(1|true|yes|required)$/i.test(String(row.selection_required || row.required || "")),
+      __line: row.__line
+    })).filter(row => row.menuItem || row.option);
+  }
+
+  async function saveCustomizationRows(rows, menuConfig, catalogProducts) {
+    if (!rows.length) return;
+    const byName=new Map((catalogProducts||[]).map(p=>[normalizeName(p.name),p]));
+    const grouped=new Map();
+    for(const row of rows){
+      if(!row.menuItem || !row.option) throw new Error(`Customization CSV line ${row.__line}: menu_item and option are required.`);
+      const product=byName.get(normalizeName(row.menuItem));
+      if(!product) throw new Error(`Customization CSV line ${row.__line}: menu item “${row.menuItem}” was not found.`);
+      const category=product.categoryKey || product.category;
+      const key=productConfigKey(product.name,category);
+      if(!grouped.has(key)) grouped.set(key,{product,groups:new Map()});
+      const entry=grouped.get(key); const gkey=row.group.toLowerCase();
+      if(!entry.groups.has(gkey)) entry.groups.set(gkey,{key:gkey.replace(/[^a-z0-9]+/g,"-")||"addons",label:row.group,type:row.required?"radio":"checkbox",required:row.required,options:[]});
+      entry.groups.get(gkey).options.push({label:row.option,value:row.option,price:row.additionalPrice});
+    }
+    for(const [key,entry] of grouped){
+      const existing=menuConfig.products?.[key]||{};
+      const productConfig={...existing,productName:entry.product.name,category:entry.product.categoryKey||entry.product.category,customizations:[...entry.groups.values()],updatedAt:new Date().toISOString()};
+      const payload=await fetchJson(`${apiUrl()}/api/menu-config/product`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({productKey:key,previousKey:key,productConfig})});
+      if(payload.config) menuConfig=payload.config;
+    }
+  }
+
   function mimeForName(name) {
     const ext = String(name || "").toLowerCase().split(".").pop();
     if (ext === "png") return "image/png";
@@ -353,6 +400,7 @@
 
   async function preparePreview() {
     const csvFile = document.getElementById("ckImportCsv")?.files?.[0] || null;
+    const customFile = document.getElementById("ckImportCustomCsv")?.files?.[0] || null;
     const errors = [];
     setPreviewBusy(true);
     setErrors("");
@@ -364,6 +412,7 @@
       state.zipDetails = imageSelection.zipDetails;
       state.duplicateImageNames = imageSelection.duplicateNames;
       state.csvRows = csvFile ? parseCsv(await csvFile.text()) : [];
+      state.customizationRows = customFile ? parseCustomizationCsv(await customFile.text()) : [];
       state.catalog = await fetchJson(`${apiUrl()}/api/catalog`, { cache: "no-store" });
       const existingProducts = Array.isArray(state.catalog.products) ? state.catalog.products : [];
       const maps = imageMaps(state.imageEntries);
@@ -376,8 +425,8 @@
       state.inventory = inventory;
       const ingredientMap = new Map(inventory.map(item => [normalizeName(item.name), item]));
 
-      if (!state.csvRows.length && !state.imageEntries.length) {
-        throw new Error("Choose a CSV file, one or more image ZIP files, or multiple images first.");
+      if (!state.csvRows.length && !state.imageEntries.length && !state.customizationRows.length) {
+        throw new Error("Choose a Menu CSV, Item Customizations CSV, image ZIP, or images first.");
       }
 
       const existingByKey = new Map(existingProducts.map(p => [productMatchKey(p.name, p.categoryKey || p.category), p]));
@@ -468,7 +517,7 @@
       };
 
       renderPreview(state.plan);
-      document.getElementById("ckImportStart").disabled = Boolean(errors.length) || validRows.length === 0;
+      document.getElementById("ckImportStart").disabled = Boolean(errors.length) || (validRows.length === 0 && state.customizationRows.length === 0);
     } catch (error) {
       state.plan = null;
       renderPreview(null);
@@ -796,6 +845,10 @@
       }
 
       const resultProducts = Array.isArray(resultCatalog.products) ? resultCatalog.products : (Array.isArray(state.catalog.products) ? state.catalog.products : []);
+      if (state.customizationRows.length) {
+        const configPayload = await fetchJson(`${apiUrl()}/api/menu-config`, { cache: "no-store" });
+        await saveCustomizationRows(state.customizationRows, configPayload.config || {products:{},categoryDefaults:{}}, resultProducts);
+      }
       const productMap = new Map(resultProducts.map(p => [productMatchKey(p.name, p.categoryKey || p.category), p]));
       const imageJobs = validRows.filter(row => row.imageEntry).map(row => {
         const product = productMap.get(productMatchKey(row.name, row.category)) || row.existing;
@@ -854,13 +907,19 @@
               <button class="ck-import-template-btn" id="ckImportTemplate" type="button">Download CSV Template</button>
             </div>
             <div class="ck-import-box">
-              <strong>2. Image ZIPs (optional)</strong>
+              <strong>2. Item Customizations CSV (optional)</strong>
+              <span>Attach item-specific dips, flavors, toppings, and paid options without creating them as menu products.</span>
+              <input id="ckImportCustomCsv" type="file" accept=".csv,text/csv">
+              <button class="ck-import-template-btn" id="ckImportCustomTemplate" type="button">Download Customization Template</button>
+            </div>
+            <div class="ck-import-box">
+              <strong>3. Image ZIPs (optional)</strong>
               <span>Select multiple ZIP batches at once. All ZIPs are merged and matched to the CSV/products by filename.</span>
               <input id="ckImportZip" type="file" accept=".zip,application/zip,application/x-zip-compressed" multiple>
               <small id="ckImportZipSummary" class="ck-import-file-summary">No ZIP files selected.</small>
             </div>
             <div class="ck-import-box">
-              <strong>3. Or select images</strong>
+              <strong>4. Or select images</strong>
               <span>Select many PNG/JPG/WebP files at once instead of using a ZIP.</span>
               <input id="ckImportImages" type="file" accept="image/png,image/jpeg,image/webp" multiple>
             </div>
@@ -892,6 +951,7 @@
     document.body.appendChild(backdrop);
 
     document.getElementById("ckImportTemplate")?.addEventListener("click", downloadTemplate);
+    document.getElementById("ckImportCustomTemplate")?.addEventListener("click", downloadCustomizationTemplate);
     document.getElementById("ckImportZip")?.addEventListener("change", updateZipSelectionSummary);
     document.getElementById("ckImportPreview")?.addEventListener("click", preparePreview);
     document.getElementById("ckImportStart")?.addEventListener("click", startImport);
