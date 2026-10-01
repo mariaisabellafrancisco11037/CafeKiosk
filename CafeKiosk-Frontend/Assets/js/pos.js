@@ -710,6 +710,64 @@ function categoryMeta(category) {
     };
 }
 
+
+const namedMenuImageMap = [
+  [/caramel\s+macchiato/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caramel_Latte_Macchiato.jpg"],
+  [/macchiato/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caramel_Latte_Macchiato.jpg"],
+  [/espresso/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Espresso_BW_1.jpg"],
+  [/americano/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caff%C3%A8_Americano.jpg"],
+  [/cappuccino/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cappuccino_at_Sightglass_Coffee.jpg"],
+  [/latte|flat\s+white|spanish\s+latte|vanilla\s+latte|hazelnut\s+latte|brown\s+sugar\s+latte|salted\s+caramel\s+latte/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"],
+  [/mocha/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mocha_coffee.jpg"],
+  [/frappe|frappuccino|blended/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Frappuccino.jpg"],
+  [/matcha/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Matcha_Latte.jpg"],
+  [/milk\s*tea|okinawa|boba|pearl/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble_Tea.png"],
+  [/tea/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Milk_tea.jpg"],
+  [/lemonade|juice|cooler|soda|float/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lemonade.jpg"],
+  [/smoothie|shake/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_smoothie_%282017%29.jpg"],
+  [/sandwich|panini/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Club_sandwich.png"],
+  [/burger/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hamburger_%28black_bg%29.jpg"],
+  [/fries/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/French_fries_2.jpg"],
+  [/pasta|spaghetti|carbonara/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Spaghetti_al_Pomodoro.JPG"],
+  [/rice|silog|meal|chicken|wings/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fried_rice_2.jpg"],
+  [/donut/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Glazed-Donut.jpg"],
+  [/croissant|pastry|danish|roll/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Croissant-Petr_Kratochvil.jpg"],
+  [/cookie/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_chip_cookie.jpg"],
+  [/brownie/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_Brownie.JPG"],
+  [/cake|cheesecake|tiramisu|mousse/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_cake.jpg"],
+  [/muffin|banana\s+bread/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Blueberry_muffins%2C_2010.jpg"],
+  [/ice\s*cream|sundae|gelato/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_ice_cream_cone_%282%29.jpg"],
+  [/mango|fruit/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mangoes_pic.jpg"],
+  [/strawberry/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberries.jpg"],
+  [/chocolate/i, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_cake.jpg"]
+];
+
+function namedMenuImage(name, categoryFallback) {
+  const text = String(name || "").trim();
+  for (const [pattern, url] of namedMenuImageMap) {
+    if (pattern.test(text)) return url;
+  }
+  return categoryFallback || "/Assets/images/coffee.png";
+}
+
+function resolveProductImage(name, image, category) {
+    return String(image || "").trim() || namedMenuImage(name, categoryMeta(category).image);
+}
+
+function extractItemNote(item) {
+    const direct = String(item?.note || item?.specialNote || item?.special_note || "").trim();
+    if (direct) return direct;
+    const list = Array.isArray(item?.customizations) ? item.customizations : [];
+    const fromList = list.map(v => String(v || "").trim()).find(v => /^note\s*:/i.test(v));
+    return fromList ? fromList.replace(/^note\s*:\s*/i, "") : "";
+}
+
+function customizationLinesWithoutNotes(item) {
+    const list = Array.isArray(item?.customizations) ? item.customizations : [];
+    const filtered = list.map(v => String(v || "").trim()).filter(Boolean).filter(v => !/^note\s*:/i.test(v));
+    return filtered.length ? filtered : ["Standard"];
+}
+
 function rebuildPosCategories(categories) {
     const nav = document.querySelector(".category-navigation");
     if (!nav) return;
@@ -1207,7 +1265,7 @@ function getCategoryItems(category) {
                     category: key,
                     name: product.name,
                     price: Number(product.price),
-                    image: product.image || categoryMeta(key).image,
+                    image: resolveProductImage(product.name, product.image, key),
                     available: isMenuItemAvailable(product.name, key)
                 }))
             );
@@ -1222,7 +1280,7 @@ function getCategoryItems(category) {
             category,
             name: product.name,
             price: Number(product.price),
-            image: product.image || categoryMeta(category).image,
+            image: resolveProductImage(product.name, product.image, category),
             available:
                 isMenuItemAvailable(
                     product.name,
@@ -1393,6 +1451,7 @@ function renderMenu() {
                     <img
                         src="${product.image}"
                         alt="${escapeHTML(product.name)}"
+                        onerror="this.onerror=null;this.src='${categoryMeta(product.category).image}';"
                     >
 
                 </div>
@@ -2256,18 +2315,17 @@ function renderCart() {
                 const lineTotal =
                     unit *
                     item.qty;
-
-
                 const details =
-                    item.customizations &&
-                    item.customizations.length
-                        ? item.customizations
-                            .map(
-                                detail =>
-                                    `<li>${escapeHTML(detail)}</li>`
-                            )
-                            .join("")
-                        : `<li>Standard</li>`;
+                    customizationLinesWithoutNotes(item)
+                        .map(detail => `<li>${escapeHTML(detail)}</li>`)
+                        .join("");
+
+                const note =
+                    extractItemNote(item);
+
+                const noteMarkup = note
+                    ? `<div class="cart-item-note"><strong>Note:</strong> ${escapeHTML(note)}</div>`
+                    : "";
 
 
                 return `
@@ -2286,6 +2344,8 @@ function renderCart() {
                         <ul class="cart-customizations">
                             ${details}
                         </ul>
+
+                        ${noteMarkup}
 
 
                         <div class="cart-item-summary">

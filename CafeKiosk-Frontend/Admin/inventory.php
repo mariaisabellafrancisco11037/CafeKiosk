@@ -12,8 +12,8 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-inventory-touch-scroll-v4">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v4">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix3">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v5">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix4">
 </head>
 <body class="uniform-admin inventory-page">
   <div class="inventory-shell">
@@ -377,10 +377,10 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="../Assets/js/auth-session.js"></script>
   <script src="../Assets/js/inventory.js"></script>
-  <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix4"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v4"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v5"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix4"></script>
 </body>
 </html>

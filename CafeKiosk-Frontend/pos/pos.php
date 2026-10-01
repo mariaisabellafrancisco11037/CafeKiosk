@@ -23,8 +23,8 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v4">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-pos-responsive-v4">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v5">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-pos-responsive-v5">
 </head>
 
 <body class="uniform-pos">
@@ -484,16 +484,16 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=20261001-workflow-v4"></script>
+<script src="/Assets/js/pos.js?v=20261001-workflow-v5"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
-  <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix4"></script>
   <script src="../Assets/js/profile-menu.js?v=20261001-pos-profile-fix"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v4"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v5"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix4"></script>
 </body>
 </html>

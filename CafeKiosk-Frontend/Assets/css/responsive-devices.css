@@ -73,3 +73,51 @@
  body.uniform-pos .menu-img{height:108px!important}
  body.uniform-pos .ck-mobile-order-toggle{right:10px!important;bottom:52px!important}
 }
+
+
+/* 2026-10-01 mobile footer/spacing and kiosk cleanup */
+@media(max-width:1180px){
+  body.uniform-pos .menu-area,
+  body.kiosk-menu .menu-area,
+  body.manager-order-queue-page .queue-main,
+  body.manager-order-queue-page .queue-right,
+  body.order-queue-page .queue-main,
+  body.order-queue-page .queue-right,
+  body.manager-dashboard-page .dashboard-main,
+  body.staff-dashboard-page .dashboard-main,
+  body.admin-dashboard-page .content,
+  body.admin-dashboard-page .main-content,
+  body.admin-dashboard-page .dashboard-content {
+    padding-bottom: 110px !important;
+    box-sizing: border-box !important;
+  }
+  body.uniform-pos .ck-mobile-order-toggle,
+  body.kiosk-menu .ck-mobile-order-toggle { bottom: 84px !important; }
+  body.uniform-pos .cart-panel,
+  body.kiosk-menu .order-summary { padding-bottom: 96px !important; }
+  body.uniform-pos .pagination,
+  body.kiosk-menu .pagination,
+  .pagination,
+  .order-actions,
+  .detail-actions { margin-bottom: 22px !important; }
+  body.kiosk-menu .sidebar,
+  body.kiosk-menu .ck-nav-toggle,
+  body.kiosk-menu .ck-nav-backdrop { display:none !important; }
+  body.kiosk-menu .menu-area { padding-top: 18px !important; }
+  body.manager-order-queue-page .queue-main,
+  body.order-queue-page .queue-main { padding-top: 68px !important; }
+  body.manager-order-queue-page .queue-right,
+  body.order-queue-page .queue-right { padding-top: 68px !important; }
+  body.manager-dashboard-page .page-shell,
+  body.staff-dashboard-page .page-shell { padding-top: 68px !important; }
+}
+@media(max-width:760px){
+  body.uniform-pos .pos-container,
+  body.kiosk-menu .container,
+  body.manager-order-queue-page .queue-app,
+  body.order-queue-page .queue-app { min-height: calc(100dvh - 76px) !important; }
+  body.manager-order-queue-page .queue-app,
+  body.order-queue-page .queue-app { display:block !important; }
+  body.manager-order-queue-page .queue-right,
+  body.order-queue-page .queue-right { width:100% !important; max-width:none !important; margin-top:12px !important; }
+}
