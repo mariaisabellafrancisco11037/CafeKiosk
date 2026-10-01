@@ -223,3 +223,33 @@ html { scroll-behavior: smooth; }
 /* SECURITY ALERT SUMMARY */
 .security-summary-card { border-color:#e2aaa5; background:#fff8f6; }
 .security-summary-card .card-kicker { color:#a7443e; }
+
+
+/* 2026-10-01 System Monitor usability: visible draggable sidebar scrollbar + section state. */
+.system-monitor-body .staff-sidebar {
+  scrollbar-width: auto !important;
+  scrollbar-color: rgba(92,65,42,.48) rgba(92,65,42,.08) !important;
+}
+.system-monitor-body .staff-sidebar::-webkit-scrollbar { width: 11px !important; }
+.system-monitor-body .staff-sidebar::-webkit-scrollbar-track { background: rgba(92,65,42,.07); border-radius: 999px; }
+.system-monitor-body .staff-sidebar::-webkit-scrollbar-thumb { background: rgba(92,65,42,.46) !important; border: 2px solid #fffdf9; border-radius: 999px; }
+.system-monitor-body .staff-sidebar::-webkit-scrollbar-thumb:hover { background: rgba(63,128,95,.82) !important; }
+.system-monitor-body .staff-nav-link.active {
+  position: relative;
+  background: var(--cku-green) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 18px rgba(63,128,95,.25) !important;
+}
+.system-monitor-body .staff-nav-link.active::after {
+  content: 'YOU ARE HERE';
+  margin-left: auto;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+.system-monitor-body .monitor-panel[id] { scroll-margin-top: 18px; }

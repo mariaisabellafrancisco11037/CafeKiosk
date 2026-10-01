@@ -606,6 +606,40 @@
   el('confirmApprovalBtn')?.addEventListener('click', confirmApprovalDecision);
   el('approvalDecisionModal')?.addEventListener('click', (event) => { if (event.target === el('approvalDecisionModal')) closeApprovalDecision(); });
 
+  // Keep the sidebar highlight synchronized with the section currently in view.
+  // This makes the System Monitor location obvious even when the page is scrolled
+  // with the mouse wheel/scrollbar instead of by clicking the navigation.
+  const monitorNavLinks = Array.from(document.querySelectorAll('.staff-nav-link[href^="#"]'));
+  const monitorSections = monitorNavLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  function setActiveMonitorSection(id) {
+    monitorNavLinks.forEach((link) => {
+      const active = link.getAttribute('href') === `#${id}`;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  monitorNavLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const id = link.getAttribute('href').slice(1);
+      setActiveMonitorSection(id);
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.id) setActiveMonitorSection(visible.target.id);
+    }, { root: null, rootMargin: '-18% 0px -58% 0px', threshold: [0.05, 0.2, 0.45] });
+    monitorSections.forEach((section) => sectionObserver.observe(section));
+  }
+
   loadProfile();
   refreshOverview();
   loadApprovals();

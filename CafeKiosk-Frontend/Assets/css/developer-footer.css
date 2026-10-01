@@ -8,3 +8,18 @@ body.kiosk-home>.cafekiosk-developer-footer{margin-top:auto!important;flex:0 0 a
 body.kiosk-home{padding-bottom:52px!important;}
 body.kiosk-home>.cafekiosk-developer-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;margin:0!important;z-index:100!important;}
 @media(max-width:640px){body.kiosk-home{padding-bottom:48px!important;}}
+
+
+/* Kiosk service-type page uses a fixed-height centered layout. Pin attribution to
+   the viewport bottom so it cannot split the screen between the cards. */
+body.kiosk-order-type { padding-bottom: 54px !important; }
+body.kiosk-order-type > .cafekiosk-developer-footer {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  z-index: 100 !important;
+}
+@media(max-width:640px){body.kiosk-order-type{padding-bottom:48px!important;}}

@@ -297,6 +297,33 @@ async function sendCafeRegistrationNotification(options={}) {
   return sendResendEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
 }
 
+function buildCafeApprovalEmail(options = {}) {
+  const cafeName = clean(options.cafeName) || 'Your Cafe';
+  const ownerName = clean(options.ownerName) || 'Cafe Owner';
+  const loginUrl = clean(options.loginUrl) || '';
+  const subject = `Your CafeKiosk registration is approved - ${cafeName}`;
+  const text = [
+    `Hello ${ownerName},`, '',
+    `Your CafeKiosk registration for ${cafeName} has been approved by the System Administrator.`,
+    'You can now sign in using the account credentials you created during registration.',
+    loginUrl ? `Sign in: ${loginUrl}` : '', '',
+    'If you did not create this account, please contact the CafeKiosk administrator.', '',
+    'Powered by CafeKiosk'
+  ].filter(Boolean).join('\n');
+  const loginButton = loginUrl ? `<p style="margin:24px 0"><a href="${escapeHtml(loginUrl)}" style="display:inline-block;background:#4f9872;color:#fff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:700">Sign in to CafeKiosk</a></p>` : '';
+  const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;background:#f5f1e8;padding:24px;color:#2f2a24"><div style="max-width:620px;margin:auto;background:#fff;border:1px solid #e4dac8;border-radius:16px;overflow:hidden"><div style="background:#4f9872;color:#fff;padding:22px 26px"><strong style="font-size:22px">Cafe Account Approved</strong></div><div style="padding:26px"><p>Hello ${escapeHtml(ownerName)},</p><p>Your CafeKiosk registration for <strong>${escapeHtml(cafeName)}</strong> has been approved by the System Administrator.</p><p>You can now sign in using the account credentials you created during registration.</p>${loginButton}<p style="color:#7a6e61;font-size:13px">If you did not create this account, please contact the CafeKiosk administrator.</p><p style="margin-top:24px"><strong>Powered by CafeKiosk</strong></p></div></div></body></html>`;
+  return { subject, text, html };
+}
+
+async function sendCafeApprovalEmail(options = {}) {
+  const recipient = clean(options.to).toLowerCase();
+  if (!isEmail(recipient)) return { sent:false, configured:getEmailConfig().configured, error:'The cafe owner email address is invalid.' };
+  const content = buildCafeApprovalEmail(options);
+  const config = getEmailConfig();
+  if (config.provider === 'smtp') return sendSmtpEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
+  return sendResendEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
+}
+
 async function sendStaffInvitation(options) {
   const content = buildInvitationEmail(options || {});
   const cafeName = clean(options?.cafeName) || 'CafeKiosk';
@@ -331,6 +358,8 @@ module.exports = {
   sendStaffInvitation,
   sendCafeRegistrationNotification,
   buildCafeRegistrationNotification,
+  sendCafeApprovalEmail,
+  buildCafeApprovalEmail,
   buildInvitationEmail,
   sendPasswordResetEmail,
   buildPasswordResetEmail

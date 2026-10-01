@@ -6,6 +6,7 @@ const dbPool = require('../config/dbPool');
 const kioskAccessStore = require('../services/kioskAccessStore');
 const ensurePanelistUpgrades = require('../ensure-panelist-upgrades');
 const { addAuditLog } = require('../services/auditLogStore');
+const { sendCafeApprovalEmail } = require('../services/emailService');
 const { makeRateLimit } = require('../middleware/securityRateLimit');
 const { createSecurityAlert, getRecentSecurityAlerts, clientIp } = require('../services/securityAlertService');
 const {
@@ -804,12 +805,32 @@ async function changeCafeApproval(req, res, nextStatus) {
     await connection.commit();
     if (!isApproved) await disconnectCafeSockets(req.app.get('io'), cafeId);
 
+    // Approval is committed first. Email delivery is a notification and must
+    // never roll back a valid System Administrator decision if the provider is down.
+    let approvalEmail = null;
+    if (isApproved && cafe.email) {
+      const publicBaseUrl = text(process.env.PUBLIC_APP_URL || process.env.APP_URL || '').replace(/\/$/, '');
+      approvalEmail = await sendCafeApprovalEmail({
+        to: cafe.email,
+        cafeName: cafe.cafe_name,
+        ownerName: cafe.full_name,
+        loginUrl: publicBaseUrl ? `${publicBaseUrl}/login` : ''
+      }).catch((emailError) => ({ sent:false, configured:true, error: emailError?.message || 'Approval email could not be sent.' }));
+      if (!approvalEmail?.sent) console.error('Cafe approval email delivery failed:', approvalEmail?.error || 'Unknown email error');
+    }
+
     return res.json({
       success: true,
       cafeId,
       approvalStatus: nextStatus,
+      emailNotification: isApproved ? {
+        attempted: Boolean(cafe.email),
+        sent: Boolean(approvalEmail?.sent),
+        configured: approvalEmail?.configured !== false,
+        error: approvalEmail?.sent ? null : (approvalEmail?.error || (cafe.email ? 'Email was not sent.' : 'Owner email is missing.'))
+      } : null,
       message: isApproved
-        ? `${cafe.cafe_name} was approved. The cafe owner can now sign in.`
+        ? `${cafe.cafe_name} was approved. The cafe owner can now sign in.${approvalEmail?.sent ? ' An approval email was sent to the owner.' : ' Approval was saved, but the email notification was not sent.'}`
         : `${cafe.cafe_name} was rejected and cannot sign in.`
     });
   } catch (error) {
