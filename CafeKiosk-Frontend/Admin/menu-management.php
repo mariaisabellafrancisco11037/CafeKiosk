@@ -417,8 +417,8 @@
   </div>
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-management.js?v=blank-image-cards-20261001"></script>
-  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=bulk-import-multizip-20261001"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=image-db-import-fix-20261001"></script>
+  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=image-db-import-fix-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>

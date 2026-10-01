@@ -2064,15 +2064,3 @@ body.product-save-busy {
         animation-duration: 2s;
     }
 }
-
-/* 2026-10-01: Product-image upload/management intentionally disabled.
-   The catalog image card remains visible as an empty placeholder, while stored
-   product images are not rendered and existing DB values are not deleted. */
-.form-right > .upload-title,
-.form-right > .image-drop,
-.form-right > #productImage {
-  display: none !important;
-}
-.form-right {
-  min-width: 0;
-}

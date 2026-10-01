@@ -896,7 +896,7 @@
         </header>
         <div class="ck-import-body">
           <p class="ck-import-note">
-            <b>Bulk menu import:</b> upload the menu CSV to create/update products, prices, descriptions, sizes, and recipes. Item customizations can be imported separately. Product-image importing is disabled to avoid relying on non-persistent image data.
+            <b>Bulk menu import:</b> upload the menu CSV to create/update products, prices, descriptions, sizes, and recipes. Item customizations can be imported separately. Product images can be imported from one or more ZIP files or selected directly. Images are optimized, saved to the authenticated cafe's MySQL product record, and remain tenant-scoped.
           </p>
           <div class="ck-import-input-grid">
             <div class="ck-import-box">
@@ -911,14 +911,14 @@
               <input id="ckImportCustomCsv" type="file" accept=".csv,text/csv">
               <button class="ck-import-template-btn" id="ckImportCustomTemplate" type="button">Download Customization Template</button>
             </div>
-            <div class="ck-import-box" style="display:none" aria-hidden="true">
-              <strong>3. Image ZIPs (disabled)</strong>
+            <div class="ck-import-box">
+              <strong>3. Image ZIPs (optional)</strong>
               <span>Select multiple ZIP batches at once. All ZIPs are merged and matched to the CSV/products by filename.</span>
               <input id="ckImportZip" type="file" accept=".zip,application/zip,application/x-zip-compressed" multiple>
               <small id="ckImportZipSummary" class="ck-import-file-summary">No ZIP files selected.</small>
             </div>
-            <div class="ck-import-box" style="display:none" aria-hidden="true">
-              <strong>4. Image selection (disabled)</strong>
+            <div class="ck-import-box">
+              <strong>4. Image selection (optional)</strong>
               <span>Select many PNG/JPG/WebP files at once instead of using a ZIP.</span>
               <input id="ckImportImages" type="file" accept="image/png,image/jpeg,image/webp" multiple>
             </div>
