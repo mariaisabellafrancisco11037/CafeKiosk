@@ -12,6 +12,7 @@ const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
 const dbPool = require("./config/dbPool");
 const ensurePanelistUpgrades = require('./ensure-panelist-upgrades');
+const cleanupLunaLeakedDemoCatalog = require('./cleanup-luna-leaked-demo-catalog');
 const { makeRateLimit } = require("./middleware/securityRateLimit");
 
 const {
@@ -2156,6 +2157,14 @@ server.listen(
         console.log(
             "☕ CafeKiosk Running"
         );
+
+        // One-time repair for the Luna account affected by the old cafe-1
+        // frontend fallback. Failure is logged but never prevents startup.
+        try {
+            await cleanupLunaLeakedDemoCatalog();
+        } catch (error) {
+            console.error("Tenant catalog repair failed:", error.message);
+        }
 
         console.log(
             "======================================"

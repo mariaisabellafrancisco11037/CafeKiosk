@@ -417,7 +417,7 @@
   </div>
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-management.js?v=faster-image-upload-20261001"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=tenant-isolation-v2-20261001"></script>
   <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=bulk-inventory-linked-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>

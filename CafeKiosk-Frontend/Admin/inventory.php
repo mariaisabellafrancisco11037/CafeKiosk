@@ -377,7 +377,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
-  <script src="../Assets/js/admin-stable/inventory.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/inventory.js?v=tenant-isolation-v2-admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/inventory-bulk-import.js?v=bulk-progress-linked-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>

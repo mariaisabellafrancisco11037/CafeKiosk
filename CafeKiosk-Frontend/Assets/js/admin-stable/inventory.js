@@ -5,14 +5,15 @@ const $ =
     );
 
 
-const CAFE_ID =
-  String(
-    localStorage.getItem(
-      "cafeId"
-    ) ||
-    "cafe-1"
-  ).trim() ||
-  "cafe-1";
+function resolveInventoryCafeId() {
+  try {
+    const adminSession = JSON.parse(localStorage.getItem("cafeAdminSession") || "null");
+    if (adminSession && adminSession.cafeId) return String(adminSession.cafeId).trim();
+  } catch (_) {}
+  return String(localStorage.getItem("cafeId") || "").trim();
+}
+
+const CAFE_ID = resolveInventoryCafeId();
 
 
 localStorage.setItem(

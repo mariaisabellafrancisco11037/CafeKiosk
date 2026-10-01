@@ -56,9 +56,19 @@ let selectedCategoryIcon = CATEGORY_ICON_OPTIONS[0].path;
    registered cafes begin with a clean menu.
 ========================================================= */
 
-const MENU_CAFE_ID =
-    String(localStorage.getItem("cafeId") || "cafe-1").trim() ||
-    "cafe-1";
+function resolveMenuCafeId() {
+    // The role session is the authoritative client-side tenant hint.
+    // Never let a stale global cafeId from a previous/demo login decide whether
+    // this page may load the bundled cafe-1 catalog. The backend cookie remains
+    // the final authority for every catalog read/write.
+    try {
+        const adminSession = JSON.parse(localStorage.getItem("cafeAdminSession") || "null");
+        if (adminSession && adminSession.cafeId) return String(adminSession.cafeId).trim();
+    } catch (_) {}
+    return String(localStorage.getItem("cafeId") || "").trim();
+}
+
+const MENU_CAFE_ID = resolveMenuCafeId();
 
 const IS_DEMO_CAFE = MENU_CAFE_ID === "cafe-1";
 const CATEGORIES_STORAGE_KEY = `cafe_categories:${MENU_CAFE_ID}`;
@@ -887,9 +897,12 @@ async function loadCatalogFromBackend() {
         const remoteCategories = Array.isArray(data.categories) ? data.categories : [];
         const remoteProducts = Array.isArray(data.products) ? data.products : [];
 
-        // An empty catalog is a legitimate state for every newly registered cafe.
-        // Only cafe-1 is allowed to fall back to the bundled Demo Cafe menu.
-        if (!IS_DEMO_CAFE || remoteCategories.length || remoteProducts.length) {
+        // The authenticated backend response is authoritative for tenant identity.
+        // An empty catalog for a real cafe MUST stay empty. A stale browser
+        // cafeId must never cause cafe-1 demo products to be copied into it.
+        const remoteCafeId = String(data.cafeId || "").trim();
+        const remoteIsDemoCafe = remoteCafeId === "cafe-1";
+        if (!remoteIsDemoCafe || remoteCategories.length || remoteProducts.length) {
             categories = remoteCategories.map(category => ({
                 name: category.name || category.categoryName || category.canonicalKey || "Category",
                 image: category.image || "../Assets/images/logo.png"
