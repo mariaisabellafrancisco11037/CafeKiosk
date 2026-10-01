@@ -1,0 +1,5 @@
+name,category,price,description,availability,image,sizes,ingredients
+Black Coffee,Coffees,100,Freshly brewed black coffee,Available,Black_Coffee.png,"Regular:0:1;Large:25:1.5","Coffee Beans:18:required;Filtered Water:220:required"
+Cafe Au Lait,Coffees,140,Coffee with steamed milk,Available,Cafe_Au_Lait.png,"Regular:0:1;Large:25:1.5","Coffee Beans:18:required;Fresh Milk:160:required"
+Vietnamese Coffee,Coffees,150,Bold coffee with condensed milk,Available,Vietnamese_Coffee.png,"16 oz:0:1;22 oz:30:1.4","Coffee Beans:20:required;Condensed Milk:45:required"
+Iced Caramel Macchiato,Coffees,180,Iced espresso milk and caramel,Available,Iced_Caramel_Macchiato.png,"16 oz:0:1;22 oz:30:1.4","Coffee Beans:18:required;Fresh Milk:180:required;Caramel Syrup:25:required"
