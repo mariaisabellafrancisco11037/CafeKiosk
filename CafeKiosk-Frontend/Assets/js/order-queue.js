@@ -398,17 +398,25 @@ function normalizeOrder(order, index = 0) {
     promotionName: order.promotionName || order.promotion?.name || "",
     stations: Array.isArray(order.stations) ? order.stations.map(normalizePrepStation).filter(Boolean) : [],
     stationStatuses: order.stationStatuses && typeof order.stationStatuses === "object" ? order.stationStatuses : {},
-    items: (Array.isArray(rawItems) ? rawItems : []).map(item => ({
-      productId: item.productId ?? item.product_id ?? "",
-      name: item.name ?? item.product_name ?? "Item",
-      category: item.category ?? item.category_snapshot ?? "Uncategorized",
-      prepStation: normalizePrepStation(item.prepStation ?? item.prep_station) || classifyPrepStation(item.category ?? item.category_snapshot, item.name ?? item.product_name),
-      qty: Number(item.qty ?? item.quantity ?? 1),
-      price: Number(item.price ?? item.unit_price ?? 0) + Number(item.customizationCost ?? item.customization_cost ?? 0),
-      customizations: Array.isArray(item.customizations)
+    items: (Array.isArray(rawItems) ? rawItems : []).map(item => {
+      const customizations = Array.isArray(item.customizations)
         ? item.customizations
-        : Array.isArray(item.options) ? item.options : []
-    }))
+        : Array.isArray(item.options) ? item.options : [];
+      const explicitNote = String(item.note ?? item.specialNote ?? item.special_note ?? "").trim();
+      const embeddedNote = customizations
+        .map(value => String(value || "").trim())
+        .find(value => /^note\s*:/i.test(value));
+      return {
+        productId: item.productId ?? item.product_id ?? "",
+        name: item.name ?? item.product_name ?? "Item",
+        category: item.category ?? item.category_snapshot ?? "Uncategorized",
+        prepStation: normalizePrepStation(item.prepStation ?? item.prep_station) || classifyPrepStation(item.category ?? item.category_snapshot, item.name ?? item.product_name),
+        qty: Number(item.qty ?? item.quantity ?? 1),
+        price: Number(item.price ?? item.unit_price ?? 0) + Number(item.customizationCost ?? item.customization_cost ?? 0),
+        customizations,
+        note: explicitNote || (embeddedNote ? embeddedNote.replace(/^note\s*:\s*/i, "") : "")
+      };
+    })
   };
 }
 
@@ -1017,10 +1025,24 @@ function countByStatus(status) {
   return orders.filter(order => orderHasStation(order, activePrepStation) && statusForCurrentView(order) === status).length;
 }
 
+function stationStillNeedsPreparation(order, station) {
+  const status = stationStatusFor(order, station);
+  return !["Completed", "Voided", "Refunded", "Cancelled"].includes(status);
+}
+
 function updateStationCounts() {
-  const all = orders.length;
-  const beverage = orders.filter(order => orderHasStation(order, "Beverage")).length;
-  const food = orders.filter(order => orderHasStation(order, "Food")).length;
+  // Preparation Queue counters represent work that still needs preparation.
+  // Mixed orders are counted once in All and once in each station they contain.
+  const activeOrders = orders.filter(order =>
+    getOrderStations(order).some(station => stationStillNeedsPreparation(order, station))
+  );
+  const all = activeOrders.length;
+  const beverage = orders.filter(order =>
+    orderHasStation(order, "Beverage") && stationStillNeedsPreparation(order, "Beverage")
+  ).length;
+  const food = orders.filter(order =>
+    orderHasStation(order, "Food") && stationStillNeedsPreparation(order, "Food")
+  ).length;
   if ($("allStationCount")) $("allStationCount").textContent = all;
   if ($("beverageStationCount")) $("beverageStationCount").textContent = beverage;
   if ($("foodStationCount")) $("foodStationCount").textContent = food;
@@ -1198,10 +1220,15 @@ function renderDetails() {
   const visibleDetailItems = itemsForStation(order);
   $("detailItems").innerHTML = visibleDetailItems.length
     ? visibleDetailItems.map(item => {
-        const details = item.customizations?.length
-          ? `<div class="detail-customizations">${item.customizations.map(x => `-${escapeHTML(x)}`).join("<br>")}</div>`
+        const optionLines = (item.customizations || []).filter(value => !/^note\s*:/i.test(String(value || "").trim()));
+        const details = optionLines.length
+          ? `<div class="detail-customizations">${optionLines.map(x => `-${escapeHTML(x)}`).join("<br>")}</div>`
           : "";
-        return `<div class="detail-item"><div class="detail-item-title">${escapeHTML(item.name)} x ${item.qty}</div>${details}</div>`;
+        const note = String(item.note || "").trim();
+        const noteHtml = note
+          ? `<div class="detail-item-note"><strong>Note:</strong> ${escapeHTML(note)}</div>`
+          : "";
+        return `<div class="detail-item"><div class="detail-item-title">${escapeHTML(item.name)} x ${item.qty}</div>${details}${noteHtml}</div>`;
       }).join("")
     : `<div style="color:#8B7D70">No item details available.</div>`;
 }

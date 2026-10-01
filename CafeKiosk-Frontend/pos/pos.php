@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=20260928-ux-v1"
+        href="../Assets/css/pos.css?v=20261001-workflow-responsive"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -23,8 +23,8 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-fix3">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix3">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v4">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-pos-responsive-v4">
 </head>
 
 <body class="uniform-pos">
@@ -294,34 +294,22 @@
 
             </div>
 
-
-            <div class="order-actions">
-
-                <button
-                    type="button"
-                    id="checkoutButton"
-                    class="confirm-btn"
-                >
-                    Confirm Order
-                </button>
-
-
-                <button
-                    type="button"
-                    id="clearCartButton"
-                    class="cancel-btn"
-                >
-                    Cancel
-                </button>
-
-            </div>
-
         </div>
 
     </aside>
 
 </div>
 
+
+<!-- POS FINAL REVIEW MODAL -->
+<div id="posReviewModal" class="ck-pos-review-overlay" aria-hidden="true">
+  <section class="ck-pos-review-dialog" role="dialog" aria-modal="true" aria-labelledby="posReviewTitle">
+    <div class="ck-pos-review-head"><div><span>FINAL CHECK</span><h2 id="posReviewTitle">Confirm payment & order</h2><p>Review the order before sending it to the preparation queue.</p></div><button type="button" id="posReviewClose" aria-label="Close review">×</button></div>
+    <div class="ck-pos-review-meta"><div><span>Payment</span><strong id="posReviewPayment">—</strong></div><div><span>Order Type</span><strong id="posReviewService">—</strong></div><div><span>Total</span><strong id="posReviewTotal">₱0.00</strong></div></div>
+    <div id="posReviewItems" class="ck-pos-review-items"></div>
+    <div class="ck-pos-review-actions"><button type="button" id="posReviewBack" class="ck-pos-review-back">Back</button><button type="button" id="posReviewConfirm" class="ck-pos-review-confirm">Confirm & Send Order</button></div>
+  </section>
+</div>
 
 <!-- =========================================================
      ITEM CUSTOMIZATION MODAL
@@ -496,16 +484,16 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=20260928-settings-v1"></script>
+<script src="/Assets/js/pos.js?v=20261001-workflow-v4"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
   <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
-  <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
+  <script src="../Assets/js/profile-menu.js?v=20261001-pos-profile-fix"></script>
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-fix3"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v4"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
 </body>
 </html>

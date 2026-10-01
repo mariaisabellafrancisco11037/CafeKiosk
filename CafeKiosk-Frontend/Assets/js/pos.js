@@ -2726,8 +2726,37 @@ function commitPOSPaymentAndSubmit() {
     if ($("cashReceived")) $("cashReceived").value = amount.toFixed(2);
     updatePaymentFields();
     closePOSPaymentModal();
-    confirmPOSOrder();
+    openPOSOrderReview();
 }
+
+function openPOSOrderReview() {
+    if (!cart.length) return;
+    const modal = $("posReviewModal");
+    if (!modal) { confirmPOSOrder(); return; }
+    const totals = calculateCart();
+    const payment = $("paymentMethod")?.value || selectedPaymentMethod || "Cash";
+    if ($("posReviewPayment")) $("posReviewPayment").textContent = `${paymentMethodLabel(payment)} • ${money(Number($("cashReceived")?.value || 0))}`;
+    if ($("posReviewService")) $("posReviewService").textContent = $("serviceType")?.value || "Dine In";
+    if ($("posReviewTotal")) $("posReviewTotal").textContent = money(totals.total);
+    if ($("posReviewItems")) {
+        $("posReviewItems").innerHTML = cart.map(item => {
+            const customizations = (item.customizations || []).map(value => `<small>${escapeHTML(value)}</small>`).join("");
+            return `<div class="ck-pos-review-item"><div><strong>${escapeHTML(item.name)}</strong>${customizations}</div><span>x${Number(item.qty || 1)}</span><b>${money((Number(item.price || 0) + Number(item.customizationCost || 0)) * Number(item.qty || 1))}</b></div>`;
+        }).join("");
+    }
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("ck-pos-review-open");
+}
+
+function closePOSOrderReview() {
+    const modal = $("posReviewModal");
+    if (!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("ck-pos-review-open");
+}
+
 
 
 // =========================================================
@@ -3381,12 +3410,20 @@ function setupEvents() {
     });
 
     $("paymentSummaryButton")?.addEventListener("click", openPOSPaymentModal);
-    $("checkoutButton")?.addEventListener("click", openPOSPaymentModal);
 
     $("paymentModalClose")?.addEventListener("click", closePOSPaymentModal);
     $("paymentModalCancel")?.addEventListener("click", closePOSPaymentModal);
     $("paymentModalConfirm")?.addEventListener("click", commitPOSPaymentAndSubmit);
     $("paymentModalAmount")?.addEventListener("input", updatePOSPaymentModalUI);
+    $("posReviewClose")?.addEventListener("click", closePOSOrderReview);
+    $("posReviewBack")?.addEventListener("click", closePOSOrderReview);
+    $("posReviewConfirm")?.addEventListener("click", async () => {
+        closePOSOrderReview();
+        await confirmPOSOrder();
+    });
+    $("posReviewModal")?.addEventListener("click", event => {
+        if (event.target === $("posReviewModal")) closePOSOrderReview();
+    });
 
     document.querySelectorAll("#paymentModal .ck-payment-method").forEach(button => {
         button.addEventListener("click", () => selectPOSPaymentMethod(button.dataset.paymentMethod, true));
@@ -3407,11 +3444,6 @@ function setupEvents() {
     });
 
 
-    $("clearCartButton")
-        .addEventListener(
-            "click",
-            clearPOSCart
-        );
 
 
     $("itemModal")

@@ -976,7 +976,7 @@
 
     const bindProfiles = () => {
       let bound = false;
-      document.querySelectorAll('.cku-topbar .cku-profile-card').forEach(card => {
+      document.querySelectorAll('.cku-topbar .cku-profile-card, .uniform-pos-profile, .staff-profile.uniform-profile-card').forEach(card => {
         if (card.classList.contains('ckp-trigger')) {
           menuShell = card.closest('.ckp-profile-shell') || menuShell;
           bound = true;
@@ -998,7 +998,7 @@
 
   // Delegated profile click handling survives header/profile-card replacement.
   document.addEventListener('click', event => {
-    const profileCard = event.target.closest('.cku-profile-card');
+    const profileCard = event.target.closest('.cku-profile-card, .uniform-pos-profile, .staff-profile.uniform-profile-card');
     if (profileCard && area()) {
       event.preventDefault();
       event.stopPropagation();
@@ -1008,7 +1008,7 @@
       }
 
       const activeTrigger = event.target.closest('.ckp-trigger')
-        || document.querySelector('.cku-topbar .ckp-trigger');
+        || document.querySelector('.cku-topbar .ckp-trigger, .cart-panel .ckp-trigger');
       const shell = activeTrigger?.closest('.ckp-profile-shell');
       if (shell) {
         menuShell = shell;

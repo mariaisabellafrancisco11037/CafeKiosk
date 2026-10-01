@@ -3084,3 +3084,6 @@ button.inventory-option-unavailable,
   #itemModal .item-custom-note textarea { min-height:68px; font-size:.75rem; }
   #itemModal .item-custom-note-help span:first-child { max-width:75%; }
 }
+
+/* Keep final kiosk review actions above the persistent attribution footer. */
+#orderModalBox{padding-bottom:58px!important}#orderModalBox>.modal-actions{position:sticky!important;bottom:0!important;z-index:5!important;margin-top:14px!important;padding:12px 0 8px!important;background:linear-gradient(to top,#fffaf1 75%,rgba(255,250,241,0))!important}#orderModalBox>.modal-actions .cancel-btn,#orderModalBox>.modal-actions .confirm-btn{min-height:48px!important}
