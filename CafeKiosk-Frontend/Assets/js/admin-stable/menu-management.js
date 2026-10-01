@@ -1100,76 +1100,6 @@ button.innerHTML = `
    RENDER PRODUCTS
 ========================================================= */
 
-
-function resolveFallbackCategoryImage(categoryKey) {
-    const key = String(categoryKey || "").trim().toLowerCase();
-
-    if (key.includes("non") || key.includes("chocolate") || key.includes("smoothie")) {
-        return "/Assets/images/non-coffee.png";
-    }
-
-    if (key.includes("milk")) {
-        return "/Assets/images/milktea.png";
-    }
-
-    if (key.includes("food")) {
-        return "/Assets/images/food.png";
-    }
-
-    if (key.includes("snack")) {
-        return "/Assets/images/snack.png";
-    }
-
-    if (key.includes("dessert")) {
-        return "/Assets/images/dessert.png";
-    }
-
-    return "/Assets/images/coffee.png";
-}
-
-function resolveProductImageByName(product) {
-    const configured = String(product?.image || "").trim();
-
-    // Product-specific images saved in MySQL always win.
-    if (configured) {
-        return configured;
-    }
-
-    const name = String(product?.name || "").trim().toLowerCase();
-
-    const namedFallbacks = [
-        [/caramel\s+macchiato|macchiato/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caramel_Latte_Macchiato.jpg"],
-        [/cappuccino/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cappuccino_at_Sightglass_Coffee.jpg"],
-        [/espresso|americano|black\s+coffee/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Espresso_BW_1.jpg"],
-        [/latte|flat\s+white|cafe\s+au\s+lait/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"],
-        [/mocha|hot\s+chocolate|chocolate\s+milk/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mocha_coffee.jpg"],
-        [/milk\s*tea|okinawa|hokkaido|wintermelon|taro|pearl|boba/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble_Tea.png"],
-        [/matcha/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Matcha_Latte.jpg"],
-        [/smoothie/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_smoothie_%282017%29.jpg"],
-        [/lemonade|iced\s+tea|soda|fruit\s+tea/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lemonade.jpg"],
-        [/sandwich|wrap/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Club_sandwich.png"],
-        [/burger/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hamburger_%28black_bg%29.jpg"],
-        [/pasta|spaghetti|carbonara|mac\s+and\s+cheese/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Spaghetti_al_Pomodoro.JPG"],
-        [/rice|breakfast/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fried_rice_2.jpg"],
-        [/fries|wedges|hash\s+brown/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/French_fries_2.jpg"],
-        [/wing|nugget|tender|popcorn\s+chicken/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fried_chicken.jpg"],
-        [/cookie/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_chip_cookie.jpg"],
-        [/muffin/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Blueberry_muffins%2C_2010.jpg"],
-        [/donut|cinnamon\s+roll/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Glazed-Donut.jpg"],
-        [/ice\s*cream|sundae/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Strawberry_ice_cream_cone_%282%29.jpg"],
-        [/cheesecake|cake|brownie|tiramisu|mousse|panna\s+cotta|leche\s+flan/, "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate_cake.jpg"]
-    ];
-
-    for (const [pattern, url] of namedFallbacks) {
-        if (pattern.test(name)) {
-            return url;
-        }
-    }
-
-    return resolveFallbackCategoryImage(product?.categoryKey || product?.category || product?.categoryName);
-}
-
-
 function renderProducts() {
 
     const query =
@@ -1304,11 +1234,45 @@ function renderProducts() {
                                 class="product-image"
                             >
 
-                                <img
-                                    src="${resolveProductImageByName(product)}"
-                                    alt="${escapeHtml(product.name)}"
-                                    onerror="this.onerror=null;this.src='${resolveFallbackCategoryImage(product.categoryKey || product.categoryName)}';"
-                                >
+                                ${
+                                    product.image
+
+                                    ?
+
+                                    `
+
+                                    <img
+                                        src="${product.image}"
+
+                                        alt="${escapeHtml(
+                                            product.name
+                                        )}"
+                                    >
+
+                                    `
+
+                                    :
+
+                                    `
+
+                                    <span
+                                        class="placeholder-icon"
+                                        aria-hidden="true"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.6"
+                                        >
+                                            <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                            <path d="m21 15-5-5L5 21"></path>
+                                        </svg>
+                                    </span>
+
+                                    `
+                                }
 
                                 ${
                                     isAvailable

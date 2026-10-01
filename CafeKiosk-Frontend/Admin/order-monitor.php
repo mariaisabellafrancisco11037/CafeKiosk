@@ -8,17 +8,15 @@
 
   <link
     rel="stylesheet"
-    href="../Assets/css/order-monitor.css?v=station-v2"
+    href="../Assets/css/admin-stable/order-monitor.css?v=admin-stable-20261001"
   >
-<link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=31-approval-id-layout">
-  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
+<link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-admin-order-inventory-final-v2">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
+  <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
 </head>
 
 <body class="uniform-admin">
@@ -955,14 +953,12 @@
 
   <script src="/socket.io/socket.io.js"></script>
 
-  <script src="/Assets/js/auth-session.js?v=live-cookie-realtime-v1"></script>
+  <script src="/Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
 
-  <script src="../Assets/js/order-monitor.js?v=live-cookie-realtime-v1"></script>
+  <script src="../Assets/js/admin-stable/order-monitor.js?v=admin-stable-20261001"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
-  <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
+  <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
+  <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
 </body>
 </html>

@@ -335,11 +335,7 @@ async function syncNormalizedRecipeRows(recipeConfig) {
 }
 
 async function seedDemoCafe() {
-  if (String(process.env.AUTO_SEED_DEMO || 'true').toLowerCase() === 'false') {
-    return { skipped: true, reason: 'AUTO_SEED_DEMO=false' };
-  }
-
-  await ensureDemoCafeExists();
+await ensureDemoCafeExists();
   await appState.ensureTable();
 
   const catalog = await ensureCategoriesAndProducts();

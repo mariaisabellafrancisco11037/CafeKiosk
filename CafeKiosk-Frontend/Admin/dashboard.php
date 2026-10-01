@@ -4,15 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Admin Dashboard</title>
-  <link rel="stylesheet" href="../Assets/css/dashboard.css">
-<link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
-  <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=31-approval-id-layout">
-  <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/dashboard.css?v=admin-stable-20261001">
+<link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 
 <body class="uniform-admin">
@@ -118,7 +116,7 @@
       <header class="monitor-header dashboard-header">
         <div>
           <span class="eyebrow">SYSTEM OVERVIEW</span>
-          <h1 id="dashboardWelcome">Hello, Welcome to <span data-cafe-identity>CafeKiosk</span></h1>
+          <h1>Admin Dashboard</h1>
           <p>Live overview of orders, sales, POS, Kiosk, menu and inventory.</p>
         </div>
 
@@ -299,14 +297,11 @@
   </div>
 
   <!-- Existing CafeKiosk authentication helper -->
-  <script src="../Assets/js/auth-session.js"></script>
-  <script src="../Assets/js/dashboard.js?v=dashboard-restored-20260929-v1"></script>
-<script src="../Assets/js/dashboard-products.js"></script>
-  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
-  <script src="../Assets/js/dashboard-welcome.js?v=20261001-welcome-fix3"></script>
-  <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
+  <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/dashboard.js?v=admin-stable-20261001"></script>
+<script src="../Assets/js/admin-stable/dashboard-products.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
+  <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
 </body>
 </html>

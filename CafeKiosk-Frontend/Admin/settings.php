@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CafeKiosk - Settings</title>
-<link rel="stylesheet" href="../Assets/css/admin-extension.css">
-<link rel="stylesheet" href="../Assets/css/kiosk-access.css?v=1">
-<script src="../Assets/js/auth-session.js"></script>
-<link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-<link rel="stylesheet" href="../Assets/css/profile-menu.css?v=31-approval-id-layout">
-<link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
+<link rel="stylesheet" href="../Assets/css/admin-stable/admin-extension.css?v=admin-stable-20261001">
+<link rel="stylesheet" href="../Assets/css/admin-stable/kiosk-access.css?v=admin-stable-20261001">
+<script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
+<link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
+<link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
+<link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
 <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
 <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 <style>
@@ -27,8 +27,6 @@
 @media(max-width:800px){.settings-config-grid,.settings-admin-grid{grid-template-columns:1fr}.settings-page-intro{display:block}.settings-config-card,.settings-link-card{min-height:unset;padding:15px}.settings-config-icon,.settings-link-icon{width:46px;height:46px;border-radius:13px}.payment-setting-row{grid-template-columns:40px minmax(0,1fr) auto}.payment-setting-icon{width:40px;height:40px}}
 @media(max-width:480px){.settings-config-card,.settings-link-card{grid-template-columns:44px minmax(0,1fr) 18px;gap:10px;padding:13px}.settings-config-copy p,.settings-link-copy span{font-size:10px}.settings-config-summary{font-size:9px}}
 </style>
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 <body class="ck-admin-page uniform-admin">
 <div class="ck-shell">
@@ -100,12 +98,10 @@
 </div>
 
 <div class="ck-modal" id="settingsModal"><div class="ck-dialog" style="max-width:680px"><div class="ck-toolbar"><h2 id="settingsTitle">Settings</h2><button class="ck-btn" id="closeSettings" type="button">Close</button></div><div id="settingsBody"></div></div></div>
-<script src="../Assets/js/kiosk-qr.js?v=1"></script>
-<script src="../Assets/js/settings-page.js?v=20260928-settings-v4"></script>
-<script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
-<script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
-<script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
+<script src="../Assets/js/admin-stable/kiosk-qr.js?v=admin-stable-20261001"></script>
+<script src="../Assets/js/admin-stable/settings-page.js?v=admin-stable-20261001"></script>
+<script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
+<script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
+<script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
 </body>
 </html>
