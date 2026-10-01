@@ -1,7 +1,5 @@
 (() => {
   "use strict";
-
-  const CAFE_ID = String(localStorage.getItem("cafeId") || "cafe-1").trim() || "cafe-1";
   let config = { products: {}, categoryDefaults: {} };
   let editingKey = "";
 
@@ -166,7 +164,7 @@
   async function loadConfig() {
     try {
       const response = await apiFetch(
-        `${apiUrl()}/api/menu-config?cafeId=${encodeURIComponent(CAFE_ID)}`,
+        `${apiUrl()}/api/menu-config`,
         { cache: "no-store" }
       );
       if (!response.ok) return;
@@ -210,61 +208,43 @@
     const ingredients = collectRichIngredients();
     const saveCategoryDefault = document.getElementById("ckSaveCategoryDefault")?.checked === true;
 
-    let latest = config;
-
-    try {
-      const current = await apiFetch(
-        `${apiUrl()}/api/menu-config?cafeId=${encodeURIComponent(CAFE_ID)}`,
-        { cache: "no-store" }
-      );
-      if (current.ok) {
-        const payload = await current.json();
-        if (payload?.config) latest = payload.config;
-      }
-    } catch (_) {
-      // Use the last loaded configuration if the refresh request fails.
-    }
-
-    latest = {
-      products: { ...(latest?.products || {}) },
-      categoryDefaults: { ...(latest?.categoryDefaults || {}) }
-    };
-
     const previousProduct =
-      latest.products[newKey] ||
-      (editingKey ? latest.products[editingKey] : null) ||
+      config.products?.[newKey] ||
+      (editingKey ? config.products?.[editingKey] : null) ||
       {};
 
-    latest.products[newKey] = {
+    const productConfig = {
       ...previousProduct,
       productName: name,
       category,
       sizes,
-      ingredients,
-      updatedAt: new Date().toISOString()
+      ingredients
     };
 
-    if (editingKey && editingKey !== newKey) {
-      delete latest.products[editingKey];
-    }
-
-    if (saveCategoryDefault) {
-      latest.categoryDefaults[categoryKey(category)] = sizes;
-    }
-
     try {
-      const response = await apiFetch(`${apiUrl()}/api/menu-config`, {
-        method: "PUT",
+      const response = await apiFetch(`${apiUrl()}/api/menu-config/product`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cafeId: CAFE_ID, config: latest }),
-        keepalive: true
+        body: JSON.stringify({
+          productKey: newKey,
+          previousKey: editingKey || "",
+          productConfig,
+          categoryDefaultKey: saveCategoryDefault ? categoryKey(category) : "",
+          categoryDefault: saveCategoryDefault ? sizes : null
+        })
       });
 
       if (!response.ok) {
-        throw new Error(`Menu configuration save failed (HTTP ${response.status})`);
+        let detail = "";
+        try {
+          const payload = await response.json();
+          detail = payload?.message ? `: ${payload.message}` : "";
+        } catch (_) {}
+        throw new Error(`Menu configuration save failed (HTTP ${response.status})${detail}`);
       }
 
-      config = latest;
+      const payload = await response.json();
+      if (payload?.config) config = payload.config;
       editingKey = newKey;
       return true;
     } catch (error) {

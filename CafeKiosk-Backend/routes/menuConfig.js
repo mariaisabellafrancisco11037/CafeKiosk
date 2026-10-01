@@ -36,6 +36,35 @@ router.get("/",optionalAuth,async(req,res,next)=>{
   }catch(e){next(e);}
 });
 
+
+router.patch("/product",verify,admin,owner,async(req,res,next)=>{
+  try{
+    const cafeId=String(req.user?.cafeId||"");
+    const productKey=String(req.body?.productKey||"").trim();
+    const previousKey=String(req.body?.previousKey||"").trim();
+    const productConfig=req.body?.productConfig;
+    const categoryDefaultKey=String(req.body?.categoryDefaultKey||"").trim();
+    const categoryDefault=Array.isArray(req.body?.categoryDefault)?req.body.categoryDefault:null;
+
+    if(!productKey || !productConfig || typeof productConfig!=="object"){
+      return res.status(400).json({success:false,message:"A valid product size configuration is required."});
+    }
+
+    const current=await store.get(cafeId);
+    const next={
+      products:{...(current.products||{})},
+      categoryDefaults:{...(current.categoryDefaults||{})}
+    };
+
+    next.products[productKey]={...productConfig,updatedAt:new Date().toISOString()};
+    if(previousKey && previousKey!==productKey) delete next.products[previousKey];
+    if(categoryDefaultKey && categoryDefault) next.categoryDefaults[categoryDefaultKey]=categoryDefault;
+
+    const config=await store.put(cafeId,next);
+    res.json({success:true,cafeId,productKey,config});
+  }catch(e){next(e);}
+});
+
 router.put("/",verify,admin,owner,async(req,res,next)=>{
   try{
     const cafeId=String(req.user?.cafeId||"");
