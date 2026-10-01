@@ -659,7 +659,7 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=20261001-review-flow-v5"></script>
+<script src="/Assets/js/menu.js?v=20261001-menu-restore-v6"></script>
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>

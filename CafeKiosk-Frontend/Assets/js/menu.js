@@ -3806,10 +3806,16 @@ async function loadMysqlProductCatalog() {
           image: product.image || ""
         });
       }
-      Object.keys(grouped).forEach(key => {
-        if (!menuData[key]) menuData[key] = [];
-        menuData[key].splice(0, menuData[key].length, ...grouped[key]);
-      });
+
+      const demoCatalogLooksComplete = !isDemo || products.length >= 180;
+      if (demoCatalogLooksComplete) {
+        Object.keys(grouped).forEach(key => {
+          if (!menuData[key]) menuData[key] = [];
+          menuData[key].splice(0, menuData[key].length, ...grouped[key]);
+        });
+      } else {
+        console.warn(`Demo Cafe kiosk catalog returned only ${products.length} products; keeping bundled full demo menu.`);
+      }
     } else if (!isDemo) {
       effectiveCategories.forEach(category => {
         const key = String(category.canonicalKey || category.key || category.name || "").trim();

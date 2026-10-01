@@ -3592,10 +3592,20 @@ async function loadMysqlProductCatalog() {
         image: product.image || ""
       });
     });
-    Object.keys(grouped).forEach(key => {
-      if (!menuData[key]) menuData[key] = [];
-      menuData[key].splice(0, menuData[key].length, ...grouped[key]);
-    });
+
+    // Demo Cafe must never collapse to a partial/empty menu because of a
+    // temporarily incomplete DB response. A healthy seeded Demo Cafe has
+    // 180 products; when fewer are returned, keep the bundled sample menu
+    // and let the startup seeder repair MySQL on the next deployment boot.
+    const demoCatalogLooksComplete = !isDemo || products.length >= 180;
+    if (demoCatalogLooksComplete) {
+      Object.keys(grouped).forEach(key => {
+        if (!menuData[key]) menuData[key] = [];
+        menuData[key].splice(0, menuData[key].length, ...grouped[key]);
+      });
+    } else {
+      console.warn(`Demo Cafe catalog returned only ${products.length} products; keeping bundled full demo menu.`);
+    }
 
     rebuildPosCategories(effectiveCategories);
     return true;

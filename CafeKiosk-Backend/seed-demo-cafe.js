@@ -132,7 +132,28 @@ async function ensureCategoriesAndProducts() {
     if (existing.length) {
       productId = Number(existing[0].product_id);
       const category = demo.categories.find(row => row.key === product.categoryKey);
-      await pool.execute(`UPDATE products SET image_path=COALESCE(NULLIF(image_path,''), ?) WHERE product_id=? AND cafe_id=?`,[product.image || category?.image || '/Assets/images/logo.png', productId, CAFE_ID]);
+
+      // The Demo Cafe is a controlled showcase tenant. Restore the complete
+      // sample catalog on every startup so accidental edits/deactivation do
+      // not make menu items disappear from POS/Kiosk during demonstrations.
+      await pool.execute(
+        `UPDATE products
+            SET category_id=?,
+                base_price=?,
+                image_path=?,
+                manual_availability='Available',
+                is_active=1,
+                sort_order=?
+          WHERE product_id=? AND cafe_id=?`,
+        [
+          categoryId,
+          Number(product.price || 0),
+          product.image || category?.image || '/Assets/images/logo.png',
+          Number(product.sortOrder || 0),
+          productId,
+          CAFE_ID
+        ]
+      );
     } else {
       const [result] = await pool.execute(
         `INSERT INTO products

@@ -484,7 +484,7 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=20261001-workflow-v5"></script>
+<script src="/Assets/js/pos.js?v=20261001-menu-restore-v6"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
