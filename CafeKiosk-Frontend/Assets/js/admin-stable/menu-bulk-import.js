@@ -9,6 +9,9 @@
     inventory: [],
     csvRows: [],
     imageEntries: [],
+    zipFiles: [],
+    zipDetails: [],
+    duplicateImageNames: [],
     plan: null,
     busy: false
   };
@@ -269,17 +272,52 @@
     const map = new Map();
     const zipInput = document.getElementById("ckImportZip");
     const filesInput = document.getElementById("ckImportImages");
+    const zipFiles = Array.from(zipInput?.files || []);
+    const duplicateNames = [];
+    const zipDetails = [];
 
-    if (zipInput?.files?.[0]) {
-      const entries = await unzipImages(zipInput.files[0]);
-      entries.forEach(entry => map.set(baseName(entry.name).toLowerCase(), entry));
+    // MULTI-ZIP SUPPORT: every selected ZIP is opened and merged into one image queue.
+    // This lets owners select all 10-image category batches (for example 1-10, 11-20,
+    // 21-30 ... 171-180) in a single bulk-import operation.
+    for (let i = 0; i < zipFiles.length; i += 1) {
+      const zipFile = zipFiles[i];
+      const entries = await unzipImages(zipFile);
+      zipDetails.push({ name: zipFile.name, count: entries.length });
+      for (const entry of entries) {
+        const key = baseName(entry.name).toLowerCase();
+        if (map.has(key)) {
+          duplicateNames.push(`${baseName(entry.name)} (${zipFile.name})`);
+          continue; // Keep the first copy so imports are deterministic.
+        }
+        map.set(key, { ...entry, sourceZip: zipFile.name });
+      }
     }
 
+    // Loose image files can be mixed with ZIPs. They are merged into the same queue.
     for (const file of Array.from(filesInput?.files || [])) {
       if (!String(file.type || "").startsWith("image/") && !/\.(png|jpe?g|webp)$/i.test(file.name)) continue;
-      map.set(baseName(file.name).toLowerCase(), { name: baseName(file.name), blob: file });
+      const key = baseName(file.name).toLowerCase();
+      if (map.has(key)) {
+        duplicateNames.push(`${baseName(file.name)} (selected image)`);
+        continue;
+      }
+      map.set(key, { name: baseName(file.name), blob: file, sourceZip: "Selected images" });
     }
-    return [...map.values()];
+
+    return { entries: [...map.values()], zipFiles, zipDetails, duplicateNames };
+  }
+
+  function updateZipSelectionSummary() {
+    const input = document.getElementById("ckImportZip");
+    const summary = document.getElementById("ckImportZipSummary");
+    if (!summary) return;
+    const files = Array.from(input?.files || []);
+    if (!files.length) {
+      summary.textContent = "No ZIP files selected.";
+      return;
+    }
+    const totalMb = files.reduce((sum, file) => sum + Number(file.size || 0), 0) / (1024 * 1024);
+    summary.textContent = `${files.length} ZIP file${files.length === 1 ? "" : "s"} selected • ${totalMb.toFixed(1)} MB total`;
   }
 
   async function fetchJson(url, options = {}) {
@@ -320,7 +358,11 @@
     setErrors("");
 
     try {
-      state.imageEntries = await loadSelectedImages();
+      const imageSelection = await loadSelectedImages();
+      state.imageEntries = imageSelection.entries;
+      state.zipFiles = imageSelection.zipFiles;
+      state.zipDetails = imageSelection.zipDetails;
+      state.duplicateImageNames = imageSelection.duplicateNames;
       state.csvRows = csvFile ? parseCsv(await csvFile.text()) : [];
       state.catalog = await fetchJson(`${apiUrl()}/api/catalog`, { cache: "no-store" });
       const existingProducts = Array.isArray(state.catalog.products) ? state.catalog.products : [];
@@ -335,7 +377,7 @@
       const ingredientMap = new Map(inventory.map(item => [normalizeName(item.name), item]));
 
       if (!state.csvRows.length && !state.imageEntries.length) {
-        throw new Error("Choose a CSV file, an image ZIP, or multiple images first.");
+        throw new Error("Choose a CSV file, one or more image ZIP files, or multiple images first.");
       }
 
       const existingByKey = new Map(existingProducts.map(p => [productMatchKey(p.name, p.categoryKey || p.category), p]));
@@ -476,6 +518,12 @@
     }).join("") + (rows.length > preview.length ? `<tr><td colspan="6">…and ${rows.length - preview.length} more items.</td></tr>` : "");
 
     const notes = [];
+    if (Array.isArray(state.zipFiles) && state.zipFiles.length) {
+      notes.push(`ZIP files loaded: ${state.zipFiles.length} • unique images found: ${state.imageEntries.length}`);
+    }
+    if (Array.isArray(state.duplicateImageNames) && state.duplicateImageNames.length) {
+      notes.push(`Duplicate filenames skipped (${state.duplicateImageNames.length}): ${state.duplicateImageNames.slice(0, 10).join(", ")}${state.duplicateImageNames.length > 10 ? "…" : ""}`);
+    }
     if (plan.unmatchedImages.length) {
       notes.push(`Unmatched images (${plan.unmatchedImages.length}): ${plan.unmatchedImages.slice(0, 12).map(x => x.name).join(", ")}${plan.unmatchedImages.length > 12 ? "…" : ""}`);
     }
@@ -795,8 +843,8 @@
         </header>
         <div class="ck-import-body">
           <p class="ck-import-note">
-            <b>Fast image replacement:</b> upload your image ZIP only—no CSV needed. CafeKiosk matches filenames like <b>21_Black_Coffee.png</b> to existing products automatically.<br>
-            <b>Full menu creation:</b> upload the CSV template plus an optional image ZIP to create/update products, prices, descriptions, sizes, recipes, and images in one run.
+            <b>Fast image replacement:</b> select one or many image ZIP files at once—no CSV needed. CafeKiosk merges every ZIP into one queue and matches filenames like <b>21_Black_Coffee.png</b> automatically.<br>
+            <b>Full menu creation:</b> upload the CSV template plus any number of image ZIPs to create/update products, prices, descriptions, sizes, recipes, and images in one run.
           </p>
           <div class="ck-import-input-grid">
             <div class="ck-import-box">
@@ -806,9 +854,10 @@
               <button class="ck-import-template-btn" id="ckImportTemplate" type="button">Download CSV Template</button>
             </div>
             <div class="ck-import-box">
-              <strong>2. Image ZIP (optional)</strong>
-              <span>Upload the ZIP files generated for your menu. Filenames are matched to product names.</span>
-              <input id="ckImportZip" type="file" accept=".zip,application/zip">
+              <strong>2. Image ZIPs (optional)</strong>
+              <span>Select multiple ZIP batches at once. All ZIPs are merged and matched to the CSV/products by filename.</span>
+              <input id="ckImportZip" type="file" accept=".zip,application/zip,application/x-zip-compressed" multiple>
+              <small id="ckImportZipSummary" class="ck-import-file-summary">No ZIP files selected.</small>
             </div>
             <div class="ck-import-box">
               <strong>3. Or select images</strong>
@@ -843,6 +892,7 @@
     document.body.appendChild(backdrop);
 
     document.getElementById("ckImportTemplate")?.addEventListener("click", downloadTemplate);
+    document.getElementById("ckImportZip")?.addEventListener("change", updateZipSelectionSummary);
     document.getElementById("ckImportPreview")?.addEventListener("click", preparePreview);
     document.getElementById("ckImportStart")?.addEventListener("click", startImport);
     document.getElementById("ckImportClose")?.addEventListener("click", closeModal);
