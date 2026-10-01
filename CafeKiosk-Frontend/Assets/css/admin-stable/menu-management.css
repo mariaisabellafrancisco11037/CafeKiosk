@@ -2065,9 +2065,9 @@ body.product-save-busy {
     }
 }
 
-/* 2026-10-01: Product-image management intentionally disabled.
-   Images are hidden from Menu Management without deleting any existing DB values. */
-.product-card .product-image,
+/* 2026-10-01: Product-image upload/management intentionally disabled.
+   The catalog image card remains visible as an empty placeholder, while stored
+   product images are not rendered and existing DB values are not deleted. */
 .form-right > .upload-title,
 .form-right > .image-drop,
 .form-right > #productImage {

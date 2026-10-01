@@ -1460,7 +1460,7 @@ function renderProducts() {
                             >
 
                                 ${
-                                    product.image
+                                    false // Keep the image card, but do not display stored product images.
 
                                     ?
 

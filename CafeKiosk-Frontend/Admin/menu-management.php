@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=no-product-images-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=blank-image-cards-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=bulk-import-multizip-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -417,7 +417,7 @@
   </div>
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-management.js?v=no-product-images-20261001"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=blank-image-cards-20261001"></script>
   <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=bulk-import-multizip-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
