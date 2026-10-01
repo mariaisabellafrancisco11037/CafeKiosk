@@ -81,9 +81,12 @@ function setApprovalPinFeedback(message = "", type = "") {
 }
 
 async function verifyEnteredApprovalPin({ silent = false } = {}) {
+  const approvalIdInput = $("managerApprovalId");
+  const approvalId = String(approvalIdInput?.value || "").trim().toUpperCase();
   const pinInput = $("managerPin");
   const pin = String(pinInput?.value || "").trim();
   verifiedApproval = null;
+  if (!/^(ADM|MGR)-[A-F0-9]{6}$/.test(approvalId)) { if (!silent) setApprovalPinFeedback("Enter the Admin/Manager Approval ID first.", "error"); approvalIdInput?.focus(); return null; }
   if (!/^\d{4,6}$/.test(pin)) {
     if (!silent) setApprovalPinFeedback("Enter a 4-6 digit Admin/Manager PIN.", "error");
     return null;
@@ -93,11 +96,11 @@ async function verifyEnteredApprovalPin({ silent = false } = {}) {
     const response = await authenticatedFetch(`${API_URL}/api/auth/approval-pin/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ pin })
+      body: JSON.stringify({ approvalId, pin })
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok || !data.success) throw new Error(data.message || "Approval PIN was not accepted.");
-    verifiedApproval = { pin, approver: data.approver || null };
+    verifiedApproval = { approvalId, pin, approver: data.approver || null };
     const who = data.approver?.name || data.approver?.username || data.approver?.role || "Admin/Manager";
     setApprovalPinFeedback(`Approved by ${who}.`, "success");
     return verifiedApproval;
@@ -122,7 +125,14 @@ function configureApprovalPinUI() {
   }
 
   if (staffNeedsApprovalPin()) {
-    if (label) label.textContent = "Admin/Manager Approval PIN:";
+    let approvalIdInput = $("managerApprovalId");
+    if (!approvalIdInput && control) {
+      const idLabel=document.createElement("label"); idLabel.className="field-label approval-id-label"; idLabel.setAttribute("for","managerApprovalId"); idLabel.textContent="1. Admin/Manager Approval ID:";
+      approvalIdInput=document.createElement("input"); approvalIdInput.id="managerApprovalId"; approvalIdInput.type="text"; approvalIdInput.maxLength=10; approvalIdInput.autocomplete="off"; approvalIdInput.placeholder="Example: ADM-A1B2C3"; approvalIdInput.className="approval-id-input";
+      control.parentElement?.insertBefore(idLabel,control); control.parentElement?.insertBefore(approvalIdInput,control);
+      approvalIdInput.addEventListener("input",()=>{approvalIdInput.value=String(approvalIdInput.value||"").toUpperCase().replace(/[^A-Z0-9-]/g,""); verifiedApproval=null; setApprovalPinFeedback("");});
+    }
+    if (label) label.textContent = "2. Admin/Manager Approval PIN:";
     input.placeholder = "Ask an Admin/Manager for their approval PIN";
     input.required = true;
     if (control && !$("verifyApprovalPinButton")) {

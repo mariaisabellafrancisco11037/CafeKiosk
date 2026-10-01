@@ -257,6 +257,21 @@ async function sendResendEmail({ to, subject, html, text, senderName, replyTo })
   }
 }
 
+function buildCafeRegistrationNotification(options = {}) {
+  const cafeName=clean(options.cafeName)||'New Cafe', ownerName=clean(options.ownerName)||'Cafe Owner', ownerEmail=clean(options.ownerEmail), ownerPhone=clean(options.ownerPhone), cafeId=clean(options.cafeId);
+  const subject=`CafeKiosk approval required: ${cafeName}`;
+  const text=['A new cafe owner registration is waiting for System Administrator approval.','',`Cafe: ${cafeName}`,`Cafe ID: ${cafeId}`,`Owner: ${ownerName}`,`Email: ${ownerEmail}`,`Phone: ${ownerPhone}`,'','Open the CafeKiosk System Administrator dashboard and review the Approvals section.','This email is a notification only. Registration is NOT approved automatically.'].join('\n');
+  const html=`<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;background:#f5f1e8;padding:24px;color:#2f2a24"><div style="max-width:620px;margin:auto;background:white;border:1px solid #e4dac8;border-radius:16px;overflow:hidden"><div style="background:#234a3b;color:white;padding:22px 26px"><strong style="font-size:22px">New Cafe Registration</strong></div><div style="padding:26px"><p>A new cafe owner registration is waiting for <strong>System Administrator approval</strong>.</p><p><strong>Cafe:</strong> ${escapeHtml(cafeName)}<br><strong>Cafe ID:</strong> ${escapeHtml(cafeId)}<br><strong>Owner:</strong> ${escapeHtml(ownerName)}<br><strong>Email:</strong> ${escapeHtml(ownerEmail)}<br><strong>Phone:</strong> ${escapeHtml(ownerPhone)}</p><p>Open CafeKiosk → System Administrator → Approvals to review the request.</p><p style="color:#7a6e61;font-size:13px"><strong>Important:</strong> this email does not approve the cafe automatically.</p></div></div></body></html>`;
+  return {subject,text,html};
+}
+
+async function sendCafeRegistrationNotification(options={}) {
+  const recipient=clean(process.env.SYSTEM_ADMIN_NOTIFICATION_EMAIL||process.env.SYSTEM_ADMIN_EMAIL);
+  if(!recipient) return {sent:false,configured:false,error:'SYSTEM_ADMIN_NOTIFICATION_EMAIL is not configured.'};
+  const content=buildCafeRegistrationNotification(options);
+  return sendResendEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
+}
+
 async function sendStaffInvitation(options) {
   const content = buildInvitationEmail(options || {});
   const cafeName = clean(options?.cafeName) || 'CafeKiosk';
@@ -289,6 +304,8 @@ async function sendPasswordResetEmail(options) {
 module.exports = {
   getEmailConfig,
   sendStaffInvitation,
+  sendCafeRegistrationNotification,
+  buildCafeRegistrationNotification,
   buildInvitationEmail,
   sendPasswordResetEmail,
   buildPasswordResetEmail

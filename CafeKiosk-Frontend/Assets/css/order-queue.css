@@ -1536,3 +1536,5 @@ button{cursor:pointer}
   .station-tabs-inline .station-tab:nth-child(2){min-width:84px;}
   .station-tabs-inline .station-icon{display:inline;}
 }
+
+.approval-id-input{width:100%;box-sizing:border-box;border:1px solid #d7c19c;border-radius:10px;background:#fffaf0;padding:11px 12px;margin:6px 0 10px;font:700 13px/1.2 "Segoe UI",Arial,sans-serif;letter-spacing:.06em;color:#4f351f;text-transform:uppercase}.approval-id-input:focus{outline:2px solid rgba(76,143,94,.2);border-color:#4c8f5e}.approval-id-label{display:block;margin-top:8px}

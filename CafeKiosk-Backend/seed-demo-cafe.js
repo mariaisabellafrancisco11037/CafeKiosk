@@ -131,12 +131,14 @@ async function ensureCategoriesAndProducts() {
     let productId;
     if (existing.length) {
       productId = Number(existing[0].product_id);
+      const category = demo.categories.find(row => row.key === product.categoryKey);
+      await pool.execute(`UPDATE products SET image_path=COALESCE(NULLIF(image_path,''), ?) WHERE product_id=? AND cafe_id=?`,[product.image || category?.image || '/Assets/images/logo.png', productId, CAFE_ID]);
     } else {
       const [result] = await pool.execute(
         `INSERT INTO products
-           (cafe_id, category_id, product_name, base_price, manual_availability, is_active, sort_order)
-         VALUES (?, ?, ?, ?, 'Available', 1, ?)`,
-        [CAFE_ID, categoryId, product.name, Number(product.price || 0), Number(product.sortOrder || 0)]
+           (cafe_id, category_id, product_name, base_price, image_path, manual_availability, is_active, sort_order)
+         VALUES (?, ?, ?, ?, ?, 'Available', 1, ?)`,
+        [CAFE_ID, categoryId, product.name, Number(product.price || 0), product.image || demo.categories.find(row => row.key === product.categoryKey)?.image || '/Assets/images/logo.png', Number(product.sortOrder || 0)]
       );
       productId = Number(result.insertId);
       productsAdded += 1;

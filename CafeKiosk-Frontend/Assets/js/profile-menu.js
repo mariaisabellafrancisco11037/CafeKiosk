@@ -569,10 +569,13 @@
         </div>
       </div>
 
+
+      <div class="ckp-pin-status ckp-approval-id-card"><span class="ckp-pin-step">1</span><div><strong>Your Approval ID</strong><span id="ckpApprovalIdValue">Generating…</span><small>Give this ID together with your PIN when approving a Staff refund or void.</small></div><button type="button" class="ckp-secondary" id="ckpCopyApprovalId">Copy ID</button></div>
+
       <section class="ckp-pin-section" aria-labelledby="ckpPinSetHeading">
         <div class="ckp-pin-section-head">
           <div>
-            <span class="ckp-pin-step">1</span>
+            <span class="ckp-pin-step">2</span>
             <div>
               <h3 id="ckpPinSetHeading">Set or replace approval PIN</h3>
               <p>Enter a new 4–6 digit PIN twice. Saving here replaces the previous PIN.</p>
@@ -634,6 +637,7 @@
     });
     modal.querySelector('#ckpPinForm')?.addEventListener('submit', saveApprovalPin);
     modal.querySelector('#ckpTestPinButton')?.addEventListener('click', testCurrentApprovalPin);
+    modal.querySelector('#ckpCopyApprovalId')?.addEventListener('click', async () => { const value=String(modal.querySelector('#ckpApprovalIdValue')?.textContent||'').trim(); if(!value||value==='Generating…'||value==='Unavailable')return; try{await navigator.clipboard.writeText(value);}catch(_){} });
     return modal;
   }
 
@@ -664,6 +668,8 @@
         throw new Error(data.message || 'Unable to read PIN status.');
       }
       setPinStatus(Boolean(data.hasPin));
+      const approvalIdEl = modal.querySelector('#ckpApprovalIdValue');
+      if (approvalIdEl) approvalIdEl.textContent = data.approvalId || 'Unavailable';
     } catch (error) {
       const status = modal.querySelector('#ckpPinStatus');
       const title = modal.querySelector('#ckpPinStatusTitle');
@@ -795,6 +801,8 @@
       }
 
       setPinStatus(true);
+      const approvalIdEl = document.getElementById('ckpApprovalIdValue');
+      if (approvalIdEl && data.approvalId) approvalIdEl.textContent = data.approvalId;
       if (msg) {
         msg.textContent = 'Approval PIN saved successfully.';
         msg.className = 'ckp-form-message ckp-pin-result success';

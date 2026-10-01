@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body class="uniform-admin system-monitor-body">
   <div class="queue-shell">
@@ -220,5 +221,6 @@
 
   <script src="../Assets/js/system-monitor.js?v=20260928-security-alerts-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

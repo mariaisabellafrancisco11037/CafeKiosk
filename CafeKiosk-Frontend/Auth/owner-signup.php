@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body>
   <main class="signup-page">
@@ -29,7 +30,7 @@
         </div>
         <div class="signup-field">
           <label for="ownerPhone">Phone Number</label>
-          <input id="ownerPhone" maxlength="40" autocomplete="tel" placeholder="Optional">
+          <input id="ownerPhone" maxlength="40" autocomplete="tel" required placeholder="Required for owner verification">
         </div>
         <div class="signup-field">
           <label for="ownerEmail">Email Address</label>
@@ -47,7 +48,9 @@
           <label for="ownerConfirmPassword">Confirm Password</label>
           <input id="ownerConfirmPassword" type="password" minlength="8" maxlength="128" required autocomplete="new-password">
         </div>
-        <div class="signup-note">After signup, your request is sent to the <strong>System Administrator for approval</strong>. Staff and Manager accounts can only be invited after the cafe owner is approved.</div>
+        <div class="signup-note">Only cafe owners or legally authorized representatives may register a cafe. After signup, the request is sent to the <strong>System Administrator for manual approval</strong>, and an email notification is sent to the configured IT/System Admin address.</div>
+        <div class="signup-field full owner-declaration"><label class="owner-declaration-label" for="ownerDeclaration"><input id="ownerDeclaration" type="checkbox" required><span>I confirm that I am the cafe owner or the legally authorized representative of this cafe. I understand the account remains pending until the System Administrator reviews it.</span></label></div>
+
         <div class="signup-field full">
           <div id="ownerSignupMessage" class="signup-message" role="status" aria-live="polite"></div>
           <button class="signup-submit" type="submit">CREATE CAFE ACCOUNT</button>
@@ -114,8 +117,9 @@
     </section>
   </main>
   <script src="../Assets/js/kiosk-qr.js?v=1"></script>
-  <script src="../Assets/js/signup.js?v=4"></script>
+  <script src="../Assets/js/signup.js?v=adviser-owner-verification-v1"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

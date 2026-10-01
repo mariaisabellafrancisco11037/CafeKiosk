@@ -12,6 +12,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-inventory-touch-scroll-v4">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body class="uniform-admin inventory-page">
   <div class="inventory-shell">
@@ -378,5 +379,6 @@
   <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

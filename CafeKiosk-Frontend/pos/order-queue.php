@@ -12,6 +12,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body class="uniform-pos">
   <div class="queue-app">
@@ -302,5 +303,6 @@
   <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

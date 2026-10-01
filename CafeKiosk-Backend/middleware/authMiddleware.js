@@ -271,6 +271,13 @@ function isAdmin(req, res, next) {
   return normalizeRole(req.user?.role) === 'admin' ? next() : apiForbidden(res, 'Admin access is required.');
 }
 
+
+function isOwner(req, res, next) {
+  return normalizeRole(req.user?.role) === 'admin' && Boolean(req.user?.isOwner)
+    ? next()
+    : apiForbidden(res, 'Cafe owner access is required for this customization.');
+}
+
 function isStaff(req, res, next) {
   return normalizeRole(req.user?.role) === 'staff' ? next() : apiForbidden(res, 'Staff access is required.');
 }
@@ -334,6 +341,7 @@ module.exports = {
   requireAuth,
   optionalAuth,
   isAdmin,
+  isOwner,
   isStaff,
   isStaffOrAdmin,
   requireRole,

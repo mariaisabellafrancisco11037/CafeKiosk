@@ -1,0 +1,1 @@
+(function(){'use strict';if(document.querySelector('.cafekiosk-developer-footer'))return;const f=document.createElement('footer');f.className='cafekiosk-developer-footer';f.setAttribute('aria-label','Developer attribution');f.textContent='Developed by: Maria Isabella Francisco (Developer of Cafekiosk)';document.body.appendChild(f);}());

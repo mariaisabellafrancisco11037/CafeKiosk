@@ -213,7 +213,8 @@
       "category": "Coffee",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 0
+      "sortOrder": 0,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Double Espresso",
@@ -221,7 +222,8 @@
       "category": "Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 1
+      "sortOrder": 1,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Americano",
@@ -229,7 +231,8 @@
       "category": "Coffee",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 2
+      "sortOrder": 2,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cafe Latte",
@@ -237,7 +240,8 @@
       "category": "Coffee",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 3
+      "sortOrder": 3,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cappuccino",
@@ -245,7 +249,8 @@
       "category": "Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 4
+      "sortOrder": 4,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Flat White",
@@ -253,7 +258,8 @@
       "category": "Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 5
+      "sortOrder": 5,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cafe Mocha",
@@ -261,7 +267,8 @@
       "category": "Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 6
+      "sortOrder": 6,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "White Chocolate Mocha",
@@ -269,7 +276,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 7
+      "sortOrder": 7,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Caramel Macchiato",
@@ -277,7 +285,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 8
+      "sortOrder": 8,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Vanilla Latte",
@@ -285,7 +294,8 @@
       "category": "Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 9
+      "sortOrder": 9,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Caramel Latte",
@@ -293,7 +303,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 10
+      "sortOrder": 10,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Hazelnut Latte",
@@ -301,7 +312,8 @@
       "category": "Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 11
+      "sortOrder": 11,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Spanish Latte",
@@ -309,7 +321,8 @@
       "category": "Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 12
+      "sortOrder": 12,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Brown Sugar Latte",
@@ -317,7 +330,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 13
+      "sortOrder": 13,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Salted Caramel Latte",
@@ -325,7 +339,8 @@
       "category": "Coffee",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 14
+      "sortOrder": 14,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cinnamon Latte",
@@ -333,7 +348,8 @@
       "category": "Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 15
+      "sortOrder": 15,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Honey Cinnamon Latte",
@@ -341,7 +357,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 16
+      "sortOrder": 16,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Pistachio Latte",
@@ -349,7 +366,8 @@
       "category": "Coffee",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 17
+      "sortOrder": 17,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Toffee Nut Latte",
@@ -357,7 +375,8 @@
       "category": "Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 18
+      "sortOrder": 18,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Dark Chocolate Mocha",
@@ -365,7 +384,8 @@
       "category": "Coffee",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 19
+      "sortOrder": 19,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Black Coffee",
@@ -373,7 +393,8 @@
       "category": "Coffee",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 20
+      "sortOrder": 20,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cafe Au Lait",
@@ -381,7 +402,8 @@
       "category": "Coffee",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 21
+      "sortOrder": 21,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Vietnamese Coffee",
@@ -389,7 +411,8 @@
       "category": "Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 22
+      "sortOrder": 22,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Macchiato",
@@ -397,7 +420,8 @@
       "category": "Coffee",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 23
+      "sortOrder": 23,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Affogato",
@@ -405,7 +429,8 @@
       "category": "Coffee",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 24
+      "sortOrder": 24,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Cold Brew",
@@ -413,7 +438,8 @@
       "category": "Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 25
+      "sortOrder": 25,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Iced Americano",
@@ -421,7 +447,8 @@
       "category": "Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 26
+      "sortOrder": 26,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Iced Cafe Latte",
@@ -429,7 +456,8 @@
       "category": "Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 27
+      "sortOrder": 27,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Iced Cafe Mocha",
@@ -437,7 +465,8 @@
       "category": "Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 28
+      "sortOrder": 28,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Iced Caramel Macchiato",
@@ -445,7 +474,8 @@
       "category": "Coffee",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 29
+      "sortOrder": 29,
+      "image": "/Assets/images/coffee.png"
     },
     {
       "name": "Classic Hot Chocolate",
@@ -453,7 +483,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 30
+      "sortOrder": 30,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Dark Hot Chocolate",
@@ -461,7 +492,8 @@
       "category": "Non-Coffee",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 31
+      "sortOrder": 31,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "White Hot Chocolate",
@@ -469,7 +501,8 @@
       "category": "Non-Coffee",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 32
+      "sortOrder": 32,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Iced Chocolate",
@@ -477,7 +510,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 33
+      "sortOrder": 33,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Chocolate Milk",
@@ -485,7 +519,8 @@
       "category": "Non-Coffee",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 34
+      "sortOrder": 34,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Matcha Latte",
@@ -493,7 +528,8 @@
       "category": "Non-Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 35
+      "sortOrder": 35,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Iced Matcha Latte",
@@ -501,7 +537,8 @@
       "category": "Non-Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 36
+      "sortOrder": 36,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Strawberry Matcha Latte",
@@ -509,7 +546,8 @@
       "category": "Non-Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 37
+      "sortOrder": 37,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Mango Matcha Latte",
@@ -517,7 +555,8 @@
       "category": "Non-Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 38
+      "sortOrder": 38,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Vanilla Matcha Latte",
@@ -525,7 +564,8 @@
       "category": "Non-Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 39
+      "sortOrder": 39,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Strawberry Milk",
@@ -533,7 +573,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 40
+      "sortOrder": 40,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Mango Milk",
@@ -541,7 +582,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 41
+      "sortOrder": 41,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Banana Milk",
@@ -549,7 +591,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 42
+      "sortOrder": 42,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Cookies and Cream",
@@ -557,7 +600,8 @@
       "category": "Non-Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 43
+      "sortOrder": 43,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Chocolate Oreo",
@@ -565,7 +609,8 @@
       "category": "Non-Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 44
+      "sortOrder": 44,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Strawberry Smoothie",
@@ -573,7 +618,8 @@
       "category": "Non-Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 45
+      "sortOrder": 45,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Mango Smoothie",
@@ -581,7 +627,8 @@
       "category": "Non-Coffee",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 46
+      "sortOrder": 46,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Banana Smoothie",
@@ -589,7 +636,8 @@
       "category": "Non-Coffee",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 47
+      "sortOrder": 47,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Mixed Berry Smoothie",
@@ -597,7 +645,8 @@
       "category": "Non-Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 48
+      "sortOrder": 48,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Avocado Smoothie",
@@ -605,7 +654,8 @@
       "category": "Non-Coffee",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 49
+      "sortOrder": 49,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Fresh Lemonade",
@@ -613,7 +663,8 @@
       "category": "Non-Coffee",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 50
+      "sortOrder": 50,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Strawberry Lemonade",
@@ -621,7 +672,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 51
+      "sortOrder": 51,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Honey Lemon",
@@ -629,7 +681,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 52
+      "sortOrder": 52,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Peach Iced Tea",
@@ -637,7 +690,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 53
+      "sortOrder": 53,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Lemon Iced Tea",
@@ -645,7 +699,8 @@
       "category": "Non-Coffee",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 54
+      "sortOrder": 54,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Lychee Iced Tea",
@@ -653,7 +708,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 55
+      "sortOrder": 55,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Passion Fruit Tea",
@@ -661,7 +717,8 @@
       "category": "Non-Coffee",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 56
+      "sortOrder": 56,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Green Apple Soda",
@@ -669,7 +726,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 57
+      "sortOrder": 57,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Strawberry Soda",
@@ -677,7 +735,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 58
+      "sortOrder": 58,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Blueberry Soda",
@@ -685,7 +744,8 @@
       "category": "Non-Coffee",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 59
+      "sortOrder": 59,
+      "image": "/Assets/images/non-coffee.png"
     },
     {
       "name": "Classic Milk Tea",
@@ -693,7 +753,8 @@
       "category": "Milktea",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 60
+      "sortOrder": 60,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Pearl Milk Tea",
@@ -701,7 +762,8 @@
       "category": "Milktea",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 61
+      "sortOrder": 61,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Brown Sugar Milk Tea",
@@ -709,7 +771,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 62
+      "sortOrder": 62,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Wintermelon Milk Tea",
@@ -717,7 +780,8 @@
       "category": "Milktea",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 63
+      "sortOrder": 63,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Okinawa Milk Tea",
@@ -725,7 +789,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 64
+      "sortOrder": 64,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Hokkaido Milk Tea",
@@ -733,7 +798,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 65
+      "sortOrder": 65,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Thai Milk Tea",
@@ -741,7 +807,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 66
+      "sortOrder": 66,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Taro Milk Tea",
@@ -749,7 +816,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 67
+      "sortOrder": 67,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Matcha Milk Tea",
@@ -757,7 +825,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 68
+      "sortOrder": 68,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Chocolate Milk Tea",
@@ -765,7 +834,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 69
+      "sortOrder": 69,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Strawberry Milk Tea",
@@ -773,7 +843,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 70
+      "sortOrder": 70,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Mango Milk Tea",
@@ -781,7 +852,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 71
+      "sortOrder": 71,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Honeydew Milk Tea",
@@ -789,7 +861,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 72
+      "sortOrder": 72,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Vanilla Milk Tea",
@@ -797,7 +870,8 @@
       "category": "Milktea",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 73
+      "sortOrder": 73,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Caramel Milk Tea",
@@ -805,7 +879,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 74
+      "sortOrder": 74,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Hazelnut Milk Tea",
@@ -813,7 +888,8 @@
       "category": "Milktea",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 75
+      "sortOrder": 75,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Cookies and Cream Milk Tea",
@@ -821,7 +897,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 76
+      "sortOrder": 76,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Cheesecake Milk Tea",
@@ -829,7 +906,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 77
+      "sortOrder": 77,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Red Velvet Milk Tea",
@@ -837,7 +915,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 78
+      "sortOrder": 78,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Dark Chocolate Milk Tea",
@@ -845,7 +924,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 79
+      "sortOrder": 79,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Salted Caramel Milk Tea",
@@ -853,7 +933,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 80
+      "sortOrder": 80,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Brown Sugar Pearl Milk",
@@ -861,7 +942,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 81
+      "sortOrder": 81,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Taro Pearl Milk Tea",
@@ -869,7 +951,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 82
+      "sortOrder": 82,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Matcha Pearl Milk Tea",
@@ -877,7 +960,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 83
+      "sortOrder": 83,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Wintermelon Pearl Milk Tea",
@@ -885,7 +969,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 84
+      "sortOrder": 84,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Oreo Milk Tea",
@@ -893,7 +978,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 85
+      "sortOrder": 85,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Cream Cheese Milk Tea",
@@ -901,7 +987,8 @@
       "category": "Milktea",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 86
+      "sortOrder": 86,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Pudding Milk Tea",
@@ -909,7 +996,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 87
+      "sortOrder": 87,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Grass Jelly Milk Tea",
@@ -917,7 +1005,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 88
+      "sortOrder": 88,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Honey Pearl Milk Tea",
@@ -925,7 +1014,8 @@
       "category": "Milktea",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 89
+      "sortOrder": 89,
+      "image": "/Assets/images/milktea.png"
     },
     {
       "name": "Classic Club Sandwich",
@@ -933,7 +1023,8 @@
       "category": "Food",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 90
+      "sortOrder": 90,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Ham and Cheese Sandwich",
@@ -941,7 +1032,8 @@
       "category": "Food",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 91
+      "sortOrder": 91,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Sandwich",
@@ -949,7 +1041,8 @@
       "category": "Food",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 92
+      "sortOrder": 92,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Tuna Sandwich",
@@ -957,7 +1050,8 @@
       "category": "Food",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 93
+      "sortOrder": 93,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Egg Sandwich",
@@ -965,7 +1059,8 @@
       "category": "Food",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 94
+      "sortOrder": 94,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Grilled Cheese Sandwich",
@@ -973,7 +1068,8 @@
       "category": "Food",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 95
+      "sortOrder": 95,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Pesto Sandwich",
@@ -981,7 +1077,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 96
+      "sortOrder": 96,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "BLT Sandwich",
@@ -989,7 +1086,8 @@
       "category": "Food",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 97
+      "sortOrder": 97,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Wrap",
@@ -997,7 +1095,8 @@
       "category": "Food",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 98
+      "sortOrder": 98,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Tuna Wrap",
@@ -1005,7 +1104,8 @@
       "category": "Food",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 99
+      "sortOrder": 99,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Burger",
@@ -1013,7 +1113,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 100
+      "sortOrder": 100,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Classic Beef Burger",
@@ -1021,7 +1122,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 101
+      "sortOrder": 101,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Cheeseburger",
@@ -1029,7 +1131,8 @@
       "category": "Food",
       "price": 210,
       "availability": "Available",
-      "sortOrder": 102
+      "sortOrder": 102,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Bacon Cheeseburger",
@@ -1037,7 +1140,8 @@
       "category": "Food",
       "price": 230,
       "availability": "Available",
-      "sortOrder": 103
+      "sortOrder": 103,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Mushroom Burger",
@@ -1045,7 +1149,8 @@
       "category": "Food",
       "price": 220,
       "availability": "Available",
-      "sortOrder": 104
+      "sortOrder": 104,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Carbonara",
@@ -1053,7 +1158,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 105
+      "sortOrder": 105,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Spaghetti Bolognese",
@@ -1061,7 +1167,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 106
+      "sortOrder": 106,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Alfredo Pasta",
@@ -1069,7 +1176,8 @@
       "category": "Food",
       "price": 210,
       "availability": "Available",
-      "sortOrder": 107
+      "sortOrder": 107,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Pesto Pasta",
@@ -1077,7 +1185,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 108
+      "sortOrder": 108,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Baked Mac and Cheese",
@@ -1085,7 +1194,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 109
+      "sortOrder": 109,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Rice Bowl",
@@ -1093,7 +1203,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 110
+      "sortOrder": 110,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Beef Rice Bowl",
@@ -1101,7 +1212,8 @@
       "category": "Food",
       "price": 200,
       "availability": "Available",
-      "sortOrder": 111
+      "sortOrder": 111,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Teriyaki Chicken Bowl",
@@ -1109,7 +1221,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 112
+      "sortOrder": 112,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Garlic Chicken Rice",
@@ -1117,7 +1230,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 113
+      "sortOrder": 113,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Beef Tapa Rice",
@@ -1125,7 +1239,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 114
+      "sortOrder": 114,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Chicken Caesar Salad",
@@ -1133,7 +1248,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 115
+      "sortOrder": 115,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Garden Salad",
@@ -1141,7 +1257,8 @@
       "category": "Food",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 116
+      "sortOrder": 116,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Breakfast Plate",
@@ -1149,7 +1266,8 @@
       "category": "Food",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 117
+      "sortOrder": 117,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Bacon and Egg Breakfast",
@@ -1157,7 +1275,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 118
+      "sortOrder": 118,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "Sausage and Egg Breakfast",
@@ -1165,7 +1284,8 @@
       "category": "Food",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 119
+      "sortOrder": 119,
+      "image": "/Assets/images/food.png"
     },
     {
       "name": "French Fries",
@@ -1173,7 +1293,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 120
+      "sortOrder": 120,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Cheese Fries",
@@ -1181,7 +1302,8 @@
       "category": "Snack",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 121
+      "sortOrder": 121,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Loaded Fries",
@@ -1189,7 +1311,8 @@
       "category": "Snack",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 122
+      "sortOrder": 122,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Potato Wedges",
@@ -1197,7 +1320,8 @@
       "category": "Snack",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 123
+      "sortOrder": 123,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Onion Rings",
@@ -1205,7 +1329,8 @@
       "category": "Snack",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 124
+      "sortOrder": 124,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Nachos",
@@ -1213,7 +1338,8 @@
       "category": "Snack",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 125
+      "sortOrder": 125,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Cheesy Nachos",
@@ -1221,7 +1347,8 @@
       "category": "Snack",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 126
+      "sortOrder": 126,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Loaded Nachos",
@@ -1229,7 +1356,8 @@
       "category": "Snack",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 127
+      "sortOrder": 127,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Mozzarella Sticks",
@@ -1237,7 +1365,8 @@
       "category": "Snack",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 128
+      "sortOrder": 128,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Chicken Nuggets",
@@ -1245,7 +1374,8 @@
       "category": "Snack",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 129
+      "sortOrder": 129,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Chicken Wings",
@@ -1253,7 +1383,8 @@
       "category": "Snack",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 130
+      "sortOrder": 130,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Buffalo Wings",
@@ -1261,7 +1392,8 @@
       "category": "Snack",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 131
+      "sortOrder": 131,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Garlic Parmesan Wings",
@@ -1269,7 +1401,8 @@
       "category": "Snack",
       "price": 190,
       "availability": "Available",
-      "sortOrder": 132
+      "sortOrder": 132,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Chicken Tenders",
@@ -1277,7 +1410,8 @@
       "category": "Snack",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 133
+      "sortOrder": 133,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Popcorn Chicken",
@@ -1285,7 +1419,8 @@
       "category": "Snack",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 134
+      "sortOrder": 134,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Cheese Sticks",
@@ -1293,7 +1428,8 @@
       "category": "Snack",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 135
+      "sortOrder": 135,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Spring Rolls",
@@ -1301,7 +1437,8 @@
       "category": "Snack",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 136
+      "sortOrder": 136,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Fish and Chips",
@@ -1309,7 +1446,8 @@
       "category": "Snack",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 137
+      "sortOrder": 137,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Hash Browns",
@@ -1317,7 +1455,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 138
+      "sortOrder": 138,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Potato Croquettes",
@@ -1325,7 +1464,8 @@
       "category": "Snack",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 139
+      "sortOrder": 139,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Garlic Bread",
@@ -1333,7 +1473,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 140
+      "sortOrder": 140,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Cheesy Garlic Bread",
@@ -1341,7 +1482,8 @@
       "category": "Snack",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 141
+      "sortOrder": 141,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Mini Pizza",
@@ -1349,7 +1491,8 @@
       "category": "Snack",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 142
+      "sortOrder": 142,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Ham and Cheese Croissant",
@@ -1357,7 +1500,8 @@
       "category": "Snack",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 143
+      "sortOrder": 143,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Sausage Roll",
@@ -1365,7 +1509,8 @@
       "category": "Snack",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 144
+      "sortOrder": 144,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Chocolate Chip Cookie",
@@ -1373,7 +1518,8 @@
       "category": "Snack",
       "price": 70,
       "availability": "Available",
-      "sortOrder": 145
+      "sortOrder": 145,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Oatmeal Cookie",
@@ -1381,7 +1527,8 @@
       "category": "Snack",
       "price": 70,
       "availability": "Available",
-      "sortOrder": 146
+      "sortOrder": 146,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Chocolate Muffin",
@@ -1389,7 +1536,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 147
+      "sortOrder": 147,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Blueberry Muffin",
@@ -1397,7 +1545,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 148
+      "sortOrder": 148,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Banana Muffin",
@@ -1405,7 +1554,8 @@
       "category": "Snack",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 149
+      "sortOrder": 149,
+      "image": "/Assets/images/snack.png"
     },
     {
       "name": "Classic Cheesecake",
@@ -1413,7 +1563,8 @@
       "category": "Dessert",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 150
+      "sortOrder": 150,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Blueberry Cheesecake",
@@ -1421,7 +1572,8 @@
       "category": "Dessert",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 151
+      "sortOrder": 151,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Strawberry Cheesecake",
@@ -1429,7 +1581,8 @@
       "category": "Dessert",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 152
+      "sortOrder": 152,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Oreo Cheesecake",
@@ -1437,7 +1590,8 @@
       "category": "Dessert",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 153
+      "sortOrder": 153,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Basque Burnt Cheesecake",
@@ -1445,7 +1599,8 @@
       "category": "Dessert",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 154
+      "sortOrder": 154,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Cake",
@@ -1453,7 +1608,8 @@
       "category": "Dessert",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 155
+      "sortOrder": 155,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Red Velvet Cake",
@@ -1461,7 +1617,8 @@
       "category": "Dessert",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 156
+      "sortOrder": 156,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Carrot Cake",
@@ -1469,7 +1626,8 @@
       "category": "Dessert",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 157
+      "sortOrder": 157,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Mocha Cake",
@@ -1477,7 +1635,8 @@
       "category": "Dessert",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 158
+      "sortOrder": 158,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Ube Cake",
@@ -1485,7 +1644,8 @@
       "category": "Dessert",
       "price": 160,
       "availability": "Available",
-      "sortOrder": 159
+      "sortOrder": 159,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Tiramisu",
@@ -1493,7 +1653,8 @@
       "category": "Dessert",
       "price": 180,
       "availability": "Available",
-      "sortOrder": 160
+      "sortOrder": 160,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Brownie",
@@ -1501,7 +1662,8 @@
       "category": "Dessert",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 161
+      "sortOrder": 161,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Walnut Brownie",
@@ -1509,7 +1671,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 162
+      "sortOrder": 162,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Lava Cake",
@@ -1517,7 +1680,8 @@
       "category": "Dessert",
       "price": 170,
       "availability": "Available",
-      "sortOrder": 163
+      "sortOrder": 163,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Banana Bread",
@@ -1525,7 +1689,8 @@
       "category": "Dessert",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 164
+      "sortOrder": 164,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Donut",
@@ -1533,7 +1698,8 @@
       "category": "Dessert",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 165
+      "sortOrder": 165,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Glazed Donut",
@@ -1541,7 +1707,8 @@
       "category": "Dessert",
       "price": 80,
       "availability": "Available",
-      "sortOrder": 166
+      "sortOrder": 166,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Strawberry Donut",
@@ -1549,7 +1716,8 @@
       "category": "Dessert",
       "price": 90,
       "availability": "Available",
-      "sortOrder": 167
+      "sortOrder": 167,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Cinnamon Roll",
@@ -1557,7 +1725,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 168
+      "sortOrder": 168,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Croissant",
@@ -1565,7 +1734,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 169
+      "sortOrder": 169,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Sundae",
@@ -1573,7 +1743,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 170
+      "sortOrder": 170,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Strawberry Sundae",
@@ -1581,7 +1752,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 171
+      "sortOrder": 171,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Vanilla Ice Cream",
@@ -1589,7 +1761,8 @@
       "category": "Dessert",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 172
+      "sortOrder": 172,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Ice Cream",
@@ -1597,7 +1770,8 @@
       "category": "Dessert",
       "price": 100,
       "availability": "Available",
-      "sortOrder": 173
+      "sortOrder": 173,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Cookies and Cream Ice Cream",
@@ -1605,7 +1779,8 @@
       "category": "Dessert",
       "price": 110,
       "availability": "Available",
-      "sortOrder": 174
+      "sortOrder": 174,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Mango Graham",
@@ -1613,7 +1788,8 @@
       "category": "Dessert",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 175
+      "sortOrder": 175,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Mango Float",
@@ -1621,7 +1797,8 @@
       "category": "Dessert",
       "price": 130,
       "availability": "Available",
-      "sortOrder": 176
+      "sortOrder": 176,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Leche Flan",
@@ -1629,7 +1806,8 @@
       "category": "Dessert",
       "price": 120,
       "availability": "Available",
-      "sortOrder": 177
+      "sortOrder": 177,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Chocolate Mousse",
@@ -1637,7 +1815,8 @@
       "category": "Dessert",
       "price": 140,
       "availability": "Available",
-      "sortOrder": 178
+      "sortOrder": 178,
+      "image": "/Assets/images/dessert.png"
     },
     {
       "name": "Panna Cotta",
@@ -1645,7 +1824,8 @@
       "category": "Dessert",
       "price": 150,
       "availability": "Available",
-      "sortOrder": 179
+      "sortOrder": 179,
+      "image": "/Assets/images/dessert.png"
     }
   ]
 }

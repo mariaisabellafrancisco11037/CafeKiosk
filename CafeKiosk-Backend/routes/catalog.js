@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const store = require('../services/catalogStore');
 const pool = require('../config/dbPool');
-const { verifyToken, optionalAuth, isAdmin } = require('../middleware/authMiddleware');
+const { verifyToken, optionalAuth, isAdmin, isOwner } = require('../middleware/authMiddleware');
 
 async function checkoutConfig(cafeId) {
   const [[paymentRows], [taxRows], [preferenceRows]] = await Promise.all([
@@ -60,7 +60,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.put('/', verifyToken, isAdmin, async (req, res, next) => {
+router.put('/', verifyToken, isAdmin, isOwner, async (req, res, next) => {
   try {
     const cafeId = String(req.user?.cafeId || 'cafe-1');
     const products = await store.replace(

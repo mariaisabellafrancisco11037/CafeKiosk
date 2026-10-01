@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const dbPool = require('../config/dbPool');
 
@@ -19,13 +20,14 @@ async function prepareSchema() {
 
     const requiredColumns = [
       ['approval_pin_hash', 'VARCHAR(255) NULL'],
-      ['approval_pin_updated_at', 'DATETIME NULL']
+      ['approval_pin_updated_at', 'DATETIME NULL'],
+      ['approval_id', 'VARCHAR(32) NULL']
     ];
 
     const [columns] = await connection.execute(
       `SELECT COLUMN_NAME FROM information_schema.COLUMNS
        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
-         AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at')`
+         AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at','approval_id')`
     );
     const names = new Set(columns.map(row => String(row.COLUMN_NAME || '')));
 
@@ -38,10 +40,16 @@ async function prepareSchema() {
       }
     }
 
+    try {
+      await connection.query('ALTER TABLE users ADD UNIQUE KEY uq_users_approval_id (approval_id)');
+    } catch (error) {
+      if (!['ER_DUP_KEYNAME', 'ER_DUP_ENTRY'].includes(error?.code)) throw error;
+    }
+
     const [verified] = await connection.execute(
       `SELECT COLUMN_NAME FROM information_schema.COLUMNS
        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
-         AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at')`
+         AND COLUMN_NAME IN ('approval_pin_hash','approval_pin_updated_at','approval_id')`
     );
     const verifiedNames = new Set(verified.map(row => String(row.COLUMN_NAME || '')));
     if (!requiredColumns.every(([columnName]) => verifiedNames.has(columnName))) {
@@ -67,6 +75,36 @@ async function ensureApprovalPinSchema() {
   await schemaPromise;
 }
 
+function normalizeApprovalId(value) {
+  return String(value ?? '').trim().toUpperCase();
+}
+
+function validApprovalId(value) {
+  return /^(ADM|MGR)-[A-F0-9]{6}$/.test(normalizeApprovalId(value));
+}
+
+async function ensureUserApprovalId(cafeId, userId, roleValue) {
+  await ensureApprovalPinSchema();
+  const numericUserId = Number(userId);
+  const role = String(roleValue || '').trim().toLowerCase();
+  if (!Number.isFinite(numericUserId) || numericUserId <= 0 || !['admin','manager'].includes(role)) return '';
+  const [existing] = await dbPool.execute('SELECT approval_id FROM users WHERE cafe_id=? AND user_id=? LIMIT 1',[String(cafeId||''),numericUserId]);
+  const current = normalizeApprovalId(existing?.[0]?.approval_id || '');
+  if (validApprovalId(current)) return current;
+  const prefix = role === 'manager' ? 'MGR' : 'ADM';
+  for (let attempt=0; attempt<12; attempt+=1) {
+    const candidate = `${prefix}-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
+    try {
+      const [result] = await dbPool.execute(`UPDATE users SET approval_id=? WHERE cafe_id=? AND user_id=? AND (approval_id IS NULL OR approval_id='')`,[candidate,String(cafeId||''),numericUserId]);
+      if (Number(result?.affectedRows||0)===1) return candidate;
+      const [rows]=await dbPool.execute('SELECT approval_id FROM users WHERE cafe_id=? AND user_id=? LIMIT 1',[String(cafeId||''),numericUserId]);
+      const found=normalizeApprovalId(rows?.[0]?.approval_id||'');
+      if(validApprovalId(found)) return found;
+    } catch(error) { if(error?.code!=='ER_DUP_ENTRY') throw error; }
+  }
+  throw new Error('Unable to generate a unique Approval ID.');
+}
+
 function normalizePin(value) {
   return String(value ?? '').trim();
 }
@@ -83,7 +121,7 @@ async function getUserApprovalPinStatus(cafeId, userId) {
   }
 
   const [rows] = await dbPool.execute(
-    `SELECT user_id, full_name, username, role, status,
+    `SELECT user_id, full_name, username, role, status, approval_id,
             approval_pin_hash IS NOT NULL AND approval_pin_hash <> '' AS has_pin,
             approval_pin_updated_at
        FROM users
@@ -94,9 +132,11 @@ async function getUserApprovalPinStatus(cafeId, userId) {
 
   if (!rows.length) return { found: false, hasPin: false, updatedAt: null };
   const row = rows[0];
+  const approvalId = await ensureUserApprovalId(cafeId, numericUserId, row.role);
   return {
     found: true,
     userId: Number(row.user_id),
+    approvalId,
     name: row.full_name || row.username || row.role,
     username: row.username || '',
     role: row.role,
@@ -168,56 +208,17 @@ async function verifyUserApprovalPin(cafeId, userId, pinValue) {
   };
 }
 
-async function verifyCafeApprovalPin(cafeId, pinValue) {
+async function verifyCafeApprovalPin(cafeId, pinValue, approvalIdValue) {
   const pin = normalizePin(pinValue);
-  if (!validPin(pin)) {
-    return {
-      valid: false,
-      code: 'APPROVAL_PIN_REQUIRED',
-      message: 'Enter a valid 4-6 digit Admin/Manager PIN.'
-    };
-  }
-
+  const approvalId = normalizeApprovalId(approvalIdValue);
+  if (!validApprovalId(approvalId)) return {valid:false,code:'APPROVAL_ID_REQUIRED',message:'Enter the Admin/Manager Approval ID first.'};
+  if (!validPin(pin)) return {valid:false,code:'APPROVAL_PIN_REQUIRED',message:'Enter a valid 4-6 digit Admin/Manager PIN.'};
   await ensureApprovalPinSchema();
-
-  const [rows] = await dbPool.execute(
-    `SELECT user_id, full_name, username, role, approval_pin_hash
-       FROM users
-      WHERE cafe_id = ?
-        AND role IN ('Admin','Manager')
-        AND status = 'Active'
-        AND approval_pin_hash IS NOT NULL
-        AND approval_pin_hash <> ''`,
-    [String(cafeId || '')]
-  );
-
-  if (!rows.length) {
-    return {
-      valid: false,
-      code: 'APPROVAL_PIN_NOT_CONFIGURED',
-      message: 'No approval PIN is configured for this cafe. An Admin or Manager must set one from their Profile menu.'
-    };
-  }
-
-  for (const row of rows) {
-    if (await bcrypt.compare(pin, String(row.approval_pin_hash || ''))) {
-      return {
-        valid: true,
-        approver: {
-          userId: Number(row.user_id),
-          name: row.full_name || row.username || row.role,
-          username: row.username || '',
-          role: row.role
-        }
-      };
-    }
-  }
-
-  return {
-    valid: false,
-    code: 'APPROVAL_PIN_INVALID',
-    message: 'Invalid Admin/Manager approval PIN.'
-  };
+  const [rows] = await dbPool.execute(`SELECT user_id, full_name, username, role, approval_id, approval_pin_hash FROM users WHERE cafe_id=? AND approval_id=? AND role IN ('Admin','Manager') AND status='Active' AND approval_pin_hash IS NOT NULL AND approval_pin_hash<>'' LIMIT 1`,[String(cafeId||''),approvalId]);
+  if(!rows.length) return {valid:false,code:'APPROVAL_CREDENTIALS_INVALID',message:'The Approval ID or PIN is invalid.'};
+  const row=rows[0];
+  if(!(await bcrypt.compare(pin,String(row.approval_pin_hash||'')))) return {valid:false,code:'APPROVAL_CREDENTIALS_INVALID',message:'The Approval ID or PIN is invalid.'};
+  return {valid:true,approver:{userId:Number(row.user_id),approvalId:row.approval_id||approvalId,name:row.full_name||row.username||row.role,username:row.username||'',role:row.role}};
 }
 
 module.exports = {
@@ -226,5 +227,8 @@ module.exports = {
   validPin,
   getUserApprovalPinStatus,
   verifyUserApprovalPin,
-  verifyCafeApprovalPin
+  verifyCafeApprovalPin,
+  ensureUserApprovalId,
+  normalizeApprovalId,
+  validApprovalId
 };

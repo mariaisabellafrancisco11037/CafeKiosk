@@ -209,3 +209,5 @@ body {
 .approval-pending-details{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 12px;margin:16px auto;padding:13px;max-width:500px;border:1px solid #eadcca;border-radius:11px;background:#fffdf9;text-align:left}
 .approval-pending-details span{color:#907a65;font-size:10px}.approval-pending-details strong{color:#4d3827;font-size:11px;word-break:break-word}
 .approval-pending-help{font-size:10.5px!important}.approval-login-link{display:flex!important;align-items:center;justify-content:center;text-decoration:none;margin-top:10px}
+
+.owner-declaration{margin-top:4px}.owner-declaration-label{display:flex!important;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid #d9c7a9;border-radius:12px;background:#fffaf0;line-height:1.45}.owner-declaration-label input{width:18px!important;height:18px!important;min-width:18px;margin-top:2px}

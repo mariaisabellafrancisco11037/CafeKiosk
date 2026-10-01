@@ -24,6 +24,7 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 
 <body class="uniform-pos manager-pos-page">
@@ -502,5 +503,6 @@
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

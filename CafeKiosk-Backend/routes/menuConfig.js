@@ -5,6 +5,7 @@ const auth=require("../middleware/authMiddleware");
 const { optionalAuth } = auth;
 const verify=auth.verifyToken;
 const admin=auth.isAdmin;
+const owner=auth.isOwner;
 
 function publicConfig(config={}){
   const products={};
@@ -35,7 +36,7 @@ router.get("/",optionalAuth,async(req,res,next)=>{
   }catch(e){next(e);}
 });
 
-router.put("/",verify,admin,async(req,res,next)=>{
+router.put("/",verify,admin,owner,async(req,res,next)=>{
   try{
     const cafeId=String(req.user?.cafeId||"");
     const config=await store.put(cafeId,req.body?.config||req.body||{});

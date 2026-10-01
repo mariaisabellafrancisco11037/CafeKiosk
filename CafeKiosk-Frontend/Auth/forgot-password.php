@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body class="auth-body uniform-auth">
   <main class="login-page">
@@ -42,5 +43,6 @@
   <script src="/Assets/js/forgot-password.js?v=password-recovery-v1"></script>
   <script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>

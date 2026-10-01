@@ -1,11 +1,11 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { ensureApprovalPinSchema, getUserApprovalPinStatus, verifyUserApprovalPin, verifyCafeApprovalPin } = require('../services/approvalPinService');
+const { ensureApprovalPinSchema, getUserApprovalPinStatus, verifyUserApprovalPin, verifyCafeApprovalPin, ensureUserApprovalId } = require('../services/approvalPinService');
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
-const { sendStaffInvitation, sendPasswordResetEmail, getEmailConfig } = require('../services/emailService');
+const { sendStaffInvitation, sendPasswordResetEmail, sendCafeRegistrationNotification, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
 const { createSecurityAlert, clientIp } = require('../services/securityAlertService');
 const { ensureSessionSchema, createSession, attachTokenHash, revokeSession, revokeAllUserSessions, SESSION_HOURS } = require('../services/authSessionService');
@@ -1385,9 +1385,13 @@ exports.ownerSignup = async (req, res) => {
   const phone = safeText(req.body?.phone);
   const username = safeText(req.body?.username);
   const password = String(req.body?.password || '');
+  const ownerDeclaration = req.body?.ownerDeclaration === true || String(req.body?.ownerDeclaration || '').toLowerCase() === 'true';
 
-  if (!cafeName || !fullName || !email || !username || !password) {
-    return res.status(400).json({ success: false, message: 'Cafe name, owner name, email, username, and password are required.' });
+  if (!cafeName || !fullName || !email || !phone || !username || !password) {
+    return res.status(400).json({ success: false, message: 'Cafe name, owner name, email, phone number, username, and password are required.' });
+  }
+  if (!ownerDeclaration) {
+    return res.status(400).json({ success: false, message: 'Only the cafe owner or legally authorized representative may register a new cafe. Confirm the ownership declaration to continue.' });
   }
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
@@ -1461,9 +1465,12 @@ exports.ownerSignup = async (req, res) => {
 
     await connection.commit();
 
+    const adminNotification = await sendCafeRegistrationNotification({ cafeName, ownerName: fullName, ownerEmail: email, ownerPhone: phone, cafeId, requestedAt: new Date().toISOString() }).catch(error => ({sent:false,error:error?.message||'Notification failed.'}));
+
     return res.status(201).json({
       success: true,
       pendingApproval: true,
+      adminNotificationSent: Boolean(adminNotification?.sent),
       message: 'Registration submitted. A System Administrator must approve this cafe account before the owner can sign in.',
       cafeId,
       userId: userResult.insertId,
@@ -2131,6 +2138,7 @@ exports.setApprovalPin = async (req, res) => {
 
     await connection.commit();
     transactionOpen = false;
+    const approvalId = await ensureUserApprovalId(cafeId, numericUserId, role);
 
     // Audit logging is intentionally outside the transaction: an audit-log
     // problem must never turn a successful PIN change into a false failure.
@@ -2149,6 +2157,7 @@ exports.setApprovalPin = async (req, res) => {
     return res.json({
       success: true,
       hasPin: true,
+      approvalId,
       role,
       updatedAt: savedRows[0]?.approval_pin_updated_at || null,
       message: 'Approval PIN saved and verified successfully.'
@@ -2190,6 +2199,7 @@ exports.approvalPinStatus = async (req, res) => {
     return res.json({
       success: true,
       hasPin: status.hasPin,
+      approvalId: status.approvalId || '',
       updatedAt: status.updatedAt,
       role: status.role,
       recoverable: false
@@ -2209,7 +2219,7 @@ exports.verifyApprovalPin = async (req, res) => {
     const selfOnly = String(req.body?.scope || '').toLowerCase() === 'self';
     const result = selfOnly && ['Admin', 'Manager'].includes(role)
       ? await verifyUserApprovalPin(req.user?.cafeId, req.user?.userId, req.body?.pin)
-      : await verifyCafeApprovalPin(req.user?.cafeId, req.body?.pin);
+      : await verifyCafeApprovalPin(req.user?.cafeId, req.body?.pin, req.body?.approvalId);
 
     if (!result.valid) {
       return res.status(403).json({ success: false, code: result.code, message: result.message });

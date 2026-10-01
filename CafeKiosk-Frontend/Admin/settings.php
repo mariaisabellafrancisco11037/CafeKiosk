@@ -27,6 +27,7 @@
 @media(max-width:800px){.settings-config-grid,.settings-admin-grid{grid-template-columns:1fr}.settings-page-intro{display:block}.settings-config-card,.settings-link-card{min-height:unset;padding:15px}.settings-config-icon,.settings-link-icon{width:46px;height:46px;border-radius:13px}.payment-setting-row{grid-template-columns:40px minmax(0,1fr) auto}.payment-setting-icon{width:40px;height:40px}}
 @media(max-width:480px){.settings-config-card,.settings-link-card{grid-template-columns:44px minmax(0,1fr) 18px;gap:10px;padding:13px}.settings-config-copy p,.settings-link-copy span{font-size:10px}.settings-config-summary{font-size:9px}}
 </style>
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
 </head>
 <body class="ck-admin-page uniform-admin">
 <div class="ck-shell">
@@ -103,5 +104,6 @@
 <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
 <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
 <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
+  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
 </body>
 </html>
