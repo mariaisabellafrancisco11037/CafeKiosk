@@ -1933,3 +1933,134 @@ svg {
     font-size: 11.5px;
   }
 }
+
+
+/* Product image/database save feedback */
+.product-save-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(36, 25, 17, .38);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, visibility .18s ease;
+}
+
+.product-save-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+.product-save-card {
+    width: min(430px, calc(100vw - 34px));
+    padding: 24px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    background: #fffaf0;
+    border: 1px solid rgba(91, 66, 42, .22);
+    border-radius: 20px;
+    box-shadow: 0 24px 65px rgba(47, 31, 18, .24);
+    color: #4b321f;
+}
+
+.product-save-spinner {
+    width: 42px;
+    height: 42px;
+    border: 4px solid rgba(75, 143, 94, .18);
+    border-top-color: #4f9a68;
+    border-radius: 50%;
+    animation: product-save-spin .8s linear infinite;
+}
+
+.product-save-copy {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.product-save-copy strong {
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.product-save-copy span {
+    color: #80664f;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.product-save-progress {
+    grid-column: 1 / -1;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(79, 154, 104, .14);
+}
+
+.product-save-progress span {
+    display: block;
+    width: 38%;
+    height: 100%;
+    border-radius: inherit;
+    background: #4f9a68;
+    animation: product-save-progress 1.15s ease-in-out infinite;
+}
+
+body.product-save-busy {
+    cursor: progress;
+}
+
+.image-upload-status {
+    display: block;
+    margin-top: 9px;
+    color: #4f7f5c;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: center;
+}
+
+@keyframes product-save-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes product-save-progress {
+    0% { transform: translateX(-115%); }
+    55% { transform: translateX(95%); }
+    100% { transform: translateX(265%); }
+}
+
+@media (max-width: 560px) {
+    .product-save-card {
+        padding: 20px;
+        border-radius: 17px;
+    }
+
+    .product-save-spinner {
+        width: 36px;
+        height: 36px;
+    }
+
+    .product-save-copy strong {
+        font-size: 15px;
+    }
+
+    .product-save-copy span {
+        font-size: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-save-spinner,
+    .product-save-progress span {
+        animation-duration: 2s;
+    }
+}

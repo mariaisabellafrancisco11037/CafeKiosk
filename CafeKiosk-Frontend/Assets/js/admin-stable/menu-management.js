@@ -830,7 +830,7 @@ async function loadAvailabilityFromBackend() {
    LOCAL STORAGE
 ========================================================= */
 
-function persist() {
+function persist(options = {}) {
 
     localStorage.setItem(
         CATEGORIES_STORAGE_KEY,
@@ -849,7 +849,10 @@ function persist() {
 
 
     scheduleAvailabilitySync();
-    scheduleCatalogSync();
+
+    if (!options.skipCatalogSync) {
+        scheduleCatalogSync();
+    }
 
 }
 
@@ -1648,6 +1651,10 @@ function previewProductImageFile(file) {
     reader.readAsDataURL(
         file
     );
+
+    markProductImageReady(
+        file.name || ""
+    );
 }
 
 imageInput.addEventListener(
@@ -1708,6 +1715,153 @@ imageDropZone?.addEventListener(
 
 
 /* =========================================================
+   PRODUCT SAVE / IMAGE DATABASE LOADING SCREEN
+========================================================= */
+
+let productSaveOverlay = null;
+
+function ensureProductSaveOverlay() {
+    if (productSaveOverlay) {
+        return productSaveOverlay;
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "product-save-overlay";
+
+    overlay.setAttribute(
+        "aria-live",
+        "polite"
+    );
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    overlay.innerHTML = `
+        <div class="product-save-card" role="status">
+            <div class="product-save-spinner" aria-hidden="true"></div>
+
+            <div class="product-save-copy">
+                <strong id="productSaveTitle">
+                    Saving product...
+                </strong>
+
+                <span id="productSaveMessage">
+                    Preparing the product information.
+                </span>
+            </div>
+
+            <div class="product-save-progress" aria-hidden="true">
+                <span></span>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(
+        overlay
+    );
+
+    productSaveOverlay =
+        overlay;
+
+    return overlay;
+}
+
+function setProductSaveLoading(
+    title,
+    message
+) {
+    const overlay =
+        ensureProductSaveOverlay();
+
+    const titleNode =
+        overlay.querySelector(
+            "#productSaveTitle"
+        );
+
+    const messageNode =
+        overlay.querySelector(
+            "#productSaveMessage"
+        );
+
+    if (titleNode) {
+        titleNode.textContent =
+            title ||
+            "Saving product...";
+    }
+
+    if (messageNode) {
+        messageNode.textContent =
+            message ||
+            "Please wait.";
+    }
+
+    overlay.classList.add(
+        "is-visible"
+    );
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "product-save-busy"
+    );
+}
+
+function hideProductSaveLoading() {
+    if (!productSaveOverlay) {
+        return;
+    }
+
+    productSaveOverlay.classList.remove(
+        "is-visible"
+    );
+
+    productSaveOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "product-save-busy"
+    );
+}
+
+function markProductImageReady(fileName = "") {
+    if (!imageDropZone) {
+        return;
+    }
+
+    let status =
+        imageDropZone.querySelector(
+            ".image-upload-status"
+        );
+
+    if (!status) {
+        status =
+            document.createElement("span");
+
+        status.className =
+            "image-upload-status";
+
+        imageDropZone.appendChild(
+            status
+        );
+    }
+
+    status.textContent =
+        fileName
+            ? `Image ready: ${fileName}. It will be saved to the database when you save the product.`
+            : "Image ready. It will be saved to the database when you save the product.";
+}
+
+/* =========================================================
    SAVE PRODUCT
 ========================================================= */
 
@@ -1717,7 +1871,18 @@ productForm.addEventListener(
 
         event.preventDefault();
 
+        const hasProductImage =
+            Boolean(
+                imagePreview?.src &&
+                imagePreview.src !== window.location.href
+            );
 
+        setProductSaveLoading(
+            "Saving product...",
+            hasProductImage
+                ? "Preparing the attached image and product information."
+                : "Preparing the product information."
+        );
 
         const editId =
             String(
@@ -1837,6 +2002,11 @@ productForm.addEventListener(
 
 
 
+        setProductSaveLoading(
+            "Saving ingredients...",
+            "Keeping the product recipe and ingredient usage up to date."
+        );
+
         const recipeSaved =
             await saveRecipeForProduct(
                 product
@@ -1844,22 +2014,72 @@ productForm.addEventListener(
 
 
         if (!recipeSaved) {
+            hideProductSaveLoading();
             return;
         }
 
+
+        setProductSaveLoading(
+            "Saving cup sizes...",
+            "Keeping the product's serving sizes and recipe multipliers."
+        );
 
         const flexibleConfigSaved =
             await window.CafeFlexSizes?.saveForCurrentProduct?.();
 
         if (flexibleConfigSaved === false) {
+            hideProductSaveLoading();
             return;
         }
 
 
-        persist();
+        persist({
+            skipCatalogSync: true
+        });
 
 
-        showMenu();
+        setProductSaveLoading(
+            hasProductImage
+                ? "Uploading image to database..."
+                : "Saving product to database...",
+            hasProductImage
+                ? "Please keep this page open while CafeKiosk saves the attached image and product details."
+                : "Please keep this page open while CafeKiosk saves the product details."
+        );
+
+
+        const catalogSaved =
+            await syncCatalogToBackend();
+
+
+        if (!catalogSaved) {
+            hideProductSaveLoading();
+
+            alert(
+                hasProductImage
+                    ? "The product details are still on this device, but the image could not be saved to the database. Please check your connection and try Save Product again."
+                    : "The product details are still on this device, but they could not be saved to the database. Please check your connection and try Save Product again."
+            );
+
+            return;
+        }
+
+
+        setProductSaveLoading(
+            "Saved successfully",
+            hasProductImage
+                ? "The product image and product information are now saved in the database."
+                : "The product information is now saved in the database."
+        );
+
+
+        window.setTimeout(
+            () => {
+                hideProductSaveLoading();
+                showMenu();
+            },
+            650
+        );
 
     }
 );
