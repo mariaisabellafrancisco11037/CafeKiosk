@@ -1056,7 +1056,7 @@ exports.login = async (req, res) => {
       return res.status(403).json({ success: false, message: `This account is ${String(account.status).toLowerCase()}. Please contact the cafe owner.` });
     }
 
-    if (requestedRole && requestedRole !== account.role && !(requestedRole === 'Admin' && account.role === 'Manager')) {
+    if (requestedRole && requestedRole !== account.role) {
       return res.status(403).json({ success: false, message: `This account is not authorized for ${requestedRole} login.` });
     }
 

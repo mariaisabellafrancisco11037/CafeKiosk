@@ -1634,7 +1634,6 @@ app.get(
 app.get(
     "/staff-dashboard",
     requirePageRole(
-        "Admin",
         "Staff"
     ),
     (req, res) => {

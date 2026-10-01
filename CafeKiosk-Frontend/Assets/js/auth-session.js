@@ -134,8 +134,13 @@
         }
 
 
-        // POS / Order Queue should normally use Staff.
-        // If no Staff session exists, Admin may still access these pages.
+        // Staff dashboard is strictly Staff. Never inherit an Admin or Manager
+        // session merely because another role is signed in in this browser.
+        if (path.includes("staff-dashboard")) {
+            return "staff";
+        }
+
+        // POS / Order Queue can be opened by their supported operational roles.
         if (
             path.includes(
                 "/pos/"
@@ -145,9 +150,6 @@
             ) ||
             path.includes(
                 "order-queue"
-            ) ||
-            path.includes(
-                "staff-dashboard"
             )
         ) {
 
