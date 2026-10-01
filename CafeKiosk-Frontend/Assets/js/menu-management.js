@@ -632,7 +632,9 @@ async function syncCatalogToBackend() {
                     category: p.category,
                     price: Number(p.price || 0),
                     description: p.description || "",
-                    image: p.image || "",
+                    ...(String(p.image || "").startsWith("data:image/")
+                        ? {}
+                        : { image: p.image || "" }),
                     availability: p.availability === "Unavailable" ? "Unavailable" : "Available",
                     sortOrder: index
                 }))
@@ -645,6 +647,226 @@ async function syncCatalogToBackend() {
         return true;
     } catch (error) {
         console.warn("Product catalog could not be synced to MySQL.", error);
+        return false;
+    }
+}
+
+
+function imageElementFromSource(source) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload =
+            () => resolve(image);
+
+        image.onerror =
+            () => reject(
+                new Error("The selected image could not be read.")
+            );
+
+        image.src =
+            source;
+    });
+}
+
+async function optimizeProductImageDataUrl(source) {
+    const value =
+        String(source || "");
+
+    if (!value.startsWith("data:image/")) {
+        return value;
+    }
+
+    if (
+        value.length <= 165000 &&
+        value.startsWith("data:image/jpeg")
+    ) {
+        return value;
+    }
+
+    const image =
+        await imageElementFromSource(
+            value
+        );
+
+    let maxDimension =
+        720;
+
+    let quality =
+        0.78;
+
+    let result =
+        value;
+
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+        const scale =
+            Math.min(
+                1,
+                maxDimension /
+                Math.max(
+                    image.naturalWidth || image.width,
+                    image.naturalHeight || image.height
+                )
+            );
+
+        const width =
+            Math.max(
+                1,
+                Math.round(
+                    (image.naturalWidth || image.width) *
+                    scale
+                )
+            );
+
+        const height =
+            Math.max(
+                1,
+                Math.round(
+                    (image.naturalHeight || image.height) *
+                    scale
+                )
+            );
+
+        const canvas =
+            document.createElement(
+                "canvas"
+            );
+
+        canvas.width =
+            width;
+
+        canvas.height =
+            height;
+
+        const context =
+            canvas.getContext(
+                "2d",
+                {
+                    alpha:
+                        false
+                }
+            );
+
+        context.fillStyle =
+            "#ffffff";
+
+        context.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+        context.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
+
+        result =
+            canvas.toDataURL(
+                "image/jpeg",
+                quality
+            );
+
+        if (
+            result.length <=
+            165000
+        ) {
+            return result;
+        }
+
+        if (
+            quality >
+            0.52
+        ) {
+            quality -=
+                0.08;
+        } else {
+            maxDimension =
+                Math.max(
+                    480,
+                    Math.round(
+                        maxDimension *
+                        0.82
+                    )
+                );
+        }
+    }
+
+    if (
+        result.length >
+        185000
+    ) {
+        throw new Error(
+            "The selected image is still too large after optimization."
+        );
+    }
+
+    return result;
+}
+
+async function syncProductImageToBackend(product) {
+    const image =
+        String(
+            product?.image ||
+            ""
+        );
+
+    if (!image.startsWith("data:image/")) {
+        return true;
+    }
+
+    try {
+        const response =
+            await fetch(
+                `${MENU_API_URL}/api/catalog/product-image`,
+                {
+                    method:
+                        "PUT",
+                    headers:
+                        {
+                            "Content-Type":
+                                "application/json"
+                        },
+                    credentials:
+                        "include",
+                    body:
+                        JSON.stringify({
+                            productId:
+                                product.id,
+                            name:
+                                product.name,
+                            category:
+                                product.category,
+                            image
+                        })
+                }
+            );
+
+        const payload =
+            await response
+                .json()
+                .catch(
+                    () => ({})
+                );
+
+        if (!response.ok) {
+            throw new Error(
+                payload.message ||
+                `HTTP ${response.status}`
+            );
+        }
+
+        return true;
+    } catch (error) {
+        console.warn(
+            "Product image could not be synced to MySQL.",
+            error
+        );
+
         return false;
     }
 }
@@ -1946,6 +2168,50 @@ productForm.addEventListener(
 
 
 
+        let preparedImage =
+            imagePreview.src
+
+            ||
+
+            existingProduct?.image
+
+            ||
+
+            "";
+
+        if (
+            String(
+                preparedImage
+            ).startsWith(
+                "data:image/"
+            )
+        ) {
+            setProductSaveLoading(
+                "Optimizing image...",
+                "CafeKiosk is resizing the attached image so it can be stored safely in the database."
+            );
+
+            try {
+                preparedImage =
+                    await optimizeProductImageDataUrl(
+                        preparedImage
+                    );
+
+                imagePreview.src =
+                    preparedImage;
+            } catch (error) {
+                hideProductSaveLoading();
+
+                alert(
+                    error.message ||
+                    "The selected image could not be prepared for database saving."
+                );
+
+                return;
+            }
+        }
+
+
         const product = {
 
             id:
@@ -1998,15 +2264,7 @@ productForm.addEventListener(
 
             image:
 
-                imagePreview.src
-
-                ||
-
-                existingProduct?.image
-
-                ||
-
-                ""
+                preparedImage
 
         };
 
@@ -2092,18 +2350,46 @@ productForm.addEventListener(
             hideProductSaveLoading();
 
             alert(
-                hasProductImage
-                    ? "The product details are still on this device, but the image could not be saved to the database. Please check your connection and try Save Product again."
-                    : "The product details are still on this device, but they could not be saved to the database. Please check your connection and try Save Product again."
+                "The product could not be saved to the database. Please try Save Product again."
             );
 
             return;
         }
 
 
+        if (
+            String(
+                product.image ||
+                ""
+            ).startsWith(
+                "data:image/"
+            )
+        ) {
+            setProductSaveLoading(
+                "Uploading image to database...",
+                "The product details are saved. CafeKiosk is now storing the optimized image."
+            );
+
+            const imageSaved =
+                await syncProductImageToBackend(
+                    product
+                );
+
+            if (!imageSaved) {
+                hideProductSaveLoading();
+
+                alert(
+                    "The product was saved, but its image could not be stored in the database. Please choose the image again and retry."
+                );
+
+                return;
+            }
+        }
+
+
         setProductSaveLoading(
             "Saved successfully",
-            hasProductImage
+            String(product.image || "").startsWith("data:image/")
                 ? "The product image and product information are now saved in the database."
                 : "The product information is now saved in the database."
         );

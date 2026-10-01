@@ -159,7 +159,7 @@ async function replace(cafeId = 'cafe-1', categories = [], products = []) {
           await conn.execute(
             `UPDATE products
                 SET category_id=?, product_code=?, product_name=?, description=?,
-                    base_price=?, image_path=?, manual_availability=?, is_active=1,
+                    base_price=?, image_path=COALESCE(?, image_path), manual_availability=?, is_active=1,
                     sort_order=?
               WHERE cafe_id=? AND product_id=?`,
             [
@@ -168,7 +168,7 @@ async function replace(cafeId = 'cafe-1', categories = [], products = []) {
               name,
               p.description || null,
               Number(p.price || 0),
-              p.image || null,
+              Object.prototype.hasOwnProperty.call(p, "image") ? p.image : null,
               availability,
               Number(p.sortOrder ?? index),
               tenantId,
@@ -192,7 +192,7 @@ async function replace(cafeId = 'cafe-1', categories = [], products = []) {
              product_code=VALUES(product_code),
              description=VALUES(description),
              base_price=VALUES(base_price),
-             image_path=VALUES(image_path),
+             image_path=COALESCE(VALUES(image_path), image_path),
              manual_availability=VALUES(manual_availability),
              is_active=1,
              sort_order=VALUES(sort_order),
@@ -256,4 +256,66 @@ async function replace(cafeId = 'cafe-1', categories = [], products = []) {
   }
 }
 
-module.exports = { list, listCategories, replace, normKey };
+
+async function updateProductImage(cafeId = 'cafe-1', {
+  productId = '',
+  name = '',
+  category = '',
+  image = ''
+} = {}) {
+  const tenantId = String(cafeId);
+  const imageValue = String(image || '');
+
+  if (!imageValue) {
+    throw new Error('Product image is required.');
+  }
+
+  const idText = String(productId || '').trim();
+
+  if (/^\d+$/.test(idText)) {
+    const [result] = await pool.execute(
+      `UPDATE products
+          SET image_path=?
+        WHERE cafe_id=? AND product_id=? AND is_active=1`,
+      [imageValue, tenantId, Number(idText)]
+    );
+
+    if (result.affectedRows) {
+      return true;
+    }
+  }
+
+  const productName = String(name || '').trim();
+  const categoryKey = normKey(category);
+
+  if (!productName || !categoryKey) {
+    return false;
+  }
+
+  const [rows] = await pool.execute(
+    `SELECT p.product_id
+       FROM products p
+       JOIN categories c ON c.category_id=p.category_id
+      WHERE p.cafe_id=?
+        AND p.product_name=?
+        AND c.canonical_key=?
+        AND p.is_active=1
+      LIMIT 1`,
+    [tenantId, productName, categoryKey]
+  );
+
+  if (!rows.length) {
+    return false;
+  }
+
+  const [result] = await pool.execute(
+    `UPDATE products
+        SET image_path=?
+      WHERE cafe_id=? AND product_id=?`,
+    [imageValue, tenantId, Number(rows[0].product_id)]
+  );
+
+  return Boolean(result.affectedRows);
+}
+
+module.exports = { list, listCategories, replace, updateProductImage, normKey };

@@ -73,4 +73,43 @@ router.put('/', verifyToken, isAdmin, isOwner, async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+
+router.put('/product-image', verifyToken, isAdmin, isOwner, async (req, res, next) => {
+  try {
+    const cafeId = String(req.user?.cafeId || 'cafe-1');
+    const image = String(req.body?.image || '');
+
+    // Keep the dedicated image request comfortably below the existing
+    // 256 KB JSON security ceiling.
+    if (!image.startsWith('data:image/') || image.length > 190000) {
+      return res.status(400).json({
+        success: false,
+        message: 'The image is too large. Please choose the image again so CafeKiosk can optimize it.'
+      });
+    }
+
+    const updated = await store.updateProductImage(cafeId, {
+      productId: req.body?.productId,
+      name: req.body?.name,
+      category: req.body?.category,
+      image
+    });
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: 'The product could not be found for image saving.'
+      });
+    }
+
+    res.json({
+      success: true,
+      cafeId,
+      message: 'Product image saved.'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
