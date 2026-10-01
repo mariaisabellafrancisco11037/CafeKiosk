@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-rootfix-v1">
   <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v6">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 <body class="uniform-admin">
   <div class="menu-shell">
@@ -406,10 +406,10 @@
   <script src="../Assets/js/menu-management.js?v=20261001-image-fix-v234"></script>
 <script src="../Assets/js/menu-flex-config.js"></script>
   <script src="../Assets/js/auth-session.js?v=12"></script>
-  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v6"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v6"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>

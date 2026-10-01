@@ -363,3 +363,202 @@ body{padding-bottom:0 !important;}
   body.uniform-pos .menu-card-image img,
   body.uniform-pos .menu-img {height:96px!important;}
 }
+
+
+/* 2026-10-01 mobile shell polish v7 */
+@media (max-width: 760px){
+  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+
+  /* keep the hamburger clear of page titles */
+  .ck-nav-toggle{
+    top:14px!important;
+    left:14px!important;
+    width:46px!important;
+    height:46px!important;
+    border-radius:13px!important;
+  }
+
+  /* compact top/title area instead of letting it sit under the menu button */
+  body.manager-order-queue-page .page-title-box,
+  body.order-queue-page .page-title-box{
+    min-height:62px!important;
+    height:auto!important;
+    margin:0 0 12px!important;
+    padding:12px 12px 12px 74px!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+  body.manager-order-queue-page .page-title-box h1,
+  body.order-queue-page .page-title-box h1{
+    font-size:1.22rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+  }
+
+  /* Remove the inherited desktop row sizing that caused the giant empty gap. */
+  body.manager-order-queue-page .queue-main,
+  body.order-queue-page .queue-main,
+  body.uniform-manager.cku-v2 .queue-main.cku-content{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:12px!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:0!important;
+    padding:12px!important;
+    margin:0!important;
+    overflow:visible!important;
+    grid-template-rows:none!important;
+  }
+  body.manager-order-queue-page .queue-main>* ,
+  body.order-queue-page .queue-main>*{
+    flex:0 0 auto!important;
+  }
+  body.manager-order-queue-page .filters-row,
+  body.order-queue-page .filters-row{
+    margin:0!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  body.manager-order-queue-page .queue-station-row,
+  body.order-queue-page .queue-station-row,
+  body.manager-order-queue-page .status-tabs,
+  body.order-queue-page .status-tabs,
+  body.manager-order-queue-page .live-order-card,
+  body.order-queue-page .live-order-card,
+  body.manager-order-queue-page .pagination,
+  body.order-queue-page .pagination{
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+  body.manager-order-queue-page .status-tabs,
+  body.order-queue-page .status-tabs{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  body.manager-order-queue-page .live-order-card,
+  body.order-queue-page .live-order-card{
+    min-height:0!important;
+  }
+  body.manager-order-queue-page .table-wrap,
+  body.order-queue-page .table-wrap{
+    max-height:none!important;
+  }
+  body.manager-order-queue-page .queue-right,
+  body.order-queue-page .queue-right{
+    padding:0 12px 22px!important;
+  }
+
+  /* Manager dashboard: remove large dead space after the title and avoid overlap. */
+  body.manager-dashboard-page .staff-dashboard-main,
+  body.staff-dashboard-page .staff-dashboard-main,
+  body.uniform-manager.cku-v2 .manager-dashboard-main.cku-content{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:12px!important;
+    padding:12px!important;
+    min-height:0!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+  body.manager-dashboard-page .staff-welcome-card,
+  body.staff-dashboard-page .staff-welcome-card,
+  body.manager-dashboard-page .manager-role-strip,
+  body.staff-dashboard-page .manager-role-strip,
+  body.manager-dashboard-page .staff-metric-grid,
+  body.staff-dashboard-page .staff-metric-grid,
+  body.manager-dashboard-page .staff-dashboard-grid,
+  body.staff-dashboard-page .staff-dashboard-grid,
+  body.manager-dashboard-page .staff-panel,
+  body.staff-dashboard-page .staff-panel{
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+  body.cku-v2 .cku-topbar{
+    min-height:70px!important;
+    height:auto!important;
+    padding:10px 12px 10px 74px!important;
+  }
+  body.cku-v2 .cku-title-card{
+    width:100%!important;
+    min-height:56px!important;
+    height:auto!important;
+    padding:9px 12px!important;
+  }
+  body.cku-v2 .cku-title-card h1{font-size:20px!important;line-height:1.15!important}
+  body.cku-v2 .cku-title-kicker{font-size:9px!important}
+
+  /* Make the opened sidebar an actual navigation drawer instead of an empty white sheet. */
+  body.ck-has-mobile-sidebar .sidebar,
+  body.ck-has-mobile-sidebar .staff-sidebar,
+  body.ck-has-mobile-sidebar .ck-sidebar,
+  body.uniform-manager.cku-v2 .cku-sidebar,
+  body.staff-dashboard-page.cku-v2 .cku-sidebar{
+    width:min(82vw,300px)!important;
+    max-width:300px!important;
+    padding:72px 14px 22px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:10px!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .logo{
+    display:flex!important;
+    justify-content:center!important;
+    margin:0 0 8px!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .logo img{
+    width:72px!important;
+    height:72px!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .manager-sidebar-cafe-name{
+    display:block!important;
+    max-width:none!important;
+    width:100%!important;
+    margin:0 0 12px!important;
+    text-align:center!important;
+    font-size:.8rem!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .staff-navigation,
+  body.ck-nav-open .staff-navigation{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    width:100%!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .staff-nav-button,
+  body.ck-nav-open .staff-nav-button{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:48px!important;
+    padding:10px 12px!important;
+    justify-content:flex-start!important;
+    gap:12px!important;
+    border-radius:12px!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .manager-nav-label{
+    display:inline-block!important;
+    font-size:.85rem!important;
+  }
+  body.ck-nav-open .manager-sidebar-icons .staff-nav-icon{
+    width:24px!important;
+    min-width:24px!important;
+    height:24px!important;
+  }
+}
+
+@media (max-width: 760px) and (orientation: landscape){
+  body.manager-order-queue-page .filters-row,
+  body.order-queue-page .filters-row{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  body.manager-order-queue-page .filters-row .date-box,
+  body.order-queue-page .filters-row .date-box{grid-column:1/-1!important}
+  body.manager-order-queue-page .status-tabs,
+  body.order-queue-page .status-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body.manager-dashboard-page .staff-metric-grid,
+  body.staff-dashboard-page .staff-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

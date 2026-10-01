@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-manager-match-staff-v4">
   <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v6">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 <body class="uniform-pos manager-order-queue-page">
   <div class="queue-app">
@@ -301,12 +301,12 @@
   <script src="../Assets/js/auth-session.js?v=live-cookie-realtime-v1"></script>
   <script src="../Assets/js/order-queue.js?v=live-cookie-realtime-v1"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v6"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="../Assets/js/live-presence.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v6"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>
