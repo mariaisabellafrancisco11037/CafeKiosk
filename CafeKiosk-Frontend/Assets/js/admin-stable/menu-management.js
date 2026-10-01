@@ -1505,7 +1505,8 @@ function showForm(
 
     } else {
 
-        loadIngredientMasterList();
+        recipeLoadState = "loaded";
+        recipeLoadPromise = loadIngredientMasterList().then(() => true);
 
     }
 
@@ -1609,51 +1610,98 @@ searchInput.addEventListener(
 
 
 /* =========================================================
-   IMAGE UPLOAD
+   IMAGE UPLOAD + DRAG / DROP
 ========================================================= */
+
+const imageDropZone =
+    document.querySelector(
+        'label.image-drop[for="productImage"]'
+    );
+
+function previewProductImageFile(file) {
+    if (!file) {
+        return;
+    }
+
+    if (!String(file.type || "").startsWith("image/")) {
+        alert("Please choose an image file.");
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload =
+        event => {
+
+            imagePreview.src =
+                event.target.result;
+
+            imagePreview.style.display =
+                "block";
+
+            imagePlaceholder.style.display =
+                "none";
+
+        };
+
+    reader.readAsDataURL(
+        file
+    );
+}
 
 imageInput.addEventListener(
     "change",
     event => {
+        previewProductImageFile(
+            event.target.files?.[0]
+        );
+    }
+);
 
+["dragenter", "dragover"].forEach(
+    eventName => {
+        imageDropZone?.addEventListener(
+            eventName,
+            event => {
+                event.preventDefault();
+                event.stopPropagation();
+                imageDropZone.classList.add(
+                    "is-dragging"
+                );
+            }
+        );
+    }
+);
+
+["dragleave", "drop"].forEach(
+    eventName => {
+        imageDropZone?.addEventListener(
+            eventName,
+            event => {
+                event.preventDefault();
+                event.stopPropagation();
+                imageDropZone.classList.remove(
+                    "is-dragging"
+                );
+            }
+        );
+    }
+);
+
+imageDropZone?.addEventListener(
+    "drop",
+    event => {
         const file =
-            event.target.files?.[0];
-
+            event.dataTransfer?.files?.[0];
 
         if (!file) {
-
             return;
-
         }
 
-
-
-        const reader =
-            new FileReader();
-
-
-
-        reader.onload =
-            event => {
-
-                imagePreview.src =
-                    event.target.result;
-
-
-                imagePreview.style.display =
-                    "block";
-
-
-                imagePlaceholder.style.display =
-                    "none";
-
-            };
-
-
-        reader.readAsDataURL(
+        previewProductImageFile(
             file
         );
-
     }
 );
 
@@ -2581,6 +2629,8 @@ const addRecipeIngredientBtn =
     );
 
 let ingredientMasterList = [];
+let recipeLoadPromise = Promise.resolve(true);
+let recipeLoadState = "idle";
 let activeRecipeKey = "";
 
 function adminApiHeaders() {
@@ -3062,109 +3112,123 @@ async function loadRecipeForProduct(product) {
     resetRecipeBuilder();
 
     if (!product) {
-        return;
+        recipeLoadState = "loaded";
+        recipeLoadPromise = Promise.resolve(true);
+        return true;
     }
 
-    try {
-        const response =
-            await fetch(
-                `${RECIPE_API_URL}/recipe?cafeId=${encodeURIComponent(CAFE_ID)}&name=${encodeURIComponent(product.name)}&category=${encodeURIComponent(normalizeMenuCategory(product.category))}`,
-                {
-                    headers:
-                        adminApiHeaders(),
-                    credentials:
-                        "include",
-                    cache:
-                        "no-store"
+    recipeLoadState = "loading";
+
+    recipeLoadPromise = (async () => {
+        try {
+            const response =
+                await fetch(
+                    `${RECIPE_API_URL}/recipe?cafeId=${encodeURIComponent(CAFE_ID)}&name=${encodeURIComponent(product.name)}&category=${encodeURIComponent(normalizeMenuCategory(product.category))}`,
+                    {
+                        headers:
+                            adminApiHeaders(),
+                        credentials:
+                            "include",
+                        cache:
+                            "no-store"
+                    }
+                );
+
+            if (!response.ok) {
+                throw new Error(
+                    `Recipe request returned ${response.status}`
+                );
+            }
+
+            const data =
+                await response.json();
+
+            ingredientMasterList =
+                Array.isArray(
+                    data.ingredients
+                )
+                    ? data.ingredients
+                    : [];
+
+            renderIngredientSuggestions();
+
+            if (
+                !data.recipe ||
+                !Array.isArray(
+                    data.recipe.ingredients
+                )
+            ) {
+                renderRecipeEmptyState();
+                recipeLoadState = "loaded";
+                return true;
+            }
+
+            activeRecipeKey =
+                data.recipe.key ||
+                "";
+
+            const byId =
+                new Map(
+                    ingredientMasterList.map(
+                        ingredient => [
+                            ingredient.id,
+                            ingredient
+                        ]
+                    )
+                );
+
+            recipeRowsContainer.innerHTML =
+                "";
+
+            data.recipe.ingredients.forEach(
+                row => {
+                    const ingredient =
+                        byId.get(
+                            row.ingredientId
+                        ) ||
+                        {};
+
+                    addRecipeRow({
+                        name:
+                            ingredient.name ||
+                            row.ingredientId,
+                        unit:
+                            ingredient.unit ||
+                            "g",
+                        stock:
+                            ingredient.stock ??
+                            0,
+                        lowStockThreshold:
+                            ingredient.lowStockThreshold ??
+                            0,
+                        amount:
+                            row.amount,
+                        mode:
+                            row.mode,
+                        optionValue:
+                            row.optionValue
+                    });
                 }
             );
 
-        if (!response.ok) {
-            throw new Error(
-                `Recipe request returned ${response.status}`
-            );
-        }
-
-        const data =
-            await response.json();
-
-        ingredientMasterList =
-            Array.isArray(
-                data.ingredients
-            )
-                ? data.ingredients
-                : [];
-
-        renderIngredientSuggestions();
-
-        if (
-            !data.recipe ||
-            !Array.isArray(
-                data.recipe.ingredients
-            )
-        ) {
             renderRecipeEmptyState();
-            return;
-        }
+            recipeLoadState = "loaded";
+            return true;
 
-        activeRecipeKey =
-            data.recipe.key ||
-            "";
+        } catch (error) {
+            recipeLoadState = "failed";
 
-        const byId =
-            new Map(
-                ingredientMasterList.map(
-                    ingredient => [
-                        ingredient.id,
-                        ingredient
-                    ]
-                )
+            console.warn(
+                "Recipe inventory could not be loaded:",
+                error
             );
 
-        recipeRowsContainer.innerHTML =
-            "";
+            renderRecipeEmptyState();
+            return false;
+        }
+    })();
 
-        data.recipe.ingredients.forEach(
-            row => {
-                const ingredient =
-                    byId.get(
-                        row.ingredientId
-                    ) ||
-                    {};
-
-                addRecipeRow({
-                    name:
-                        ingredient.name ||
-                        row.ingredientId,
-                    unit:
-                        ingredient.unit ||
-                        "g",
-                    stock:
-                        ingredient.stock ??
-                        0,
-                    lowStockThreshold:
-                        ingredient.lowStockThreshold ??
-                        0,
-                    amount:
-                        row.amount,
-                    mode:
-                        row.mode,
-                    optionValue:
-                        row.optionValue
-                });
-            }
-        );
-
-        renderRecipeEmptyState();
-
-    } catch (error) {
-        console.warn(
-            "Recipe inventory could not be loaded:",
-            error
-        );
-
-        renderRecipeEmptyState();
-    }
+    return recipeLoadPromise;
 }
 
 async function loadIngredientMasterList() {
@@ -3204,6 +3268,15 @@ async function loadIngredientMasterList() {
 }
 
 async function saveRecipeForProduct(product) {
+    if (recipeLoadState === "loading") {
+        await recipeLoadPromise;
+    }
+
+    if (recipeLoadState === "failed") {
+        alert("The existing ingredient recipe could not be loaded, so CafeKiosk did not overwrite it. Please reopen the product and try again.");
+        return false;
+    }
+
     const rows =
         recipeRowsFromForm();
 

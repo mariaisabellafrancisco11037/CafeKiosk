@@ -2,6 +2,9 @@
   "use strict";
   let config = { products: {}, categoryDefaults: {} };
   let editingKey = "";
+  let configLoaded = false;
+  let configLoadPromise = null;
+  let formHydrated = false;
 
   function apiUrl() {
     if (location.protocol === "http:" || location.protocol === "https:") {
@@ -162,21 +165,37 @@
   }
 
   async function loadConfig() {
-    try {
-      const response = await apiFetch(
-        `${apiUrl()}/api/menu-config`,
-        { cache: "no-store" }
-      );
-      if (!response.ok) return;
-      const payload = await response.json();
-      config = payload.config || config;
-    } catch (error) {
-      console.warn("Menu size configuration could not be loaded:", error);
-    }
+    if (configLoadPromise) return configLoadPromise;
+
+    configLoadPromise = (async () => {
+      try {
+        const response = await apiFetch(
+          `${apiUrl()}/api/menu-config`,
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Menu configuration request returned ${response.status}`);
+        }
+
+        const payload = await response.json();
+        config = payload.config || config;
+        configLoaded = true;
+        return true;
+      } catch (error) {
+        configLoaded = false;
+        console.warn("Menu size configuration could not be loaded:", error);
+        return false;
+      }
+    })();
+
+    return configLoadPromise;
   }
 
-  function loadForForm() {
-    if (!ensure()) return;
+  async function loadForForm() {
+    if (!ensure()) return false;
+
+    await loadConfig();
 
     const name = value("productName");
     const category = value("productCategory");
@@ -194,8 +213,12 @@
     // A single editable Regular row is a neutral starting point, not a fixed preset list.
     (sizes.length ? sizes : [{ label: "Regular", priceAdd: 0, multiplier: 1 }]).forEach(addSize);
 
+    formHydrated = true;
+
     const checkbox = document.getElementById("ckSaveCategoryDefault");
     if (checkbox) checkbox.checked = false;
+
+    return true;
   }
 
   async function saveForCurrentProduct() {
@@ -203,15 +226,20 @@
     const category = value("productCategory");
     if (!name || !category) return false;
 
-    const newKey = productKey(category, name);
-    const sizes = collectSizes();
-    const ingredients = collectRichIngredients();
-    const saveCategoryDefault = document.getElementById("ckSaveCategoryDefault")?.checked === true;
+    await loadConfig();
 
+    const newKey = productKey(category, name);
     const previousProduct =
       config.products?.[newKey] ||
       (editingKey ? config.products?.[editingKey] : null) ||
       {};
+
+    const sizes = formHydrated
+      ? collectSizes()
+      : (Array.isArray(previousProduct.sizes) ? previousProduct.sizes : []);
+
+    const ingredients = collectRichIngredients();
+    const saveCategoryDefault = document.getElementById("ckSaveCategoryDefault")?.checked === true;
 
     const productConfig = {
       ...previousProduct,
@@ -246,6 +274,8 @@
       const payload = await response.json();
       if (payload?.config) config = payload.config;
       editingKey = newKey;
+      configLoaded = true;
+      formHydrated = true;
       return true;
     } catch (error) {
       console.error(error);
