@@ -826,7 +826,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ categories: [...categoryMap.values()], products: compactProducts })
         });
-        setProgress(18, "Menu items saved. Applying sizes and recipes…");
+        setProgress(18, "Menu items saved. Linking recipes to Inventory…");
 
         const needsConfig = validRows.some(row => row.sizes || row.ingredients);
         if (needsConfig) {
@@ -839,7 +839,7 @@
             await saveFlexibleConfig(row, menuConfig, ingredientByName);
             await saveRecipe(row, ingredientByName);
             configDone += 1;
-            setProgress(18 + (22 * configDone / Math.max(1, configRows.length)), `Saving sizes and recipes (${configDone}/${configRows.length})…`);
+            setProgress(18 + (22 * configDone / Math.max(1, configRows.length)), `Linking ingredient usage to Inventory (${configDone}/${configRows.length})…`);
           }
         }
       }

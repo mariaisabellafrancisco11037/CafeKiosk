@@ -6,7 +6,7 @@
   <title>CafeKiosk - Inventory Monitor</title>
   <link rel="stylesheet" href="../Assets/css/admin-stable/inventory.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/inventory-responsive-upgrade.css?v=admin-stable-20261001">
-<link rel="stylesheet" href="../Assets/css/admin-stable/inventory-bulk-import.css?v=bulk-20261001">
+<link rel="stylesheet" href="../Assets/css/admin-stable/inventory-bulk-import.css?v=bulk-progress-linked-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
@@ -378,7 +378,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/inventory.js?v=admin-stable-20261001"></script>
-  <script src="../Assets/js/admin-stable/inventory-bulk-import.js?v=bulk-20261001"></script>
+  <script src="../Assets/js/admin-stable/inventory-bulk-import.js?v=bulk-progress-linked-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
