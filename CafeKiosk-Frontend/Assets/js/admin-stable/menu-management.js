@@ -1460,7 +1460,7 @@ function renderProducts() {
                             >
 
                                 ${
-                                    String(product.image || "").trim()
+                                    product.image
 
                                     ?
 

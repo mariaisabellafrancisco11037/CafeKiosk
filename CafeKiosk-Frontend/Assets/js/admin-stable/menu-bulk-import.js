@@ -890,13 +890,14 @@
         <header class="ck-import-header">
           <div>
             <span class="ck-import-kicker">BULK MENU TOOLS</span>
-            <h2 id="ckImportTitle">Import Menu & Customizations</h2>
+            <h2 id="ckImportTitle">Import Menu & Images</h2>
           </div>
           <button class="ck-import-close" id="ckImportClose" type="button" aria-label="Close">×</button>
         </header>
         <div class="ck-import-body">
           <p class="ck-import-note">
-            <b>Bulk menu import:</b> upload the menu CSV to create/update products, prices, descriptions, sizes, and recipes. Item customizations can be imported separately. Product images can be imported from one or more ZIP files or selected directly. Images are optimized, saved to the authenticated cafe's MySQL product record, and remain tenant-scoped.
+            <b>Fast image replacement:</b> select one or many image ZIP files at once—no CSV needed. CafeKiosk merges every ZIP into one queue and matches filenames like <b>21_Black_Coffee.png</b> automatically.<br>
+            <b>Full menu creation:</b> upload the CSV template plus any number of image ZIPs to create/update products, prices, descriptions, sizes, recipes, and images in one run.
           </p>
           <div class="ck-import-input-grid">
             <div class="ck-import-box">
@@ -918,7 +919,7 @@
               <small id="ckImportZipSummary" class="ck-import-file-summary">No ZIP files selected.</small>
             </div>
             <div class="ck-import-box">
-              <strong>4. Image selection (optional)</strong>
+              <strong>4. Or select images</strong>
               <span>Select many PNG/JPG/WebP files at once instead of using a ZIP.</span>
               <input id="ckImportImages" type="file" accept="image/png,image/jpeg,image/webp" multiple>
             </div>
