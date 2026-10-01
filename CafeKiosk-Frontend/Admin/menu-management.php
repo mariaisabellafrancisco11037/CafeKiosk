@@ -418,7 +418,7 @@
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
 <script src="../Assets/js/admin-stable/menu-management.js?v=tenant-isolation-v2-20261001"></script>
-  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=customization-auto-addon-v2-20261001"></script>
+  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=customization-auto-addon-404fix-v3-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>

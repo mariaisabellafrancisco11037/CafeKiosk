@@ -257,7 +257,7 @@
   async function linkCustomizationIngredients(rows, catalogProducts) {
     if (!rows.length) return;
 
-    const inventoryPayload = await fetchJson(`${apiUrl()}/api/menu-availability/config`, { cache: "no-store" });
+    const inventoryPayload = await fetchJson(`${apiUrl()}/api/menu-availability/inventory-config`, { cache: "no-store" });
     const inventory = Array.isArray(inventoryPayload.ingredients) ? inventoryPayload.ingredients : [];
     const ingredientByName = new Map(inventory.map(item => [normalizeName(item.name), item]));
     const productByName = new Map((catalogProducts || []).map(p => [normalizeName(p.name), p]));
