@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v5">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-pos-responsive-v5">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-pos-v6">
 </head>
 
 <body class="uniform-kiosk kiosk-menu">
@@ -663,10 +663,10 @@
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>
-  <script src="/Assets/js/uniform-theme.js?v=20261001-layout-fix4"></script>
+  <script src="/Assets/js/uniform-theme.js?v=20261001-mobile-shell-v6"></script>
   <script src="/Assets/js/live-presence.js?v=3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v5"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix4"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v6"></script>
 </body>
 </html>
