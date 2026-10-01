@@ -15,7 +15,8 @@ function getEmailConfig() {
   const fromEmail = clean(process.env.RESEND_FROM_EMAIL);
   const fromName = clean(process.env.RESEND_FROM_NAME) || 'CafeKiosk';
   const smtpConfigured = Boolean(smtpHost && smtpUser && smtpPass && smtpFromEmail && smtpSecure && smtpPort === 465);
-  return { provider: smtpConfigured ? 'smtp' : 'resend', smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass, smtpFromEmail, smtpFromName, apiKey, fromEmail, fromName, configured: smtpConfigured || Boolean(apiKey && fromEmail) };
+  const resendConfigured = Boolean(apiKey && fromEmail);
+  return { provider: smtpConfigured ? 'smtp' : 'resend', smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass, smtpFromEmail, smtpFromName, apiKey, fromEmail, fromName, smtpConfigured, resendConfigured, configured: smtpConfigured || resendConfigured };
 }
 
 function escapeHtml(value) {
@@ -219,7 +220,7 @@ async function sendSmtpEmail({ to, subject, html, text, senderName, replyTo }) {
 
 async function sendResendEmail({ to, subject, html, text, senderName, replyTo }) {
   const config = getEmailConfig();
-  if (!config.configured) {
+  if (!config.resendConfigured) {
     return {
       sent: false,
       configured: false,

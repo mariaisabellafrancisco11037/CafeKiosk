@@ -1472,6 +1472,8 @@ exports.ownerSignup = async (req, res) => {
     const publicBaseUrl = safeText(process.env.PUBLIC_APP_URL || process.env.APP_URL || 'https://cafekiosk.site').replace(/\/$/, '');
     const verifyUrl = `${publicBaseUrl}/api/auth/verify-owner-email?token=${encodeURIComponent(ownerVerifyToken)}`;
     const verificationEmail = await sendOwnerVerificationEmail({ to: email, cafeName, ownerName: fullName, verifyUrl }).catch(error => ({sent:false,error:error?.message||'Verification email failed.'}));
+    if (!verificationEmail?.sent) console.error('[owner verification] Resend delivery failed:', verificationEmail?.error || 'Unknown error', { cafeId, recipient: email.replace(/(^.).*(@.*$)/, '$1***$2') });
+    else console.log('[owner verification] Verification email accepted by Resend:', { cafeId, messageId: verificationEmail.messageId || null });
 
     return res.status(201).json({
       success: true,
@@ -2301,6 +2303,7 @@ exports.health = async (req, res) => {
     roles: ['Admin', 'Staff', 'Manager'],
     signup: { owner: true, staffInvite: true },
     passwordRecovery: { enabled: true, provider: getEmailConfig().provider, emailConfigured: getEmailConfig().configured, expiresMinutes: PASSWORD_RESET_EXPIRES_MINUTES },
+    ownerEmailVerification: { enabled: true, resendConfigured: getEmailConfig().resendConfigured, fromEmail: getEmailConfig().resendConfigured ? getEmailConfig().fromEmail : null, expiresMinutes: 30 },
     loginProtection: { temporaryLockout: true, failedAttemptsBeforeLock: LOGIN_LOCK_THRESHOLD, lockMinutes: LOGIN_LOCK_MINUTES },
     authentication: { serverSideSessions: true, browserTokenStorage: false, currentDatabaseRoleAuthoritative: true, sessionHours: SESSION_HOURS },
     cookies: COOKIE_NAMES
