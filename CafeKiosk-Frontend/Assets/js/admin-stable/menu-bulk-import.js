@@ -890,14 +890,13 @@
         <header class="ck-import-header">
           <div>
             <span class="ck-import-kicker">BULK MENU TOOLS</span>
-            <h2 id="ckImportTitle">Import Menu & Images</h2>
+            <h2 id="ckImportTitle">Import Menu & Customizations</h2>
           </div>
           <button class="ck-import-close" id="ckImportClose" type="button" aria-label="Close">×</button>
         </header>
         <div class="ck-import-body">
           <p class="ck-import-note">
-            <b>Fast image replacement:</b> select one or many image ZIP files at once—no CSV needed. CafeKiosk merges every ZIP into one queue and matches filenames like <b>21_Black_Coffee.png</b> automatically.<br>
-            <b>Full menu creation:</b> upload the CSV template plus any number of image ZIPs to create/update products, prices, descriptions, sizes, recipes, and images in one run.
+            <b>Bulk menu import:</b> upload the menu CSV to create/update products, prices, descriptions, sizes, and recipes. Item customizations can be imported separately. Product-image importing is disabled to avoid relying on non-persistent image data.
           </p>
           <div class="ck-import-input-grid">
             <div class="ck-import-box">
@@ -912,14 +911,14 @@
               <input id="ckImportCustomCsv" type="file" accept=".csv,text/csv">
               <button class="ck-import-template-btn" id="ckImportCustomTemplate" type="button">Download Customization Template</button>
             </div>
-            <div class="ck-import-box">
-              <strong>3. Image ZIPs (optional)</strong>
+            <div class="ck-import-box" style="display:none" aria-hidden="true">
+              <strong>3. Image ZIPs (disabled)</strong>
               <span>Select multiple ZIP batches at once. All ZIPs are merged and matched to the CSV/products by filename.</span>
               <input id="ckImportZip" type="file" accept=".zip,application/zip,application/x-zip-compressed" multiple>
               <small id="ckImportZipSummary" class="ck-import-file-summary">No ZIP files selected.</small>
             </div>
-            <div class="ck-import-box">
-              <strong>4. Or select images</strong>
+            <div class="ck-import-box" style="display:none" aria-hidden="true">
+              <strong>4. Image selection (disabled)</strong>
               <span>Select many PNG/JPG/WebP files at once instead of using a ZIP.</span>
               <input id="ckImportImages" type="file" accept="image/png,image/jpeg,image/webp" multiple>
             </div>

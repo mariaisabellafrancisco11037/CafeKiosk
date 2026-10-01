@@ -2064,3 +2064,15 @@ body.product-save-busy {
         animation-duration: 2s;
     }
 }
+
+/* 2026-10-01: Product-image management intentionally disabled.
+   Images are hidden from Menu Management without deleting any existing DB values. */
+.product-card .product-image,
+.form-right > .upload-title,
+.form-right > .image-drop,
+.form-right > #productImage {
+  display: none !important;
+}
+.form-right {
+  min-width: 0;
+}
