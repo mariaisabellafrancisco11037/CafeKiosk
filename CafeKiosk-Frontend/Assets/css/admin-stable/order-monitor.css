@@ -2195,3 +2195,4 @@ button{cursor:pointer}
 .admin-station-tab.active strong { background:rgba(255,255,255,.2); color:#fff; }
 .admin-station-switcher > p { margin:7px 2px 0; color:#8b7d70; font-size:9px; }
 @media(max-width:760px){ .admin-station-tabs{grid-template-columns:1fr;} }
+.detail-item-note{margin-top:7px;padding:7px 9px;border-radius:7px;background:#fff4cf;color:#68471f;font-size:11px;line-height:1.4;overflow-wrap:anywhere}.detail-item-note strong{font-weight:800}

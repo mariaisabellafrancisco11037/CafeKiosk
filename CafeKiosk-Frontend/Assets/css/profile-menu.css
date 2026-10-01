@@ -875,3 +875,7 @@ body.cku-v2 .cku-topbar {
     margin-top: 4px;
   }
 }
+/* Manager queue uses the shared top profile dropdown; suppress the legacy duplicate card. */
+body.manager-order-queue-page .queue-right>#staffButton.staff-profile{display:none!important;}
+body.manager-order-queue-page .ckp-profile-shell{z-index:7000!important;}
+body.manager-order-queue-page .ckp-menu{z-index:7100!important;max-height:min(72vh,620px);overflow-y:auto;}

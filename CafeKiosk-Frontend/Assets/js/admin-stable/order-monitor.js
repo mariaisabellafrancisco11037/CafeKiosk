@@ -266,7 +266,8 @@ function convertItem(item) {
     prepStation: normalizePrepStation(item.prepStation || item.prep_station) || classifyPrepStation(item.category || item.category_snapshot, item.name),
     qty,
     price: basePrice + customizationCost,
-    customizations: customizations.filter(Boolean)
+    customizations: customizations.filter(Boolean),
+    note: String(item.note ?? item.notes ?? item.specialNote ?? item.special_note ?? "").trim()
   };
 }
 
@@ -1546,6 +1547,7 @@ function renderDetail() {
               </div>
 
               ${custom}
+              ${item.note ? `<div class="detail-item-note"><strong>Note:</strong> ${escapeHTML(item.note)}</div>` : ""}
             </div>
           `;
 

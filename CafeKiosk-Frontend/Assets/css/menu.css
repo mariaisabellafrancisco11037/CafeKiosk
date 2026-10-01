@@ -3087,3 +3087,10 @@ button.inventory-option-unavailable,
 
 /* Keep final kiosk review actions above the persistent attribution footer. */
 #orderModalBox{padding-bottom:58px!important}#orderModalBox>.modal-actions{position:sticky!important;bottom:0!important;z-index:5!important;margin-top:14px!important;padding:12px 0 8px!important;background:linear-gradient(to top,#fffaf1 75%,rgba(255,250,241,0))!important}#orderModalBox>.modal-actions .cancel-btn,#orderModalBox>.modal-actions .confirm-btn{min-height:48px!important}
+
+/* 2026-10-01 confirmation readability fix: keep review dialog comfortably wide. */
+#orderModalBox.modal-box{width:min(720px,calc(100vw - 40px))!important;max-width:720px!important;max-height:min(86vh,760px)!important;padding-bottom:0!important}
+#orderModalBox>.modal-actions{position:static!important;margin-top:0!important;padding:16px 22px 20px!important;background:#fffaf1!important}
+#orderModalBox .modal-order-items{max-height:min(42vh,380px)!important}
+@media (orientation:landscape) and (min-width:900px){#orderModalBox.modal-box{width:min(720px,calc(100vw - 56px))!important;max-width:720px!important}}
+@media (max-width:720px){#orderModalBox.modal-box{width:min(100%,620px)!important}}
