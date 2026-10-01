@@ -5,6 +5,7 @@
   let configLoaded = false;
   let configLoadPromise = null;
   let formHydrated = false;
+  let activeCafeId = "";
 
   function apiUrl() {
     if (location.protocol === "http:" || location.protocol === "https:") {
@@ -180,6 +181,7 @@
 
         const payload = await response.json();
         config = payload.config || config;
+        activeCafeId = String(payload.cafeId || "").trim();
         configLoaded = true;
         return true;
       } catch (error) {
@@ -204,7 +206,26 @@
 
     const product = config.products?.[key] || null;
     const categoryDefaults = config.categoryDefaults?.[categoryKey(category)] || [];
-    const sizes = product?.sizes?.length ? product.sizes : categoryDefaults;
+
+    const productSizes =
+      Array.isArray(product?.sizes)
+        ? product.sizes
+        : [];
+
+    const isLegacyRegularPlaceholder =
+      activeCafeId === "cafe-1" &&
+      product?.sizesCustomized !== true &&
+      productSizes.length === 1 &&
+      String(productSizes[0]?.label || "").trim().toLowerCase() === "regular" &&
+      Number(productSizes[0]?.priceAdd ?? productSizes[0]?.price ?? 0) === 0 &&
+      Number(productSizes[0]?.multiplier ?? 1) === 1 &&
+      categoryDefaults.length > 1;
+
+    const sizes =
+      isLegacyRegularPlaceholder
+        ? categoryDefaults
+        : (productSizes.length ? productSizes : categoryDefaults);
+
     const container = sizesContainer();
     if (!container) return;
 
@@ -246,7 +267,8 @@
       productName: name,
       category,
       sizes,
-      ingredients
+      ingredients,
+      sizesCustomized: true
     };
 
     try {

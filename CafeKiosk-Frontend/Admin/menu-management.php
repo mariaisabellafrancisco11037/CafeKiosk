@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=sizes-ingredients-dragdrop-fix-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=cup-size-footer-fix-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
@@ -346,6 +346,10 @@
           </form>
         </section>
       </section>
+
+      <footer class="admin-menu-footer">
+        Developed by: Maria Isabella Francisco (Developer of CafeKiosk)
+      </footer>
     </main>
   </div>
 
@@ -401,7 +405,7 @@
     </div>
   </div>
 
-  <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-sizes-restored-20261001"></script>
+  <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
 <script src="../Assets/js/admin-stable/menu-management.js?v=cup-sizes-restored-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
