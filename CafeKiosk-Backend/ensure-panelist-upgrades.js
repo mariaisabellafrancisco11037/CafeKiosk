@@ -102,6 +102,22 @@ async function ensurePanelistUpgrades() {
     `);
     await connection.execute(`UPDATE users SET status='Active' WHERE cafe_id='cafe-1' AND status='Pending'`);
 
+    // Adviser demo requirement: demo cafe menu cards use photographs instead of category icons.
+    if (await tableExists(connection, 'products') && await tableExists(connection, 'categories')) {
+      const photoByKey = {
+        'coffee': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg',
+        'non-coffee': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg',
+        'milktea': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg',
+        'food': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg',
+        'snack': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg',
+        'dessert': 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg'
+      };
+      for (const [key, photo] of Object.entries(photoByKey)) {
+        await connection.execute(`UPDATE products p JOIN categories c ON c.category_id=p.category_id AND c.cafe_id=p.cafe_id SET p.image_path=? WHERE p.cafe_id='cafe-1' AND c.canonical_key=?`, [photo, key]);
+      }
+    }
+
+
     return { upgraded: true, added };
   } finally {
     connection.release();

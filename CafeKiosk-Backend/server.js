@@ -11,6 +11,7 @@ const { JWT_SECRET, isProduction } = require("./config/security");
 const kioskAccessStore = require("./services/kioskAccessStore");
 const auditLogMiddleware = require("./middleware/auditLogMiddleware");
 const dbPool = require("./config/dbPool");
+const ensurePanelistUpgrades = require('./ensure-panelist-upgrades');
 const { makeRateLimit } = require("./middleware/securityRateLimit");
 
 const {
@@ -508,7 +509,7 @@ app.use((req, res, next) => {
     // external scripts, plugins, frames and foreign form targets are blocked.
     res.setHeader(
         "Content-Security-Policy",
-        "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; manifest-src 'self'; worker-src 'self' blob:"
+        "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://commons.wikimedia.org https://upload.wikimedia.org; font-src 'self' data:; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:*; manifest-src 'self'; worker-src 'self' blob:"
     );
 
     if (isProduction()) {
@@ -2240,6 +2241,7 @@ server.listen(
                 "SELECT DATABASE() AS databaseName, VERSION() AS version"
             );
             console.log(`🟢 MySQL connected: ${dbRows[0]?.databaseName || process.env.DB_NAME || "cafekiosk"} @ ${process.env.DB_HOST || "127.0.0.1"}:${process.env.DB_PORT || 3306}`);
+            try { await ensurePanelistUpgrades(); } catch (upgradeError) { console.warn('Startup schema/data upgrade warning:', upgradeError.message); }
         } catch (error) {
             console.log(`🔴 MySQL not connected: ${error.code || "DB_ERROR"} - ${error.message}`);
             if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID) {

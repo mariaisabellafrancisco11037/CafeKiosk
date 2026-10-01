@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/Assets/css/admin-extension.css">
   <script src="/Assets/js/auth-session.js?v=14"></script>
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="/Assets/css/profile-menu.css?v=30">
+  <link rel="stylesheet" href="/Assets/css/profile-menu.css?v=31-approval-id-layout">
   <style>
     .user-name-cell{display:grid;gap:3px}.user-name-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.user-owner-pill{font-size:10px;font-weight:800;padding:3px 7px;border-radius:999px;background:#efe2c5;color:#715536}.user-self-pill{font-size:10px;font-weight:800;padding:3px 7px;border-radius:999px;background:#e8f3ec;color:#376d52}.user-status-reason{font-size:11px;color:var(--ck-muted);margin-top:5px}.status-action-btn[disabled]{opacity:.5;cursor:not-allowed}.status-dialog-account{padding:12px 14px;border:1px solid var(--ck-line);border-radius:10px;background:#fbf5e9;margin-bottom:14px}.status-dialog-account strong{display:block}.status-warning{padding:10px 12px;border-radius:9px;background:#fff1ef;color:#8e433e;font-size:12px;line-height:1.45}.status-warning.activate{background:#edf7f0;color:#376d52}.reason-count{text-align:right;font-size:11px;color:var(--ck-muted);margin-top:5px}.ck-table.users-table{min-width:980px}.status-note-card{position:relative;padding:16px 16px 12px;border:1px solid #d8c88d;border-radius:10px;background:#fff9d9;box-shadow:0 5px 14px rgba(93,74,35,.08)}.status-note-card::before{content:'NOTE';position:absolute;top:-9px;left:14px;padding:2px 8px;border-radius:999px;background:#e6d489;color:#5e4b21;font-size:9px;font-weight:900;letter-spacing:.08em}.status-note-card label{margin-top:2px}.status-note-card .ck-textarea{min-height:118px;resize:vertical;background:#fffdf0;border-color:#cabd81;line-height:1.5}.status-note-card .ck-textarea:focus{outline:2px solid rgba(121,173,145,.22);border-color:var(--ck-green)}.status-note-help{font-size:11px;color:#786b45;line-height:1.45;margin-top:7px}.status-note-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}.status-note-required{font-size:10px;font-weight:800;color:#7b6640}.status-note-meta .reason-count{margin:0}
   .invite-delivery-status{padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.5;border:1px solid #d9d1c2;background:#f8f5ef;color:#5f584f}.invite-delivery-status[data-type="success"]{background:#edf7f0;border-color:#bdd8c7;color:#2f6849}.invite-delivery-status[data-type="warning"]{background:#fff7df;border-color:#ead18a;color:#765d1e}
@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-fix3">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix3">
 </head>
 <body class="ck-admin-page uniform-admin">
 <div class="ck-shell">
@@ -134,9 +135,10 @@
 
 <script src="/Assets/js/user-page.js?v=16"></script>
 <script src="/Assets/js/staff-invite.js?v=3-copy-fix"></script>
-<script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
+<script src="/Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
 <script src="/Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-fix3"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
 </body>
 </html>

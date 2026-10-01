@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-fix3">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix3">
 </head>
 
 <body class="uniform-kiosk kiosk-menu">
@@ -40,7 +41,7 @@
       onclick="selectCategory('coffee', this)"
     >
       <img
-        src="/Assets/images/coffee.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
         alt="Coffee"
       >
       Coffee
@@ -52,7 +53,7 @@
       onclick="selectCategory('non-coffee', this)"
     >
       <img
-        src="/Assets/images/non-coffee.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
         alt="Non-Coffee"
       >
       Non-Coffee
@@ -64,7 +65,7 @@
       onclick="selectCategory('milktea', this)"
     >
       <img
-        src="/Assets/images/milktea.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
         alt="Milktea"
       >
       Milktea
@@ -76,7 +77,7 @@
       onclick="selectCategory('food', this)"
     >
       <img
-        src="/Assets/images/food.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
         alt="Food"
       >
       Food
@@ -88,7 +89,7 @@
       onclick="selectCategory('snack', this)"
     >
       <img
-        src="/Assets/images/snack.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
         alt="Snack"
       >
       Snack
@@ -100,7 +101,7 @@
       onclick="selectCategory('dessert', this)"
     >
       <img
-        src="/Assets/images/dessert.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
         alt="Dessert"
       >
       Dessert
@@ -131,7 +132,7 @@
 
       <img
         id="categoryIcon"
-        src="/Assets/images/coffee.png"
+        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
         alt="Coffee category"
       >
 
@@ -187,7 +188,7 @@
       >
         <img
           class="menu-img"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Latte"
         >
 
@@ -208,7 +209,7 @@
       >
         <img
           class="menu-img"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Cappuccino"
         >
 
@@ -229,7 +230,7 @@
       >
         <img
           class="menu-img"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Mocha"
         >
 
@@ -250,7 +251,7 @@
       >
         <img
           class="menu-img"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Americano"
         >
 
@@ -271,7 +272,7 @@
       >
         <img
           class="menu-img"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Espresso"
         >
 
@@ -442,7 +443,7 @@
 
         <img
           id="modalIcon"
-          src="/Assets/images/coffee.png"
+          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
           alt="Category icon"
         >
 
@@ -552,7 +553,7 @@
         <div class="item-custom-header-icon">
           <img
             id="itemModalIcon"
-            src="/Assets/images/coffee.png"
+            src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
             alt="Coffee"
           >
         </div>
@@ -677,9 +678,10 @@
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>
-  <script src="/Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
+  <script src="/Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
   <script src="/Assets/js/live-presence.js?v=3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-fix3"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
 </body>
 </html>

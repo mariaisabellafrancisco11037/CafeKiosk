@@ -6,7 +6,7 @@
       "key": "coffee",
       "name": "Coffee",
       "configKey": "coffee",
-      "image": "/Assets/images/coffee.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg",
       "sizes": [
         {
           "label": "Tall",
@@ -47,7 +47,7 @@
       "key": "non-coffee",
       "name": "Non-Coffee",
       "configKey": "non-coffee",
-      "image": "/Assets/images/non-coffee.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg",
       "sizes": [
         {
           "label": "Small",
@@ -84,7 +84,7 @@
       "key": "milktea",
       "name": "Milktea",
       "configKey": "milk-tea",
-      "image": "/Assets/images/milktea.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg",
       "sizes": [
         {
           "label": "Regular",
@@ -120,7 +120,7 @@
       "key": "food",
       "name": "Food",
       "configKey": "foods",
-      "image": "/Assets/images/food.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg",
       "sizes": [],
       "addons": [
         {
@@ -149,7 +149,7 @@
       "key": "snack",
       "name": "Snack",
       "configKey": "snacks",
-      "image": "/Assets/images/snack.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg",
       "sizes": [
         {
           "label": "Single",
@@ -177,7 +177,7 @@
       "key": "dessert",
       "name": "Dessert",
       "configKey": "dessert",
-      "image": "/Assets/images/dessert.png",
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg",
       "sizes": [
         {
           "label": "Single",
@@ -214,7 +214,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 0,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Double Espresso",
@@ -223,7 +223,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 1,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Americano",
@@ -232,7 +232,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 2,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cafe Latte",
@@ -241,7 +241,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 3,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cappuccino",
@@ -250,7 +250,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 4,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Flat White",
@@ -259,7 +259,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 5,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cafe Mocha",
@@ -268,7 +268,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 6,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "White Chocolate Mocha",
@@ -277,7 +277,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 7,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Caramel Macchiato",
@@ -286,7 +286,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 8,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Vanilla Latte",
@@ -295,7 +295,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 9,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Caramel Latte",
@@ -304,7 +304,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 10,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Hazelnut Latte",
@@ -313,7 +313,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 11,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Spanish Latte",
@@ -322,7 +322,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 12,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Brown Sugar Latte",
@@ -331,7 +331,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 13,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Salted Caramel Latte",
@@ -340,7 +340,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 14,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cinnamon Latte",
@@ -349,7 +349,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 15,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Honey Cinnamon Latte",
@@ -358,7 +358,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 16,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Pistachio Latte",
@@ -367,7 +367,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 17,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Toffee Nut Latte",
@@ -376,7 +376,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 18,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Dark Chocolate Mocha",
@@ -385,7 +385,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 19,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Black Coffee",
@@ -394,7 +394,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 20,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cafe Au Lait",
@@ -403,7 +403,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 21,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Vietnamese Coffee",
@@ -412,7 +412,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 22,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Macchiato",
@@ -421,7 +421,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 23,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Affogato",
@@ -430,7 +430,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 24,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Cold Brew",
@@ -439,7 +439,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 25,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Iced Americano",
@@ -448,7 +448,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 26,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Iced Cafe Latte",
@@ -457,7 +457,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 27,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Iced Cafe Mocha",
@@ -466,7 +466,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 28,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Iced Caramel Macchiato",
@@ -475,7 +475,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 29,
-      "image": "/Assets/images/coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
     },
     {
       "name": "Classic Hot Chocolate",
@@ -484,7 +484,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 30,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Dark Hot Chocolate",
@@ -493,7 +493,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 31,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "White Hot Chocolate",
@@ -502,7 +502,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 32,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Iced Chocolate",
@@ -511,7 +511,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 33,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Chocolate Milk",
@@ -520,7 +520,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 34,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Matcha Latte",
@@ -529,7 +529,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 35,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Iced Matcha Latte",
@@ -538,7 +538,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 36,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Strawberry Matcha Latte",
@@ -547,7 +547,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 37,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Mango Matcha Latte",
@@ -556,7 +556,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 38,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Vanilla Matcha Latte",
@@ -565,7 +565,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 39,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Strawberry Milk",
@@ -574,7 +574,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 40,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Mango Milk",
@@ -583,7 +583,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 41,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Banana Milk",
@@ -592,7 +592,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 42,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Cookies and Cream",
@@ -601,7 +601,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 43,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Chocolate Oreo",
@@ -610,7 +610,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 44,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Strawberry Smoothie",
@@ -619,7 +619,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 45,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Mango Smoothie",
@@ -628,7 +628,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 46,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Banana Smoothie",
@@ -637,7 +637,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 47,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Mixed Berry Smoothie",
@@ -646,7 +646,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 48,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Avocado Smoothie",
@@ -655,7 +655,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 49,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Fresh Lemonade",
@@ -664,7 +664,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 50,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Strawberry Lemonade",
@@ -673,7 +673,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 51,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Honey Lemon",
@@ -682,7 +682,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 52,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Peach Iced Tea",
@@ -691,7 +691,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 53,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Lemon Iced Tea",
@@ -700,7 +700,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 54,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Lychee Iced Tea",
@@ -709,7 +709,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 55,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Passion Fruit Tea",
@@ -718,7 +718,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 56,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Green Apple Soda",
@@ -727,7 +727,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 57,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Strawberry Soda",
@@ -736,7 +736,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 58,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Blueberry Soda",
@@ -745,7 +745,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 59,
-      "image": "/Assets/images/non-coffee.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
     },
     {
       "name": "Classic Milk Tea",
@@ -754,7 +754,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 60,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Pearl Milk Tea",
@@ -763,7 +763,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 61,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Brown Sugar Milk Tea",
@@ -772,7 +772,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 62,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Wintermelon Milk Tea",
@@ -781,7 +781,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 63,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Okinawa Milk Tea",
@@ -790,7 +790,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 64,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Hokkaido Milk Tea",
@@ -799,7 +799,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 65,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Thai Milk Tea",
@@ -808,7 +808,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 66,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Taro Milk Tea",
@@ -817,7 +817,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 67,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Matcha Milk Tea",
@@ -826,7 +826,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 68,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Chocolate Milk Tea",
@@ -835,7 +835,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 69,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Strawberry Milk Tea",
@@ -844,7 +844,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 70,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Mango Milk Tea",
@@ -853,7 +853,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 71,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Honeydew Milk Tea",
@@ -862,7 +862,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 72,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Vanilla Milk Tea",
@@ -871,7 +871,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 73,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Caramel Milk Tea",
@@ -880,7 +880,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 74,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Hazelnut Milk Tea",
@@ -889,7 +889,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 75,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Cookies and Cream Milk Tea",
@@ -898,7 +898,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 76,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Cheesecake Milk Tea",
@@ -907,7 +907,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 77,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Red Velvet Milk Tea",
@@ -916,7 +916,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 78,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Dark Chocolate Milk Tea",
@@ -925,7 +925,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 79,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Salted Caramel Milk Tea",
@@ -934,7 +934,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 80,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Brown Sugar Pearl Milk",
@@ -943,7 +943,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 81,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Taro Pearl Milk Tea",
@@ -952,7 +952,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 82,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Matcha Pearl Milk Tea",
@@ -961,7 +961,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 83,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Wintermelon Pearl Milk Tea",
@@ -970,7 +970,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 84,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Oreo Milk Tea",
@@ -979,7 +979,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 85,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Cream Cheese Milk Tea",
@@ -988,7 +988,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 86,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Pudding Milk Tea",
@@ -997,7 +997,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 87,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Grass Jelly Milk Tea",
@@ -1006,7 +1006,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 88,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Honey Pearl Milk Tea",
@@ -1015,7 +1015,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 89,
-      "image": "/Assets/images/milktea.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
     },
     {
       "name": "Classic Club Sandwich",
@@ -1024,7 +1024,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 90,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Ham and Cheese Sandwich",
@@ -1033,7 +1033,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 91,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Sandwich",
@@ -1042,7 +1042,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 92,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Tuna Sandwich",
@@ -1051,7 +1051,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 93,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Egg Sandwich",
@@ -1060,7 +1060,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 94,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Grilled Cheese Sandwich",
@@ -1069,7 +1069,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 95,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Pesto Sandwich",
@@ -1078,7 +1078,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 96,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "BLT Sandwich",
@@ -1087,7 +1087,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 97,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Wrap",
@@ -1096,7 +1096,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 98,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Tuna Wrap",
@@ -1105,7 +1105,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 99,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Burger",
@@ -1114,7 +1114,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 100,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Classic Beef Burger",
@@ -1123,7 +1123,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 101,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Cheeseburger",
@@ -1132,7 +1132,7 @@
       "price": 210,
       "availability": "Available",
       "sortOrder": 102,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Bacon Cheeseburger",
@@ -1141,7 +1141,7 @@
       "price": 230,
       "availability": "Available",
       "sortOrder": 103,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Mushroom Burger",
@@ -1150,7 +1150,7 @@
       "price": 220,
       "availability": "Available",
       "sortOrder": 104,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Carbonara",
@@ -1159,7 +1159,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 105,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Spaghetti Bolognese",
@@ -1168,7 +1168,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 106,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Alfredo Pasta",
@@ -1177,7 +1177,7 @@
       "price": 210,
       "availability": "Available",
       "sortOrder": 107,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Pesto Pasta",
@@ -1186,7 +1186,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 108,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Baked Mac and Cheese",
@@ -1195,7 +1195,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 109,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Rice Bowl",
@@ -1204,7 +1204,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 110,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Beef Rice Bowl",
@@ -1213,7 +1213,7 @@
       "price": 200,
       "availability": "Available",
       "sortOrder": 111,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Teriyaki Chicken Bowl",
@@ -1222,7 +1222,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 112,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Garlic Chicken Rice",
@@ -1231,7 +1231,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 113,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Beef Tapa Rice",
@@ -1240,7 +1240,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 114,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Chicken Caesar Salad",
@@ -1249,7 +1249,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 115,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Garden Salad",
@@ -1258,7 +1258,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 116,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Breakfast Plate",
@@ -1267,7 +1267,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 117,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Bacon and Egg Breakfast",
@@ -1276,7 +1276,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 118,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "Sausage and Egg Breakfast",
@@ -1285,7 +1285,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 119,
-      "image": "/Assets/images/food.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
     },
     {
       "name": "French Fries",
@@ -1294,7 +1294,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 120,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Cheese Fries",
@@ -1303,7 +1303,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 121,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Loaded Fries",
@@ -1312,7 +1312,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 122,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Potato Wedges",
@@ -1321,7 +1321,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 123,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Onion Rings",
@@ -1330,7 +1330,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 124,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Nachos",
@@ -1339,7 +1339,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 125,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Cheesy Nachos",
@@ -1348,7 +1348,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 126,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Loaded Nachos",
@@ -1357,7 +1357,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 127,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Mozzarella Sticks",
@@ -1366,7 +1366,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 128,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Chicken Nuggets",
@@ -1375,7 +1375,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 129,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Chicken Wings",
@@ -1384,7 +1384,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 130,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Buffalo Wings",
@@ -1393,7 +1393,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 131,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Garlic Parmesan Wings",
@@ -1402,7 +1402,7 @@
       "price": 190,
       "availability": "Available",
       "sortOrder": 132,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Chicken Tenders",
@@ -1411,7 +1411,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 133,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Popcorn Chicken",
@@ -1420,7 +1420,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 134,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Cheese Sticks",
@@ -1429,7 +1429,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 135,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Spring Rolls",
@@ -1438,7 +1438,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 136,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Fish and Chips",
@@ -1447,7 +1447,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 137,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Hash Browns",
@@ -1456,7 +1456,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 138,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Potato Croquettes",
@@ -1465,7 +1465,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 139,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Garlic Bread",
@@ -1474,7 +1474,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 140,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Cheesy Garlic Bread",
@@ -1483,7 +1483,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 141,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Mini Pizza",
@@ -1492,7 +1492,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 142,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Ham and Cheese Croissant",
@@ -1501,7 +1501,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 143,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Sausage Roll",
@@ -1510,7 +1510,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 144,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Chocolate Chip Cookie",
@@ -1519,7 +1519,7 @@
       "price": 70,
       "availability": "Available",
       "sortOrder": 145,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Oatmeal Cookie",
@@ -1528,7 +1528,7 @@
       "price": 70,
       "availability": "Available",
       "sortOrder": 146,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Chocolate Muffin",
@@ -1537,7 +1537,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 147,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Blueberry Muffin",
@@ -1546,7 +1546,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 148,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Banana Muffin",
@@ -1555,7 +1555,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 149,
-      "image": "/Assets/images/snack.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
     },
     {
       "name": "Classic Cheesecake",
@@ -1564,7 +1564,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 150,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Blueberry Cheesecake",
@@ -1573,7 +1573,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 151,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Strawberry Cheesecake",
@@ -1582,7 +1582,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 152,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Oreo Cheesecake",
@@ -1591,7 +1591,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 153,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Basque Burnt Cheesecake",
@@ -1600,7 +1600,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 154,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Cake",
@@ -1609,7 +1609,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 155,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Red Velvet Cake",
@@ -1618,7 +1618,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 156,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Carrot Cake",
@@ -1627,7 +1627,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 157,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Mocha Cake",
@@ -1636,7 +1636,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 158,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Ube Cake",
@@ -1645,7 +1645,7 @@
       "price": 160,
       "availability": "Available",
       "sortOrder": 159,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Tiramisu",
@@ -1654,7 +1654,7 @@
       "price": 180,
       "availability": "Available",
       "sortOrder": 160,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Brownie",
@@ -1663,7 +1663,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 161,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Walnut Brownie",
@@ -1672,7 +1672,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 162,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Lava Cake",
@@ -1681,7 +1681,7 @@
       "price": 170,
       "availability": "Available",
       "sortOrder": 163,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Banana Bread",
@@ -1690,7 +1690,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 164,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Donut",
@@ -1699,7 +1699,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 165,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Glazed Donut",
@@ -1708,7 +1708,7 @@
       "price": 80,
       "availability": "Available",
       "sortOrder": 166,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Strawberry Donut",
@@ -1717,7 +1717,7 @@
       "price": 90,
       "availability": "Available",
       "sortOrder": 167,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Cinnamon Roll",
@@ -1726,7 +1726,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 168,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Croissant",
@@ -1735,7 +1735,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 169,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Sundae",
@@ -1744,7 +1744,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 170,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Strawberry Sundae",
@@ -1753,7 +1753,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 171,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Vanilla Ice Cream",
@@ -1762,7 +1762,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 172,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Ice Cream",
@@ -1771,7 +1771,7 @@
       "price": 100,
       "availability": "Available",
       "sortOrder": 173,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Cookies and Cream Ice Cream",
@@ -1780,7 +1780,7 @@
       "price": 110,
       "availability": "Available",
       "sortOrder": 174,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Mango Graham",
@@ -1789,7 +1789,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 175,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Mango Float",
@@ -1798,7 +1798,7 @@
       "price": 130,
       "availability": "Available",
       "sortOrder": 176,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Leche Flan",
@@ -1807,7 +1807,7 @@
       "price": 120,
       "availability": "Available",
       "sortOrder": 177,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Chocolate Mousse",
@@ -1816,7 +1816,7 @@
       "price": 140,
       "availability": "Available",
       "sortOrder": 178,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     },
     {
       "name": "Panna Cotta",
@@ -1825,7 +1825,7 @@
       "price": 150,
       "availability": "Available",
       "sortOrder": 179,
-      "image": "/Assets/images/dessert.png"
+      "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
     }
   ]
 }

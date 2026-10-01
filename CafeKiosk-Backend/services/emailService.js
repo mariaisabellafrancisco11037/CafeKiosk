@@ -1,19 +1,21 @@
+const tls = require('tls');
 function clean(value) {
   return String(value ?? '').trim();
 }
 
 function getEmailConfig() {
+  const smtpHost = clean(process.env.SMTP_HOST);
+  const smtpPort = Number(process.env.SMTP_PORT || 465);
+  const smtpSecure = String(process.env.SMTP_SECURE || 'true').toLowerCase() !== 'false';
+  const smtpUser = clean(process.env.SMTP_USER);
+  const smtpPass = clean(process.env.SMTP_PASS).replace(/\s+/g, '');
+  const smtpFromEmail = clean(process.env.SMTP_FROM_EMAIL || smtpUser);
+  const smtpFromName = clean(process.env.SMTP_FROM_NAME) || 'CafeKiosk';
   const apiKey = clean(process.env.RESEND_API_KEY);
   const fromEmail = clean(process.env.RESEND_FROM_EMAIL);
   const fromName = clean(process.env.RESEND_FROM_NAME) || 'CafeKiosk';
-
-  return {
-    provider: 'resend',
-    apiKey,
-    fromEmail,
-    fromName,
-    configured: Boolean(apiKey && fromEmail)
-  };
+  const smtpConfigured = Boolean(smtpHost && smtpUser && smtpPass && smtpFromEmail && smtpSecure && smtpPort === 465);
+  return { provider: smtpConfigured ? 'smtp' : 'resend', smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass, smtpFromEmail, smtpFromName, apiKey, fromEmail, fromName, configured: smtpConfigured || Boolean(apiKey && fromEmail) };
 }
 
 function escapeHtml(value) {
@@ -194,6 +196,27 @@ function buildPasswordResetEmail({ cafeName, fullName, role, resetUrl, expiresMi
   return { subject, text, html };
 }
 
+function smtpDotStuff(value) { return String(value || '').replace(/\r?\n/g, '\r\n').replace(/^\./gm, '..'); }
+async function sendSmtpEmail({ to, subject, html, text, senderName, replyTo }) {
+  const c = getEmailConfig();
+  if (c.provider !== 'smtp') return { sent:false, configured:false, error:'Gmail SMTP is not configured.' };
+  const recipient=clean(to).toLowerCase(); if(!isEmail(recipient)) return {sent:false,configured:true,error:'The recipient email address is invalid.'};
+  return new Promise(resolve => {
+    let socket, buffer='', queue=[], settled=false;
+    const finish=v=>{if(settled)return;settled=true;try{socket?.end()}catch(_){}resolve(v)};
+    const next=(expect,cmd)=>new Promise((res,rej)=>{queue.push({expect,res,rej});if(cmd)socket.write(cmd+'\r\n')});
+    function pump(){while(queue.length){const m=buffer.match(/(?:^|\r\n)(\d{3})([- ])([^\r\n]*)(?:\r\n|$)/g);if(!m||!m.length)return;const lines=buffer.split('\r\n');let last='';for(let i=0;i<lines.length;i++){if(/^\d{3} /.test(lines[i]))last=lines[i]}if(!last)return;const code=Number(last.slice(0,3));buffer='';const q=queue.shift();if(!q)return;if(q.expect.includes(code)){q.res(code)}else q.rej(new Error('SMTP '+last));}}
+    try{socket=tls.connect({host:c.smtpHost,port:c.smtpPort,servername:c.smtpHost,rejectUnauthorized:true},()=>{});socket.setTimeout(20000);socket.on('data',d=>{buffer+=d.toString('utf8');pump()});socket.on('timeout',()=>finish({sent:false,configured:true,error:'SMTP connection timed out.'}));socket.on('error',e=>finish({sent:false,configured:true,error:e.message}));
+      (async()=>{try{
+        await next([220]); await next([250],`EHLO cafekiosk`); await next([334],'AUTH LOGIN'); await next([334],Buffer.from(c.smtpUser).toString('base64')); await next([235],Buffer.from(c.smtpPass).toString('base64')); await next([250],`MAIL FROM:<${c.smtpFromEmail}>`); await next([250,251],`RCPT TO:<${recipient}>`); await next([354],'DATA');
+        const fromName=clean(senderName)||c.smtpFromName; const headers=[`From: ${fromName} <${c.smtpFromEmail}>`,`To: <${recipient}>`,`Subject: ${clean(subject)}`,`MIME-Version: 1.0`,`Content-Type: multipart/alternative; boundary=ck_${Date.now()}`]; if(isEmail(replyTo))headers.push(`Reply-To: ${clean(replyTo).toLowerCase()}`); const b='ck_'+Date.now(); headers[headers.length-1]=`Content-Type: multipart/alternative; boundary=${b}`;
+        const msg=headers.join('\r\n')+'\r\n\r\n'+`--${b}\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n${smtpDotStuff(text)}\r\n--${b}\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${smtpDotStuff(html)}\r\n--${b}--\r\n.`;
+        await next([250],msg); await next([221],'QUIT').catch(()=>{}); finish({sent:true,configured:true,provider:'gmail-smtp'});
+      }catch(e){finish({sent:false,configured:true,error:e.message})}})();
+    }catch(e){finish({sent:false,configured:true,error:e.message})}
+  });
+}
+
 async function sendResendEmail({ to, subject, html, text, senderName, replyTo }) {
   const config = getEmailConfig();
   if (!config.configured) {
@@ -269,6 +292,8 @@ async function sendCafeRegistrationNotification(options={}) {
   const recipient=clean(process.env.SYSTEM_ADMIN_NOTIFICATION_EMAIL||process.env.SYSTEM_ADMIN_EMAIL);
   if(!recipient) return {sent:false,configured:false,error:'SYSTEM_ADMIN_NOTIFICATION_EMAIL is not configured.'};
   const content=buildCafeRegistrationNotification(options);
+  const config=getEmailConfig();
+  if(config.provider==='smtp') return sendSmtpEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
   return sendResendEmail({to:recipient,subject:content.subject,html:content.html,text:content.text,senderName:'CafeKiosk System'});
 }
 

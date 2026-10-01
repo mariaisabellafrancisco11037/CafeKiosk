@@ -217,7 +217,7 @@
   const PERSON_ICON_V2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>';
 
   const PAGE_META = {
-    'dashboard.php': { kicker: 'SYSTEM OVERVIEW', title: 'Admin Dashboard', desc: 'Live overview of orders, sales, POS, Kiosk, menu and inventory.' },
+    'dashboard.php': { kicker: 'SYSTEM OVERVIEW', title: 'Hello, Welcome to CafeKiosk', desc: 'Live overview of orders, sales, POS, Kiosk, menu and inventory.' },
     'order-monitor.php': { kicker: 'LIVE OPERATIONS', title: 'Order Monitor', desc: 'Monitor and manage live POS and Kiosk orders.' },
     'menu-management.php': { kicker: 'ADMIN CATALOG', title: 'Menu Management', desc: 'Manage categories, menu items and availability.' },
     'promotions-discount.php': { kicker: 'PROMOTIONS', title: 'Promotions & Discount', desc: 'Create and manage discount rules for POS and Kiosk.' },
@@ -409,9 +409,13 @@
 
     const title = document.createElement('section');
     title.className = 'cku-title-card';
+    const dashboardCafeName = String(sessionV2(area)?.cafeName || localStorage.getItem('cafeName') || 'CafeKiosk').trim() || 'CafeKiosk';
+    const titleMarkup = (area === 'admin' && file === 'dashboard.php')
+      ? `Hello, Welcome to <span data-cafe-identity>${escapeV2(dashboardCafeName)}</span>`
+      : escapeV2(meta.title);
     title.innerHTML = `
       <span class="cku-title-kicker">${escapeV2(meta.kicker)}</span>
-      <h1>${escapeV2(meta.title)}</h1>
+      <h1>${titleMarkup}</h1>
     `;
 
     const right = document.createElement('div');
@@ -476,6 +480,9 @@
     if (!area) return;
 
     const file = pageNameV2();
+    // POS and Kiosk keep their purpose-built layouts. The locked shell was colliding
+    // with their responsive grids and causing broken tablet/phone layouts.
+    if ((area === 'staff' && file === 'pos.php') || (area === 'manager' && file === 'pos.php') || (area === 'kiosk' && file === 'menu.php')) return;
     const shell = shellForV2(area);
     const sidebar = sidebarForV2(shell, area);
     const main = mainForV2(shell);

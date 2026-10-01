@@ -12,12 +12,13 @@
   >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
-  <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=30">
+  <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=31-approval-id-layout">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-final-responsive.css?v=20260928-admin-order-inventory-final-v2">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=adviser-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-fix3">
+  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-layout-fix3">
 </head>
 
 <body class="uniform-admin">
@@ -958,9 +959,10 @@
 
   <script src="../Assets/js/order-monitor.js?v=live-cookie-realtime-v1"></script>
 
-  <script src="../Assets/js/uniform-theme.js?v=20260928-mobile-v1"></script>
+  <script src="../Assets/js/uniform-theme.js?v=20261001-layout-fix3"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=adviser-v1"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261001-footer-fix3"></script>
+  <script src="/Assets/js/responsive-navigation.js?v=20261001-layout-fix3"></script>
 </body>
 </html>
