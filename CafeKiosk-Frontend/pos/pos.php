@@ -493,7 +493,7 @@
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-project-info-v9"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-thesis-info-v10"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>

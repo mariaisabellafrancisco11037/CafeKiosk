@@ -9,7 +9,7 @@
   footer.innerHTML = `
     <div class="ck-footer-inner">
       <div class="ck-footer-credit">
-        <strong>Developed by:</strong> Maria Isabella Francisco
+        <strong>Developed by:</strong> <strong class="ck-footer-developer-name">Maria Isabella Francisco</strong>
         <span class="ck-footer-role">(Developer of CafeKiosk)</span>
       </div>
       <div class="ck-footer-contributors">
@@ -17,7 +17,7 @@
         <span class="ck-footer-contributor-list">Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</span>
       </div>
       <div class="ck-footer-notice">
-        Academic Project Notice: CafeKiosk was developed for educational and academic purposes as part of a school project.
+        Thesis Project Notice: CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.
       </div>
     </div>`;
 

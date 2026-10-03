@@ -35,7 +35,7 @@
   <script src="../Assets/js/system-admin-login.js?v=1"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-project-info-v9"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-thesis-info-v10"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>
