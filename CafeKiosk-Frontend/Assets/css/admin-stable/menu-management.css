@@ -2214,3 +2214,60 @@ body.has-project-footer .product-grid::-webkit-scrollbar-thumb:hover {
     min-height: 420px !important;
   }
 }
+
+
+/* =========================================================
+   HIGH-VISIBILITY MENU MANAGEMENT SCROLLBARS — 2026-10-03
+   Product Catalog + Product Information form. Visual-only; no data logic.
+========================================================= */
+body.has-project-footer #menuView .product-grid {
+  height: clamp(500px, 70vh, 780px) !important;
+  min-height: 500px !important;
+  max-height: 780px !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #4c956f #eadfce !important;
+  padding-right: 10px !important;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar,
+body.has-project-footer #formView .product-form::-webkit-scrollbar {
+  width: 16px !important;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-track,
+body.has-project-footer #formView .product-form::-webkit-scrollbar-track {
+  background: #eadfce !important;
+  border: 1px solid rgba(83,53,31,.12);
+  border-radius: 999px;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb,
+body.has-project-footer #formView .product-form::-webkit-scrollbar-thumb {
+  background: #4c956f !important;
+  border: 3px solid #eadfce !important;
+  border-radius: 999px;
+  min-height: 64px;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb:hover,
+body.has-project-footer #formView .product-form::-webkit-scrollbar-thumb:hover {
+  background: #397a59 !important;
+}
+
+body.has-project-footer #formView .product-form {
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #4c956f #eadfce !important;
+  padding-right: 18px !important;
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 62vh !important;
+    min-height: 420px !important;
+  }
+}

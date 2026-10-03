@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=product-slider-session-fix-20261003">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=visible-scrollbar-fix-20261003">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=bulk-import-multizip-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -64,21 +64,48 @@
       grid-template-rows: auto auto !important;
     }
 
-    body.uniform-admin.has-project-footer #menuView .category-panel,
-    body.uniform-admin.has-project-footer #menuView .product-panel {
+    body.uniform-admin.has-project-footer #menuView .category-panel {
       height: auto !important;
       max-height: none !important;
       overflow: visible !important;
     }
 
+    /* Keep the Product Catalog large, but give it its own always-visible slider. */
     body.uniform-admin.has-project-footer #menuView .product-panel {
-      grid-template-rows: auto auto !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      grid-template-rows: auto minmax(0, 1fr) !important;
     }
 
     body.uniform-admin.has-project-footer #menuView .product-grid {
-      height: auto !important;
-      max-height: none !important;
-      overflow: visible !important;
+      height: clamp(500px, 70vh, 780px) !important;
+      min-height: 500px !important;
+      max-height: 780px !important;
+      overflow-x: hidden !important;
+      overflow-y: scroll !important;
+      scrollbar-gutter: stable !important;
+      scrollbar-width: auto !important;
+      scrollbar-color: #4c956f #eadfce !important;
+      padding-right: 10px !important;
+    }
+
+    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar {
+      width: 16px;
+    }
+    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-track {
+      background: #eadfce;
+      border: 1px solid rgba(83,53,31,.12);
+      border-radius: 999px;
+    }
+    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb {
+      background: #4c956f;
+      border: 3px solid #eadfce;
+      border-radius: 999px;
+      min-height: 64px;
+    }
+    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb:hover {
+      background: #397a59;
     }
 
     body.uniform-admin.has-project-footer .admin-menu-footer {
