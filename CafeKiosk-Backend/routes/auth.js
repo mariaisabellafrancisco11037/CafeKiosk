@@ -32,7 +32,6 @@ router.get('/password-reset/validate', controller.validatePasswordReset);
 router.post('/password-reset', recoveryLimiter, controller.resetPassword);
 
 router.post('/signup/owner', signupLimiter, controller.ownerSignup);
-router.get('/verify-owner-email', controller.verifyOwnerEmail);
 router.get('/invites/validate', inviteCheckLimiter, controller.validateInvite);
 router.post('/signup/staff', signupLimiter, controller.staffSignup);
 router.post('/invites', requireRole('Admin'), controller.createInvite);

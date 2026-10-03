@@ -1,0 +1,8 @@
+CafeKiosk System Administrator Approval Restored
+
+- New cafe owner registrations remain Pending/Inactive.
+- No owner signup verification/activation email is sent.
+- No approval email is sent to the cafe owner after approval.
+- Only the System Administrator Approvals section can approve/reject a new cafe account.
+- Approved owners can sign in after System Administrator approval.
+- Existing email features for staff invitations/password recovery were not removed.
