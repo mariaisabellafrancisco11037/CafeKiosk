@@ -352,11 +352,87 @@
 
 .ck-import-errors:empty { display: none; }
 
-.ck-import-progress { margin-top: 16px; }
-.ck-import-progress[hidden] { display: none; }
-.ck-import-progress-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: .83rem; }
-.ck-import-progress-track { height: 9px; overflow: hidden; border-radius: 999px; background: #e7ddcf; }
-.ck-import-progress-bar { width: 0%; height: 100%; background: var(--ck-import-green); transition: width .2s ease; }
+/* Full-screen processing overlay — intentionally matches Inventory bulk import. */
+.ck-import-progress {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 12, 7, .60);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.ck-import-progress[hidden] { display: none !important; }
+
+.ck-import-progress-card {
+  width: min(430px, 92vw);
+  padding: 26px;
+  border: 1px solid #ead7bd;
+  border-radius: 18px;
+  background: #fffaf0;
+  color: var(--ck-import-brown);
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+}
+
+.ck-import-spinner {
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  border: 4px solid #eadfd3;
+  border-top-color: var(--ck-import-green);
+  border-radius: 50%;
+  animation: ckMenuImportSpin .8s linear infinite;
+}
+
+.ck-import-progress-card h3 {
+  margin: 12px 0 6px;
+  color: var(--ck-import-brown);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.ck-import-progress-card p {
+  margin: 0 0 16px;
+  color: #66584d;
+  line-height: 1.5;
+}
+
+.ck-import-progress-card strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--ck-import-brown);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.ck-import-progress-card small {
+  display: block;
+  margin-top: 12px;
+  color: #806e5e;
+}
+
+.ck-import-progress-track {
+  height: 10px;
+  margin: 12px 0 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eadfd3;
+}
+
+.ck-import-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--ck-import-green);
+  transition: width .2s ease;
+}
+
+@keyframes ckMenuImportSpin {
+  to { transform: rotate(360deg); }
+}
 
 .ck-import-footer {
   position: sticky;

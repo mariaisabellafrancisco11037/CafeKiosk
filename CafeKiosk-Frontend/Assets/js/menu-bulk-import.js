@@ -680,15 +680,20 @@
     btn.textContent = busy ? "Preparing…" : "Prepare Preview";
   }
 
-  function setProgress(percent, label) {
+  function setProgress(percent, label, title) {
     const wrap = document.getElementById("ckImportProgress");
     const bar = document.getElementById("ckImportProgressBar");
     const copy = document.getElementById("ckImportProgressLabel");
     const pct = document.getElementById("ckImportProgressPct");
+    const heading = document.getElementById("ckImportProgressTitle");
+    const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
     if (wrap) wrap.hidden = false;
-    if (bar) bar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
-    if (copy) copy.textContent = label || "Working…";
-    if (pct) pct.textContent = `${Math.round(percent)}%`;
+    if (bar) bar.style.width = `${safePercent}%`;
+    if (copy) copy.textContent = label || "Please wait while CafeKiosk imports the menu.";
+    if (pct) pct.textContent = `${Math.round(safePercent)}%`;
+    if (heading) {
+      heading.textContent = title || (safePercent >= 100 ? "Menu Import Complete" : "Importing Menu…");
+    }
   }
 
   function hideProgress() {
@@ -842,7 +847,7 @@
     try {
       let resultCatalog = state.catalog;
       const validRows = state.plan.validRows;
-      setProgress(5, state.plan.mode === "full" ? "Saving menu items…" : "Preparing image replacements…");
+      setProgress(5, state.plan.mode === "full" ? `0 of ${validRows.length} menu items processed. Saving directly to this cafe\'s Menu database…` : "Preparing image replacements…");
 
       if (state.plan.mode === "full") {
         const existingProducts = Array.isArray(state.catalog.products) ? state.catalog.products : [];
@@ -952,14 +957,14 @@
         void imageDone;
       }
 
-      setProgress(100, "Import complete.");
+      setProgress(100, `${validRows.length} of ${validRows.length} menu items saved successfully.`, "Menu Import Complete");
       setErrors(state.plan.unmatchedImages.length
         ? `Import completed. ${state.plan.unmatchedImages.length} image(s) did not match a menu item and were skipped.`
         : "Import completed successfully. Reloading Menu Management…");
       setTimeout(() => window.location.reload(), 950);
     } catch (error) {
       setErrors(`Import stopped: ${error.message || error}`);
-      setProgress(0, "Import needs attention.");
+      setProgress(0, `Import stopped: ${error.message || error}`, "Import Needs Attention");
       [start, cancel, close].forEach(btn => { if (btn) btn.disabled = false; });
       state.busy = false;
     }
@@ -1024,8 +1029,14 @@
           </div>
           <div class="ck-import-errors" id="ckImportErrors"></div>
           <div class="ck-import-progress" id="ckImportProgress" hidden>
-            <div class="ck-import-progress-head"><span id="ckImportProgressLabel">Working…</span><b id="ckImportProgressPct">0%</b></div>
-            <div class="ck-import-progress-track"><div class="ck-import-progress-bar" id="ckImportProgressBar"></div></div>
+            <div class="ck-import-progress-card" role="status" aria-live="polite">
+              <div class="ck-import-spinner" aria-hidden="true"></div>
+              <h3 id="ckImportProgressTitle">Importing Menu…</h3>
+              <p id="ckImportProgressLabel">Please wait while CafeKiosk saves menu items to this cafe's database.</p>
+              <div class="ck-import-progress-track"><div class="ck-import-progress-bar" id="ckImportProgressBar"></div></div>
+              <strong id="ckImportProgressPct">0%</strong>
+              <small>Please do not close or refresh this page.</small>
+            </div>
           </div>
         </div>
         <footer class="ck-import-footer">

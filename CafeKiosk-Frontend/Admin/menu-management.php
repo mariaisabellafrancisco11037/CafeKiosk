@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=visible-scrollbar-fix-20261003">
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=polished-import-ui-20261003">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=menu-loading-overlay-20261003">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
@@ -530,7 +530,7 @@
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
 <script src="../Assets/js/admin-stable/menu-management.js?v=category-default-icons-20261003"></script>
-  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=customization-auto-addon-404fix-v3-20261001"></script>
+  <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=menu-loading-overlay-20261003"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=session-role-isolation-20261003-v2"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>

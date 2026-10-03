@@ -1,0 +1,14 @@
+CafeKiosk - Menu Management Bulk Import Loading Screen
+
+Updated Menu Management bulk import to use the same full-screen loading experience as Inventory bulk import.
+
+Changes included:
+- full-screen dark blurred overlay during Start Import
+- centered cream CafeKiosk progress card
+- animated green spinner
+- live progress bar and percentage
+- menu item processing status text
+- completion and error headings
+- warning not to close or refresh the page
+
+Existing CSV import, customization import, image ZIP/image upload, recipe linking, inventory linking, product updates, and cafe tenant isolation were preserved.
