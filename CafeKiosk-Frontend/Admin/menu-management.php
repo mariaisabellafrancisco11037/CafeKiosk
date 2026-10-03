@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=visible-scrollbar-fix-20261003">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=bottom-row-buttons-visible-fix-20261003b">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=menu-loading-overlay-20261003">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -77,20 +77,20 @@
       max-height: none !important;
       overflow: hidden !important;
       grid-template-rows: auto minmax(0, 1fr) !important;
-      padding-bottom: 96px !important;
+      padding-bottom: 24px !important;
     }
 
     body.uniform-admin.has-project-footer #menuView .product-grid {
-      height: clamp(720px, 86vh, 1080px) !important;
-      min-height: 720px !important;
-      max-height: 1080px !important;
+      height: 500px !important;
+      min-height: 500px !important;
+      max-height: 500px !important;
       overflow-x: hidden !important;
       overflow-y: scroll !important;
       scrollbar-gutter: stable !important;
       scrollbar-width: auto !important;
       scrollbar-color: #4c956f #eadfce !important;
       padding-right: 10px !important;
-      padding-bottom: 96px !important;
+      padding-bottom: 24px !important;
     }
 
     body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar {
@@ -114,25 +114,25 @@
 
     @media (max-width: 1100px) {
       body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: clamp(640px, 80vh, 920px) !important;
-        min-height: 640px !important;
-        max-height: 920px !important;
+        height: 500px !important;
+        min-height: 500px !important;
+        max-height: 500px !important;
       }
     }
 
     @media (max-width: 900px) {
       body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: clamp(560px, 74vh, 820px) !important;
-        min-height: 560px !important;
-        max-height: 820px !important;
+        height: 440px !important;
+        min-height: 440px !important;
+        max-height: 440px !important;
       }
     }
 
     @media (max-width: 640px) {
       body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: clamp(460px, 68vh, 720px) !important;
-        min-height: 460px !important;
-        max-height: 720px !important;
+        height: 380px !important;
+        min-height: 380px !important;
+        max-height: 380px !important;
       }
     }
 
@@ -143,7 +143,7 @@
       visibility: visible !important;
       opacity: 1 !important;
       width: 100% !important;
-      margin: 32px 0 0 !important;
+      margin: 24px 0 0 !important;
       z-index: 1 !important;
     }
 

@@ -2133,3 +2133,48 @@ body.has-project-footer .admin-menu-footer {
     max-height: 720px !important;
   }
 }
+
+
+/* =========================================================
+   EXACT FULL-ROW PRODUCT GRID FIT — 2026-10-03B
+   Ensure the visible Product Catalog area ends after a complete card row so
+   the bottom visible row still shows price + Edit/Delete buttons.
+========================================================= */
+body.has-project-footer #menuView .product-panel {
+  padding-bottom: 24px !important;
+}
+
+body.has-project-footer #menuView .product-grid {
+  height: 500px !important;
+  min-height: 500px !important;
+  max-height: 500px !important;
+  padding-bottom: 24px !important;
+}
+
+body.has-project-footer .admin-menu-footer {
+  margin-top: 24px !important;
+}
+
+@media (max-width: 1100px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 500px !important;
+    min-height: 500px !important;
+    max-height: 500px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 440px !important;
+    min-height: 440px !important;
+    max-height: 440px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 380px !important;
+    min-height: 380px !important;
+    max-height: 380px !important;
+  }
+}
