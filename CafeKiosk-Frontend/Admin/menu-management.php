@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=full-cards-visible-fix-20261003c">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=catalog-layout-scrollbar-redesign-20261003d">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=menu-loading-overlay-20261003">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -13,198 +13,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
-
-  <!-- Menu Management: whole-page scrolling so the footer is reached with the browser scrollbar. -->
-  <style id="menuManagementWholePageScrollFix">
-    html {
-      height: auto !important;
-      min-height: 100% !important;
-      overflow-x: hidden !important;
-      overflow-y: scroll !important;
-      scrollbar-gutter: stable;
-      scrollbar-width: auto;
-      scrollbar-color: rgba(76,149,111,.88) #eadfce;
-    }
-
-    body.uniform-admin.has-project-footer {
-      width: 100% !important;
-      height: auto !important;
-      min-height: 100dvh !important;
-      margin: 0 !important;
-      overflow: visible !important;
-    }
-
-    body.uniform-admin.has-project-footer .menu-shell {
-      width: 100% !important;
-      height: auto !important;
-      min-height: 100dvh !important;
-      overflow: visible !important;
-      align-items: start !important;
-    }
-
-    body.uniform-admin.has-project-footer .staff-sidebar {
-      position: sticky !important;
-      top: 0 !important;
-      align-self: start !important;
-      height: 100dvh !important;
-      max-height: 100dvh !important;
-    }
-
-    body.uniform-admin.has-project-footer .menu-main {
-      height: auto !important;
-      min-height: 100dvh !important;
-      overflow: visible !important;
-      grid-template-rows: 74px auto !important;
-      padding-bottom: 22px !important;
-    }
-
-    body.uniform-admin.has-project-footer #menuView.menu-dashboard:not(.hidden) {
-      height: auto !important;
-      min-height: 0 !important;
-      overflow: visible !important;
-      grid-template-rows: auto auto !important;
-    }
-
-    body.uniform-admin.has-project-footer #menuView .category-panel {
-      height: auto !important;
-      max-height: none !important;
-      overflow: visible !important;
-    }
-
-    /* Keep the Product Catalog large, but give it its own always-visible slider. */
-    body.uniform-admin.has-project-footer #menuView .product-panel {
-      height: auto !important;
-      max-height: none !important;
-      overflow: hidden !important;
-      grid-template-rows: auto minmax(0, 1fr) !important;
-      padding-bottom: 24px !important;
-    }
-
-    body.uniform-admin.has-project-footer #menuView .product-grid {
-      height: 500px !important;
-      min-height: 500px !important;
-      max-height: 500px !important;
-      overflow-x: hidden !important;
-      overflow-y: scroll !important;
-      scrollbar-gutter: stable !important;
-      scrollbar-width: auto !important;
-      scrollbar-color: #4c956f #eadfce !important;
-      padding-right: 10px !important;
-      padding-bottom: 24px !important;
-    }
-
-    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar {
-      width: 16px;
-    }
-    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-track {
-      background: #eadfce;
-      border: 1px solid rgba(83,53,31,.12);
-      border-radius: 999px;
-    }
-    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb {
-      background: #4c956f;
-      border: 3px solid #eadfce;
-      border-radius: 999px;
-      min-height: 64px;
-    }
-    body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb:hover {
-      background: #397a59;
-    }
-
-
-    @media (max-width: 1100px) {
-      body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: 500px !important;
-        min-height: 500px !important;
-        max-height: 500px !important;
-      }
-    }
-
-    @media (max-width: 900px) {
-      body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: 440px !important;
-        min-height: 440px !important;
-        max-height: 440px !important;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: 380px !important;
-        min-height: 380px !important;
-        max-height: 380px !important;
-      }
-    }
-
-    body.uniform-admin.has-project-footer .admin-menu-footer {
-      position: relative !important;
-      inset: auto !important;
-      display: flex !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      width: 100% !important;
-      margin: 24px 0 0 !important;
-      z-index: 1 !important;
-    }
-
-    html::-webkit-scrollbar { width: 12px; }
-    html::-webkit-scrollbar-track { background: #eadfce; }
-    html::-webkit-scrollbar-thumb {
-      background: rgba(76,149,111,.88);
-      border: 2px solid #eadfce;
-      border-radius: 999px;
-    }
-    html::-webkit-scrollbar-thumb:hover { background: #3f805f; }
-  </style>
-
-  <!-- Final Product Catalog full-card visibility fix -->
-  <style id="menuManagementFullCardVisibilityFixFinal">
-    body.uniform-admin.has-project-footer #menuView .product-grid {
-      height: 460px !important;
-      min-height: 460px !important;
-      max-height: 460px !important;
-      padding: 0 10px 0 1px !important;
-      gap: 12px !important;
-      grid-auto-rows: 224px !important;
-      scroll-snap-type: y proximity;
-      scroll-padding-top: 0;
-      overscroll-behavior-y: contain;
-    }
-
-    body.uniform-admin.has-project-footer #menuView .product-card {
-      min-height: 224px !important;
-      height: 224px !important;
-      scroll-snap-align: start;
-    }
-
-    body.uniform-admin.has-project-footer .admin-menu-footer {
-      margin-top: 24px !important;
-    }
-
-    @media (max-width: 900px) {
-      body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: 460px !important;
-        min-height: 460px !important;
-        max-height: 460px !important;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body.uniform-admin.has-project-footer #menuView .product-grid {
-        height: 340px !important;
-        min-height: 340px !important;
-        max-height: 340px !important;
-        grid-auto-rows: 164px !important;
-      }
-
-      body.uniform-admin.has-project-footer #menuView .product-card {
-        min-height: 164px !important;
-        height: 164px !important;
-      }
-    }
-  </style>
-
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
+<link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 <body class="uniform-admin has-project-footer">
   <div class="menu-shell">
@@ -612,6 +421,5 @@
   <script src="../Assets/js/admin-stable/profile-menu.js?v=20261003-change-email-v1"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
-  <script src="/Assets/js/admin-stable/menu-catalog-full-row-fix.js?v=20261003-final-full-row-v1"></script>
 </body>
 </html>

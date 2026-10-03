@@ -1,0 +1,12 @@
+CafeKiosk Menu Management - Product Catalog Layout + Scrollbar Redesign
+Date: 2026-10-03
+
+Changes:
+- Removed the conflicting inline Menu Management layout overrides.
+- Removed the runtime full-row JavaScript override that was forcing dimensions with inline !important styles.
+- Rebuilt Menu Management page flow so the product panel can grow to its real height.
+- Product Catalog now has one dedicated, always-visible styled vertical scrollbar.
+- Desktop catalog viewport is exactly two complete 224px card rows plus the 12px row gap (460px total).
+- Product cards can no longer be cropped by the product panel/footer.
+- The thesis footer remains in normal document flow below the complete Menu Management page.
+- No menu/product data or backend logic was changed.

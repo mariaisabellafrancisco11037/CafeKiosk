@@ -2089,360 +2089,126 @@ body.product-save-busy {
 }
 
 /* =========================================================
-   WHOLE-PAGE SCROLL + FOOTER FLOW — 2026-10-03
-   The browser/page scrollbar now controls Menu Management from the header,
-   through the full Product Catalog, down to the thesis footer. Product cards
-   are not placed inside a separate vertically scrolling viewport.
+   MENU MANAGEMENT PRODUCT CATALOG — CLEAN LAYOUT + SCROLLBAR
+   2026-10-03D
+
+   Goals:
+   - Product Catalog is never clipped by the page/footer.
+   - The catalog owns one clear vertical scrollbar.
+   - Two complete card rows are visible at a time on desktop.
+   - The thesis footer stays in normal document flow below the page.
+   - No runtime JavaScript is allowed to force dimensions inline.
 ========================================================= */
+
 html {
   height: auto !important;
-  min-height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   scrollbar-gutter: stable;
 }
 
 body.has-project-footer {
+  width: 100% !important;
   height: auto !important;
   min-height: 100dvh !important;
+  max-height: none !important;
   overflow-x: hidden !important;
   overflow-y: visible !important;
 }
 
+/* Let the application grow with its real content instead of clipping it to
+   the viewport. The footer therefore starts only after Menu Management ends. */
 body.has-project-footer .menu-shell {
+  width: 100% !important;
   height: auto !important;
   min-height: 100dvh !important;
   overflow: visible !important;
-  align-items: start;
+  align-items: start !important;
 }
 
 body.has-project-footer .staff-sidebar {
-  position: sticky;
-  top: 0;
-  height: 100dvh;
-  max-height: 100dvh;
+  position: sticky !important;
+  top: 0 !important;
+  align-self: start !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
 }
 
 body.has-project-footer .menu-main {
   height: auto !important;
   min-height: 100dvh !important;
-  grid-template-rows: auto auto !important;
-  overflow: visible !important;
-}
-
-body.has-project-footer .menu-dashboard {
-  min-height: 0 !important;
-  grid-template-rows: auto auto !important;
-  overflow: visible !important;
-}
-
-body.has-project-footer .product-panel {
-  min-height: 0 !important;
-  grid-template-rows: auto auto !important;
-  overflow: visible !important;
-}
-
-body.has-project-footer .product-grid {
-  min-height: 0 !important;
-  height: auto !important;
   max-height: none !important;
-  overflow-x: visible !important;
-  overflow-y: visible !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding-bottom: 24px !important;
 }
 
-body.has-project-footer .admin-menu-footer {
-  position: static !important;
-  width: 100%;
+body.has-project-footer .menu-topbar {
+  flex: 0 0 auto !important;
 }
 
-@media (max-width: 900px) {
-  body.has-project-footer .staff-sidebar {
-    position: static;
-    height: auto;
-    max-height: none;
-  }
-}
-
-
-/* =========================================================
-   PRODUCT CATALOG SLIDER RESTORED — 2026-10-03
-   Keep the whole page scroll for the thesis footer, but give the Product
-   Catalog its own clearly visible vertical scrollbar again. This does not
-   alter, filter, seed, or remove any products.
-========================================================= */
-body.has-project-footer .product-panel {
+body.has-project-footer #menuView.menu-dashboard:not(.hidden) {
+  width: 100% !important;
+  height: auto !important;
   min-height: 0 !important;
-  overflow: hidden !important;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
 }
 
-body.has-project-footer .product-grid {
-  height: clamp(480px, 68vh, 760px) !important;
-  min-height: 480px !important;
-  max-height: 820px !important;
-  overflow-x: hidden !important;
-  overflow-y: scroll !important;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
-  scrollbar-width: auto;
-  scrollbar-color: #5a9a70 #efe2d0;
-  padding-right: 8px !important;
+body.has-project-footer #menuView .category-panel {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
-body.has-project-footer .product-grid::-webkit-scrollbar {
-  width: 12px;
-}
-
-body.has-project-footer .product-grid::-webkit-scrollbar-track {
-  background: #efe2d0;
-  border-radius: 999px;
-}
-
-body.has-project-footer .product-grid::-webkit-scrollbar-thumb {
-  background: #5a9a70;
-  border: 2px solid #efe2d0;
-  border-radius: 999px;
-  min-height: 54px;
-}
-
-body.has-project-footer .product-grid::-webkit-scrollbar-thumb:hover {
-  background: #477e5b;
-}
-
-@media (max-width: 900px) {
-  body.has-project-footer .product-grid {
-    height: 62vh !important;
-    min-height: 460px !important;
-  }
-}
-
-
-/* =========================================================
-   HIGH-VISIBILITY MENU MANAGEMENT SCROLLBARS — 2026-10-03
-   Product Catalog + Product Information form. Visual-only; no data logic.
-========================================================= */
-body.has-project-footer #menuView .product-grid {
-  height: clamp(720px, 86vh, 1080px) !important;
-  min-height: 560px !important;
-  max-height: 1080px !important;
-  overflow-x: hidden !important;
-  overflow-y: scroll !important;
-  scrollbar-gutter: stable !important;
-  scrollbar-width: auto !important;
-  scrollbar-color: #4c956f #eadfce !important;
-  padding-right: 10px !important;
-}
-
-body.has-project-footer #menuView .product-grid::-webkit-scrollbar,
-body.has-project-footer #formView .product-form::-webkit-scrollbar {
-  width: 16px !important;
-}
-
-body.has-project-footer #menuView .product-grid::-webkit-scrollbar-track,
-body.has-project-footer #formView .product-form::-webkit-scrollbar-track {
-  background: #eadfce !important;
-  border: 1px solid rgba(83,53,31,.12);
-  border-radius: 999px;
-}
-
-body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb,
-body.has-project-footer #formView .product-form::-webkit-scrollbar-thumb {
-  background: #4c956f !important;
-  border: 3px solid #eadfce !important;
-  border-radius: 999px;
-  min-height: 64px;
-}
-
-body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb:hover,
-body.has-project-footer #formView .product-form::-webkit-scrollbar-thumb:hover {
-  background: #397a59 !important;
-}
-
-body.has-project-footer #formView .product-form {
-  overflow-y: scroll !important;
-  scrollbar-gutter: stable !important;
-  scrollbar-width: auto !important;
-  scrollbar-color: #4c956f #eadfce !important;
-  padding-right: 18px !important;
-}
-
-@media (max-width: 900px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 62vh !important;
-    min-height: 460px !important;
-  }
-}
-
-
-/* =========================================================
-   PRODUCT CATALOG CUT-OFF FIX — 2026-10-03
-   Keep the product catalog comfortably visible above the footer so cards
-   do not look clipped. Visual/layout only.
-========================================================= */
+/* Product panel is intentionally allowed to expand. This is the key fix:
+   the internal 460px catalog can no longer be cropped by a shorter parent. */
 body.has-project-footer #menuView .product-panel {
-  padding-bottom: 96px !important;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 13px !important;
+  padding: 15px 16px 18px !important;
 }
 
+body.has-project-footer #menuView .product-panel-head {
+  flex: 0 0 auto !important;
+}
+
+/* Exactly two full 224px rows + one 12px gap. */
 body.has-project-footer #menuView .product-grid {
-  height: clamp(720px, 86vh, 1080px) !important;
-  min-height: 720px !important;
-  max-height: 1080px !important;
-  padding-bottom: 96px !important;
-}
-
-body.has-project-footer .admin-menu-footer {
-  margin-top: 18px !important;
-}
-
-@media (max-width: 1100px) {
-  body.has-project-footer #menuView .product-grid {
-    height: clamp(640px, 80vh, 920px) !important;
-    min-height: 640px !important;
-    max-height: 920px !important;
-  }
-}
-
-@media (max-width: 900px) {
-  body.has-project-footer #menuView .product-grid {
-    height: clamp(560px, 74vh, 820px) !important;
-    min-height: 560px !important;
-    max-height: 820px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  body.has-project-footer #menuView .product-grid {
-    height: clamp(460px, 68vh, 720px) !important;
-    min-height: 460px !important;
-    max-height: 720px !important;
-  }
-}
-
-
-/* =========================================================
-   EXACT FULL-ROW PRODUCT GRID FIT — 2026-10-03B
-   Ensure the visible Product Catalog area ends after a complete card row so
-   the bottom visible row still shows price + Edit/Delete buttons.
-========================================================= */
-body.has-project-footer #menuView .product-panel {
-  padding-bottom: 24px !important;
-}
-
-body.has-project-footer #menuView .product-grid {
-  height: 500px !important;
-  min-height: 500px !important;
-  max-height: 500px !important;
-  padding-bottom: 24px !important;
-}
-
-body.has-project-footer .admin-menu-footer {
-  margin-top: 24px !important;
-}
-
-@media (max-width: 1100px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 500px !important;
-    min-height: 500px !important;
-    max-height: 500px !important;
-  }
-}
-
-@media (max-width: 900px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 440px !important;
-    min-height: 440px !important;
-    max-height: 440px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 380px !important;
-    min-height: 380px !important;
-    max-height: 380px !important;
-  }
-}
-
-
-/* =========================================================
-   FULL PRODUCT CARD VISIBILITY FIX — 2026-10-03C
-   Show only complete visible rows in Product Catalog so the bottom visible
-   cards are never clipped. Keeps internal scrolling for the catalog.
-========================================================= */
-body.has-project-footer #menuView .product-grid {
+  width: 100% !important;
   height: 460px !important;
   min-height: 460px !important;
   max-height: 460px !important;
-  padding: 0 10px 0 1px !important;
-  gap: 12px !important;
+  flex: 0 0 460px !important;
   grid-auto-rows: 224px !important;
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 0;
-  overscroll-behavior-y: contain;
+  align-content: start !important;
+  gap: 12px !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: stable !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #4c956f #eee2d0 !important;
+  scroll-snap-type: y mandatory !important;
+  scroll-padding-block: 0 !important;
+  padding: 0 14px 0 1px !important;
 }
 
 body.has-project-footer #menuView .product-card {
-  min-height: 224px !important;
-  height: 224px !important;
-  scroll-snap-align: start;
-}
-
-body.has-project-footer .admin-menu-footer {
-  margin-top: 24px !important;
-}
-
-@media (max-width: 900px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 460px !important;
-    min-height: 460px !important;
-    max-height: 460px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  body.has-project-footer #menuView .product-grid {
-    height: 340px !important;
-    min-height: 340px !important;
-    max-height: 340px !important;
-    grid-auto-rows: 164px !important;
-  }
-
-  body.has-project-footer #menuView .product-card {
-    min-height: 164px !important;
-    height: 164px !important;
-  }
-}
-
-/* =========================================================
-   FINAL FULL-ROW CATALOG GUARANTEE — 2026-10-03
-   Runtime JS reinforces this block after theme scripts. The visible catalog
-   viewport is exactly two complete 224px rows + one 12px gap.
-========================================================= */
-body.ck-full-menu-cards #menuView .product-panel {
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: hidden !important;
-  padding-bottom: 18px !important;
-}
-
-body.ck-full-menu-cards #menuView .product-grid {
-  height: 460px !important;
-  min-height: 460px !important;
-  max-height: 460px !important;
-  grid-auto-rows: 224px !important;
-  gap: 12px !important;
-  align-content: start !important;
-  overflow-x: hidden !important;
-  overflow-y: scroll !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  padding-right: 10px !important;
-  scroll-snap-type: y mandatory !important;
-  scroll-padding-top: 0 !important;
-  scrollbar-gutter: stable !important;
-}
-
-body.ck-full-menu-cards #menuView .product-card {
   height: 224px !important;
   min-height: 224px !important;
   max-height: 224px !important;
@@ -2450,9 +2216,70 @@ body.ck-full-menu-cards #menuView .product-card {
   scroll-snap-stop: always !important;
 }
 
-body.ck-full-menu-cards .cafekiosk-developer-footer,
-body.ck-full-menu-cards .admin-menu-footer {
-  position: static !important;
-  clear: both !important;
-  margin-top: 24px !important;
+/* Clear, inset scrollbar that never sits underneath the card content. */
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar {
+  width: 14px !important;
 }
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-track {
+  background: #eee2d0 !important;
+  border: 1px solid rgba(83, 53, 31, .12) !important;
+  border-radius: 999px !important;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb {
+  background: #4c956f !important;
+  border: 3px solid #eee2d0 !important;
+  border-radius: 999px !important;
+  min-height: 68px !important;
+}
+
+body.has-project-footer #menuView .product-grid::-webkit-scrollbar-thumb:hover {
+  background: #397a59 !important;
+}
+
+/* Keep the thesis footer after the complete menu shell, never on top of cards. */
+body.has-project-footer .cafekiosk-developer-footer,
+body.has-project-footer .admin-menu-footer {
+  position: static !important;
+  inset: auto !important;
+  clear: both !important;
+  width: 100% !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 930px) {
+  body.has-project-footer .staff-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  body.has-project-footer #menuView .product-grid {
+    height: 460px !important;
+    min-height: 460px !important;
+    max-height: 460px !important;
+    flex-basis: 460px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  body.has-project-footer #menuView .product-panel {
+    padding: 13px 12px 15px !important;
+  }
+
+  body.has-project-footer #menuView .product-grid {
+    height: 460px !important;
+    min-height: 460px !important;
+    max-height: 460px !important;
+    flex-basis: 460px !important;
+    grid-auto-rows: 224px !important;
+    padding-right: 10px !important;
+  }
+
+  body.has-project-footer #menuView .product-card {
+    height: 224px !important;
+    min-height: 224px !important;
+    max-height: 224px !important;
+  }
+}
+
