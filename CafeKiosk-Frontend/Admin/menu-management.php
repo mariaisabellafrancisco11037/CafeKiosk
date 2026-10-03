@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=menu-catalog-large-slider-20261003">
 </head>
 <body class="uniform-admin">
   <div class="menu-shell">
