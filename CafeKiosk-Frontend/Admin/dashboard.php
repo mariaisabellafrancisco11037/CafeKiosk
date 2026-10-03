@@ -298,7 +298,7 @@
   </div>
 
   <!-- Existing CafeKiosk authentication helper -->
-  <script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/auth-session.js?v=session-role-isolation-20261003-v2"></script>
   <script src="../Assets/js/admin-stable/dashboard.js?v=admin-stable-20261001"></script>
 <script src="../Assets/js/admin-stable/dashboard-products.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>

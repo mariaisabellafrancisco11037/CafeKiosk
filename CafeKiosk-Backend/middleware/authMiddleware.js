@@ -81,10 +81,21 @@ function requestedRoleSelector(req) {
 function decodeRequestUser(req, preferredRoles = []) {
   const normalizedPreferred = preferredRoles.map(normalizeRole).filter((role) => COOKIE_NAMES[role]);
   const selected = requestedRoleSelector(req);
-  const order = [];
 
+  // IMPORTANT: A browser can be signed in as Admin, Manager and Staff at the
+  // same time. When the tab explicitly identifies its active role, authenticate
+  // ONLY with that role's HttpOnly cookie. Never fall through to another role's
+  // cookie, because that makes one tab unexpectedly inherit another tab's login.
+  if (selected) {
+    const rawToken = getRoleCookieToken(req, selected);
+    const claims = verifyJwt(rawToken);
+    return claims ? { ...claims, _cookieRole: selected, _rawToken: rawToken } : null;
+  }
+
+  // Requests that cannot send X-Cafe-Role (for example protected page
+  // navigation) use the route's allowed/preferred role first.
+  const order = [];
   for (const role of normalizedPreferred) if (!order.includes(role)) order.push(role);
-  if (selected && !order.includes(selected)) order.push(selected);
   for (const role of ['admin', 'manager', 'staff']) if (!order.includes(role)) order.push(role);
 
   for (const role of order) {

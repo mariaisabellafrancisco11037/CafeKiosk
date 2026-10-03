@@ -6,7 +6,7 @@
 <title>CafeKiosk - Settings</title>
 <link rel="stylesheet" href="../Assets/css/admin-stable/admin-extension.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/kiosk-access.css?v=admin-stable-20261001">
-<script src="../Assets/js/admin-stable/auth-session.js?v=admin-stable-20261001"></script>
+<script src="../Assets/js/admin-stable/auth-session.js?v=session-role-isolation-20261003-v2"></script>
 <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">

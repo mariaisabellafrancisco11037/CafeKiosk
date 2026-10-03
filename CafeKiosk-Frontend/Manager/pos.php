@@ -482,7 +482,7 @@
   </section>
 </div>
 
-<script src="../Assets/js/auth-session.js"></script>
+<script src="../Assets/js/auth-session.js?v=session-role-isolation-20261003-v2"></script>
 <script src="/Assets/js/pos.js?v=20261003-db-images-v1"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>

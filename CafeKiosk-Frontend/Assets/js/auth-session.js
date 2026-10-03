@@ -554,39 +554,15 @@
                     .toLowerCase();
 
 
-            // Admin page may only keep an Admin session.
+            // Each browser tab is role-isolated. If this tab says it is Admin,
+            // Manager, or Staff, /api/auth/me must return that exact role.
+            // This prevents another role cookie in the same browser from taking over.
             if (
-                activeRole ===
-                    "admin" &&
-                returnedRole !==
-                    "admin"
+                ["admin", "manager", "staff"].includes(activeRole) &&
+                returnedRole !== activeRole
             ) {
-
-                throw new Error(
-                    "Admin session required."
-                );
-
+                throw new Error(`${activeRole} session required.`);
             }
-
-
-            // Staff/POS page accepts Staff or Admin.
-            if (
-                activeRole ===
-                    "staff" &&
-                ![
-                    "staff",
-                    "admin"
-                ].includes(
-                    returnedRole
-                )
-            ) {
-
-                throw new Error(
-                    "Staff session required."
-                );
-
-            }
-
 
             return data.user;
 

@@ -2162,3 +2162,55 @@ body.has-project-footer .admin-menu-footer {
     max-height: none;
   }
 }
+
+
+/* =========================================================
+   PRODUCT CATALOG SLIDER RESTORED — 2026-10-03
+   Keep the whole page scroll for the thesis footer, but give the Product
+   Catalog its own clearly visible vertical scrollbar again. This does not
+   alter, filter, seed, or remove any products.
+========================================================= */
+body.has-project-footer .product-panel {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.has-project-footer .product-grid {
+  height: clamp(480px, 68vh, 760px) !important;
+  min-height: 480px !important;
+  max-height: 760px !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: #5a9a70 #efe2d0;
+  padding-right: 8px !important;
+}
+
+body.has-project-footer .product-grid::-webkit-scrollbar {
+  width: 12px;
+}
+
+body.has-project-footer .product-grid::-webkit-scrollbar-track {
+  background: #efe2d0;
+  border-radius: 999px;
+}
+
+body.has-project-footer .product-grid::-webkit-scrollbar-thumb {
+  background: #5a9a70;
+  border: 2px solid #efe2d0;
+  border-radius: 999px;
+  min-height: 54px;
+}
+
+body.has-project-footer .product-grid::-webkit-scrollbar-thumb:hover {
+  background: #477e5b;
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer .product-grid {
+    height: 62vh !important;
+    min-height: 420px !important;
+  }
+}

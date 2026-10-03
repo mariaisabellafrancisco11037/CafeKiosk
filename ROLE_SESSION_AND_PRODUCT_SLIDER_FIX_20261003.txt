@@ -1,0 +1,12 @@
+CafeKiosk fix - 2026-10-03
+
+1. Same-browser Admin / Manager / Staff role isolation
+- Role-specific HttpOnly cookies remain separate.
+- X-Cafe-Role now selects ONLY the matching cookie; it no longer falls through to another logged-in role.
+- Each tab verifies that /api/auth/me returns exactly the active role.
+- Logging out one role does not clear the other role cookies/sessions.
+
+2. Menu Management Product Catalog slider restored
+- Product Catalog has its own visible vertical scrollbar again.
+- Whole-page scrolling is retained so the thesis footer remains reachable.
+- Menu products/data are not modified by this change.

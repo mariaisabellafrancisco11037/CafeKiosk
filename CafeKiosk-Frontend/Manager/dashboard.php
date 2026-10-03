@@ -103,7 +103,7 @@
       <div class="staff-dashboard-message" id="staffDashboardMessage" aria-live="polite"></div>
     </main>
   </div>
-  <script src="../Assets/js/auth-session.js?v=manager1"></script>
+  <script src="../Assets/js/auth-session.js?v=session-role-isolation-20261003-v2"></script>
   <script src="../Assets/js/manager-dashboard.js?v=manager-realtime-v3"></script>
   <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/profile-menu.js?v=logout-confirm-v2"></script>
