@@ -3095,3 +3095,107 @@ button.inventory-option-unavailable,
 #orderModalBox .modal-order-items{max-height:min(42vh,380px)!important}
 @media (orientation:landscape) and (min-width:900px){#orderModalBox.modal-box{width:min(720px,calc(100vw - 56px))!important;max-width:720px!important}}
 @media (max-width:720px){#orderModalBox.modal-box{width:min(100%,620px)!important}}
+
+
+/* =========================================================
+   KIOSK FAST BOOT / LOADING SCENE
+   Prevents stale placeholder menu cards from appearing while
+   the live cafe catalog is loading.
+   ========================================================= */
+.kiosk-boot-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.75), transparent 34%),
+        radial-gradient(circle at 85% 80%, rgba(123, 170, 143, 0.13), transparent 30%),
+        #f5ebdd;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .22s ease, visibility .22s ease;
+}
+
+.kiosk-boot-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.kiosk-boot-card {
+    width: min(430px, calc(100vw - 40px));
+    padding: 34px 30px 30px;
+    border: 1px solid rgba(111, 78, 55, 0.16);
+    border-radius: 28px;
+    background: rgba(255, 250, 242, 0.96);
+    box-shadow: 0 24px 70px rgba(111, 78, 55, 0.16);
+    text-align: center;
+}
+
+.kiosk-boot-logo-wrap {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fffaf1;
+    border: 2px solid rgba(111, 78, 55, 0.18);
+    box-shadow: 0 12px 30px rgba(111, 78, 55, 0.09);
+}
+
+.kiosk-boot-logo {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+}
+
+.kiosk-boot-card h1 {
+    margin: 10px 0 8px;
+    color: #4f2c12;
+    font-size: clamp(1.55rem, 4vw, 2rem);
+    line-height: 1.15;
+}
+
+.kiosk-boot-card p {
+    margin: 0;
+    color: #7d624c;
+    font-size: .96rem;
+    line-height: 1.5;
+}
+
+.kiosk-boot-spinner {
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 2px 0 8px;
+}
+
+.kiosk-boot-spinner span {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #5aa06d;
+    animation: kioskBootPulse 1s ease-in-out infinite;
+}
+
+.kiosk-boot-spinner span:nth-child(2) { animation-delay: .14s; }
+.kiosk-boot-spinner span:nth-child(3) { animation-delay: .28s; }
+
+@keyframes kioskBootPulse {
+    0%, 70%, 100% { transform: translateY(0); opacity: .38; }
+    35% { transform: translateY(-6px); opacity: 1; }
+}
+
+body.kiosk-booting .container {
+    visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kiosk-boot-loader { transition: none; }
+    .kiosk-boot-spinner span { animation: none; opacity: .7; }
+}

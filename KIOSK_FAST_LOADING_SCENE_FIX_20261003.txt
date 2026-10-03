@@ -1,0 +1,12 @@
+CafeKiosk Kiosk Fast Loading Scene Fix — 2026-10-03
+
+Changes:
+- Removed the old hard-coded 5-item coffee placeholder from Kiosk/menu.php.
+- Added a branded full-screen loading scene while the live cafe catalog is fetched.
+- Kiosk menu bootstrap now starts on DOMContentLoaded instead of window.load, so it no longer waits for remote/category images before requesting the catalog.
+- Slug-based kiosk catalog loading now runs in parallel with tenant-info resolution instead of waiting for it first.
+- Removed the redundant forced Coffee re-render after the catalog had already selected the real first category.
+- Loader automatically disappears after the live catalog or safe fallback is ready.
+
+Result:
+Customers no longer see the temporary old Latte/Cappuccino/Mocha/Americano/Espresso screen. They see a clean loading scene, then the actual menu as soon as it is available.

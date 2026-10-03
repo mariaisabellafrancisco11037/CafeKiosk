@@ -3748,12 +3748,17 @@ document.addEventListener(
 // =====================================================
 async function loadMysqlProductCatalog() {
   try {
-    if (window.CafeKioskTenant?.ready) {
+    const tenantSlug = String(window.CafeKioskTenant?.slug || sessionStorage.getItem("kioskSlug") || "").trim();
+
+    // A slug-based kiosk catalog can be requested immediately. Do not serialize
+    // it behind the separate tenant-info request; this removes an unnecessary
+    // network round trip from the visible loading time. Legacy/non-slug kiosks
+    // still wait for tenant resolution because they depend on the cafe id.
+    if (!tenantSlug && window.CafeKioskTenant?.ready) {
       try { await window.CafeKioskTenant.ready; } catch (_) {}
     }
 
     const base = typeof API_URL !== "undefined" ? API_URL : ((!location.port || location.port === "80" || location.port === "443" || location.port === "5000") ? location.origin : `${location.protocol}//${location.hostname}:5000`);
-    const tenantSlug = String(window.CafeKioskTenant?.slug || sessionStorage.getItem("kioskSlug") || "").trim();
     const cafeId = String(window.CafeKioskTenant?.info?.cafeId || localStorage.getItem("cafeId") || "cafe-1");
     CAFE_ID = cafeId;
     localStorage.setItem("cafeId", cafeId);
@@ -3765,6 +3770,10 @@ async function loadMysqlProductCatalog() {
     const response = await fetch(endpoint, { cache: "no-store", credentials: "include" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
+    const resolvedCafeId = String(payload.cafeId || cafeId || "cafe-1");
+    CAFE_ID = resolvedCafeId;
+    localStorage.setItem("cafeId", resolvedCafeId);
+    sessionStorage.setItem("cafeId", resolvedCafeId);
     const categories = Array.isArray(payload.categories) ? payload.categories : [];
     const products = Array.isArray(payload.products) ? payload.products : [];
     const configuredMethods = Array.isArray(payload.paymentMethods) ? payload.paymentMethods : [];
@@ -3777,7 +3786,7 @@ async function loadMysqlProductCatalog() {
     sessionStorage.setItem("cafeCurrencySymbol", String(kioskCheckoutSettings.currencySymbol || "₱"));
     sessionStorage.setItem("cafeReceiptFooter", String(kioskCheckoutSettings.receiptFooter || ""));
     applyKioskPaymentConfig();
-    const isDemo = String(payload.cafeId || cafeId) === "cafe-1";
+    const isDemo = resolvedCafeId === "cafe-1";
 
     // Only the Demo Cafe may fall back to the bundled sample catalog. Every
     // real cafe starts clean and uses only its own MySQL categories/products.
@@ -3837,8 +3846,20 @@ async function loadMysqlProductCatalog() {
     rebuildKioskCategories(effectiveCategories);
     return true;
   } catch (error) {
-    const cafeId = String(localStorage.getItem("cafeId") || "cafe-1");
-    if (cafeId !== "cafe-1") {
+    let fallbackCafeId = String(localStorage.getItem("cafeId") || "cafe-1");
+    const failedSlug = String(window.CafeKioskTenant?.slug || sessionStorage.getItem("kioskSlug") || "").trim();
+
+    // Because slug catalog loading is intentionally parallelized, resolve the
+    // tenant identity only if that fast catalog request fails. This keeps real
+    // cafes from ever falling back to the Demo Cafe menu due to a stale cafeId.
+    if (failedSlug && window.CafeKioskTenant?.ready) {
+      try {
+        const tenantInfo = await window.CafeKioskTenant.ready;
+        if (tenantInfo?.cafeId) fallbackCafeId = String(tenantInfo.cafeId);
+      } catch (_) {}
+    }
+
+    if (fallbackCafeId !== "cafe-1") {
       Object.keys(menuData).forEach(key => delete menuData[key]);
       rebuildKioskCategories([]);
       console.error("Cafe catalog unavailable; demo items were NOT used for this cafe.", error);
@@ -3855,14 +3876,34 @@ async function loadMysqlProductCatalog() {
 }
 
 // =====================================================
-// DEFAULT PAGE LOAD
+// FAST DEFAULT PAGE LOAD
+// Start as soon as the DOM exists instead of waiting for every image to finish.
 // =====================================================
 
-window.addEventListener(
-  "load",
-  async () => {
+function setKioskBootLoading(isLoading, message = "") {
+  const loader = document.getElementById("kioskBootLoader");
+  const messageNode = document.getElementById("kioskBootMessage");
+  const grid = document.getElementById("menuGrid");
 
+  if (message && messageNode) messageNode.textContent = message;
+  document.body?.classList.toggle("kiosk-booting", Boolean(isLoading));
+  if (grid) grid.setAttribute("aria-busy", isLoading ? "true" : "false");
+
+  if (!loader) return;
+  loader.classList.toggle("is-hidden", !isLoading);
+  loader.setAttribute("aria-hidden", isLoading ? "false" : "true");
+}
+
+let kioskMenuBootStarted = false;
+async function bootKioskMenu() {
+  if (kioskMenuBootStarted) return;
+  kioskMenuBootStarted = true;
+
+  setKioskBootLoading(true, "Loading the latest menu items, prices, and availability...");
+
+  try {
     await loadMysqlProductCatalog();
+
 
     // -------------------------------------------------
     // SETUP SEARCH
@@ -3986,21 +4027,6 @@ window.addEventListener(
 
 
     // -------------------------------------------------
-    // LOAD FIRST CATEGORY
-    // -------------------------------------------------
-
-    const firstBtn =
-      document.querySelector(
-        ".nav-btn"
-      );
-
-    selectCategory(
-      "coffee",
-      firstBtn
-    );
-
-
-    // -------------------------------------------------
     // RENDER EMPTY ORDER
     // -------------------------------------------------
 
@@ -4035,8 +4061,18 @@ window.addEventListener(
       "======================================"
     );
 
+  } finally {
+    // The real catalog (or the safe fallback) is now rendered. Never leave the
+    // customer staring at stale placeholder cards or a loader indefinitely.
+    setKioskBootLoading(false);
   }
-);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bootKioskMenu, { once: true });
+} else {
+  bootKioskMenu();
+}
 
 // Customer special-request counter (Kiosk item customization).
 document.addEventListener("DOMContentLoaded", () => {

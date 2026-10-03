@@ -6,7 +6,7 @@
 
   <title>CafeKiosk - Menu</title>
 
-  <link rel="stylesheet" href="/Assets/css/menu.css?v=20261003-checkout-image-sync-v1">
+  <link rel="stylesheet" href="/Assets/css/menu.css?v=20261003-kiosk-fast-loading-v1">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -17,7 +17,24 @@
   <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 
-<body class="uniform-kiosk kiosk-menu">
+<body class="uniform-kiosk kiosk-menu kiosk-booting">
+
+<!--
+  Kiosk boot loader: prevents the old hard-coded sample cards from flashing
+  while the real cafe catalog is being fetched from the backend.
+-->
+<div id="kioskBootLoader" class="kiosk-boot-loader" role="status" aria-live="polite" aria-label="Loading cafe menu">
+  <div class="kiosk-boot-card">
+    <div class="kiosk-boot-logo-wrap">
+      <img src="/Assets/images/logo.png" alt="CafeKiosk" class="kiosk-boot-logo">
+    </div>
+    <div class="kiosk-boot-spinner" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <h1>Preparing your menu</h1>
+    <p id="kioskBootMessage">Loading the latest menu items, prices, and availability...</p>
+  </div>
+</div>
 
 <div class="container">
 
@@ -34,78 +51,7 @@
       >
     </div>
 
-    <!-- CATEGORY NAVIGATION -->
-    <button
-      class="nav-btn active"
-      type="button"
-      onclick="selectCategory('coffee', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-        alt="Coffee"
-      >
-      Coffee
-    </button>
-
-    <button
-      class="nav-btn"
-      type="button"
-      onclick="selectCategory('non-coffee', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Iced_Chocolate_20250411-131126.jpg"
-        alt="Non-Coffee"
-      >
-      Non-Coffee
-    </button>
-
-    <button
-      class="nav-btn"
-      type="button"
-      onclick="selectCategory('milktea', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Bubble-tea.jpg"
-        alt="Milktea"
-      >
-      Milktea
-    </button>
-
-    <button
-      class="nav-btn"
-      type="button"
-      onclick="selectCategory('food', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Sandwich_in_Restaurant.jpg"
-        alt="Food"
-      >
-      Food
-    </button>
-
-    <button
-      class="nav-btn"
-      type="button"
-      onclick="selectCategory('snack', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Cookies_(Unsplash).jpg"
-        alt="Snack"
-      >
-      Snack
-    </button>
-
-    <button
-      class="nav-btn"
-      type="button"
-      onclick="selectCategory('dessert', this)"
-    >
-      <img
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Cake0.jpg"
-        alt="Dessert"
-      >
-      Dessert
-    </button>
+    <!-- Category buttons are injected from the live cafe catalog. -->
 
     <!-- Cancel is kept out of the order summary so the checkout controls
          have more vertical room. -->
@@ -132,7 +78,7 @@
 
       <img
         id="categoryIcon"
-        src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
+        src="/Assets/images/coffee.png"
         alt="Coffee category"
       >
 
@@ -175,117 +121,8 @@
     <div
       class="menu-grid"
       id="menuGrid"
-    >
-
-      <!-- =================================================
-           SAMPLE COFFEE ITEMS
-           ================================================= -->
-
-      <!-- LATTE -->
-      <div
-        class="menu-card"
-        onclick="showItemModal('Latte', 120, 'coffee')"
-      >
-        <img
-          class="menu-img"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-          alt="Latte"
-        >
-
-        <h3>
-          Latte
-        </h3>
-
-        <p>
-          ₱120
-        </p>
-      </div>
-
-
-      <!-- CAPPUCCINO -->
-      <div
-        class="menu-card"
-        onclick="showItemModal('Cappuccino', 130, 'coffee')"
-      >
-        <img
-          class="menu-img"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-          alt="Cappuccino"
-        >
-
-        <h3>
-          Cappuccino
-        </h3>
-
-        <p>
-          ₱130
-        </p>
-      </div>
-
-
-      <!-- MOCHA -->
-      <div
-        class="menu-card"
-        onclick="showItemModal('Mocha', 140, 'coffee')"
-      >
-        <img
-          class="menu-img"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-          alt="Mocha"
-        >
-
-        <h3>
-          Mocha
-        </h3>
-
-        <p>
-          ₱140
-        </p>
-      </div>
-
-
-      <!-- AMERICANO -->
-      <div
-        class="menu-card"
-        onclick="showItemModal('Americano', 100, 'coffee')"
-      >
-        <img
-          class="menu-img"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-          alt="Americano"
-        >
-
-        <h3>
-          Americano
-        </h3>
-
-        <p>
-          ₱100
-        </p>
-      </div>
-
-
-      <!-- ESPRESSO -->
-      <div
-        class="menu-card"
-        onclick="showItemModal('Espresso', 90, 'coffee')"
-      >
-        <img
-          class="menu-img"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
-          alt="Espresso"
-        >
-
-        <h3>
-          Espresso
-        </h3>
-
-        <p>
-          ₱90
-        </p>
-      </div>
-
-    </div>
+      aria-busy="true"
+    ></div>
 
   </main>
 
@@ -428,7 +265,7 @@
 
         <img
           id="modalIcon"
-          src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
+          src="/Assets/images/coffee.png"
           alt="Category icon"
         >
 
@@ -538,7 +375,7 @@
         <div class="item-custom-header-icon">
           <img
             id="itemModalIcon"
-            src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Caffe_Latte_at_Pulse_Cafe.jpg"
+            src="/Assets/images/coffee.png"
             alt="Coffee"
           >
         </div>
@@ -659,7 +496,7 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=20261003-checkout-image-sync-v1"></script>
+<script src="/Assets/js/menu.js?v=20261003-kiosk-fast-loading-v1"></script>
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>
