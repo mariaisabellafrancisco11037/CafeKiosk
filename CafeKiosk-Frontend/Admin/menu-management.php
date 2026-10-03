@@ -13,6 +13,94 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
+
+  <!-- Menu Management: whole-page scrolling so the footer is reached with the browser scrollbar. -->
+  <style id="menuManagementWholePageScrollFix">
+    html {
+      height: auto !important;
+      min-height: 100% !important;
+      overflow-x: hidden !important;
+      overflow-y: scroll !important;
+      scrollbar-gutter: stable;
+      scrollbar-width: auto;
+      scrollbar-color: rgba(76,149,111,.88) #eadfce;
+    }
+
+    body.uniform-admin.has-project-footer {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 100dvh !important;
+      margin: 0 !important;
+      overflow: visible !important;
+    }
+
+    body.uniform-admin.has-project-footer .menu-shell {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 100dvh !important;
+      overflow: visible !important;
+      align-items: start !important;
+    }
+
+    body.uniform-admin.has-project-footer .staff-sidebar {
+      position: sticky !important;
+      top: 0 !important;
+      align-self: start !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+    }
+
+    body.uniform-admin.has-project-footer .menu-main {
+      height: auto !important;
+      min-height: 100dvh !important;
+      overflow: visible !important;
+      grid-template-rows: 74px auto !important;
+    }
+
+    body.uniform-admin.has-project-footer #menuView.menu-dashboard:not(.hidden) {
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      grid-template-rows: auto auto !important;
+    }
+
+    body.uniform-admin.has-project-footer #menuView .category-panel,
+    body.uniform-admin.has-project-footer #menuView .product-panel {
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    body.uniform-admin.has-project-footer #menuView .product-panel {
+      grid-template-rows: auto auto !important;
+    }
+
+    body.uniform-admin.has-project-footer #menuView .product-grid {
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    body.uniform-admin.has-project-footer .admin-menu-footer {
+      position: relative !important;
+      inset: auto !important;
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      margin: 0 !important;
+      z-index: 1 !important;
+    }
+
+    html::-webkit-scrollbar { width: 12px; }
+    html::-webkit-scrollbar-track { background: #eadfce; }
+    html::-webkit-scrollbar-thumb {
+      background: rgba(76,149,111,.88);
+      border: 2px solid #eadfce;
+      border-radius: 999px;
+    }
+    html::-webkit-scrollbar-thumb:hover { background: #3f805f; }
+  </style>
 </head>
 <body class="uniform-admin has-project-footer">
   <div class="menu-shell">
