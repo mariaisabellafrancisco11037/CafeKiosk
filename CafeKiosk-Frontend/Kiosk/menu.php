@@ -496,9 +496,9 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=20261003-kiosk-fast-loading-v1"></script>
+<script src="/Assets/js/menu.js?v=20261003-kiosk-addons-v2"></script>
 
-<script src="/Assets/js/menu-runtime-config.js?v=34"></script>
+<script src="/Assets/js/menu-runtime-config.js?v=36"></script>
 <script src="/Assets/js/discount-client.js"></script>
   <script src="/Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="/Assets/js/live-presence.js?v=3"></script>

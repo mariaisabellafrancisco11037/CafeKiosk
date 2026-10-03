@@ -1,0 +1,631 @@
+﻿menu_item,customization_group,option,additional_price,selection_required
+Espresso,Coffee Add-ons,Extra shot,30,False
+Espresso,Coffee Add-ons,Vanilla syrup,20,False
+Espresso,Coffee Add-ons,Caramel syrup,20,False
+Espresso,Coffee Add-ons,Whipped cream,20,False
+Double Espresso,Coffee Add-ons,Extra shot,30,False
+Double Espresso,Coffee Add-ons,Vanilla syrup,20,False
+Double Espresso,Coffee Add-ons,Caramel syrup,20,False
+Double Espresso,Coffee Add-ons,Whipped cream,20,False
+Americano,Coffee Add-ons,Extra shot,30,False
+Americano,Coffee Add-ons,Vanilla syrup,20,False
+Americano,Coffee Add-ons,Caramel syrup,20,False
+Americano,Coffee Add-ons,Whipped cream,20,False
+Cafe Latte,Coffee Add-ons,Extra shot,30,False
+Cafe Latte,Coffee Add-ons,Vanilla syrup,20,False
+Cafe Latte,Coffee Add-ons,Caramel syrup,20,False
+Cafe Latte,Coffee Add-ons,Whipped cream,20,False
+Cappuccino,Coffee Add-ons,Extra shot,30,False
+Cappuccino,Coffee Add-ons,Vanilla syrup,20,False
+Cappuccino,Coffee Add-ons,Caramel syrup,20,False
+Cappuccino,Coffee Add-ons,Whipped cream,20,False
+Flat White,Coffee Add-ons,Extra shot,30,False
+Flat White,Coffee Add-ons,Vanilla syrup,20,False
+Flat White,Coffee Add-ons,Caramel syrup,20,False
+Flat White,Coffee Add-ons,Whipped cream,20,False
+Cafe Mocha,Coffee Add-ons,Extra shot,30,False
+Cafe Mocha,Coffee Add-ons,Vanilla syrup,20,False
+Cafe Mocha,Coffee Add-ons,Caramel syrup,20,False
+Cafe Mocha,Coffee Add-ons,Whipped cream,20,False
+White Chocolate Mocha,Coffee Add-ons,Extra shot,30,False
+White Chocolate Mocha,Coffee Add-ons,Vanilla syrup,20,False
+White Chocolate Mocha,Coffee Add-ons,Caramel syrup,20,False
+White Chocolate Mocha,Coffee Add-ons,Whipped cream,20,False
+Caramel Macchiato,Coffee Add-ons,Extra shot,30,False
+Caramel Macchiato,Coffee Add-ons,Vanilla syrup,20,False
+Caramel Macchiato,Coffee Add-ons,Caramel syrup,20,False
+Caramel Macchiato,Coffee Add-ons,Whipped cream,20,False
+Vanilla Latte,Coffee Add-ons,Extra shot,30,False
+Vanilla Latte,Coffee Add-ons,Vanilla syrup,20,False
+Vanilla Latte,Coffee Add-ons,Caramel syrup,20,False
+Vanilla Latte,Coffee Add-ons,Whipped cream,20,False
+Caramel Latte,Coffee Add-ons,Extra shot,30,False
+Caramel Latte,Coffee Add-ons,Vanilla syrup,20,False
+Caramel Latte,Coffee Add-ons,Caramel syrup,20,False
+Caramel Latte,Coffee Add-ons,Whipped cream,20,False
+Hazelnut Latte,Coffee Add-ons,Extra shot,30,False
+Hazelnut Latte,Coffee Add-ons,Vanilla syrup,20,False
+Hazelnut Latte,Coffee Add-ons,Caramel syrup,20,False
+Hazelnut Latte,Coffee Add-ons,Whipped cream,20,False
+Spanish Latte,Coffee Add-ons,Extra shot,30,False
+Spanish Latte,Coffee Add-ons,Vanilla syrup,20,False
+Spanish Latte,Coffee Add-ons,Caramel syrup,20,False
+Spanish Latte,Coffee Add-ons,Whipped cream,20,False
+Brown Sugar Latte,Coffee Add-ons,Extra shot,30,False
+Brown Sugar Latte,Coffee Add-ons,Vanilla syrup,20,False
+Brown Sugar Latte,Coffee Add-ons,Caramel syrup,20,False
+Brown Sugar Latte,Coffee Add-ons,Whipped cream,20,False
+Salted Caramel Latte,Coffee Add-ons,Extra shot,30,False
+Salted Caramel Latte,Coffee Add-ons,Vanilla syrup,20,False
+Salted Caramel Latte,Coffee Add-ons,Caramel syrup,20,False
+Salted Caramel Latte,Coffee Add-ons,Whipped cream,20,False
+Cinnamon Latte,Coffee Add-ons,Extra shot,30,False
+Cinnamon Latte,Coffee Add-ons,Vanilla syrup,20,False
+Cinnamon Latte,Coffee Add-ons,Caramel syrup,20,False
+Cinnamon Latte,Coffee Add-ons,Whipped cream,20,False
+Honey Cinnamon Latte,Coffee Add-ons,Extra shot,30,False
+Honey Cinnamon Latte,Coffee Add-ons,Vanilla syrup,20,False
+Honey Cinnamon Latte,Coffee Add-ons,Caramel syrup,20,False
+Honey Cinnamon Latte,Coffee Add-ons,Whipped cream,20,False
+Pistachio Latte,Coffee Add-ons,Extra shot,30,False
+Pistachio Latte,Coffee Add-ons,Vanilla syrup,20,False
+Pistachio Latte,Coffee Add-ons,Caramel syrup,20,False
+Pistachio Latte,Coffee Add-ons,Whipped cream,20,False
+Toffee Nut Latte,Coffee Add-ons,Extra shot,30,False
+Toffee Nut Latte,Coffee Add-ons,Vanilla syrup,20,False
+Toffee Nut Latte,Coffee Add-ons,Caramel syrup,20,False
+Toffee Nut Latte,Coffee Add-ons,Whipped cream,20,False
+Dark Chocolate Mocha,Coffee Add-ons,Extra shot,30,False
+Dark Chocolate Mocha,Coffee Add-ons,Vanilla syrup,20,False
+Dark Chocolate Mocha,Coffee Add-ons,Caramel syrup,20,False
+Dark Chocolate Mocha,Coffee Add-ons,Whipped cream,20,False
+Black Coffee,Coffee Add-ons,Extra shot,30,False
+Black Coffee,Coffee Add-ons,Vanilla syrup,20,False
+Black Coffee,Coffee Add-ons,Caramel syrup,20,False
+Black Coffee,Coffee Add-ons,Whipped cream,20,False
+Cafe Au Lait,Coffee Add-ons,Extra shot,30,False
+Cafe Au Lait,Coffee Add-ons,Vanilla syrup,20,False
+Cafe Au Lait,Coffee Add-ons,Caramel syrup,20,False
+Cafe Au Lait,Coffee Add-ons,Whipped cream,20,False
+Vietnamese Coffee,Coffee Add-ons,Extra shot,30,False
+Vietnamese Coffee,Coffee Add-ons,Vanilla syrup,20,False
+Vietnamese Coffee,Coffee Add-ons,Caramel syrup,20,False
+Vietnamese Coffee,Coffee Add-ons,Whipped cream,20,False
+Macchiato,Coffee Add-ons,Extra shot,30,False
+Macchiato,Coffee Add-ons,Vanilla syrup,20,False
+Macchiato,Coffee Add-ons,Caramel syrup,20,False
+Macchiato,Coffee Add-ons,Whipped cream,20,False
+Affogato,Coffee Add-ons,Extra shot,30,False
+Affogato,Coffee Add-ons,Vanilla syrup,20,False
+Affogato,Coffee Add-ons,Caramel syrup,20,False
+Affogato,Coffee Add-ons,Whipped cream,20,False
+Cold Brew,Coffee Add-ons,Extra shot,30,False
+Cold Brew,Coffee Add-ons,Vanilla syrup,20,False
+Cold Brew,Coffee Add-ons,Caramel syrup,20,False
+Cold Brew,Coffee Add-ons,Whipped cream,20,False
+Iced Americano,Coffee Add-ons,Extra shot,30,False
+Iced Americano,Coffee Add-ons,Vanilla syrup,20,False
+Iced Americano,Coffee Add-ons,Caramel syrup,20,False
+Iced Americano,Coffee Add-ons,Whipped cream,20,False
+Iced Cafe Latte,Coffee Add-ons,Extra shot,30,False
+Iced Cafe Latte,Coffee Add-ons,Vanilla syrup,20,False
+Iced Cafe Latte,Coffee Add-ons,Caramel syrup,20,False
+Iced Cafe Latte,Coffee Add-ons,Whipped cream,20,False
+Iced Cafe Mocha,Coffee Add-ons,Extra shot,30,False
+Iced Cafe Mocha,Coffee Add-ons,Vanilla syrup,20,False
+Iced Cafe Mocha,Coffee Add-ons,Caramel syrup,20,False
+Iced Cafe Mocha,Coffee Add-ons,Whipped cream,20,False
+Iced Caramel Macchiato,Coffee Add-ons,Extra shot,30,False
+Iced Caramel Macchiato,Coffee Add-ons,Vanilla syrup,20,False
+Iced Caramel Macchiato,Coffee Add-ons,Caramel syrup,20,False
+Iced Caramel Macchiato,Coffee Add-ons,Whipped cream,20,False
+Classic Hot Chocolate,Drink Add-ons,Boba,25,False
+Classic Hot Chocolate,Drink Add-ons,Pearls,25,False
+Classic Hot Chocolate,Drink Add-ons,Whipped Cream,20,False
+Dark Hot Chocolate,Drink Add-ons,Boba,25,False
+Dark Hot Chocolate,Drink Add-ons,Pearls,25,False
+Dark Hot Chocolate,Drink Add-ons,Whipped Cream,20,False
+White Hot Chocolate,Drink Add-ons,Boba,25,False
+White Hot Chocolate,Drink Add-ons,Pearls,25,False
+White Hot Chocolate,Drink Add-ons,Whipped Cream,20,False
+Iced Chocolate,Drink Add-ons,Boba,25,False
+Iced Chocolate,Drink Add-ons,Pearls,25,False
+Iced Chocolate,Drink Add-ons,Whipped Cream,20,False
+Chocolate Milk,Drink Add-ons,Boba,25,False
+Chocolate Milk,Drink Add-ons,Pearls,25,False
+Chocolate Milk,Drink Add-ons,Whipped Cream,20,False
+Matcha Latte,Drink Add-ons,Boba,25,False
+Matcha Latte,Drink Add-ons,Pearls,25,False
+Matcha Latte,Drink Add-ons,Whipped Cream,20,False
+Iced Matcha Latte,Drink Add-ons,Boba,25,False
+Iced Matcha Latte,Drink Add-ons,Pearls,25,False
+Iced Matcha Latte,Drink Add-ons,Whipped Cream,20,False
+Strawberry Matcha Latte,Drink Add-ons,Boba,25,False
+Strawberry Matcha Latte,Drink Add-ons,Pearls,25,False
+Strawberry Matcha Latte,Drink Add-ons,Whipped Cream,20,False
+Mango Matcha Latte,Drink Add-ons,Boba,25,False
+Mango Matcha Latte,Drink Add-ons,Pearls,25,False
+Mango Matcha Latte,Drink Add-ons,Whipped Cream,20,False
+Vanilla Matcha Latte,Drink Add-ons,Boba,25,False
+Vanilla Matcha Latte,Drink Add-ons,Pearls,25,False
+Vanilla Matcha Latte,Drink Add-ons,Whipped Cream,20,False
+Strawberry Milk,Drink Add-ons,Boba,25,False
+Strawberry Milk,Drink Add-ons,Pearls,25,False
+Strawberry Milk,Drink Add-ons,Whipped Cream,20,False
+Mango Milk,Drink Add-ons,Boba,25,False
+Mango Milk,Drink Add-ons,Pearls,25,False
+Mango Milk,Drink Add-ons,Whipped Cream,20,False
+Banana Milk,Drink Add-ons,Boba,25,False
+Banana Milk,Drink Add-ons,Pearls,25,False
+Banana Milk,Drink Add-ons,Whipped Cream,20,False
+Cookies and Cream,Drink Add-ons,Boba,25,False
+Cookies and Cream,Drink Add-ons,Pearls,25,False
+Cookies and Cream,Drink Add-ons,Whipped Cream,20,False
+Chocolate Oreo,Drink Add-ons,Boba,25,False
+Chocolate Oreo,Drink Add-ons,Pearls,25,False
+Chocolate Oreo,Drink Add-ons,Whipped Cream,20,False
+Strawberry Smoothie,Drink Add-ons,Boba,25,False
+Strawberry Smoothie,Drink Add-ons,Pearls,25,False
+Strawberry Smoothie,Drink Add-ons,Whipped Cream,20,False
+Mango Smoothie,Drink Add-ons,Boba,25,False
+Mango Smoothie,Drink Add-ons,Pearls,25,False
+Mango Smoothie,Drink Add-ons,Whipped Cream,20,False
+Banana Smoothie,Drink Add-ons,Boba,25,False
+Banana Smoothie,Drink Add-ons,Pearls,25,False
+Banana Smoothie,Drink Add-ons,Whipped Cream,20,False
+Mixed Berry Smoothie,Drink Add-ons,Boba,25,False
+Mixed Berry Smoothie,Drink Add-ons,Pearls,25,False
+Mixed Berry Smoothie,Drink Add-ons,Whipped Cream,20,False
+Avocado Smoothie,Drink Add-ons,Boba,25,False
+Avocado Smoothie,Drink Add-ons,Pearls,25,False
+Avocado Smoothie,Drink Add-ons,Whipped Cream,20,False
+Fresh Lemonade,Drink Add-ons,Boba,25,False
+Fresh Lemonade,Drink Add-ons,Pearls,25,False
+Fresh Lemonade,Drink Add-ons,Whipped Cream,20,False
+Strawberry Lemonade,Drink Add-ons,Boba,25,False
+Strawberry Lemonade,Drink Add-ons,Pearls,25,False
+Strawberry Lemonade,Drink Add-ons,Whipped Cream,20,False
+Honey Lemon,Drink Add-ons,Boba,25,False
+Honey Lemon,Drink Add-ons,Pearls,25,False
+Honey Lemon,Drink Add-ons,Whipped Cream,20,False
+Peach Iced Tea,Drink Add-ons,Boba,25,False
+Peach Iced Tea,Drink Add-ons,Pearls,25,False
+Peach Iced Tea,Drink Add-ons,Whipped Cream,20,False
+Lemon Iced Tea,Drink Add-ons,Boba,25,False
+Lemon Iced Tea,Drink Add-ons,Pearls,25,False
+Lemon Iced Tea,Drink Add-ons,Whipped Cream,20,False
+Lychee Iced Tea,Drink Add-ons,Boba,25,False
+Lychee Iced Tea,Drink Add-ons,Pearls,25,False
+Lychee Iced Tea,Drink Add-ons,Whipped Cream,20,False
+Passion Fruit Tea,Drink Add-ons,Boba,25,False
+Passion Fruit Tea,Drink Add-ons,Pearls,25,False
+Passion Fruit Tea,Drink Add-ons,Whipped Cream,20,False
+Green Apple Soda,Drink Add-ons,Boba,25,False
+Green Apple Soda,Drink Add-ons,Pearls,25,False
+Green Apple Soda,Drink Add-ons,Whipped Cream,20,False
+Strawberry Soda,Drink Add-ons,Boba,25,False
+Strawberry Soda,Drink Add-ons,Pearls,25,False
+Strawberry Soda,Drink Add-ons,Whipped Cream,20,False
+Blueberry Soda,Drink Add-ons,Boba,25,False
+Blueberry Soda,Drink Add-ons,Pearls,25,False
+Blueberry Soda,Drink Add-ons,Whipped Cream,20,False
+Classic Milk Tea,Toppings,Pearls,25,False
+Classic Milk Tea,Toppings,Grass Jelly,25,False
+Classic Milk Tea,Toppings,Pudding,25,False
+Classic Milk Tea,Toppings,Cream Cheese,30,False
+Pearl Milk Tea,Toppings,Pearls,25,False
+Pearl Milk Tea,Toppings,Grass Jelly,25,False
+Pearl Milk Tea,Toppings,Pudding,25,False
+Pearl Milk Tea,Toppings,Cream Cheese,30,False
+Brown Sugar Milk Tea,Toppings,Pearls,25,False
+Brown Sugar Milk Tea,Toppings,Grass Jelly,25,False
+Brown Sugar Milk Tea,Toppings,Pudding,25,False
+Brown Sugar Milk Tea,Toppings,Cream Cheese,30,False
+Wintermelon Milk Tea,Toppings,Pearls,25,False
+Wintermelon Milk Tea,Toppings,Grass Jelly,25,False
+Wintermelon Milk Tea,Toppings,Pudding,25,False
+Wintermelon Milk Tea,Toppings,Cream Cheese,30,False
+Okinawa Milk Tea,Toppings,Pearls,25,False
+Okinawa Milk Tea,Toppings,Grass Jelly,25,False
+Okinawa Milk Tea,Toppings,Pudding,25,False
+Okinawa Milk Tea,Toppings,Cream Cheese,30,False
+Hokkaido Milk Tea,Toppings,Pearls,25,False
+Hokkaido Milk Tea,Toppings,Grass Jelly,25,False
+Hokkaido Milk Tea,Toppings,Pudding,25,False
+Hokkaido Milk Tea,Toppings,Cream Cheese,30,False
+Thai Milk Tea,Toppings,Pearls,25,False
+Thai Milk Tea,Toppings,Grass Jelly,25,False
+Thai Milk Tea,Toppings,Pudding,25,False
+Thai Milk Tea,Toppings,Cream Cheese,30,False
+Taro Milk Tea,Toppings,Pearls,25,False
+Taro Milk Tea,Toppings,Grass Jelly,25,False
+Taro Milk Tea,Toppings,Pudding,25,False
+Taro Milk Tea,Toppings,Cream Cheese,30,False
+Matcha Milk Tea,Toppings,Pearls,25,False
+Matcha Milk Tea,Toppings,Grass Jelly,25,False
+Matcha Milk Tea,Toppings,Pudding,25,False
+Matcha Milk Tea,Toppings,Cream Cheese,30,False
+Chocolate Milk Tea,Toppings,Pearls,25,False
+Chocolate Milk Tea,Toppings,Grass Jelly,25,False
+Chocolate Milk Tea,Toppings,Pudding,25,False
+Chocolate Milk Tea,Toppings,Cream Cheese,30,False
+Strawberry Milk Tea,Toppings,Pearls,25,False
+Strawberry Milk Tea,Toppings,Grass Jelly,25,False
+Strawberry Milk Tea,Toppings,Pudding,25,False
+Strawberry Milk Tea,Toppings,Cream Cheese,30,False
+Mango Milk Tea,Toppings,Pearls,25,False
+Mango Milk Tea,Toppings,Grass Jelly,25,False
+Mango Milk Tea,Toppings,Pudding,25,False
+Mango Milk Tea,Toppings,Cream Cheese,30,False
+Honeydew Milk Tea,Toppings,Pearls,25,False
+Honeydew Milk Tea,Toppings,Grass Jelly,25,False
+Honeydew Milk Tea,Toppings,Pudding,25,False
+Honeydew Milk Tea,Toppings,Cream Cheese,30,False
+Vanilla Milk Tea,Toppings,Pearls,25,False
+Vanilla Milk Tea,Toppings,Grass Jelly,25,False
+Vanilla Milk Tea,Toppings,Pudding,25,False
+Vanilla Milk Tea,Toppings,Cream Cheese,30,False
+Caramel Milk Tea,Toppings,Pearls,25,False
+Caramel Milk Tea,Toppings,Grass Jelly,25,False
+Caramel Milk Tea,Toppings,Pudding,25,False
+Caramel Milk Tea,Toppings,Cream Cheese,30,False
+Hazelnut Milk Tea,Toppings,Pearls,25,False
+Hazelnut Milk Tea,Toppings,Grass Jelly,25,False
+Hazelnut Milk Tea,Toppings,Pudding,25,False
+Hazelnut Milk Tea,Toppings,Cream Cheese,30,False
+Cookies and Cream Milk Tea,Toppings,Pearls,25,False
+Cookies and Cream Milk Tea,Toppings,Grass Jelly,25,False
+Cookies and Cream Milk Tea,Toppings,Pudding,25,False
+Cookies and Cream Milk Tea,Toppings,Cream Cheese,30,False
+Cheesecake Milk Tea,Toppings,Pearls,25,False
+Cheesecake Milk Tea,Toppings,Grass Jelly,25,False
+Cheesecake Milk Tea,Toppings,Pudding,25,False
+Cheesecake Milk Tea,Toppings,Cream Cheese,30,False
+Red Velvet Milk Tea,Toppings,Pearls,25,False
+Red Velvet Milk Tea,Toppings,Grass Jelly,25,False
+Red Velvet Milk Tea,Toppings,Pudding,25,False
+Red Velvet Milk Tea,Toppings,Cream Cheese,30,False
+Dark Chocolate Milk Tea,Toppings,Pearls,25,False
+Dark Chocolate Milk Tea,Toppings,Grass Jelly,25,False
+Dark Chocolate Milk Tea,Toppings,Pudding,25,False
+Dark Chocolate Milk Tea,Toppings,Cream Cheese,30,False
+Salted Caramel Milk Tea,Toppings,Pearls,25,False
+Salted Caramel Milk Tea,Toppings,Grass Jelly,25,False
+Salted Caramel Milk Tea,Toppings,Pudding,25,False
+Salted Caramel Milk Tea,Toppings,Cream Cheese,30,False
+Brown Sugar Pearl Milk,Toppings,Pearls,25,False
+Brown Sugar Pearl Milk,Toppings,Grass Jelly,25,False
+Brown Sugar Pearl Milk,Toppings,Pudding,25,False
+Brown Sugar Pearl Milk,Toppings,Cream Cheese,30,False
+Taro Pearl Milk Tea,Toppings,Pearls,25,False
+Taro Pearl Milk Tea,Toppings,Grass Jelly,25,False
+Taro Pearl Milk Tea,Toppings,Pudding,25,False
+Taro Pearl Milk Tea,Toppings,Cream Cheese,30,False
+Matcha Pearl Milk Tea,Toppings,Pearls,25,False
+Matcha Pearl Milk Tea,Toppings,Grass Jelly,25,False
+Matcha Pearl Milk Tea,Toppings,Pudding,25,False
+Matcha Pearl Milk Tea,Toppings,Cream Cheese,30,False
+Wintermelon Pearl Milk Tea,Toppings,Pearls,25,False
+Wintermelon Pearl Milk Tea,Toppings,Grass Jelly,25,False
+Wintermelon Pearl Milk Tea,Toppings,Pudding,25,False
+Wintermelon Pearl Milk Tea,Toppings,Cream Cheese,30,False
+Oreo Milk Tea,Toppings,Pearls,25,False
+Oreo Milk Tea,Toppings,Grass Jelly,25,False
+Oreo Milk Tea,Toppings,Pudding,25,False
+Oreo Milk Tea,Toppings,Cream Cheese,30,False
+Cream Cheese Milk Tea,Toppings,Pearls,25,False
+Cream Cheese Milk Tea,Toppings,Grass Jelly,25,False
+Cream Cheese Milk Tea,Toppings,Pudding,25,False
+Cream Cheese Milk Tea,Toppings,Cream Cheese,30,False
+Pudding Milk Tea,Toppings,Pearls,25,False
+Pudding Milk Tea,Toppings,Grass Jelly,25,False
+Pudding Milk Tea,Toppings,Pudding,25,False
+Pudding Milk Tea,Toppings,Cream Cheese,30,False
+Grass Jelly Milk Tea,Toppings,Pearls,25,False
+Grass Jelly Milk Tea,Toppings,Grass Jelly,25,False
+Grass Jelly Milk Tea,Toppings,Pudding,25,False
+Grass Jelly Milk Tea,Toppings,Cream Cheese,30,False
+Honey Pearl Milk Tea,Toppings,Pearls,25,False
+Honey Pearl Milk Tea,Toppings,Grass Jelly,25,False
+Honey Pearl Milk Tea,Toppings,Pudding,25,False
+Honey Pearl Milk Tea,Toppings,Cream Cheese,30,False
+Classic Club Sandwich,Food Add-ons,Fries,40,False
+Classic Club Sandwich,Food Add-ons,Salad,35,False
+Classic Club Sandwich,Food Add-ons,Cheese,20,False
+Classic Club Sandwich,Food Add-ons,Egg,20,False
+Classic Club Sandwich,Food Add-ons,Bacon,35,False
+Ham and Cheese Sandwich,Food Add-ons,Fries,40,False
+Ham and Cheese Sandwich,Food Add-ons,Salad,35,False
+Ham and Cheese Sandwich,Food Add-ons,Cheese,20,False
+Ham and Cheese Sandwich,Food Add-ons,Egg,20,False
+Ham and Cheese Sandwich,Food Add-ons,Bacon,35,False
+Chicken Sandwich,Food Add-ons,Fries,40,False
+Chicken Sandwich,Food Add-ons,Salad,35,False
+Chicken Sandwich,Food Add-ons,Cheese,20,False
+Chicken Sandwich,Food Add-ons,Egg,20,False
+Chicken Sandwich,Food Add-ons,Bacon,35,False
+Tuna Sandwich,Food Add-ons,Fries,40,False
+Tuna Sandwich,Food Add-ons,Salad,35,False
+Tuna Sandwich,Food Add-ons,Cheese,20,False
+Tuna Sandwich,Food Add-ons,Egg,20,False
+Tuna Sandwich,Food Add-ons,Bacon,35,False
+Egg Sandwich,Food Add-ons,Fries,40,False
+Egg Sandwich,Food Add-ons,Salad,35,False
+Egg Sandwich,Food Add-ons,Cheese,20,False
+Egg Sandwich,Food Add-ons,Egg,20,False
+Egg Sandwich,Food Add-ons,Bacon,35,False
+Grilled Cheese Sandwich,Food Add-ons,Fries,40,False
+Grilled Cheese Sandwich,Food Add-ons,Salad,35,False
+Grilled Cheese Sandwich,Food Add-ons,Cheese,20,False
+Grilled Cheese Sandwich,Food Add-ons,Egg,20,False
+Grilled Cheese Sandwich,Food Add-ons,Bacon,35,False
+Chicken Pesto Sandwich,Food Add-ons,Fries,40,False
+Chicken Pesto Sandwich,Food Add-ons,Salad,35,False
+Chicken Pesto Sandwich,Food Add-ons,Cheese,20,False
+Chicken Pesto Sandwich,Food Add-ons,Egg,20,False
+Chicken Pesto Sandwich,Food Add-ons,Bacon,35,False
+BLT Sandwich,Food Add-ons,Fries,40,False
+BLT Sandwich,Food Add-ons,Salad,35,False
+BLT Sandwich,Food Add-ons,Cheese,20,False
+BLT Sandwich,Food Add-ons,Egg,20,False
+BLT Sandwich,Food Add-ons,Bacon,35,False
+Chicken Wrap,Food Add-ons,Fries,40,False
+Chicken Wrap,Food Add-ons,Salad,35,False
+Chicken Wrap,Food Add-ons,Cheese,20,False
+Chicken Wrap,Food Add-ons,Egg,20,False
+Chicken Wrap,Food Add-ons,Bacon,35,False
+Tuna Wrap,Food Add-ons,Fries,40,False
+Tuna Wrap,Food Add-ons,Salad,35,False
+Tuna Wrap,Food Add-ons,Cheese,20,False
+Tuna Wrap,Food Add-ons,Egg,20,False
+Tuna Wrap,Food Add-ons,Bacon,35,False
+Chicken Burger,Food Add-ons,Fries,40,False
+Chicken Burger,Food Add-ons,Salad,35,False
+Chicken Burger,Food Add-ons,Cheese,20,False
+Chicken Burger,Food Add-ons,Egg,20,False
+Chicken Burger,Food Add-ons,Bacon,35,False
+Classic Beef Burger,Food Add-ons,Fries,40,False
+Classic Beef Burger,Food Add-ons,Salad,35,False
+Classic Beef Burger,Food Add-ons,Cheese,20,False
+Classic Beef Burger,Food Add-ons,Egg,20,False
+Classic Beef Burger,Food Add-ons,Bacon,35,False
+Cheeseburger,Food Add-ons,Fries,40,False
+Cheeseburger,Food Add-ons,Salad,35,False
+Cheeseburger,Food Add-ons,Cheese,20,False
+Cheeseburger,Food Add-ons,Egg,20,False
+Cheeseburger,Food Add-ons,Bacon,35,False
+Bacon Cheeseburger,Food Add-ons,Fries,40,False
+Bacon Cheeseburger,Food Add-ons,Salad,35,False
+Bacon Cheeseburger,Food Add-ons,Cheese,20,False
+Bacon Cheeseburger,Food Add-ons,Egg,20,False
+Bacon Cheeseburger,Food Add-ons,Bacon,35,False
+Mushroom Burger,Food Add-ons,Fries,40,False
+Mushroom Burger,Food Add-ons,Salad,35,False
+Mushroom Burger,Food Add-ons,Cheese,20,False
+Mushroom Burger,Food Add-ons,Egg,20,False
+Mushroom Burger,Food Add-ons,Bacon,35,False
+Carbonara,Food Add-ons,Fries,40,False
+Carbonara,Food Add-ons,Salad,35,False
+Carbonara,Food Add-ons,Cheese,20,False
+Carbonara,Food Add-ons,Egg,20,False
+Carbonara,Food Add-ons,Bacon,35,False
+Spaghetti Bolognese,Food Add-ons,Fries,40,False
+Spaghetti Bolognese,Food Add-ons,Salad,35,False
+Spaghetti Bolognese,Food Add-ons,Cheese,20,False
+Spaghetti Bolognese,Food Add-ons,Egg,20,False
+Spaghetti Bolognese,Food Add-ons,Bacon,35,False
+Chicken Alfredo Pasta,Food Add-ons,Fries,40,False
+Chicken Alfredo Pasta,Food Add-ons,Salad,35,False
+Chicken Alfredo Pasta,Food Add-ons,Cheese,20,False
+Chicken Alfredo Pasta,Food Add-ons,Egg,20,False
+Chicken Alfredo Pasta,Food Add-ons,Bacon,35,False
+Pesto Pasta,Food Add-ons,Fries,40,False
+Pesto Pasta,Food Add-ons,Salad,35,False
+Pesto Pasta,Food Add-ons,Cheese,20,False
+Pesto Pasta,Food Add-ons,Egg,20,False
+Pesto Pasta,Food Add-ons,Bacon,35,False
+Baked Mac and Cheese,Food Add-ons,Fries,40,False
+Baked Mac and Cheese,Food Add-ons,Salad,35,False
+Baked Mac and Cheese,Food Add-ons,Cheese,20,False
+Baked Mac and Cheese,Food Add-ons,Egg,20,False
+Baked Mac and Cheese,Food Add-ons,Bacon,35,False
+Chicken Rice Bowl,Food Add-ons,Fries,40,False
+Chicken Rice Bowl,Food Add-ons,Salad,35,False
+Chicken Rice Bowl,Food Add-ons,Cheese,20,False
+Chicken Rice Bowl,Food Add-ons,Egg,20,False
+Chicken Rice Bowl,Food Add-ons,Bacon,35,False
+Beef Rice Bowl,Food Add-ons,Fries,40,False
+Beef Rice Bowl,Food Add-ons,Salad,35,False
+Beef Rice Bowl,Food Add-ons,Cheese,20,False
+Beef Rice Bowl,Food Add-ons,Egg,20,False
+Beef Rice Bowl,Food Add-ons,Bacon,35,False
+Teriyaki Chicken Bowl,Food Add-ons,Fries,40,False
+Teriyaki Chicken Bowl,Food Add-ons,Salad,35,False
+Teriyaki Chicken Bowl,Food Add-ons,Cheese,20,False
+Teriyaki Chicken Bowl,Food Add-ons,Egg,20,False
+Teriyaki Chicken Bowl,Food Add-ons,Bacon,35,False
+Garlic Chicken Rice,Food Add-ons,Fries,40,False
+Garlic Chicken Rice,Food Add-ons,Salad,35,False
+Garlic Chicken Rice,Food Add-ons,Cheese,20,False
+Garlic Chicken Rice,Food Add-ons,Egg,20,False
+Garlic Chicken Rice,Food Add-ons,Bacon,35,False
+Beef Tapa Rice,Food Add-ons,Fries,40,False
+Beef Tapa Rice,Food Add-ons,Salad,35,False
+Beef Tapa Rice,Food Add-ons,Cheese,20,False
+Beef Tapa Rice,Food Add-ons,Egg,20,False
+Beef Tapa Rice,Food Add-ons,Bacon,35,False
+Chicken Caesar Salad,Food Add-ons,Fries,40,False
+Chicken Caesar Salad,Food Add-ons,Salad,35,False
+Chicken Caesar Salad,Food Add-ons,Cheese,20,False
+Chicken Caesar Salad,Food Add-ons,Egg,20,False
+Chicken Caesar Salad,Food Add-ons,Bacon,35,False
+Garden Salad,Food Add-ons,Fries,40,False
+Garden Salad,Food Add-ons,Salad,35,False
+Garden Salad,Food Add-ons,Cheese,20,False
+Garden Salad,Food Add-ons,Egg,20,False
+Garden Salad,Food Add-ons,Bacon,35,False
+Breakfast Plate,Food Add-ons,Fries,40,False
+Breakfast Plate,Food Add-ons,Salad,35,False
+Breakfast Plate,Food Add-ons,Cheese,20,False
+Breakfast Plate,Food Add-ons,Egg,20,False
+Breakfast Plate,Food Add-ons,Bacon,35,False
+Bacon and Egg Breakfast,Food Add-ons,Fries,40,False
+Bacon and Egg Breakfast,Food Add-ons,Salad,35,False
+Bacon and Egg Breakfast,Food Add-ons,Cheese,20,False
+Bacon and Egg Breakfast,Food Add-ons,Egg,20,False
+Bacon and Egg Breakfast,Food Add-ons,Bacon,35,False
+Sausage and Egg Breakfast,Food Add-ons,Fries,40,False
+Sausage and Egg Breakfast,Food Add-ons,Salad,35,False
+Sausage and Egg Breakfast,Food Add-ons,Cheese,20,False
+Sausage and Egg Breakfast,Food Add-ons,Egg,20,False
+Sausage and Egg Breakfast,Food Add-ons,Bacon,35,False
+French Fries,Snack Add-ons,Dip Sauce,15,False
+French Fries,Snack Add-ons,Extra Cheese,25,False
+Cheese Fries,Snack Add-ons,Dip Sauce,15,False
+Cheese Fries,Snack Add-ons,Extra Cheese,25,False
+Loaded Fries,Snack Add-ons,Dip Sauce,15,False
+Loaded Fries,Snack Add-ons,Extra Cheese,25,False
+Potato Wedges,Snack Add-ons,Dip Sauce,15,False
+Potato Wedges,Snack Add-ons,Extra Cheese,25,False
+Onion Rings,Snack Add-ons,Dip Sauce,15,False
+Onion Rings,Snack Add-ons,Extra Cheese,25,False
+Nachos,Snack Add-ons,Dip Sauce,15,False
+Nachos,Snack Add-ons,Extra Cheese,25,False
+Cheesy Nachos,Snack Add-ons,Dip Sauce,15,False
+Cheesy Nachos,Snack Add-ons,Extra Cheese,25,False
+Loaded Nachos,Snack Add-ons,Dip Sauce,15,False
+Loaded Nachos,Snack Add-ons,Extra Cheese,25,False
+Mozzarella Sticks,Snack Add-ons,Dip Sauce,15,False
+Mozzarella Sticks,Snack Add-ons,Extra Cheese,25,False
+Chicken Nuggets,Snack Add-ons,Dip Sauce,15,False
+Chicken Nuggets,Snack Add-ons,Extra Cheese,25,False
+Chicken Wings,Snack Add-ons,Dip Sauce,15,False
+Chicken Wings,Snack Add-ons,Extra Cheese,25,False
+Buffalo Wings,Snack Add-ons,Dip Sauce,15,False
+Buffalo Wings,Snack Add-ons,Extra Cheese,25,False
+Garlic Parmesan Wings,Snack Add-ons,Dip Sauce,15,False
+Garlic Parmesan Wings,Snack Add-ons,Extra Cheese,25,False
+Chicken Tenders,Snack Add-ons,Dip Sauce,15,False
+Chicken Tenders,Snack Add-ons,Extra Cheese,25,False
+Popcorn Chicken,Snack Add-ons,Dip Sauce,15,False
+Popcorn Chicken,Snack Add-ons,Extra Cheese,25,False
+Cheese Sticks,Snack Add-ons,Dip Sauce,15,False
+Cheese Sticks,Snack Add-ons,Extra Cheese,25,False
+Spring Rolls,Snack Add-ons,Dip Sauce,15,False
+Spring Rolls,Snack Add-ons,Extra Cheese,25,False
+Fish and Chips,Snack Add-ons,Dip Sauce,15,False
+Fish and Chips,Snack Add-ons,Extra Cheese,25,False
+Hash Browns,Snack Add-ons,Dip Sauce,15,False
+Hash Browns,Snack Add-ons,Extra Cheese,25,False
+Potato Croquettes,Snack Add-ons,Dip Sauce,15,False
+Potato Croquettes,Snack Add-ons,Extra Cheese,25,False
+Garlic Bread,Snack Add-ons,Dip Sauce,15,False
+Garlic Bread,Snack Add-ons,Extra Cheese,25,False
+Cheesy Garlic Bread,Snack Add-ons,Dip Sauce,15,False
+Cheesy Garlic Bread,Snack Add-ons,Extra Cheese,25,False
+Mini Pizza,Snack Add-ons,Dip Sauce,15,False
+Mini Pizza,Snack Add-ons,Extra Cheese,25,False
+Ham and Cheese Croissant,Snack Add-ons,Dip Sauce,15,False
+Ham and Cheese Croissant,Snack Add-ons,Extra Cheese,25,False
+Sausage Roll,Snack Add-ons,Dip Sauce,15,False
+Sausage Roll,Snack Add-ons,Extra Cheese,25,False
+Chocolate Chip Cookie,Snack Add-ons,Dip Sauce,15,False
+Chocolate Chip Cookie,Snack Add-ons,Extra Cheese,25,False
+Oatmeal Cookie,Snack Add-ons,Dip Sauce,15,False
+Oatmeal Cookie,Snack Add-ons,Extra Cheese,25,False
+Chocolate Muffin,Snack Add-ons,Dip Sauce,15,False
+Chocolate Muffin,Snack Add-ons,Extra Cheese,25,False
+Blueberry Muffin,Snack Add-ons,Dip Sauce,15,False
+Blueberry Muffin,Snack Add-ons,Extra Cheese,25,False
+Banana Muffin,Snack Add-ons,Dip Sauce,15,False
+Banana Muffin,Snack Add-ons,Extra Cheese,25,False
+Classic Cheesecake,Dessert Add-ons,Chocolate Drizzle,20,False
+Classic Cheesecake,Dessert Add-ons,Fruit,30,False
+Classic Cheesecake,Dessert Add-ons,Whipped Cream,20,False
+Blueberry Cheesecake,Dessert Add-ons,Chocolate Drizzle,20,False
+Blueberry Cheesecake,Dessert Add-ons,Fruit,30,False
+Blueberry Cheesecake,Dessert Add-ons,Whipped Cream,20,False
+Strawberry Cheesecake,Dessert Add-ons,Chocolate Drizzle,20,False
+Strawberry Cheesecake,Dessert Add-ons,Fruit,30,False
+Strawberry Cheesecake,Dessert Add-ons,Whipped Cream,20,False
+Oreo Cheesecake,Dessert Add-ons,Chocolate Drizzle,20,False
+Oreo Cheesecake,Dessert Add-ons,Fruit,30,False
+Oreo Cheesecake,Dessert Add-ons,Whipped Cream,20,False
+Basque Burnt Cheesecake,Dessert Add-ons,Chocolate Drizzle,20,False
+Basque Burnt Cheesecake,Dessert Add-ons,Fruit,30,False
+Basque Burnt Cheesecake,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Cake,Dessert Add-ons,Fruit,30,False
+Chocolate Cake,Dessert Add-ons,Whipped Cream,20,False
+Red Velvet Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Red Velvet Cake,Dessert Add-ons,Fruit,30,False
+Red Velvet Cake,Dessert Add-ons,Whipped Cream,20,False
+Carrot Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Carrot Cake,Dessert Add-ons,Fruit,30,False
+Carrot Cake,Dessert Add-ons,Whipped Cream,20,False
+Mocha Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Mocha Cake,Dessert Add-ons,Fruit,30,False
+Mocha Cake,Dessert Add-ons,Whipped Cream,20,False
+Ube Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Ube Cake,Dessert Add-ons,Fruit,30,False
+Ube Cake,Dessert Add-ons,Whipped Cream,20,False
+Tiramisu,Dessert Add-ons,Chocolate Drizzle,20,False
+Tiramisu,Dessert Add-ons,Fruit,30,False
+Tiramisu,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Brownie,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Brownie,Dessert Add-ons,Fruit,30,False
+Chocolate Brownie,Dessert Add-ons,Whipped Cream,20,False
+Walnut Brownie,Dessert Add-ons,Chocolate Drizzle,20,False
+Walnut Brownie,Dessert Add-ons,Fruit,30,False
+Walnut Brownie,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Lava Cake,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Lava Cake,Dessert Add-ons,Fruit,30,False
+Chocolate Lava Cake,Dessert Add-ons,Whipped Cream,20,False
+Banana Bread,Dessert Add-ons,Chocolate Drizzle,20,False
+Banana Bread,Dessert Add-ons,Fruit,30,False
+Banana Bread,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Donut,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Donut,Dessert Add-ons,Fruit,30,False
+Chocolate Donut,Dessert Add-ons,Whipped Cream,20,False
+Glazed Donut,Dessert Add-ons,Chocolate Drizzle,20,False
+Glazed Donut,Dessert Add-ons,Fruit,30,False
+Glazed Donut,Dessert Add-ons,Whipped Cream,20,False
+Strawberry Donut,Dessert Add-ons,Chocolate Drizzle,20,False
+Strawberry Donut,Dessert Add-ons,Fruit,30,False
+Strawberry Donut,Dessert Add-ons,Whipped Cream,20,False
+Cinnamon Roll,Dessert Add-ons,Chocolate Drizzle,20,False
+Cinnamon Roll,Dessert Add-ons,Fruit,30,False
+Cinnamon Roll,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Croissant,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Croissant,Dessert Add-ons,Fruit,30,False
+Chocolate Croissant,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Sundae,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Sundae,Dessert Add-ons,Fruit,30,False
+Chocolate Sundae,Dessert Add-ons,Whipped Cream,20,False
+Strawberry Sundae,Dessert Add-ons,Chocolate Drizzle,20,False
+Strawberry Sundae,Dessert Add-ons,Fruit,30,False
+Strawberry Sundae,Dessert Add-ons,Whipped Cream,20,False
+Vanilla Ice Cream,Dessert Add-ons,Chocolate Drizzle,20,False
+Vanilla Ice Cream,Dessert Add-ons,Fruit,30,False
+Vanilla Ice Cream,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Ice Cream,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Ice Cream,Dessert Add-ons,Fruit,30,False
+Chocolate Ice Cream,Dessert Add-ons,Whipped Cream,20,False
+Cookies and Cream Ice Cream,Dessert Add-ons,Chocolate Drizzle,20,False
+Cookies and Cream Ice Cream,Dessert Add-ons,Fruit,30,False
+Cookies and Cream Ice Cream,Dessert Add-ons,Whipped Cream,20,False
+Mango Graham,Dessert Add-ons,Chocolate Drizzle,20,False
+Mango Graham,Dessert Add-ons,Fruit,30,False
+Mango Graham,Dessert Add-ons,Whipped Cream,20,False
+Mango Float,Dessert Add-ons,Chocolate Drizzle,20,False
+Mango Float,Dessert Add-ons,Fruit,30,False
+Mango Float,Dessert Add-ons,Whipped Cream,20,False
+Leche Flan,Dessert Add-ons,Chocolate Drizzle,20,False
+Leche Flan,Dessert Add-ons,Fruit,30,False
+Leche Flan,Dessert Add-ons,Whipped Cream,20,False
+Chocolate Mousse,Dessert Add-ons,Chocolate Drizzle,20,False
+Chocolate Mousse,Dessert Add-ons,Fruit,30,False
+Chocolate Mousse,Dessert Add-ons,Whipped Cream,20,False
+Panna Cotta,Dessert Add-ons,Chocolate Drizzle,20,False
+Panna Cotta,Dessert Add-ons,Fruit,30,False
+Panna Cotta,Dessert Add-ons,Whipped Cream,20,False

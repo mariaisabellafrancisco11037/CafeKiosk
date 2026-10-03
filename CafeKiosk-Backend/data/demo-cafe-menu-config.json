@@ -1,0 +1,6835 @@
+{
+  "products": {
+    "coffee::espresso": {
+      "productName": "Espresso",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Single",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Double",
+          "priceAdd": 30.0,
+          "multiplier": 2.0
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::double espresso": {
+      "productName": "Double Espresso",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Double",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::americano": {
+      "productName": "Americano",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cafe latte": {
+      "productName": "Cafe Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cappuccino": {
+      "productName": "Cappuccino",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::flat white": {
+      "productName": "Flat White",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cafe mocha": {
+      "productName": "Cafe Mocha",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::white chocolate mocha": {
+      "productName": "White Chocolate Mocha",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::caramel macchiato": {
+      "productName": "Caramel Macchiato",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::vanilla latte": {
+      "productName": "Vanilla Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::caramel latte": {
+      "productName": "Caramel Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::hazelnut latte": {
+      "productName": "Hazelnut Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::spanish latte": {
+      "productName": "Spanish Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::brown sugar latte": {
+      "productName": "Brown Sugar Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::salted caramel latte": {
+      "productName": "Salted Caramel Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cinnamon latte": {
+      "productName": "Cinnamon Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::honey cinnamon latte": {
+      "productName": "Honey Cinnamon Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::pistachio latte": {
+      "productName": "Pistachio Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::toffee nut latte": {
+      "productName": "Toffee Nut Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::dark chocolate mocha": {
+      "productName": "Dark Chocolate Mocha",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::black coffee": {
+      "productName": "Black Coffee",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cafe au lait": {
+      "productName": "Cafe Au Lait",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::vietnamese coffee": {
+      "productName": "Vietnamese Coffee",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::macchiato": {
+      "productName": "Macchiato",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::affogato": {
+      "productName": "Affogato",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::cold brew": {
+      "productName": "Cold Brew",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::iced americano": {
+      "productName": "Iced Americano",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::iced cafe latte": {
+      "productName": "Iced Cafe Latte",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::iced cafe mocha": {
+      "productName": "Iced Cafe Mocha",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "coffee::iced caramel macchiato": {
+      "productName": "Iced Caramel Macchiato",
+      "category": "coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "coffee-add-ons",
+          "label": "Coffee Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Extra shot",
+              "value": "Extra shot",
+              "price": 30.0
+            },
+            {
+              "label": "Vanilla syrup",
+              "value": "Vanilla syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Caramel syrup",
+              "value": "Caramel syrup",
+              "price": 20.0
+            },
+            {
+              "label": "Whipped cream",
+              "value": "Whipped cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::classic hot chocolate": {
+      "productName": "Classic Hot Chocolate",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::dark hot chocolate": {
+      "productName": "Dark Hot Chocolate",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::white hot chocolate": {
+      "productName": "White Hot Chocolate",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::iced chocolate": {
+      "productName": "Iced Chocolate",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::chocolate milk": {
+      "productName": "Chocolate Milk",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::matcha latte": {
+      "productName": "Matcha Latte",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::iced matcha latte": {
+      "productName": "Iced Matcha Latte",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::strawberry matcha latte": {
+      "productName": "Strawberry Matcha Latte",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::mango matcha latte": {
+      "productName": "Mango Matcha Latte",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::vanilla matcha latte": {
+      "productName": "Vanilla Matcha Latte",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::strawberry milk": {
+      "productName": "Strawberry Milk",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::mango milk": {
+      "productName": "Mango Milk",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::banana milk": {
+      "productName": "Banana Milk",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::cookies and cream": {
+      "productName": "Cookies and Cream",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::chocolate oreo": {
+      "productName": "Chocolate Oreo",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::strawberry smoothie": {
+      "productName": "Strawberry Smoothie",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::mango smoothie": {
+      "productName": "Mango Smoothie",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::banana smoothie": {
+      "productName": "Banana Smoothie",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::mixed berry smoothie": {
+      "productName": "Mixed Berry Smoothie",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::avocado smoothie": {
+      "productName": "Avocado Smoothie",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::fresh lemonade": {
+      "productName": "Fresh Lemonade",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::strawberry lemonade": {
+      "productName": "Strawberry Lemonade",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::honey lemon": {
+      "productName": "Honey Lemon",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "Regular",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "Large",
+          "priceAdd": 25.0,
+          "multiplier": 1.5
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::peach iced tea": {
+      "productName": "Peach Iced Tea",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::lemon iced tea": {
+      "productName": "Lemon Iced Tea",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::lychee iced tea": {
+      "productName": "Lychee Iced Tea",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::passion fruit tea": {
+      "productName": "Passion Fruit Tea",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::green apple soda": {
+      "productName": "Green Apple Soda",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::strawberry soda": {
+      "productName": "Strawberry Soda",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "non-coffee::blueberry soda": {
+      "productName": "Blueberry Soda",
+      "category": "non-coffee",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 25.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "drink-add-ons",
+          "label": "Drink Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Boba",
+              "value": "Boba",
+              "price": 25.0
+            },
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::classic milk tea": {
+      "productName": "Classic Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::pearl milk tea": {
+      "productName": "Pearl Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::brown sugar milk tea": {
+      "productName": "Brown Sugar Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::wintermelon milk tea": {
+      "productName": "Wintermelon Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::okinawa milk tea": {
+      "productName": "Okinawa Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::hokkaido milk tea": {
+      "productName": "Hokkaido Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::thai milk tea": {
+      "productName": "Thai Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::taro milk tea": {
+      "productName": "Taro Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::matcha milk tea": {
+      "productName": "Matcha Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::chocolate milk tea": {
+      "productName": "Chocolate Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::strawberry milk tea": {
+      "productName": "Strawberry Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::mango milk tea": {
+      "productName": "Mango Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::honeydew milk tea": {
+      "productName": "Honeydew Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::vanilla milk tea": {
+      "productName": "Vanilla Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::caramel milk tea": {
+      "productName": "Caramel Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::hazelnut milk tea": {
+      "productName": "Hazelnut Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::cookies and cream milk tea": {
+      "productName": "Cookies and Cream Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::cheesecake milk tea": {
+      "productName": "Cheesecake Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::red velvet milk tea": {
+      "productName": "Red Velvet Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::dark chocolate milk tea": {
+      "productName": "Dark Chocolate Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::salted caramel milk tea": {
+      "productName": "Salted Caramel Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::brown sugar pearl milk": {
+      "productName": "Brown Sugar Pearl Milk",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::taro pearl milk tea": {
+      "productName": "Taro Pearl Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::matcha pearl milk tea": {
+      "productName": "Matcha Pearl Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::wintermelon pearl milk tea": {
+      "productName": "Wintermelon Pearl Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::oreo milk tea": {
+      "productName": "Oreo Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::cream cheese milk tea": {
+      "productName": "Cream Cheese Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::pudding milk tea": {
+      "productName": "Pudding Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::grass jelly milk tea": {
+      "productName": "Grass Jelly Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "milk-tea::honey pearl milk tea": {
+      "productName": "Honey Pearl Milk Tea",
+      "category": "milk-tea",
+      "sizes": [
+        {
+          "label": "16 oz",
+          "priceAdd": 0.0,
+          "multiplier": 1.0
+        },
+        {
+          "label": "22 oz",
+          "priceAdd": 30.0,
+          "multiplier": 1.4
+        }
+      ],
+      "customizations": [
+        {
+          "key": "toppings",
+          "label": "Toppings",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Pearls",
+              "value": "Pearls",
+              "price": 25.0
+            },
+            {
+              "label": "Grass Jelly",
+              "value": "Grass Jelly",
+              "price": 25.0
+            },
+            {
+              "label": "Pudding",
+              "value": "Pudding",
+              "price": 25.0
+            },
+            {
+              "label": "Cream Cheese",
+              "value": "Cream Cheese",
+              "price": 30.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::classic club sandwich": {
+      "productName": "Classic Club Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::ham and cheese sandwich": {
+      "productName": "Ham and Cheese Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken sandwich": {
+      "productName": "Chicken Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::tuna sandwich": {
+      "productName": "Tuna Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::egg sandwich": {
+      "productName": "Egg Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::grilled cheese sandwich": {
+      "productName": "Grilled Cheese Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken pesto sandwich": {
+      "productName": "Chicken Pesto Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::blt sandwich": {
+      "productName": "BLT Sandwich",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken wrap": {
+      "productName": "Chicken Wrap",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::tuna wrap": {
+      "productName": "Tuna Wrap",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken burger": {
+      "productName": "Chicken Burger",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::classic beef burger": {
+      "productName": "Classic Beef Burger",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::cheeseburger": {
+      "productName": "Cheeseburger",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::bacon cheeseburger": {
+      "productName": "Bacon Cheeseburger",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::mushroom burger": {
+      "productName": "Mushroom Burger",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::carbonara": {
+      "productName": "Carbonara",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::spaghetti bolognese": {
+      "productName": "Spaghetti Bolognese",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken alfredo pasta": {
+      "productName": "Chicken Alfredo Pasta",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::pesto pasta": {
+      "productName": "Pesto Pasta",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::baked mac and cheese": {
+      "productName": "Baked Mac and Cheese",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken rice bowl": {
+      "productName": "Chicken Rice Bowl",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::beef rice bowl": {
+      "productName": "Beef Rice Bowl",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::teriyaki chicken bowl": {
+      "productName": "Teriyaki Chicken Bowl",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::garlic chicken rice": {
+      "productName": "Garlic Chicken Rice",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::beef tapa rice": {
+      "productName": "Beef Tapa Rice",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::chicken caesar salad": {
+      "productName": "Chicken Caesar Salad",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::garden salad": {
+      "productName": "Garden Salad",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::breakfast plate": {
+      "productName": "Breakfast Plate",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::bacon and egg breakfast": {
+      "productName": "Bacon and Egg Breakfast",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "foods::sausage and egg breakfast": {
+      "productName": "Sausage and Egg Breakfast",
+      "category": "foods",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "food-add-ons",
+          "label": "Food Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Fries",
+              "value": "Fries",
+              "price": 40.0
+            },
+            {
+              "label": "Salad",
+              "value": "Salad",
+              "price": 35.0
+            },
+            {
+              "label": "Cheese",
+              "value": "Cheese",
+              "price": 20.0
+            },
+            {
+              "label": "Egg",
+              "value": "Egg",
+              "price": 20.0
+            },
+            {
+              "label": "Bacon",
+              "value": "Bacon",
+              "price": 35.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::french fries": {
+      "productName": "French Fries",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::cheese fries": {
+      "productName": "Cheese Fries",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::loaded fries": {
+      "productName": "Loaded Fries",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::potato wedges": {
+      "productName": "Potato Wedges",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::onion rings": {
+      "productName": "Onion Rings",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::nachos": {
+      "productName": "Nachos",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::cheesy nachos": {
+      "productName": "Cheesy Nachos",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::loaded nachos": {
+      "productName": "Loaded Nachos",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::mozzarella sticks": {
+      "productName": "Mozzarella Sticks",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::chicken nuggets": {
+      "productName": "Chicken Nuggets",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::chicken wings": {
+      "productName": "Chicken Wings",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::buffalo wings": {
+      "productName": "Buffalo Wings",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::garlic parmesan wings": {
+      "productName": "Garlic Parmesan Wings",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::chicken tenders": {
+      "productName": "Chicken Tenders",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::popcorn chicken": {
+      "productName": "Popcorn Chicken",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::cheese sticks": {
+      "productName": "Cheese Sticks",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::spring rolls": {
+      "productName": "Spring Rolls",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::fish and chips": {
+      "productName": "Fish and Chips",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::hash browns": {
+      "productName": "Hash Browns",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::potato croquettes": {
+      "productName": "Potato Croquettes",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::garlic bread": {
+      "productName": "Garlic Bread",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::cheesy garlic bread": {
+      "productName": "Cheesy Garlic Bread",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::mini pizza": {
+      "productName": "Mini Pizza",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::ham and cheese croissant": {
+      "productName": "Ham and Cheese Croissant",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::sausage roll": {
+      "productName": "Sausage Roll",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::chocolate chip cookie": {
+      "productName": "Chocolate Chip Cookie",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::oatmeal cookie": {
+      "productName": "Oatmeal Cookie",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::chocolate muffin": {
+      "productName": "Chocolate Muffin",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::blueberry muffin": {
+      "productName": "Blueberry Muffin",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "snacks::banana muffin": {
+      "productName": "Banana Muffin",
+      "category": "snacks",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "snack-add-ons",
+          "label": "Snack Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Dip Sauce",
+              "value": "Dip Sauce",
+              "price": 15.0
+            },
+            {
+              "label": "Extra Cheese",
+              "value": "Extra Cheese",
+              "price": 25.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::classic cheesecake": {
+      "productName": "Classic Cheesecake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::blueberry cheesecake": {
+      "productName": "Blueberry Cheesecake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::strawberry cheesecake": {
+      "productName": "Strawberry Cheesecake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::oreo cheesecake": {
+      "productName": "Oreo Cheesecake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::basque burnt cheesecake": {
+      "productName": "Basque Burnt Cheesecake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate cake": {
+      "productName": "Chocolate Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::red velvet cake": {
+      "productName": "Red Velvet Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::carrot cake": {
+      "productName": "Carrot Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::mocha cake": {
+      "productName": "Mocha Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::ube cake": {
+      "productName": "Ube Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::tiramisu": {
+      "productName": "Tiramisu",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate brownie": {
+      "productName": "Chocolate Brownie",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::walnut brownie": {
+      "productName": "Walnut Brownie",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate lava cake": {
+      "productName": "Chocolate Lava Cake",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::banana bread": {
+      "productName": "Banana Bread",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate donut": {
+      "productName": "Chocolate Donut",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::glazed donut": {
+      "productName": "Glazed Donut",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::strawberry donut": {
+      "productName": "Strawberry Donut",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::cinnamon roll": {
+      "productName": "Cinnamon Roll",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate croissant": {
+      "productName": "Chocolate Croissant",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate sundae": {
+      "productName": "Chocolate Sundae",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::strawberry sundae": {
+      "productName": "Strawberry Sundae",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::vanilla ice cream": {
+      "productName": "Vanilla Ice Cream",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate ice cream": {
+      "productName": "Chocolate Ice Cream",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::cookies and cream ice cream": {
+      "productName": "Cookies and Cream Ice Cream",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::mango graham": {
+      "productName": "Mango Graham",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::mango float": {
+      "productName": "Mango Float",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::leche flan": {
+      "productName": "Leche Flan",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::chocolate mousse": {
+      "productName": "Chocolate Mousse",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    },
+    "dessert::panna cotta": {
+      "productName": "Panna Cotta",
+      "category": "dessert",
+      "sizes": [],
+      "customizations": [
+        {
+          "key": "dessert-add-ons",
+          "label": "Dessert Add-ons",
+          "type": "checkbox",
+          "required": false,
+          "options": [
+            {
+              "label": "Chocolate Drizzle",
+              "value": "Chocolate Drizzle",
+              "price": 20.0
+            },
+            {
+              "label": "Fruit",
+              "value": "Fruit",
+              "price": 30.0
+            },
+            {
+              "label": "Whipped Cream",
+              "value": "Whipped Cream",
+              "price": 20.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "categoryDefaults": {}
+}

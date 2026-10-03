@@ -110,6 +110,7 @@
       }
     }
 
+    const customGroups = Array.isArray(product?.customizations) ? product.customizations : [];
     const ingredients = Array.isArray(product?.ingredients)
       ? product.ingredients
       : [];
@@ -142,11 +143,13 @@
         .filter(option => option.label)
     );
 
-    if (optionalIngredients.length) {
+    // Explicit Item Customizations are the customer-facing source of truth
+    // because they carry the correct labels and prices. Recipe option rows are
+    // only used as a fallback so imported add-ons do not appear twice.
+    if (optionalIngredients.length && !customGroups.length) {
       fields.push({ key: "addons", label: "Optional Add-ons", type: "checkbox", options: optionalIngredients });
     }
 
-    const customGroups = Array.isArray(product?.customizations) ? product.customizations : [];
     for (const group of customGroups) {
       const options = uniqueOptions((Array.isArray(group?.options) ? group.options : []).map(option => ({
         label: String(option?.label || option?.value || "").trim(),
@@ -276,21 +279,47 @@
 
     activeCafeId = resolveCafeId();
 
-    try {
-      const response = await fetch(
-        `${api()}/api/menu-config?cafeId=${encodeURIComponent(activeCafeId)}`,
-        { cache: "no-store", credentials: "include" }
-      );
+    const kioskSlug = String(
+      window.CafeKioskTenant?.slug ||
+      sessionStorage.getItem("kioskSlug") ||
+      ""
+    ).trim();
 
-      if (response.ok) {
-        const payload = await response.json();
-        window.CafeMenuConfig.config = payload.config || window.CafeMenuConfig.config;
+    if (kioskSlug) {
+      // Public kiosk pages receive the sanitized menu configuration together
+      // with the slug catalog. Wait for that request instead of calling the
+      // authenticated menu-config endpoint (which caused tablet kiosks for
+      // non-demo cafes to lose every add-on).
+      if (!window.CafeMenuConfig.ready) {
+        await new Promise(resolve => {
+          let settled = false;
+          const finish = () => {
+            if (settled) return;
+            settled = true;
+            window.removeEventListener("cafekiosk:menu-config-loaded", finish);
+            resolve();
+          };
+          window.addEventListener("cafekiosk:menu-config-loaded", finish, { once: true });
+          window.setTimeout(finish, 8000);
+        });
       }
-    } catch (error) {
-      console.warn("Cafe menu customization configuration could not be loaded:", error);
-    }
+    } else {
+      try {
+        const response = await fetch(
+          `${api()}/api/menu-config?cafeId=${encodeURIComponent(activeCafeId)}`,
+          { cache: "no-store", credentials: "include" }
+        );
 
-    window.CafeMenuConfig.ready = true;
+        if (response.ok) {
+          const payload = await response.json();
+          window.CafeMenuConfig.config = payload.config || window.CafeMenuConfig.config;
+        }
+      } catch (error) {
+        console.warn("Cafe menu customization configuration could not be loaded:", error);
+      }
+
+      window.CafeMenuConfig.ready = true;
+    }
     wrapShowItemModal();
     window.setTimeout(wrapShowItemModal, 250);
     window.setTimeout(wrapShowItemModal, 1000);

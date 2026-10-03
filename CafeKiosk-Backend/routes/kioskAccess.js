@@ -4,6 +4,7 @@ const router = express.Router();
 const { requireRole } = require('../middleware/authMiddleware');
 const kioskStore = require('../services/kioskAccessStore');
 const catalogStore = require('../services/catalogStore');
+const menuConfigStore = require('../services/menuConfigStore');
 const pool = require('../config/dbPool');
 const { makeRateLimit } = require('../middleware/securityRateLimit');
 
@@ -70,12 +71,13 @@ router.get('/public/:slug/catalog', kioskLookupLimiter, async (req, res, next) =
     if (!info || info.cafeStatus !== 'Active' || !info.kioskEnabled) {
       return res.status(404).json({ success: false, message: 'This kiosk link is not active.' });
     }
-    const [categories, products, paymentRows, taxRows, preferenceRows] = await Promise.all([
+    const [categories, products, paymentRows, taxRows, preferenceRows, menuConfig] = await Promise.all([
       catalogStore.listCategories(info.cafeId),
       catalogStore.list(info.cafeId),
       pool.execute('SELECT method_name,display_name,is_enabled,sort_order FROM payment_methods WHERE cafe_id=? ORDER BY sort_order', [info.cafeId]).then(([rows]) => rows),
       pool.execute('SELECT tax_rate_percent,service_charge_percent FROM tax_settings WHERE cafe_id=? LIMIT 1', [info.cafeId]).then(([rows]) => rows),
-      pool.execute('SELECT default_order_type,currency_code,currency_symbol,receipt_footer FROM system_preferences WHERE cafe_id=? LIMIT 1', [info.cafeId]).then(([rows]) => rows)
+      pool.execute('SELECT default_order_type,currency_code,currency_symbol,receipt_footer FROM system_preferences WHERE cafe_id=? LIMIT 1', [info.cafeId]).then(([rows]) => rows),
+      menuConfigStore.get(info.cafeId)
     ]);
     const paymentDefaults = [
       { methodName: 'Cash', displayName: 'Cash', isEnabled: true, sortOrder: 1 },
@@ -103,6 +105,7 @@ router.get('/public/:slug/catalog', kioskLookupLimiter, async (req, res, next) =
       categories,
       count: products.length,
       products,
+      menuConfig: menuConfigStore.publicView(menuConfig),
       paymentMethods,
       checkout: {
         tax: Number(tax.tax_rate_percent || 0),

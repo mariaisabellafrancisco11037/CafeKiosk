@@ -1,0 +1,15 @@
+CafeKiosk kiosk loading fix - 180 Demo Cafe menu preserved
+Date: 2026-10-03
+
+IMPORTANT:
+- The CafeKiosk Demo Cafe 180-item catalog is NOT removed.
+- Runtime bundled catalog: CafeKiosk-Backend/data/demo-cafe-catalog.json
+- Verified: 180 products total.
+- Verified categories: Coffee 30, Non-Coffee 30, Milktea 30, Food 30, Snack 30, Dessert 30.
+- The kiosk boot/loading scene only replaces the old temporary 5-card HTML flash while the real catalog is being fetched.
+- The 180-item database/catalog remains the real menu source.
+
+Backup/import copies are included under:
+CafeKiosk-DataBase/DemoCafe/
+  CafeKiosk_Demo_Cafe_180_Menu_Items.csv
+  CafeKiosk_Demo_Cafe_180_Item_Addons_CafeKiosk_Import.csv

@@ -3776,6 +3776,17 @@ async function loadMysqlProductCatalog() {
     sessionStorage.setItem("cafeId", resolvedCafeId);
     const categories = Array.isArray(payload.categories) ? payload.categories : [];
     const products = Array.isArray(payload.products) ? payload.products : [];
+
+    // The public kiosk catalog now carries the cafe's sanitized size/add-on
+    // configuration. Hydrate it before the menu becomes clickable so tablets
+    // never open an item modal with an empty "No add-ons" state.
+    if (payload.menuConfig && typeof payload.menuConfig === "object") {
+      window.CafeMenuConfig = window.CafeMenuConfig || { config: { products: {}, categoryDefaults: {} }, ready: false };
+      window.CafeMenuConfig.config = payload.menuConfig;
+      window.CafeMenuConfig.ready = true;
+      window.dispatchEvent(new CustomEvent("cafekiosk:menu-config-loaded", { detail: { cafeId: resolvedCafeId } }));
+    }
+
     const configuredMethods = Array.isArray(payload.paymentMethods) ? payload.paymentMethods : [];
     kioskCheckoutSettings = {
       ...kioskCheckoutSettings,

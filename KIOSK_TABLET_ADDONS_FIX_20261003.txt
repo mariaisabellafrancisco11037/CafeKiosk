@@ -1,0 +1,35 @@
+CafeKiosk - Kiosk Tablet Add-ons Fix (2026-10-03)
+
+Problem fixed
+-------------
+The public kiosk could show "No add-ons or options" even when the cafe had
+sizes/customizations in Menu Management. The public kiosk was trying to read
+/api/menu-config directly. That endpoint intentionally did not expose another
+cafe's configuration to unauthenticated users, so slug-based tablet kiosks for
+non-demo cafes received no configuration. The Demo Cafe also had 180 menu items
+but its product-level add-ons were not guaranteed in menu-config state.
+
+Changes
+-------
+1. The active kiosk slug catalog now returns a sanitized public menuConfig.
+   Only customer-facing sizes, add-on labels/prices, and optional recipe choices
+   are exposed. Inventory stock quantities remain private.
+2. Kiosk menu.js hydrates the customization config before the loading screen is
+   removed, preventing the item modal from flashing an empty state on tablets.
+3. menu-runtime-config.js waits for the slug catalog's menu configuration rather
+   than calling the authenticated menu-config endpoint.
+4. The Demo Cafe now includes a bundled product-level config for ALL 180 items:
+   - 30 Coffee
+   - 30 Non-Coffee
+   - 30 Milktea
+   - 30 Food
+   - 30 Snack
+   - 30 Dessert
+   There are 630 add-on options in total.
+5. Demo item sizes come from the 180-item menu CSV, so special items such as
+   Double Espresso keep their product-specific size choices.
+6. Explicit Item Customizations take priority over recipe option rows to avoid
+   duplicated add-ons when both files were imported.
+7. Browser asset versions were bumped so tablets do not keep the old cached JS.
+
+The 180 Demo Cafe menu products were not removed.

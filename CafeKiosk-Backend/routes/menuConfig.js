@@ -7,34 +7,6 @@ const verify=auth.verifyToken;
 const admin=auth.isAdmin;
 const owner=auth.isOwner;
 
-function publicConfig(config={}){
-  const products={};
-  for(const [key,value] of Object.entries(config.products||{})){
-    products[key]={
-      productName:value?.productName||"",
-      category:value?.category||"",
-      sizes:Array.isArray(value?.sizes)?value.sizes.map(size=>({
-        label:String(size?.label||""),
-        priceAdd:Math.max(0,Number(size?.priceAdd??size?.price??0)||0),
-        multiplier:Math.max(0.01,Number(size?.multiplier??1)||1)
-      })):[],
-      customizations:Array.isArray(value?.customizations)?value.customizations.map(group=>({
-        key:String(group?.key||"customization"),
-        label:String(group?.label||"Customization"),
-        type:group?.type==="radio"?"radio":"checkbox",
-        required:group?.required===true,
-        options:Array.isArray(group?.options)?group.options.map(option=>({
-          label:String(option?.label||option?.value||""),
-          value:String(option?.value||option?.label||""),
-          price:Math.max(0,Number(option?.price??option?.additionalPrice??0)||0)
-        })).filter(option=>option.label):[]
-      })):[],
-      updatedAt:value?.updatedAt||null
-    };
-  }
-  return {products,categoryDefaults:config.categoryDefaults||{},updatedAt:config.updatedAt||null};
-}
-
 router.get("/",optionalAuth,async(req,res,next)=>{
   try{
     const requested=String(req.query.cafeId||"cafe-1");
@@ -43,7 +15,7 @@ router.get("/",optionalAuth,async(req,res,next)=>{
       return res.status(404).json({success:false,message:"Menu configuration not found."});
     }
     const config=await store.get(cafeId);
-    res.json({success:true,cafeId,config:req.user?config:publicConfig(config)});
+    res.json({success:true,cafeId,config:req.user?config:store.publicView(config)});
   }catch(e){next(e);}
 });
 
