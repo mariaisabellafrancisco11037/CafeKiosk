@@ -102,29 +102,39 @@ html.ck-project-footer-page::-webkit-scrollbar-thumb:hover {
   line-height: 1.5;
 }
 
-/* Kiosk landing/service-type pages use a centered flex body.  Turn those
-   bodies into a vertical document so the app stays centered and the footer
-   follows below it instead of appearing beside/over it. */
+/* Kiosk landing and service-type pages keep the thesis footer in the document,
+   but the first screen is reserved entirely for the kiosk experience. The footer
+   starts after one full viewport and is only revealed when the user scrolls. */
 body.kiosk-home.ck-project-footer-page,
 body.kiosk-order-type.ck-project-footer-page {
   min-height: 100vh !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  align-items: stretch !important;
+  display: block !important;
+  width: 100% !important;
 }
 
-body.kiosk-home.ck-project-footer-page > .container,
-body.kiosk-order-type.ck-project-footer-page > .container {
+body.kiosk-home.ck-project-footer-page > .kiosk-viewport-stage,
+body.kiosk-order-type.ck-project-footer-page > .kiosk-viewport-stage {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 24px 0;
+}
+
+body.kiosk-home.ck-project-footer-page > .kiosk-viewport-stage > .container,
+body.kiosk-order-type.ck-project-footer-page > .kiosk-viewport-stage > .container {
   flex: 0 0 auto;
-  margin: auto !important;
-  padding-top: 34px;
-  padding-bottom: 34px;
+  margin: 0 auto !important;
 }
 
 body.kiosk-home.ck-project-footer-page > .cafekiosk-developer-footer,
 body.kiosk-order-type.ck-project-footer-page > .cafekiosk-developer-footer {
-  flex: 0 0 auto;
+  display: block !important;
+  position: static !important;
+  margin: 0 !important;
 }
 
 @media (max-width: 640px) {
@@ -146,9 +156,8 @@ body.kiosk-order-type.ck-project-footer-page > .cafekiosk-developer-footer {
     margin-top: 2px;
   }
 
-  body.kiosk-home.ck-project-footer-page > .container,
-  body.kiosk-order-type.ck-project-footer-page > .container {
-    padding-top: 24px;
-    padding-bottom: 24px;
+  body.kiosk-home.ck-project-footer-page > .kiosk-viewport-stage,
+  body.kiosk-order-type.ck-project-footer-page > .kiosk-viewport-stage {
+    padding: 20px 0;
   }
 }

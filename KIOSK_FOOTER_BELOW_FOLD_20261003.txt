@@ -1,0 +1,7 @@
+CafeKiosk kiosk footer behavior
+
+Updated only the Kiosk landing page and Service Type page so the thesis footer
+remains available but begins below the first viewport. Users see the kiosk screen
+without the footer taking visible space; scrolling the page reveals the same footer.
+
+No menu data, database logic, role/session code, or other pages were changed.

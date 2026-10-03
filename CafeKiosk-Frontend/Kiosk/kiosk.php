@@ -8,27 +8,29 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
 <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-kiosk-footer-below-fold-v1">
 </head>
 <body class="uniform-kiosk kiosk-home">
 
-<div class="container">
+<main class="kiosk-viewport-stage">
+  <div class="container">
 
-    <!-- LOGO -->
-    <img src="/Assets/images/logo.png" class="logo">
+      <!-- LOGO -->
+      <img src="/Assets/images/logo.png" class="logo">
 
-    <!-- TITLE -->
-    <h1 class="title">Welcome to <span data-kiosk-cafe-name>CafeKiosk</span></h1>
+      <!-- TITLE -->
+      <h1 class="title">Welcome to <span data-kiosk-cafe-name>CafeKiosk</span></h1>
 
-    <!-- SUBTEXT -->
-    <p class="subtitle">Tap below to begin your order</p>
+      <!-- SUBTEXT -->
+      <p class="subtitle">Tap below to begin your order</p>
 
-    <!-- START BUTTON -->
-    <button class="start-btn" onclick="startOrder()">
-        START ORDER
-    </button>
+      <!-- START BUTTON -->
+      <button class="start-btn" onclick="startOrder()">
+          START ORDER
+      </button>
 
-</div>
+  </div>
+</main>
 
 
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
@@ -39,6 +41,6 @@
   <script src="/Assets/js/live-presence.js?v=3"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-kiosk-footer-below-fold-v1"></script>
 </body>
 </html>
