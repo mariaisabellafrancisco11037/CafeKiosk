@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CafeKiosk Login</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-page-bottom-v9">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 <body>
 
@@ -1224,6 +1224,6 @@
 </main>
 
 <script src="script.js"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-project-info-v9"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
 </body>
 </html>

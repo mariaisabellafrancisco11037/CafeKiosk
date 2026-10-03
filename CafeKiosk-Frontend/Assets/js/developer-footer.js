@@ -1,11 +1,19 @@
 (function () {
   'use strict';
 
+  if (!document.body) return;
+
+  /* The thesis footer belongs to the document itself.  Keeping it outside
+     dashboard/POS internal scrollers gives every CafeKiosk screen one main
+     page scrollbar that can reach the footer without resizing app panels. */
+  document.documentElement.classList.add('ck-project-footer-page');
+  document.body.classList.add('ck-project-footer-page');
+
   if (document.querySelector('.cafekiosk-developer-footer')) return;
 
   const footer = document.createElement('footer');
   footer.className = 'cafekiosk-developer-footer';
-  footer.setAttribute('aria-label', 'CafeKiosk project information');
+  footer.setAttribute('aria-label', 'CafeKiosk thesis project information');
   footer.innerHTML = `
     <div class="ck-footer-inner">
       <div class="ck-footer-credit">
@@ -21,13 +29,5 @@
       </div>
     </div>`;
 
-  /* Most pages scroll on the document, so the footer belongs after the page.
-     A few dashboards deliberately lock body scrolling and give <main> its own
-     vertical scroller; only in that case place the footer inside that scroller. */
-  const scrollableMain = Array.from(document.querySelectorAll('main')).find((el) => {
-    const style = window.getComputedStyle(el);
-    return style.overflowY === 'auto' || style.overflowY === 'scroll';
-  });
-
-  (scrollableMain || document.body).appendChild(footer);
+  document.body.appendChild(footer);
 })();

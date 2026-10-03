@@ -101,6 +101,7 @@
     }
     html::-webkit-scrollbar-thumb:hover { background: #3f805f; }
   </style>
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 <body class="uniform-admin has-project-footer">
   <div class="menu-shell">
@@ -448,15 +449,6 @@
 
     </main>
   </div>
-
-  <footer class="admin-menu-footer">
-    <div class="admin-menu-footer-inner">
-      <div><strong>Developed by:</strong> <strong>Maria Isabella Francisco</strong> <em>(Developer of CafeKiosk)</em></div>
-      <div><strong>Project Contributors:</strong> <strong>Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</strong></div>
-      <div class="admin-menu-footer-note"><strong>Thesis Project Notice:</strong> CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.</div>
-    </div>
-  </footer>
-
   <!-- CATEGORY MODAL -->
   <div class="modal-backdrop hidden" id="categoryModal">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -516,5 +508,6 @@
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
 </body>
 </html>

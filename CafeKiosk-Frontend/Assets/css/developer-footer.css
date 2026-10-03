@@ -1,14 +1,57 @@
-/* CafeKiosk project footer
-   Normal document-flow footer: it appears after page content and is never pinned
-   over the interface. On short kiosk pages, the page remains full-height and the
-   footer rests at the bottom; on long pages, users reach it by scrolling down. */
+/* =========================================================
+   CAFEKIOSK SYSTEM-WIDE THESIS FOOTER + PAGE SCROLLBAR
+   The application screen keeps its existing layout. The footer is appended
+   after that screen so the browser/page scrollbar can move down to it.
+========================================================= */
+
+html.ck-project-footer-page {
+  width: 100%;
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: rgba(76, 149, 111, .90) #eadfce;
+}
+
+/* Override fullscreen page locks only during normal page use.  Modal/payment
+   classes are intentionally excluded so their existing scroll locks still work. */
+body.ck-project-footer-page:not(.ck-payment-open):not(.ck-service-open):not(.ck-pos-review-open):not(.print-options-open):not(.product-save-busy) {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  padding-bottom: 0 !important;
+}
+
+html.ck-project-footer-page::-webkit-scrollbar {
+  width: 12px;
+}
+
+html.ck-project-footer-page::-webkit-scrollbar-track {
+  background: #eadfce;
+}
+
+html.ck-project-footer-page::-webkit-scrollbar-thumb {
+  background: rgba(76, 149, 111, .90);
+  border: 2px solid #eadfce;
+  border-radius: 999px;
+}
+
+html.ck-project-footer-page::-webkit-scrollbar-thumb:hover {
+  background: #3f805f;
+}
+
 .cafekiosk-developer-footer {
   position: static !important;
   inset: auto !important;
-  flex: 0 0 auto;
-  width: 100%;
-  margin: 28px 0 0;
-  padding: 18px 20px;
+  width: 100% !important;
+  min-height: 42px;
+  margin: 0 !important;
+  padding: 16px 20px;
   box-sizing: border-box;
   background: #fff8ed;
   border-top: 1px solid rgba(91, 75, 62, .22);
@@ -37,20 +80,21 @@
   font-weight: 800;
 }
 
+.cafekiosk-developer-footer .ck-footer-developer-name,
+.cafekiosk-developer-footer .ck-footer-contributor-list {
+  font-weight: 800;
+}
+
 .cafekiosk-developer-footer .ck-footer-role {
   color: #7a6754;
   font-weight: 600;
   font-style: italic;
 }
 
-.cafekiosk-developer-footer .ck-footer-contributor-list {
-  font-weight: 800;
-}
-
 .cafekiosk-developer-footer .ck-footer-notice {
+  width: min(760px, 100%);
   margin: 4px auto 0;
   padding-top: 9px;
-  width: min(760px, 100%);
   border-top: 1px solid rgba(91, 75, 62, .14);
   color: #7a6754;
   font-size: 12px;
@@ -58,61 +102,52 @@
   line-height: 1.5;
 }
 
-.cafekiosk-developer-footer a { color: inherit; }
-
-/* The footer must be part of the page, not a floating/fixed overlay. */
-body { padding-bottom: 0 !important; }
-html, body { min-height: 100%; }
-
-/* Kiosk landing/service-type previously used fixed 100vh + overflow:hidden.
-   Let those two pages grow vertically so the footer can live at the real bottom. */
-body.kiosk-home,
-body.kiosk-order-type {
-  height: auto !important;
+/* Kiosk landing/service-type pages use a centered flex body.  Turn those
+   bodies into a vertical document so the app stays centered and the footer
+   follows below it instead of appearing beside/over it. */
+body.kiosk-home.ck-project-footer-page,
+body.kiosk-order-type.ck-project-footer-page {
   min-height: 100vh !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-start !important;
   align-items: stretch !important;
-  padding-bottom: 0 !important;
 }
 
-body.kiosk-home > .container,
-body.kiosk-order-type > .container {
+body.kiosk-home.ck-project-footer-page > .container,
+body.kiosk-order-type.ck-project-footer-page > .container {
+  flex: 0 0 auto;
   margin: auto !important;
   padding-top: 34px;
   padding-bottom: 34px;
 }
 
-body.kiosk-home > .cafekiosk-developer-footer,
-body.kiosk-order-type > .cafekiosk-developer-footer {
-  position: static !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  margin-top: 0 !important;
+body.kiosk-home.ck-project-footer-page > .cafekiosk-developer-footer,
+body.kiosk-order-type.ck-project-footer-page > .cafekiosk-developer-footer {
+  flex: 0 0 auto;
 }
 
 @media (max-width: 640px) {
   .cafekiosk-developer-footer {
-    margin-top: 22px;
-    padding: 15px 14px;
+    padding: 14px;
   }
+
   .cafekiosk-developer-footer .ck-footer-credit,
   .cafekiosk-developer-footer .ck-footer-contributors {
     font-size: 12px;
   }
+
   .cafekiosk-developer-footer .ck-footer-notice {
     font-size: 11px;
   }
+
   .cafekiosk-developer-footer .ck-footer-contributor-list {
     display: block;
     margin-top: 2px;
   }
-  body.kiosk-home > .container,
-  body.kiosk-order-type > .container {
+
+  body.kiosk-home.ck-project-footer-page > .container,
+  body.kiosk-order-type.ck-project-footer-page > .container {
     padding-top: 24px;
     padding-bottom: 24px;
   }

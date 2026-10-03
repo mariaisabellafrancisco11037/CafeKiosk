@@ -17,6 +17,7 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 
 <body class="uniform-admin">
@@ -960,5 +961,6 @@
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
 </body>
 </html>

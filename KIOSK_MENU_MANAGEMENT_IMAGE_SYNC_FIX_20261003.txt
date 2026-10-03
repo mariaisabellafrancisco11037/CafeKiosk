@@ -1,0 +1,11 @@
+CafeKiosk Kiosk/POS Menu Management Image Sync Fix
+
+Root cause:
+The Kiosk and POS intentionally ignored the MySQL catalog for cafe-1 whenever fewer than 180 products were returned. Because of that, they kept the bundled placeholder/sample menu and placeholder images even though Menu Management already contained the correct product images.
+
+Fix:
+- MySQL is now authoritative whenever it returns products.
+- Kiosk now displays the exact products and image values saved from Menu Management.
+- POS uses the same rule so both customer and cashier views stay consistent.
+- The bundled Demo Cafe menu is used only when no usable database catalog is available.
+- No menu records, prices, database rows, product images, or footer content were removed.

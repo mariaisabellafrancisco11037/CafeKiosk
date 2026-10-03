@@ -3807,15 +3807,19 @@ async function loadMysqlProductCatalog() {
         });
       }
 
-      const demoCatalogLooksComplete = !isDemo || products.length >= 180;
-      if (demoCatalogLooksComplete) {
-        Object.keys(grouped).forEach(key => {
-          if (!menuData[key]) menuData[key] = [];
-          menuData[key].splice(0, menuData[key].length, ...grouped[key]);
-        });
-      } else {
-        console.warn(`Demo Cafe kiosk catalog returned only ${products.length} products; keeping bundled full demo menu.`);
-      }
+      // The MySQL catalog is authoritative whenever it contains products.
+      // This includes cafe-1: owners may intentionally have fewer than the old
+      // 180 demo items, and Kiosk/POS must show the exact products and images
+      // saved from Menu Management instead of the bundled placeholder menu.
+      Object.keys(menuData).forEach(key => delete menuData[key]);
+      effectiveCategories.forEach(category => {
+        const key = String(category.canonicalKey || category.key || category.name || "").trim();
+        if (key) menuData[key] = [];
+      });
+      Object.keys(grouped).forEach(key => {
+        if (!menuData[key]) menuData[key] = [];
+        menuData[key].splice(0, menuData[key].length, ...grouped[key]);
+      });
     } else if (!isDemo) {
       effectiveCategories.forEach(category => {
         const key = String(category.canonicalKey || category.key || category.name || "").trim();

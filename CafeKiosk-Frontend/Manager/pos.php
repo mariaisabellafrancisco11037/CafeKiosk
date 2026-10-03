@@ -24,8 +24,8 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-page-bottom-v9">
-  <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-pos-v6">
+<link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-pos-v6">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 
 <body class="uniform-pos manager-pos-page">
@@ -483,7 +483,7 @@
 </div>
 
 <script src="../Assets/js/auth-session.js"></script>
-<script src="/Assets/js/pos.js?v=20261001-menu-restore-v6"></script>
+<script src="/Assets/js/pos.js?v=20261003-db-images-v1"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>
@@ -492,7 +492,7 @@
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-thesis-info-v11"></script>
-  <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
+<script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
 </body>
 </html>
