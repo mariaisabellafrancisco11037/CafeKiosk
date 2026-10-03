@@ -10,14 +10,14 @@
     <div class="ck-footer-inner">
       <div class="ck-footer-credit">
         <strong>Developed by:</strong> <strong class="ck-footer-developer-name">Maria Isabella Francisco</strong>
-        <span class="ck-footer-role">(Developer of CafeKiosk)</span>
+        <em class="ck-footer-role">(Developer of CafeKiosk)</em>
       </div>
       <div class="ck-footer-contributors">
         <strong>Project Contributors:</strong>
-        <span class="ck-footer-contributor-list">Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</span>
+        <strong class="ck-footer-contributor-list">Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</strong>
       </div>
       <div class="ck-footer-notice">
-        Thesis Project Notice: CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.
+        <strong>Thesis Project Notice:</strong> CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.
       </div>
     </div>`;
 

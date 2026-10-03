@@ -363,9 +363,9 @@
 
   <footer class="admin-menu-footer">
     <div class="admin-menu-footer-inner">
-      <div><strong>Developed by:</strong> <strong>Maria Isabella Francisco</strong> <span>(Developer of CafeKiosk)</span></div>
-      <div><strong>Project Contributors:</strong> Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</div>
-      <div class="admin-menu-footer-note">Thesis Project Notice: CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.</div>
+      <div><strong>Developed by:</strong> <strong>Maria Isabella Francisco</strong> <em>(Developer of CafeKiosk)</em></div>
+      <div><strong>Project Contributors:</strong> <strong>Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</strong></div>
+      <div class="admin-menu-footer-note"><strong>Thesis Project Notice:</strong> CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.</div>
     </div>
   </footer>
 

@@ -40,10 +40,11 @@
 .cafekiosk-developer-footer .ck-footer-role {
   color: #7a6754;
   font-weight: 600;
+  font-style: italic;
 }
 
 .cafekiosk-developer-footer .ck-footer-contributor-list {
-  font-weight: 650;
+  font-weight: 800;
 }
 
 .cafekiosk-developer-footer .ck-footer-notice {

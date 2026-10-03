@@ -1940,6 +1940,7 @@ body.has-project-footer .menu-shell {
 }
 .admin-menu-footer-inner { display: grid; gap: 5px; width: min(960px, 100%); }
 .admin-menu-footer strong { color: #3f2c1d; font-weight: 800; }
+.admin-menu-footer em { color: #7a6754; font-weight: 600; font-style: italic; }
 .admin-menu-footer span { color: #7a6754; font-weight: 600; }
 .admin-menu-footer-note {
   width: min(720px, 100%);

@@ -119,7 +119,7 @@
   <script src="../Assets/js/signup.js?v=owner-email-v2-adviser-owner-verification-v1"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261003-thesis-info-v10"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-thesis-info-v11"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>
