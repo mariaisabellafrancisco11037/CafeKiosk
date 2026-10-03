@@ -2228,3 +2228,41 @@ body.has-project-footer .admin-menu-footer {
     height: 164px !important;
   }
 }
+
+/* FINAL FULL-ROW CATALOG GUARANTEE — 2026-10-03 */
+body.ck-full-menu-cards #menuView .product-panel {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  padding-bottom: 18px !important;
+}
+body.ck-full-menu-cards #menuView .product-grid {
+  height: 460px !important;
+  min-height: 460px !important;
+  max-height: 460px !important;
+  grid-auto-rows: 224px !important;
+  gap: 12px !important;
+  align-content: start !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-right: 10px !important;
+  scroll-snap-type: y mandatory !important;
+  scroll-padding-top: 0 !important;
+  scrollbar-gutter: stable !important;
+}
+body.ck-full-menu-cards #menuView .product-card {
+  height: 224px !important;
+  min-height: 224px !important;
+  max-height: 224px !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
+}
+body.ck-full-menu-cards .cafekiosk-developer-footer,
+body.ck-full-menu-cards .admin-menu-footer {
+  position: static !important;
+  clear: both !important;
+  margin-top: 24px !important;
+}

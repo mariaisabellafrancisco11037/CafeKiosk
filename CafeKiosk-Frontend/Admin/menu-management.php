@@ -612,5 +612,6 @@
   <script src="../Assets/js/admin-stable/profile-menu.js?v=20261003-change-email-v1"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
+  <script src="/Assets/js/admin-stable/menu-catalog-full-row-fix.js?v=20261003-final-full-row-v1"></script>
 </body>
 </html>
