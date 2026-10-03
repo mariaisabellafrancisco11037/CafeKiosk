@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=bottom-row-buttons-visible-fix-20261003b">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=full-cards-visible-fix-20261003c">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=menu-loading-overlay-20261003">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -156,6 +156,54 @@
     }
     html::-webkit-scrollbar-thumb:hover { background: #3f805f; }
   </style>
+
+  <!-- Final Product Catalog full-card visibility fix -->
+  <style id="menuManagementFullCardVisibilityFixFinal">
+    body.uniform-admin.has-project-footer #menuView .product-grid {
+      height: 460px !important;
+      min-height: 460px !important;
+      max-height: 460px !important;
+      padding: 0 10px 0 1px !important;
+      gap: 12px !important;
+      grid-auto-rows: 224px !important;
+      scroll-snap-type: y proximity;
+      scroll-padding-top: 0;
+      overscroll-behavior-y: contain;
+    }
+
+    body.uniform-admin.has-project-footer #menuView .product-card {
+      min-height: 224px !important;
+      height: 224px !important;
+      scroll-snap-align: start;
+    }
+
+    body.uniform-admin.has-project-footer .admin-menu-footer {
+      margin-top: 24px !important;
+    }
+
+    @media (max-width: 900px) {
+      body.uniform-admin.has-project-footer #menuView .product-grid {
+        height: 460px !important;
+        min-height: 460px !important;
+        max-height: 460px !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body.uniform-admin.has-project-footer #menuView .product-grid {
+        height: 340px !important;
+        min-height: 340px !important;
+        max-height: 340px !important;
+        grid-auto-rows: 164px !important;
+      }
+
+      body.uniform-admin.has-project-footer #menuView .product-card {
+        min-height: 164px !important;
+        height: 164px !important;
+      }
+    }
+  </style>
+
   <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
 </head>
 <body class="uniform-admin has-project-footer">

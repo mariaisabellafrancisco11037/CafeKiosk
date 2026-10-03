@@ -2361,3 +2361,53 @@ body.has-project-footer .admin-menu-footer {
     max-height: 380px !important;
   }
 }
+
+
+/* =========================================================
+   FULL PRODUCT CARD VISIBILITY FIX — 2026-10-03C
+   Show only complete visible rows in Product Catalog so the bottom visible
+   cards are never clipped. Keeps internal scrolling for the catalog.
+========================================================= */
+body.has-project-footer #menuView .product-grid {
+  height: 460px !important;
+  min-height: 460px !important;
+  max-height: 460px !important;
+  padding: 0 10px 0 1px !important;
+  gap: 12px !important;
+  grid-auto-rows: 224px !important;
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 0;
+  overscroll-behavior-y: contain;
+}
+
+body.has-project-footer #menuView .product-card {
+  min-height: 224px !important;
+  height: 224px !important;
+  scroll-snap-align: start;
+}
+
+body.has-project-footer .admin-menu-footer {
+  margin-top: 24px !important;
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 460px !important;
+    min-height: 460px !important;
+    max-height: 460px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.has-project-footer #menuView .product-grid {
+    height: 340px !important;
+    min-height: 340px !important;
+    max-height: 340px !important;
+    grid-auto-rows: 164px !important;
+  }
+
+  body.has-project-footer #menuView .product-card {
+    min-height: 164px !important;
+    height: 164px !important;
+  }
+}
