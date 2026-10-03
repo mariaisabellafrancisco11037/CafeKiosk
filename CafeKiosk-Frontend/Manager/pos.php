@@ -24,7 +24,7 @@
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/pos-navbar-fix.css?v=20260928-portrait-v1">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-page-bottom-v9">
   <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-pos-v6">
 </head>
 
@@ -492,7 +492,7 @@
   <script src="../Assets/js/live-presence.js?v=4"></script>
   <script src="../Assets/js/pos-search-autofill-guard.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-project-info-v9"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>

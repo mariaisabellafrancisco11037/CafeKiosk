@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261001-footer-visible-v6">
+  <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-page-bottom-v9">
   <link rel="stylesheet" href="/Assets/css/responsive-devices.css?v=20261001-mobile-shell-v7">
 </head>
 <body>
@@ -119,7 +119,7 @@
   <script src="../Assets/js/signup.js?v=owner-email-v2-adviser-owner-verification-v1"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
-  <script src="/Assets/js/developer-footer.js?v=20261001-footer-visible-v6"></script>
+  <script src="/Assets/js/developer-footer.js?v=20261003-project-info-v9"></script>
   <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>
 </body>
 </html>

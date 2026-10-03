@@ -359,7 +359,11 @@
       </section>
 
       <footer class="admin-menu-footer">
-        Developed by: Maria Isabella Francisco (Developer of CafeKiosk)
+        <div class="admin-menu-footer-inner">
+          <div><strong>Developed by:</strong> Maria Isabella Francisco <span>(Developer of CafeKiosk)</span></div>
+          <div><strong>Project Contributors:</strong> Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</div>
+          <div class="admin-menu-footer-note">Academic Project Notice: CafeKiosk was developed for educational and academic purposes as part of a school project.</div>
+        </div>
       </footer>
     </main>
   </div>

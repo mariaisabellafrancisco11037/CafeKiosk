@@ -1,25 +1,118 @@
-.cafekiosk-developer-footer{display:flex;align-items:center;justify-content:center;width:100%;margin-top:24px;padding:14px 18px;background:#fff8ed;border-top:2px solid rgba(91,75,62,.22);box-shadow:0 -2px 10px rgba(40,25,15,.06);font:800 15px/1.35 "Segoe UI",Arial,sans-serif;color:#53351f;text-align:center;position:relative;z-index:10;box-sizing:border-box}.cafekiosk-developer-footer a{color:inherit}@media(max-width:640px){.cafekiosk-developer-footer{margin-top:18px;padding:12px 14px;font-size:13px;line-height:1.4}}body{padding-bottom:0 !important;}/* Keep attribution at the actual bottom of short pages without overlaying content. */
-html,body{min-height:100%;}
-body.kiosk-home{min-height:100vh!important;display:flex!important;flex-direction:column!important;}
-body.kiosk-home>.container{flex:0 0 auto;}
-body.kiosk-home>.cafekiosk-developer-footer{margin-top:auto!important;flex:0 0 auto;}
-
-/* 2026-10-01 kiosk landing: footer must sit at the viewport bottom, never mid-screen. */
-body.kiosk-home{padding-bottom:52px!important;}
-body.kiosk-home>.cafekiosk-developer-footer{position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;margin:0!important;z-index:100!important;}
-@media(max-width:640px){body.kiosk-home{padding-bottom:48px!important;}}
-
-
-/* Kiosk service-type page uses a fixed-height centered layout. Pin attribution to
-   the viewport bottom so it cannot split the screen between the cards. */
-body.kiosk-order-type { padding-bottom: 54px !important; }
-body.kiosk-order-type > .cafekiosk-developer-footer {
-  position: fixed !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  z-index: 100 !important;
+/* CafeKiosk project footer
+   Normal document-flow footer: it appears after page content and is never pinned
+   over the interface. On short kiosk pages, the page remains full-height and the
+   footer rests at the bottom; on long pages, users reach it by scrolling down. */
+.cafekiosk-developer-footer {
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 28px 0 0;
+  padding: 18px 20px;
+  box-sizing: border-box;
+  background: #fff8ed;
+  border-top: 1px solid rgba(91, 75, 62, .22);
+  box-shadow: 0 -2px 10px rgba(40, 25, 15, .05);
+  color: #53351f;
+  font-family: "Segoe UI", Arial, sans-serif;
+  text-align: center;
+  z-index: 1;
 }
-@media(max-width:640px){body.kiosk-order-type{padding-bottom:48px!important;}}
+
+.cafekiosk-developer-footer .ck-footer-inner {
+  width: min(1050px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 7px;
+}
+
+.cafekiosk-developer-footer .ck-footer-credit,
+.cafekiosk-developer-footer .ck-footer-contributors {
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.cafekiosk-developer-footer strong {
+  color: #3f2c1d;
+  font-weight: 800;
+}
+
+.cafekiosk-developer-footer .ck-footer-role {
+  color: #7a6754;
+  font-weight: 600;
+}
+
+.cafekiosk-developer-footer .ck-footer-contributor-list {
+  font-weight: 650;
+}
+
+.cafekiosk-developer-footer .ck-footer-notice {
+  margin: 4px auto 0;
+  padding-top: 9px;
+  width: min(760px, 100%);
+  border-top: 1px solid rgba(91, 75, 62, .14);
+  color: #7a6754;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.cafekiosk-developer-footer a { color: inherit; }
+
+/* The footer must be part of the page, not a floating/fixed overlay. */
+body { padding-bottom: 0 !important; }
+html, body { min-height: 100%; }
+
+/* Kiosk landing/service-type previously used fixed 100vh + overflow:hidden.
+   Let those two pages grow vertically so the footer can live at the real bottom. */
+body.kiosk-home,
+body.kiosk-order-type {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  padding-bottom: 0 !important;
+}
+
+body.kiosk-home > .container,
+body.kiosk-order-type > .container {
+  margin: auto !important;
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+body.kiosk-home > .cafekiosk-developer-footer,
+body.kiosk-order-type > .cafekiosk-developer-footer {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .cafekiosk-developer-footer {
+    margin-top: 22px;
+    padding: 15px 14px;
+  }
+  .cafekiosk-developer-footer .ck-footer-credit,
+  .cafekiosk-developer-footer .ck-footer-contributors {
+    font-size: 12px;
+  }
+  .cafekiosk-developer-footer .ck-footer-notice {
+    font-size: 11px;
+  }
+  .cafekiosk-developer-footer .ck-footer-contributor-list {
+    display: block;
+    margin-top: 2px;
+  }
+  body.kiosk-home > .container,
+  body.kiosk-order-type > .container {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}

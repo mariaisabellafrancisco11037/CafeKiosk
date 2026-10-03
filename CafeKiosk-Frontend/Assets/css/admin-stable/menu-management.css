@@ -1907,10 +1907,10 @@ svg {
 }
 
 
-/* Menu Management attribution footer - normal grid row, never overlays content */
+/* Menu Management project footer - normal grid row, never overlays content */
 .admin-menu-footer {
   min-height: 42px;
-  padding: 10px 16px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1919,19 +1919,27 @@ svg {
   border: 1px solid rgba(93, 66, 42, .18);
   border-radius: 9px;
   color: #53351f;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.25;
+  font-size: 12.5px;
+  line-height: 1.45;
   text-align: center;
   box-sizing: border-box;
 }
+.admin-menu-footer-inner { display: grid; gap: 5px; width: min(960px, 100%); }
+.admin-menu-footer strong { color: #3f2c1d; font-weight: 800; }
+.admin-menu-footer span { color: #7a6754; font-weight: 600; }
+.admin-menu-footer-note {
+  width: min(720px, 100%);
+  margin: 2px auto 0;
+  padding-top: 7px;
+  border-top: 1px solid rgba(93, 66, 42, .13);
+  color: #7a6754;
+  font-size: 11.5px;
+  font-weight: 600;
+}
 
 @media (max-width: 720px) {
-  .admin-menu-footer {
-    min-height: 40px;
-    padding: 9px 12px;
-    font-size: 11.5px;
-  }
+  .admin-menu-footer { padding: 12px; font-size: 11.5px; }
+  .admin-menu-footer-note { font-size: 10.5px; }
 }
 
 
