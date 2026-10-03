@@ -190,8 +190,7 @@
             email: $('ownerEmail').value.trim(),
             phone: $('ownerPhone').value.trim(),
             username: $('ownerUsername').value.trim(),
-            password,
-            ownerDeclaration: Boolean($('ownerDeclaration')?.checked)
+            password
           })
         });
         localStorage.setItem('cafeId', data.cafeId);

@@ -1387,13 +1387,9 @@ exports.ownerSignup = async (req, res) => {
   const phone = safeText(req.body?.phone);
   const username = safeText(req.body?.username);
   const password = String(req.body?.password || '');
-  const ownerDeclaration = req.body?.ownerDeclaration === true || String(req.body?.ownerDeclaration || '').toLowerCase() === 'true';
 
   if (!cafeName || !fullName || !email || !phone || !username || !password) {
     return res.status(400).json({ success: false, message: 'Cafe name, owner name, email, phone number, username, and password are required.' });
-  }
-  if (!ownerDeclaration) {
-    return res.status(400).json({ success: false, message: 'Only the cafe owner or legally authorized representative may register a new cafe. Confirm the ownership declaration to continue.' });
   }
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });

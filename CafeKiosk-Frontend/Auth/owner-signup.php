@@ -49,8 +49,6 @@
           <label for="ownerConfirmPassword">Confirm Password</label>
           <input id="ownerConfirmPassword" type="password" minlength="8" maxlength="128" required autocomplete="new-password">
         </div>
-        <div class="signup-note">Only cafe owners or legally authorized representatives may register a cafe. After signup, CafeKiosk sends a <strong>verification link to the owner email entered above</strong>. The link expires after 30 minutes.</div>
-        <div class="signup-field full owner-declaration"><label class="owner-declaration-label" for="ownerDeclaration"><input id="ownerDeclaration" type="checkbox" required><span>I confirm that I am the cafe owner or the legally authorized representative of this cafe. I understand I must verify the email address I entered before the cafe account becomes active.</span></label></div>
 
         <div class="signup-field full">
           <div id="ownerSignupMessage" class="signup-message" role="status" aria-live="polite"></div>
@@ -61,10 +59,10 @@
       <section id="ownerApprovalPending" class="owner-approval-pending" hidden>
         <div class="approval-pending-icon" aria-hidden="true">✓</div>
         <span class="approval-pending-kicker">REGISTRATION RECEIVED</span>
-        <h2>Check Your Email</h2>
-        <p>Your cafe account was created, but it is not active yet. We sent a verification link to the owner email you entered. Open that email and click <strong>Verify &amp; Activate Cafe Account</strong>.</p>
+        <h2>Pending System Administrator Approval</h2>
+        <p>Your cafe account was created successfully and is now waiting for approval from the CafeKiosk System Administrator.</p>
         <div class="approval-pending-details"><span>Cafe</span><strong id="pendingCafeName">—</strong><span>Cafe ID</span><strong id="pendingCafeId">—</strong></div>
-        <p class="approval-pending-help">The verification link expires after 30 minutes. After verification, return to Admin Login and use the username/email and password you registered.</p>
+        <p class="approval-pending-help">After the System Administrator approves your cafe account, return to Admin Login and use the username/email and password you registered.</p>
         <a class="signup-submit approval-login-link" href="/admin-login">GO TO ADMIN LOGIN</a>
       </section>
 
