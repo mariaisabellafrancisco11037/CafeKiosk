@@ -658,34 +658,17 @@ svg {
   grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
   align-content: start;
   gap: 12px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 2px 8px 8px 1px;
-  scrollbar-gutter: stable;
-  scrollbar-width: auto;
-  scrollbar-color: rgba(93, 66, 42, .42) rgba(93, 66, 42, .08);
-  overscroll-behavior: contain;
+  overflow-y: auto;
+  padding: 2px 4px 8px 1px;
 }
 
-/* Keep the catalog cards at their normal size when the footer reduces
-   the available vertical space. The catalog scrolls instead of compressing. */
 .product-grid::-webkit-scrollbar {
-  width: 10px;
-}
-
-.product-grid::-webkit-scrollbar-track {
-  background: rgba(93, 66, 42, .08);
-  border-radius: 999px;
+  width: 6px;
 }
 
 .product-grid::-webkit-scrollbar-thumb {
-  background: rgba(93, 66, 42, .42);
-  border: 2px solid rgba(255, 250, 241, .85);
+  background: rgba(93, 66, 42, .20);
   border-radius: 999px;
-}
-
-.product-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(93, 66, 42, .60);
 }
 
 .product-card {
@@ -1339,14 +1322,12 @@ svg {
     height: 39px;
   }
 
-  /* Preserve the normal product-card proportions on short landscape screens.
-     The Product Catalog scrollbar handles the reduced viewing area. */
   .product-image {
-    height: 105px;
+    height: 82px;
   }
 
   .product-card {
-    min-height: 224px;
+    min-height: 195px;
   }
 }
 

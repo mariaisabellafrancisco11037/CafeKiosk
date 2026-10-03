@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=product-catalog-scrollbar-20261003">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=footer-scroll-20261003">
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=bulk-import-multizip-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
@@ -12,9 +12,9 @@
   <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
-  <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=menu-catalog-large-slider-20261003">
+  <link rel="stylesheet" href="/Assets/css/admin-stable/admin-final-responsive.css?v=admin-stable-20261001">
 </head>
-<body class="uniform-admin">
+<body class="uniform-admin has-project-footer">
   <div class="menu-shell">
     <!-- ADMIN SIDEBAR - MATCHES ORDER MONITOR -->
     <aside class="staff-sidebar">
@@ -358,15 +358,16 @@
         </section>
       </section>
 
-      <footer class="admin-menu-footer">
-        <div class="admin-menu-footer-inner">
-          <div><strong>Developed by:</strong> <strong>Maria Isabella Francisco</strong> <span>(Developer of CafeKiosk)</span></div>
-          <div><strong>Project Contributors:</strong> Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</div>
-          <div class="admin-menu-footer-note">Thesis Project Notice: CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.</div>
-        </div>
-      </footer>
     </main>
   </div>
+
+  <footer class="admin-menu-footer">
+    <div class="admin-menu-footer-inner">
+      <div><strong>Developed by:</strong> <strong>Maria Isabella Francisco</strong> <span>(Developer of CafeKiosk)</span></div>
+      <div><strong>Project Contributors:</strong> Janine May S. Andrada &bull; Gabriel D. Bigcas &bull; John Paul M. Tupas</div>
+      <div class="admin-menu-footer-note">Thesis Project Notice: CafeKiosk was developed as part of an academic thesis in fulfillment of degree requirements, focusing on the design, implementation, and evaluation of a web-based cafe management and self-service ordering system.</div>
+    </div>
+  </footer>
 
   <!-- CATEGORY MODAL -->
   <div class="modal-backdrop hidden" id="categoryModal">
