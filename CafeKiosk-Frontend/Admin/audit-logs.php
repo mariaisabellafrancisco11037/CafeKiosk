@@ -11,6 +11,25 @@
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
   <link rel="stylesheet" href="/Assets/css/developer-footer.css?v=20261003-systemwide-scroll-footer-v1">
+  <style>
+    /* Polished Settings subpage back button */
+    .settings-back-row{padding:14px 0 0}
+    .settings-subpage-link{
+      display:inline-flex!important;align-items:center;justify-content:center;gap:9px;
+      min-height:42px;padding:9px 16px!important;
+      border:1px solid #b8d1bf!important;border-radius:11px!important;
+      background:#fffdf5!important;color:#39734d!important;
+      font-size:13px!important;font-weight:800!important;line-height:1!important;
+      text-decoration:none!important;box-shadow:0 2px 7px rgba(73,103,72,.08)!important;
+      transition:background .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+    }
+    .settings-subpage-link svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
+    .settings-subpage-link:hover{background:#edf7ef!important;border-color:#78ad87!important;color:#2f6845!important;box-shadow:0 5px 14px rgba(63,120,78,.14)!important;transform:translateY(-1px)}
+    .settings-subpage-link:hover svg{transform:translateX(-2px)}
+    .settings-subpage-link:active{transform:translateY(0);box-shadow:0 2px 6px rgba(63,120,78,.1)!important}
+    .settings-subpage-link:focus-visible{outline:3px solid rgba(76,154,96,.2);outline-offset:2px}
+    @media(max-width:700px){.settings-back-row{padding-top:10px}.settings-subpage-link{min-height:40px;padding:9px 13px!important;font-size:12px!important}}
+  </style>
 </head>
 <body class="uniform-admin">
   <div class="menu-shell">
@@ -30,7 +49,7 @@
       </nav>
     </aside>
 
-    <main class="page-main"><div style="padding:10px 0 0"><a class="text-action settings-subpage-link" href="/admin/settings">← Back to Settings</a></div>
+    <main class="page-main"><div class="settings-back-row"><a class="text-action settings-subpage-link" href="/admin/settings" aria-label="Back to Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>Back to Settings</span></a></div>
       <header class="page-topbar">
         <div class="page-heading-card">
           <div>
