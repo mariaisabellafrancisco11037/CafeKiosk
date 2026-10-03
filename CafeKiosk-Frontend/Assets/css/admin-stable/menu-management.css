@@ -2086,3 +2086,78 @@ body.product-save-busy {
         animation-duration: 2s;
     }
 }
+
+/* =========================================================
+   WHOLE-PAGE SCROLL + FOOTER FLOW — 2026-10-03
+   The browser/page scrollbar now controls Menu Management from the header,
+   through the full Product Catalog, down to the thesis footer. Product cards
+   are not placed inside a separate vertically scrolling viewport.
+========================================================= */
+html {
+  height: auto !important;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+body.has-project-footer {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+body.has-project-footer .menu-shell {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+  align-items: start;
+}
+
+body.has-project-footer .staff-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+
+body.has-project-footer .menu-main {
+  height: auto !important;
+  min-height: 100dvh !important;
+  grid-template-rows: auto auto !important;
+  overflow: visible !important;
+}
+
+body.has-project-footer .menu-dashboard {
+  min-height: 0 !important;
+  grid-template-rows: auto auto !important;
+  overflow: visible !important;
+}
+
+body.has-project-footer .product-panel {
+  min-height: 0 !important;
+  grid-template-rows: auto auto !important;
+  overflow: visible !important;
+}
+
+body.has-project-footer .product-grid {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+body.has-project-footer .admin-menu-footer {
+  position: static !important;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer .staff-sidebar {
+    position: static;
+    height: auto;
+    max-height: none;
+  }
+}
