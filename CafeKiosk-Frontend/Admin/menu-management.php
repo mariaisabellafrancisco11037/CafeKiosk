@@ -529,7 +529,7 @@
   </div>
 
   <script src="../Assets/js/admin-stable/menu-flex-config.js?v=cup-size-footer-fix-20261001"></script>
-<script src="../Assets/js/admin-stable/menu-management.js?v=fast-catalog-images-20261003"></script>
+<script src="../Assets/js/admin-stable/menu-management.js?v=category-default-icons-20261003"></script>
   <script src="../Assets/js/admin-stable/menu-bulk-import.js?v=customization-auto-addon-404fix-v3-20261001"></script>
   <script src="../Assets/js/admin-stable/auth-session.js?v=session-role-isolation-20261003-v2"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>

@@ -1132,6 +1132,41 @@ function getCategoryImage(
 
 }
 
+function findCategoryByName(categoryName) {
+    const target =
+        String(categoryName || "")
+            .trim()
+            .toLowerCase();
+
+    return categories.find(
+        category =>
+            String(category?.name || "")
+                .trim()
+                .toLowerCase() === target
+    ) || null;
+}
+
+function resolveProductCardImage(product) {
+    const configured =
+        String(product?.image || "")
+            .trim();
+
+    if (configured) {
+        return configured;
+    }
+
+    const matchedCategory =
+        findCategoryByName(
+            product?.category
+        );
+
+    return getCategoryImage(
+        matchedCategory || {
+            name: product?.category || ""
+        }
+    );
+}
+
 
 
 /* =========================================================
@@ -1472,47 +1507,16 @@ function renderProducts() {
                                 class="product-image"
                             >
 
-                                ${
-                                    product.image
-
-                                    ?
-
-                                    `
-
-                                    <img
-                                        src="${product.image}"
-                                        alt="${escapeHtml(
-                                            product.name
-                                        )}"
-                                        loading="lazy"
-                                        decoding="async"
-                                        fetchpriority="low"
-                                    >
-
-                                    `
-
-                                    :
-
-                                    `
-
-                                    <span
-                                        class="placeholder-icon"
-                                        aria-hidden="true"
-                                    >
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="1.6"
-                                        >
-                                            <rect x="3" y="3" width="18" height="18" rx="3"></rect>
-                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                            <path d="m21 15-5-5L5 21"></path>
-                                        </svg>
-                                    </span>
-
-                                    `
-                                }
+                                <img
+                                    src="${resolveProductCardImage(product)}"
+                                    alt="${escapeHtml(
+                                        product.name
+                                    )}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    fetchpriority="low"
+                                    onerror="this.onerror=null;this.src='${getCategoryImage(findCategoryByName(product.category) || { name: product.category })}';"
+                                >
 
                                 ${
                                     isAvailable
