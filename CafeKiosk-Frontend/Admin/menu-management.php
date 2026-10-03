@@ -55,6 +55,7 @@
       min-height: 100dvh !important;
       overflow: visible !important;
       grid-template-rows: 74px auto !important;
+      padding-bottom: 22px !important;
     }
 
     body.uniform-admin.has-project-footer #menuView.menu-dashboard:not(.hidden) {
@@ -76,18 +77,20 @@
       max-height: none !important;
       overflow: hidden !important;
       grid-template-rows: auto minmax(0, 1fr) !important;
+      padding-bottom: 18px !important;
     }
 
     body.uniform-admin.has-project-footer #menuView .product-grid {
-      height: clamp(500px, 70vh, 780px) !important;
-      min-height: 500px !important;
-      max-height: 780px !important;
+      height: clamp(620px, 78vh, 920px) !important;
+      min-height: 620px !important;
+      max-height: 920px !important;
       overflow-x: hidden !important;
       overflow-y: scroll !important;
       scrollbar-gutter: stable !important;
       scrollbar-width: auto !important;
       scrollbar-color: #4c956f #eadfce !important;
       padding-right: 10px !important;
+      padding-bottom: 18px !important;
     }
 
     body.uniform-admin.has-project-footer #menuView .product-grid::-webkit-scrollbar {
@@ -108,6 +111,31 @@
       background: #397a59;
     }
 
+
+    @media (max-width: 1100px) {
+      body.uniform-admin.has-project-footer #menuView .product-grid {
+        height: clamp(560px, 74vh, 840px) !important;
+        min-height: 560px !important;
+        max-height: 840px !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body.uniform-admin.has-project-footer #menuView .product-grid {
+        height: clamp(500px, 68vh, 760px) !important;
+        min-height: 500px !important;
+        max-height: 760px !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body.uniform-admin.has-project-footer #menuView .product-grid {
+        height: clamp(420px, 64vh, 680px) !important;
+        min-height: 420px !important;
+        max-height: 680px !important;
+      }
+    }
+
     body.uniform-admin.has-project-footer .admin-menu-footer {
       position: relative !important;
       inset: auto !important;
@@ -115,7 +143,7 @@
       visibility: visible !important;
       opacity: 1 !important;
       width: 100% !important;
-      margin: 0 !important;
+      margin: 18px 0 0 !important;
       z-index: 1 !important;
     }
 

@@ -2271,3 +2271,48 @@ body.has-project-footer #formView .product-form {
     min-height: 420px !important;
   }
 }
+
+
+/* =========================================================
+   PRODUCT CATALOG CUT-OFF FIX — 2026-10-03
+   Keep the product catalog comfortably visible above the footer so cards
+   do not look clipped. Visual/layout only.
+========================================================= */
+body.has-project-footer #menuView .product-panel {
+  padding-bottom: 18px !important;
+}
+
+body.has-project-footer #menuView .product-grid {
+  height: clamp(620px, 78vh, 920px) !important;
+  min-height: 620px !important;
+  max-height: 920px !important;
+  padding-bottom: 18px !important;
+}
+
+body.has-project-footer .admin-menu-footer {
+  margin-top: 18px !important;
+}
+
+@media (max-width: 1100px) {
+  body.has-project-footer #menuView .product-grid {
+    height: clamp(560px, 74vh, 840px) !important;
+    min-height: 560px !important;
+    max-height: 840px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  body.has-project-footer #menuView .product-grid {
+    height: clamp(500px, 68vh, 760px) !important;
+    min-height: 500px !important;
+    max-height: 760px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.has-project-footer #menuView .product-grid {
+    height: clamp(420px, 64vh, 680px) !important;
+    min-height: 420px !important;
+    max-height: 680px !important;
+  }
+}
