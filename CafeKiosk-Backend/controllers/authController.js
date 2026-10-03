@@ -1976,6 +1976,149 @@ exports.changeUserId = async (req, res) => {
   }
 };
 
+
+exports.changeEmail = async (req, res) => {
+  const newEmail = safeText(req.body?.newEmail || req.body?.email).toLowerCase();
+  const currentPassword = String(req.body?.currentPassword || '');
+
+  if (!newEmail || !currentPassword) {
+    return res.status(400).json({ success: false, message: 'Current password and new email address are required.' });
+  }
+  if (!/^\S+@\S+\.\S+$/.test(newEmail) || newEmail.length > 190) {
+    return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+  }
+
+  const numericUserId = Number(req.user?.userId);
+  const cafeId = safeText(req.user?.cafeId) || 'cafe-1';
+  if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'A database-backed CafeKiosk account is required to change the login email.'
+    });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) {
+    return res.status(503).json({ success: false, message: 'Database is unavailable. Please try again shortly.' });
+  }
+
+  let transactionOpen = false;
+  try {
+    await ensureAuthSignupSchema(connection);
+    await connection.beginTransaction();
+    transactionOpen = true;
+
+    const [rows] = await connection.execute(
+      `SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email, u.password_hash,
+              u.role, u.is_owner, c.cafe_name
+         FROM users u
+         LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE u.user_id=? AND u.cafe_id=? AND u.status='Active'
+        LIMIT 1
+        FOR UPDATE`,
+      [numericUserId, cafeId]
+    );
+
+    if (!rows.length) {
+      await connection.rollback();
+      transactionOpen = false;
+      return res.status(404).json({ success: false, message: 'Account was not found.' });
+    }
+
+    const account = rows[0];
+    const passwordOk = await bcrypt.compare(currentPassword, account.password_hash || '');
+    if (!passwordOk) {
+      await connection.rollback();
+      transactionOpen = false;
+      return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
+    }
+
+    if (String(account.email || '').toLowerCase() === newEmail) {
+      await connection.rollback();
+      transactionOpen = false;
+      return res.status(400).json({ success: false, message: 'Enter an email address that is different from your current email.' });
+    }
+
+    // Email login is global in CafeKiosk, so an email address may belong to only
+    // one user across all cafes.
+    const [duplicates] = await connection.execute(
+      `SELECT user_id FROM users
+        WHERE LOWER(email)=LOWER(?) AND user_id<>?
+        LIMIT 1`,
+      [newEmail, numericUserId]
+    );
+    if (duplicates.length) {
+      await connection.rollback();
+      transactionOpen = false;
+      return res.status(409).json({ success: false, message: 'That email address is already being used by another CafeKiosk account.' });
+    }
+
+    const oldEmail = account.email || '';
+    await connection.execute(
+      `UPDATE users
+          SET email=?, updated_at=NOW()
+        WHERE user_id=? AND cafe_id=?`,
+      [newEmail, numericUserId, cafeId]
+    );
+
+    // A password-reset link issued before the email change should no longer be
+    // usable after the login/recovery address changes.
+    try {
+      if (await tableExists(connection, 'password_reset_tokens')) {
+        await connection.execute('DELETE FROM password_reset_tokens WHERE user_id=?', [numericUserId]);
+      }
+    } catch (_) {}
+
+    await connection.commit();
+    transactionOpen = false;
+
+    try {
+      addAuditLog({
+        cafeId,
+        user: account.full_name || account.username || 'CafeKiosk User',
+        userId: numericUserId,
+        role: account.role || req.user?.role || '',
+        action: 'Change Email',
+        category: 'Users',
+        details: `Updated the account login/recovery email from ${oldEmail || 'not set'} to ${newEmail}.`,
+        entityId: String(numericUserId),
+        source: 'Profile',
+        method: req.method,
+        path: req.path,
+        ip: req.ip || '',
+        statusCode: 200,
+        success: true
+      });
+    } catch (_) {}
+
+    return res.json({
+      success: true,
+      message: 'Email address updated successfully. Use the new email for login and password recovery.',
+      user: publicUser({
+        userId: numericUserId,
+        username: account.username,
+        email: newEmail,
+        displayName: account.full_name,
+        role: account.role,
+        cafeId,
+        cafeName: account.cafe_name || '',
+        isOwner: Boolean(account.is_owner)
+      })
+    });
+  } catch (error) {
+    if (transactionOpen) {
+      try { await connection.rollback(); } catch (_) {}
+    }
+    console.error('Change email error:', error);
+    if (error?.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ success: false, message: 'That email address is already being used by another CafeKiosk account.' });
+    }
+    return res.status(500).json({ success: false, message: 'Unable to update the email address right now.' });
+  } finally {
+    connection.release();
+  }
+};
+
 exports.changePassword = async (req, res) => {
   const currentPassword = String(req.body?.currentPassword || '');
   const newPassword = String(req.body?.newPassword || '');

@@ -46,6 +46,7 @@ router.patch('/users/:userId/status', requireRole('Admin'), controller.updateUse
 router.get('/socket-ticket', verifyToken, controller.socketTicket);
 router.get('/me', verifyToken, controller.me);
 router.post('/change-user-id', verifyToken, controller.changeUserId);
+router.post('/change-email', verifyToken, controller.changeEmail);
 router.post('/change-password', verifyToken, controller.changePassword);
 router.get('/approval-pin', verifyToken, controller.approvalPinStatus);
 router.post('/approval-pin', verifyToken, controller.setApprovalPin);

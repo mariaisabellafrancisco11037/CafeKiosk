@@ -879,3 +879,24 @@ body.cku-v2 .cku-topbar {
 body.manager-order-queue-page .queue-right>#staffButton.staff-profile{display:none!important;}
 body.manager-order-queue-page .ckp-profile-shell{z-index:7000!important;}
 body.manager-order-queue-page .ckp-menu{z-index:7100!important;max-height:min(72vh,620px);overflow-y:auto;}
+
+
+/* ============================================================
+   CHANGE EMAIL / ACCOUNT ACTION LAYOUT — 2026-10-03
+   Keeps My Profile actions neat when Change Email is available.
+   ============================================================ */
+.ckp-dialog-actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 520px) {
+  .ckp-dialog-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ckp-dialog-actions .ckp-primary,
+  .ckp-dialog-actions .ckp-secondary {
+    width: 100%;
+  }
+}

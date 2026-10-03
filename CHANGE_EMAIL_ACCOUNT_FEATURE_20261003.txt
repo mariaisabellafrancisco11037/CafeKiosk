@@ -1,0 +1,8 @@
+CafeKiosk Change Email Account Feature - 2026-10-03
+===================================================
+Added self-service Change Email for authenticated Admin, Manager, and Staff accounts.
+Location: top-right profile menu > Change Email, and My Profile > Change Email.
+Security: requires the current password, validates email format, prevents duplicate account emails,
+invalidates existing password-reset tokens, and records the change in Audit Logs.
+The new address becomes the account login and password-recovery email.
+Store Information > Business Email remains separate and is not changed automatically.

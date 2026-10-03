@@ -24,6 +24,7 @@
 
   const PERSON_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>';
   const PROFILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>';
+  const EMAIL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>';
   const PIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>';
   const LOCK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>';
   const SETTINGS_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.7-1L14.5 3h-5l-.3 3.1a8 8 0 0 0-1.7 1l-2.4-1-2 3.4L5.1 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.7 1l.3 3.1h5l.3-3.1a8 8 0 0 0 1.7-1l2.4 1 2-3.4-2-1.5c.1-.3.1-.7.1-1z"/></svg>';
@@ -242,6 +243,7 @@
           <div class="ckp-detail"><span>Last Login</span><strong data-ckp-field="lastLogin">—</strong></div>
         </div>
         <div class="ckp-dialog-actions">
+          <button type="button" class="ckp-secondary" data-ckp-email>Change Email</button>
           <button type="button" class="ckp-secondary" data-ckp-userid hidden>Change User ID</button>
           <button type="button" class="ckp-secondary" data-ckp-password>Change Password</button>
           <button type="button" class="ckp-primary" data-ckp-close>Done</button>
@@ -251,6 +253,10 @@
 
     modal.addEventListener('click', event => {
       if (event.target === modal || event.target.closest('[data-ckp-close]')) closeProfileModal();
+      if (event.target.closest('[data-ckp-email]')) {
+        closeProfileModal();
+        openEmailModal();
+      }
       if (event.target.closest('[data-ckp-password]')) {
         closeProfileModal();
         openPasswordModal();
@@ -392,6 +398,134 @@
       if (message) { message.textContent = error.message || 'Unable to change User ID.'; message.className = 'ckp-form-message error'; }
     } finally {
       if (submit) { submit.disabled = false; submit.textContent = 'Update User ID'; }
+    }
+  }
+
+
+  function ensureEmailModal() {
+    let modal = document.getElementById('ckpEmailModal');
+    if (modal) return modal;
+
+    modal = document.createElement('div');
+    modal.id = 'ckpEmailModal';
+    modal.className = 'ckp-modal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = `
+      <section class="ckp-dialog ckp-password-dialog" role="dialog" aria-modal="true" aria-labelledby="ckpEmailTitle">
+        <div class="ckp-dialog-head">
+          <div>
+            <span class="ckp-eyebrow">ACCOUNT SECURITY</span>
+            <h2 id="ckpEmailTitle">Change Email Address</h2>
+          </div>
+          <button type="button" class="ckp-close" data-ckp-close-email aria-label="Close email form">×</button>
+        </div>
+        <form id="ckpEmailForm" class="ckp-password-form">
+          <label>Current Email<input name="currentEmail" type="email" readonly></label>
+          <label>New Email<input name="newEmail" type="email" maxlength="190" autocomplete="email" placeholder="name@example.com" required></label>
+          <label>Current Password<input name="currentPassword" type="password" autocomplete="current-password" required></label>
+          <p class="ckp-password-note">This becomes your login and password-recovery email. Make sure it is an address you can access. Your current CafeKiosk session will stay signed in.</p>
+          <div class="ckp-form-message" id="ckpEmailMessage" aria-live="polite"></div>
+          <div class="ckp-dialog-actions">
+            <button type="button" class="ckp-secondary" data-ckp-close-email>Cancel</button>
+            <button type="submit" class="ckp-primary">Update Email</button>
+          </div>
+        </form>
+      </section>`;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', event => {
+      if (event.target === modal || event.target.closest('[data-ckp-close-email]')) closeEmailModal();
+    });
+    modal.querySelector('#ckpEmailForm')?.addEventListener('submit', changeEmail);
+    return modal;
+  }
+
+  function openEmailModal() {
+    closeMenu();
+    const modal = ensureEmailModal();
+    const form = modal.querySelector('#ckpEmailForm');
+    const message = modal.querySelector('#ckpEmailMessage');
+    form?.reset();
+    const current = form?.querySelector('[name="currentEmail"]');
+    if (current) current.value = currentProfile().email || '';
+    if (message) { message.textContent = ''; message.className = 'ckp-form-message'; }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => form?.querySelector('[name="newEmail"]')?.focus(), 30);
+  }
+
+  function closeEmailModal() {
+    const modal = document.getElementById('ckpEmailModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function updateStoredEmail(user) {
+    if (!user) return;
+    const role = String(user.role || currentProfile().role || area() || 'Staff').toLowerCase();
+    const key = role === 'admin' ? 'cafeAdminSession' : role === 'manager' ? 'cafeManagerSession' : 'cafeStaffSession';
+    try {
+      const stored = JSON.parse(localStorage.getItem(key) || '{}');
+      localStorage.setItem(key, JSON.stringify({ ...stored, ...user, email: user.email || '' }));
+      const tab = JSON.parse(sessionStorage.getItem('cafeSession') || '{}');
+      sessionStorage.setItem('cafeSession', JSON.stringify({ ...tab, ...user, email: user.email || '' }));
+    } catch (_) {}
+  }
+
+  async function changeEmail(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('button[type="submit"]');
+    const message = document.getElementById('ckpEmailMessage');
+    const data = new FormData(form);
+    const newEmail = String(data.get('newEmail') || '').trim().toLowerCase();
+    const currentPassword = String(data.get('currentPassword') || '');
+
+    if (!/^\S+@\S+\.\S+$/.test(newEmail)) {
+      if (message) { message.textContent = 'Please enter a valid email address.'; message.className = 'ckp-form-message error'; }
+      return;
+    }
+    if (newEmail === String(currentProfile().email || '').trim().toLowerCase()) {
+      if (message) { message.textContent = 'Enter an email address that is different from your current email.'; message.className = 'ckp-form-message error'; }
+      return;
+    }
+    if (!window.CafeAuth?.apiFetch || !window.CafeAuth?.API_ORIGIN) {
+      if (message) { message.textContent = 'Authentication service is unavailable.'; message.className = 'ckp-form-message error'; }
+      return;
+    }
+
+    if (submit) { submit.disabled = true; submit.textContent = 'Updating...'; }
+    if (message) { message.textContent = ''; message.className = 'ckp-form-message'; }
+
+    try {
+      const response = await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/change-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newEmail, currentPassword })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.success) throw new Error(payload.message || 'Unable to change email address.');
+
+      if (payload.user) {
+        detailedProfile = { ...(detailedProfile || {}), ...payload.user };
+        updateStoredEmail(payload.user);
+        renderProfileEverywhere();
+      }
+      if (message) {
+        message.textContent = payload.message || 'Email address updated successfully.';
+        message.className = 'ckp-form-message success';
+      }
+      const passwordInput = form.querySelector('[name="currentPassword"]');
+      if (passwordInput) passwordInput.value = '';
+      const current = form.querySelector('[name="currentEmail"]');
+      if (current) current.value = payload.user?.email || newEmail;
+      const newInput = form.querySelector('[name="newEmail"]');
+      if (newInput) newInput.value = '';
+    } catch (error) {
+      if (message) { message.textContent = error.message || 'Unable to change email address.'; message.className = 'ckp-form-message error'; }
+    } finally {
+      if (submit) { submit.disabled = false; submit.textContent = 'Update Email'; }
     }
   }
 
@@ -906,6 +1040,7 @@
       <div class="ckp-session-row"><span class="ckp-session-status"><i></i> Active</span><span data-ckp-session>${esc(sessionDuration(p.loginAt))}</span></div>
       <div class="ckp-menu-divider"></div>
       <button type="button" class="ckp-menu-item" data-ckp-action="profile">${PROFILE_ICON}<span><strong>My Profile</strong><small>Account and cafe details</small></span></button>
+      <button type="button" class="ckp-menu-item" data-ckp-action="email">${EMAIL_ICON}<span><strong>Change Email</strong><small>Update login &amp; recovery email</small></span></button>
       ${isCafeOwner() ? `<button type="button" class="ckp-menu-item" data-ckp-action="user-id">${PROFILE_ICON}<span><strong>Change User ID</strong><small>Update Owner login ID</small></span></button>` : ''}
       <button type="button" class="ckp-menu-item" data-ckp-action="password">${LOCK_ICON}<span><strong>Change Password</strong><small>Update account security</small></span></button>
       ${canManageApprovalPin() ? `<button type="button" class="ckp-menu-item" data-ckp-action="approval-pin">${PIN_ICON}<span><strong>Approval PIN</strong><small>Set PIN for Staff refund / void approval</small></span></button>` : ''}
@@ -950,6 +1085,7 @@
       if (!actionButton) return;
       const action = actionButton.dataset.ckpAction;
       if (action === 'profile') openProfileModal();
+      if (action === 'email') openEmailModal();
       if (action === 'password') openPasswordModal();
       if (action === 'user-id') openUserIdModal();
       if (action === 'approval-pin') openPinModal();
@@ -1017,6 +1153,7 @@
     if (event.key === 'Escape') {
       closeMenu();
       closeProfileModal();
+      closeEmailModal();
       closePasswordModal();
       closeUserIdModal();
       closePinModal();

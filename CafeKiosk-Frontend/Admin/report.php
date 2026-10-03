@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../Assets/css/admin-stable/report.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
-  <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=20261003-change-email-v1">
   <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">
   <link rel="icon" type="image/x-icon" href="/Assets/images/favicon.ico?v=20260923">
   <link rel="apple-touch-icon" href="/Assets/images/logo.png">
@@ -162,7 +162,7 @@
   <script src="../Assets/js/admin-stable/report.js?v=admin-stable-20261001"></script>
 <script src="../Assets/js/admin-stable/report-products.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
-  <script src="../Assets/js/admin-stable/profile-menu.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/profile-menu.js?v=20261003-change-email-v1"></script>
   <script src="/Assets/js/admin-stable/message-dialog.js?v=admin-stable-20261001"></script>
   <script src="/Assets/js/developer-footer.js?v=20261003-systemwide-scroll-footer-v1"></script>
 </body>
