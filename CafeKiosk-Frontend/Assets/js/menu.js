@@ -946,6 +946,19 @@ function resolveMenuItemImage(item, category) {
   return String(item?.image || item?.imageUrl || item?.img || item?.photo || item?.productImage || "").trim() || namedMenuImage(item?.name, categoryImage(category));
 }
 
+function findMenuItemRecord(category, productId, name) {
+  const list = Array.isArray(menuData?.[category]) ? menuData[category] : [];
+  const idText = String(productId ?? "").trim();
+  const normalizedName = String(name || "").trim().toLowerCase();
+
+  if (idText) {
+    const byId = list.find(item => String(item?.productId ?? item?.id ?? "").trim() === idText);
+    if (byId) return byId;
+  }
+
+  return list.find(item => String(item?.name || "").trim().toLowerCase() === normalizedName) || null;
+}
+
 function rebuildKioskCategories(categories) {
   const sidebar = document.querySelector(".sidebar");
   if (!sidebar) return;
@@ -1361,8 +1374,15 @@ function showItemModal(
     );
 
   if (icon) {
-    icon.src = categoryImage(category);
-    icon.alt = categoryDisplay;
+    const matchedItem = findMenuItemRecord(category, productId, name);
+    const modalImage = resolveMenuItemImage(matchedItem || { name, image: "" }, category);
+    icon.src = modalImage;
+    icon.alt = `${name} image`;
+    icon.onerror = () => {
+      icon.onerror = null;
+      icon.src = categoryImage(category);
+      icon.alt = categoryDisplay;
+    };
   }
 
   const modalBox =

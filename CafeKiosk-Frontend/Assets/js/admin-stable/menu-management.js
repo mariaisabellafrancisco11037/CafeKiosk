@@ -888,7 +888,7 @@ function scheduleCatalogSync() {
 
 async function loadCatalogFromBackend() {
     try {
-        const response = await fetch(`${MENU_API_URL}/api/catalog?cafeId=${encodeURIComponent(CAFE_ID)}`, {
+        const response = await fetch(`${MENU_API_URL}/api/catalog?cafeId=${encodeURIComponent(CAFE_ID)}&compact=1`, {
             credentials: "include", cache: "no-store"
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1481,10 +1481,12 @@ function renderProducts() {
 
                                     <img
                                         src="${product.image}"
-
                                         alt="${escapeHtml(
                                             product.name
                                         )}"
+                                        loading="lazy"
+                                        decoding="async"
+                                        fetchpriority="low"
                                     >
 
                                     `
@@ -3971,29 +3973,42 @@ addRecipeIngredientBtn?.addEventListener(
 ========================================================= */
 
 async function initializeMenuManagement() {
-
-    const hadRemoteCatalog = await loadCatalogFromBackend();
-
-    const hadRemoteAvailability =
-        await loadAvailabilityFromBackend();
-
-
-    await loadIngredientMasterList();
-
-
+    // First paint immediately from the cafe-scoped cache. This keeps Menu
+    // Management responsive while Railway/MySQL is still answering.
     renderCategories();
-
     renderProducts();
 
+    // Catalog is the only request that must complete before we replace the
+    // cached menu. The compact endpoint avoids downloading every base64 image
+    // inside the JSON response.
+    const hadRemoteCatalog = await loadCatalogFromBackend();
 
-    if (!hadRemoteCatalog) scheduleCatalogSync();
+    if (hadRemoteCatalog) {
+        renderCategories();
+        renderProducts();
+    } else {
+        scheduleCatalogSync();
+    }
 
-    if (
-        !hadRemoteAvailability
-    ) {
+    // Availability and ingredient suggestions are secondary data. Load them
+    // after the menu is already usable instead of blocking the whole page.
+    const finishSecondaryLoad = async () => {
+        const [hadRemoteAvailability] = await Promise.all([
+            loadAvailabilityFromBackend(),
+            loadIngredientMasterList()
+        ]);
 
-        scheduleAvailabilitySync();
+        if (hadRemoteAvailability) {
+            renderProducts();
+        } else {
+            scheduleAvailabilitySync();
+        }
+    };
 
+    if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(() => { finishSecondaryLoad(); }, { timeout: 900 });
+    } else {
+        window.setTimeout(() => { finishSecondaryLoad(); }, 50);
     }
 }
 

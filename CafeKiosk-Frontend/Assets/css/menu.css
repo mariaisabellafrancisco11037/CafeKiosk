@@ -2116,9 +2116,10 @@ body {
 }
 
 #itemModal .item-custom-header-icon img {
-    width: 72px;
-    height: 72px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 #itemModal .item-custom-header-text {

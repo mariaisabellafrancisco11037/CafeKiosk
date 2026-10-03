@@ -1,0 +1,8 @@
+Menu Management speed fix - 2026-10-03
+
+- Renders cafe-scoped cached menu immediately.
+- Uses a compact catalog response that does not embed every base64 product image in JSON.
+- Product images are served individually by an authenticated tenant-scoped image endpoint.
+- Product images use browser lazy loading and asynchronous decoding.
+- Availability and ingredient suggestion requests load after the catalog is already usable.
+- No menu/product records are removed or reseeded by this change.

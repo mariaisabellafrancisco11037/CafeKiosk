@@ -6,7 +6,7 @@
 
   <title>CafeKiosk - Menu</title>
 
-  <link rel="stylesheet" href="/Assets/css/menu.css?v=20260928-notes-v1">
+  <link rel="stylesheet" href="/Assets/css/menu.css?v=20261003-item-modal-image-v1">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -659,7 +659,7 @@
      JAVASCRIPT
      ======================================================= -->
 <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/menu.js?v=20261003-db-images-v1"></script>
+<script src="/Assets/js/menu.js?v=20261003-item-modal-image-v1"></script>
 
 <script src="/Assets/js/menu-runtime-config.js?v=34"></script>
 <script src="/Assets/js/discount-client.js"></script>

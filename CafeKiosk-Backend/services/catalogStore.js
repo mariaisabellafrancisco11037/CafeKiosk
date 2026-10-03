@@ -68,6 +68,55 @@ async function list(cafeId = 'cafe-1') {
   }));
 }
 
+// Lightweight catalog for Menu Management. Product images stored as data URLs
+// can make a full catalog response tens of megabytes. For compact requests we
+// return a small authenticated image URL instead and let the browser lazily
+// request only the images that are actually visible.
+async function listCompact(cafeId = 'cafe-1') {
+  const [rows] = await pool.execute(
+    `SELECT p.product_id, p.product_name, p.base_price, p.description,
+            CASE
+              WHEN p.image_path LIKE 'data:image/%'
+                THEN CONCAT('/api/catalog/product-image/', p.product_id,
+                            '?v=', UNIX_TIMESTAMP(p.updated_at))
+              ELSE COALESCE(p.image_path, '')
+            END AS image_path,
+            p.manual_availability, p.sort_order,
+            c.category_name, c.canonical_key, c.sort_order category_sort
+       FROM products p
+       JOIN categories c ON c.category_id=p.category_id
+      WHERE p.cafe_id=? AND p.is_active=1
+      ORDER BY c.sort_order, p.sort_order, p.product_name`,
+    [String(cafeId)]
+  );
+
+  return rows.map(r => ({
+    id: String(r.product_id),
+    name: r.product_name,
+    categoryKey: r.canonical_key,
+    category: r.category_name,
+    price: Number(r.base_price || 0),
+    description: r.description || '',
+    image: r.image_path || '',
+    availability: r.manual_availability || 'Available'
+  }));
+}
+
+async function getProductImage(cafeId, productId) {
+  const [rows] = await pool.execute(
+    `SELECT image_path, updated_at
+       FROM products
+      WHERE cafe_id=? AND product_id=? AND is_active=1
+      LIMIT 1`,
+    [String(cafeId), String(productId)]
+  );
+  if (!rows.length) return null;
+  return {
+    image: String(rows[0].image_path || ''),
+    updatedAt: rows[0].updated_at || null
+  };
+}
+
 async function ensureCategory(conn, cafeId, category, sortOrder, catMap, keptCategoryIds) {
   const key = normKey(category?.canonicalKey || category?.key || category?.name || category);
   if (!key) return null;
@@ -318,4 +367,4 @@ async function updateProductImage(cafeId = 'cafe-1', {
   return Boolean(result.affectedRows);
 }
 
-module.exports = { list, listCategories, replace, updateProductImage, normKey };
+module.exports = { list, listCompact, getProductImage, listCategories, replace, updateProductImage, normKey };
