@@ -6,7 +6,7 @@
   <title>CafeKiosk - Inventory Monitor</title>
   <link rel="stylesheet" href="../Assets/css/admin-stable/inventory.css?v=admin-stable-20261001">
 <link rel="stylesheet" href="../Assets/css/admin-stable/inventory-responsive-upgrade.css?v=admin-stable-20261001">
-<link rel="stylesheet" href="../Assets/css/admin-stable/inventory-bulk-import.css?v=bulk-progress-linked-20261001">
+<link rel="stylesheet" href="../Assets/css/admin-stable/inventory-bulk-import.css?v=polished-import-ui-20261003">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="/Assets/css/admin-stable/message-dialog.css?v=admin-stable-20261001">

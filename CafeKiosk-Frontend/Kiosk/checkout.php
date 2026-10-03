@@ -189,7 +189,7 @@
 
 
     <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/checkout.js?v=20261001-kiosk-notes-v3"></script>
+<script src="/Assets/js/checkout.js?v=20261003-checkout-image-sync-v1"></script>
 
 <script src="/Assets/js/checkout-discount.js"></script>
   <script src="/Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>

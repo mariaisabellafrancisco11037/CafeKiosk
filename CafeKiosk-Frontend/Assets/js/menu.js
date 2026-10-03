@@ -1163,9 +1163,29 @@ function addItem(
       item.key === key
     );
 
+  const matchedItem =
+    findMenuItemRecord(
+      category,
+      productId,
+      name
+    );
+
+  const itemImage =
+    resolveMenuItemImage(
+      matchedItem || {
+        name,
+        image: ""
+      },
+      category
+    );
+
   if (existing) {
 
     existing.qty += qty;
+
+    // Keep the receipt/cart image synchronized with the image currently
+    // shown for this product in the Kiosk menu.
+    existing.image = itemImage;
 
   } else {
 
@@ -1178,6 +1198,7 @@ function addItem(
       customizations,
       customizationCost,
       category,
+      image: itemImage,
       key
     });
 
@@ -3013,6 +3034,10 @@ async function confirmOrder() {
 
           category:
             item.category,
+
+          image:
+            item.image ||
+            "",
 
           price:
             Number(

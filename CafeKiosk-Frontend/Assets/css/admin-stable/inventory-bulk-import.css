@@ -1,3 +1,346 @@
-.ck-inv-bulk-backdrop{position:fixed;inset:0;background:#0008;z-index:9999;display:grid;place-items:center;padding:18px}.ck-inv-bulk-backdrop[hidden]{display:none}.ck-inv-bulk{background:#fff;color:#222;width:min(900px,96vw);max-height:90vh;overflow:auto;border-radius:18px;padding:22px;box-shadow:0 20px 70px #0005}.ck-inv-bulk header,.ck-inv-bulk footer,.ck-inv-upload{display:flex;align-items:center;justify-content:space-between;gap:12px}.ck-inv-bulk h2{margin:3px 0}.ck-inv-bulk header button{font-size:28px;border:0;background:none;cursor:pointer}.ck-inv-upload{padding:14px;background:#f7f7f7;border-radius:12px;flex-wrap:wrap}.ck-inv-table{overflow:auto;margin:14px 0}.ck-inv-table table{width:100%;border-collapse:collapse}.ck-inv-table th,.ck-inv-table td{padding:10px;border-bottom:1px solid #ddd;text-align:left;white-space:nowrap}.ck-inv-bulk button{padding:9px 14px;border-radius:9px;border:1px solid #bbb;cursor:pointer}.ck-inv-bulk footer button:last-child{background:#111;color:#fff}.ck-inv-bulk .bad,#invBulkError{color:#b42318}#invBulkInfo{margin-top:12px;font-weight:600}
-/* Bulk import processing state: blocks accidental closing while database writes are active. */
-.ck-inv-progress{position:fixed;inset:0;z-index:10020;background:rgba(20,12,7,.58);display:grid;place-items:center;padding:20px}.ck-inv-progress[hidden]{display:none}.ck-inv-progress-card{width:min(430px,92vw);background:#fff;border-radius:18px;padding:26px;text-align:center;box-shadow:0 24px 80px #0006}.ck-inv-progress-card h3{margin:12px 0 6px}.ck-inv-progress-card p{margin:0 0 16px;color:#66584d}.ck-inv-progress-card small{display:block;margin-top:12px;color:#806e5e}.ck-inv-spinner{width:42px;height:42px;margin:auto;border:4px solid #eadfd3;border-top-color:#6c3b1e;border-radius:50%;animation:ckInvSpin .8s linear infinite}.ck-inv-progress-track{height:10px;background:#eadfd3;border-radius:999px;overflow:hidden;margin:12px 0 7px}.ck-inv-progress-bar{height:100%;width:0;background:#6c3b1e;transition:width .2s ease}@keyframes ckInvSpin{to{transform:rotate(360deg)}}
+/* =========================================================
+   CafeKiosk — Polished Bulk Inventory Import
+   ========================================================= */
+
+.ck-inv-bulk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(31, 24, 17, .62);
+  backdrop-filter: blur(6px);
+}
+
+.ck-inv-bulk-backdrop[hidden] { display: none !important; }
+
+.ck-inv-bulk {
+  width: min(940px, 96vw);
+  max-height: calc(100vh - 44px);
+  overflow: auto;
+  padding: 0;
+  border: 1px solid #ead7bd;
+  border-radius: 22px;
+  background: #fffaf0;
+  color: #4a2d17;
+  box-shadow: 0 28px 90px rgba(49, 31, 17, .32);
+  scrollbar-width: thin;
+  scrollbar-color: #4f9b69 #f1e5d4;
+}
+
+.ck-inv-bulk::-webkit-scrollbar { width: 10px; }
+.ck-inv-bulk::-webkit-scrollbar-track { background: #f1e5d4; }
+.ck-inv-bulk::-webkit-scrollbar-thumb {
+  background: #4f9b69;
+  border-radius: 999px;
+  border: 2px solid #f1e5d4;
+}
+
+.ck-inv-bulk > header {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #ead7bd;
+  background: rgba(255, 250, 240, .97);
+  backdrop-filter: blur(12px);
+}
+
+.ck-inv-bulk > header > div {
+  position: relative;
+  min-width: 0;
+  padding-left: 66px;
+}
+
+.ck-inv-bulk > header > div::before {
+  content: "⇧";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid #eed7b4;
+  border-radius: 50%;
+  background: #f9e7c7;
+  color: #4a2d17;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.ck-inv-bulk > header small {
+  display: block;
+  margin-bottom: 3px;
+  color: #a2602c;
+  font-size: .71rem;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.ck-inv-bulk h2 {
+  margin: 0;
+  color: #4a2d17;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+#invBulkClose {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #ddc7a9;
+  border-radius: 11px;
+  background: #fffdf8;
+  color: #4a2d17;
+  font-size: 1.42rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+#invBulkClose:hover {
+  transform: translateY(-1px);
+  border-color: #c9a881;
+  background: #fff1df;
+}
+
+.ck-inv-bulk > p {
+  margin: 20px 24px 14px;
+  color: #6e5944;
+  font-size: .96rem;
+  line-height: 1.5;
+}
+
+.ck-inv-upload {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin: 0 24px 16px;
+  padding: 16px;
+  border: 1px dashed #d7b790;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #fff8eb, #fffdf7);
+}
+
+#invBulkCsv {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #e3cfb6;
+  border-radius: 11px;
+  background: #fffdf9;
+  color: #755d46;
+  font: inherit;
+  cursor: pointer;
+}
+
+#invBulkCsv::file-selector-button {
+  margin-right: 10px;
+  padding: 9px 13px;
+  border: 1px solid #4f9b69;
+  border-radius: 9px;
+  background: #4f9b69;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+#invBulkCsv::file-selector-button:hover { background: #34734f; border-color: #34734f; }
+
+#invBulkTemplate,
+#invBulkStart {
+  min-height: 43px;
+  padding: 9px 16px;
+  border: 1px solid #4f9b69;
+  border-radius: 10px;
+  background: #4f9b69;
+  color: #fff;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 5px 14px rgba(79, 155, 105, .16);
+  transition: .18s ease;
+}
+
+#invBulkTemplate:hover,
+#invBulkStart:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: #34734f;
+  background: #34734f;
+}
+
+#invBulkStart:disabled {
+  border-color: #a9c7b3;
+  background: #a9c7b3;
+  box-shadow: none;
+  opacity: .75;
+  cursor: not-allowed;
+}
+
+#invBulkInfo {
+  margin: 0 24px 10px;
+  padding: 11px 13px;
+  border: 1px solid #e9dbc9;
+  border-radius: 11px;
+  background: #f9f1e6;
+  color: #715d49;
+  font-size: .88rem;
+  font-weight: 750;
+}
+
+.ck-inv-table {
+  max-height: 310px;
+  overflow: auto;
+  margin: 0 24px 14px;
+  border: 1px solid #e3d2bd;
+  border-radius: 14px;
+  background: #fffdfa;
+  scrollbar-width: thin;
+  scrollbar-color: #4f9b69 #f1e5d4;
+}
+
+.ck-inv-table::-webkit-scrollbar { width: 8px; height: 8px; }
+.ck-inv-table::-webkit-scrollbar-thumb { background: #4f9b69; border-radius: 999px; }
+
+.ck-inv-table table { width: 100%; min-width: 700px; border-collapse: collapse; }
+.ck-inv-table th,
+.ck-inv-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #efe2d2;
+  text-align: left;
+  white-space: nowrap;
+  font-size: .83rem;
+}
+
+.ck-inv-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8eddf;
+  color: #5b3a23;
+  font-weight: 900;
+}
+
+.ck-inv-table tbody:empty::after {
+  content: "No data to preview — choose a CSV file above.";
+  display: block;
+  padding: 34px 16px;
+  color: #9a8877;
+  font-size: .88rem;
+  text-align: center;
+}
+
+.ck-inv-bulk .bad,
+#invBulkError {
+  color: #a9342d;
+  font-weight: 800;
+}
+
+#invBulkError:not(:empty) {
+  margin: 0 24px 14px;
+  padding: 11px 13px;
+  border: 1px solid #efc3bd;
+  border-radius: 11px;
+  background: #fff0ed;
+}
+
+.ck-inv-bulk > footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #ead7bd;
+  background: rgba(255, 250, 240, .98);
+  backdrop-filter: blur(12px);
+}
+
+#invBulkCancel {
+  min-height: 43px;
+  padding: 9px 16px;
+  border: 1px solid #d8bea0;
+  border-radius: 10px;
+  background: #fffaf1;
+  color: #4c321e;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+#invBulkCancel:hover { transform: translateY(-1px); background: #f7ead8; }
+
+/* Processing overlay */
+.ck-inv-progress {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 12, 7, .60);
+  backdrop-filter: blur(4px);
+}
+
+.ck-inv-progress[hidden] { display: none !important; }
+
+.ck-inv-progress-card {
+  width: min(430px, 92vw);
+  padding: 26px;
+  border: 1px solid #ead7bd;
+  border-radius: 18px;
+  background: #fffaf0;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,.35);
+}
+
+.ck-inv-progress-card h3 { margin: 12px 0 6px; color: #4a2d17; }
+.ck-inv-progress-card p { margin: 0 0 16px; color: #66584d; }
+.ck-inv-progress-card small { display: block; margin-top: 12px; color: #806e5e; }
+.ck-inv-spinner {
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  border: 4px solid #eadfd3;
+  border-top-color: #4f9b69;
+  border-radius: 50%;
+  animation: ckInvSpin .8s linear infinite;
+}
+.ck-inv-progress-track { height: 10px; margin: 12px 0 7px; overflow: hidden; border-radius: 999px; background: #eadfd3; }
+.ck-inv-progress-bar { width: 0; height: 100%; background: #4f9b69; transition: width .2s ease; }
+
+@keyframes ckInvSpin { to { transform: rotate(360deg); } }
+
+@media (max-width: 720px) {
+  .ck-inv-bulk-backdrop { padding: 0; align-items: end; }
+  .ck-inv-bulk { width: 100%; max-height: 95vh; border-radius: 20px 20px 0 0; }
+  .ck-inv-bulk > header,
+  .ck-inv-bulk > footer { padding-left: 15px; padding-right: 15px; }
+  .ck-inv-bulk > header > div { padding-left: 0; }
+  .ck-inv-bulk > header > div::before { display: none; }
+  .ck-inv-bulk > p,
+  .ck-inv-upload,
+  #invBulkInfo,
+  .ck-inv-table,
+  #invBulkError:not(:empty) { margin-left: 15px; margin-right: 15px; }
+  .ck-inv-upload { grid-template-columns: 1fr; }
+  #invBulkTemplate { width: 100%; }
+}

@@ -1,0 +1,6 @@
+CafeKiosk Checkout/Menu Image Sync Fix
+
+- Kiosk cart items now preserve the exact image currently shown for the selected menu product.
+- Digital Receipt uses that saved image instead of guessing a photo from the item name.
+- If a product has no custom image, Checkout falls back to the corresponding category image/icon.
+- Browser cache versions were bumped for Kiosk menu.js and checkout.js.

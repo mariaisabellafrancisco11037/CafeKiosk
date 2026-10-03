@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Menu Management</title>
   <link rel="stylesheet" href="../Assets/css/admin-stable/menu-management.css?v=visible-scrollbar-fix-20261003">
-  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=bulk-import-multizip-20261001">
+  <link rel="stylesheet" href="../Assets/css/admin-stable/menu-bulk-import.css?v=polished-import-ui-20261003">
 <link rel="stylesheet" href="../Assets/css/admin-stable/feature-upgrade.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/uniform-theme.css?v=admin-stable-20261001">
   <link rel="stylesheet" href="../Assets/css/admin-stable/profile-menu.css?v=admin-stable-20261001">

@@ -1,29 +1,54 @@
-/* CafeKiosk bulk menu importer */
-.bulk-import-trigger {
-  white-space: nowrap;
+/* =========================================================
+   CafeKiosk — Polished Bulk Menu Import
+   Scoped to the Menu Management bulk importer only.
+   ========================================================= */
+
+:root {
+  --ck-import-green: #4f9b69;
+  --ck-import-green-dark: #34734f;
+  --ck-import-green-soft: #eef7f0;
+  --ck-import-brown: #4a2d17;
+  --ck-import-muted: #8a7158;
+  --ck-import-bg: #fffaf0;
+  --ck-import-card: #fffdf7;
+  --ck-import-soft: #fff2d9;
+  --ck-import-border: #ead7bd;
 }
+
+.bulk-import-trigger { white-space: nowrap; }
 
 .ck-import-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 2200;
+  z-index: 9999;
   display: grid;
   place-items: center;
-  padding: 24px;
-  background: rgba(30, 18, 10, .58);
-  backdrop-filter: blur(5px);
+  padding: 22px;
+  background: rgba(31, 24, 17, .62);
+  backdrop-filter: blur(6px);
 }
 
 .ck-import-backdrop[hidden] { display: none !important; }
 
 .ck-import-modal {
-  width: min(1080px, 100%);
-  max-height: min(900px, calc(100vh - 48px));
+  width: min(1160px, 96vw);
+  max-height: calc(100vh - 44px);
   overflow: auto;
-  border-radius: 24px;
-  background: #fffaf4;
-  box-shadow: 0 24px 80px rgba(55, 31, 13, .3);
-  color: #321f12;
+  border: 1px solid var(--ck-import-border);
+  border-radius: 22px;
+  background: var(--ck-import-bg);
+  color: var(--ck-import-brown);
+  box-shadow: 0 28px 90px rgba(49, 31, 17, .32);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ck-import-green) #f1e5d4;
+}
+
+.ck-import-modal::-webkit-scrollbar { width: 10px; }
+.ck-import-modal::-webkit-scrollbar-track { background: #f1e5d4; }
+.ck-import-modal::-webkit-scrollbar-thumb {
+  background: var(--ck-import-green);
+  border-radius: 999px;
+  border: 2px solid #f1e5d4;
 }
 
 .ck-import-header,
@@ -32,145 +57,315 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 22px 24px;
+  padding: 20px 24px;
 }
 
 .ck-import-header {
   position: sticky;
   top: 0;
-  z-index: 4;
-  background: rgba(255, 250, 244, .96);
-  border-bottom: 1px solid #ead9c8;
+  z-index: 5;
+  min-height: 82px;
+  border-bottom: 1px solid var(--ck-import-border);
+  background: rgba(255, 250, 240, .97);
   backdrop-filter: blur(12px);
 }
 
-.ck-import-header h2 { margin: 3px 0 0; font-size: 1.45rem; }
-.ck-import-kicker { font-size: .72rem; font-weight: 800; letter-spacing: .12em; color: #a15d2b; }
+.ck-import-header > div:first-child {
+  position: relative;
+  min-width: 0;
+  padding-left: 66px;
+}
+
+.ck-import-header > div:first-child::before {
+  content: "⇧";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid #eed7b4;
+  border-radius: 50%;
+  background: #f9e7c7;
+  color: var(--ck-import-brown);
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.ck-import-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: #a2602c;
+  font-size: .71rem;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.ck-import-header h2 {
+  margin: 0;
+  color: var(--ck-import-brown);
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
 .ck-import-close {
   width: 42px;
   height: 42px;
-  border-radius: 12px;
-  border: 1px solid #dbc8b5;
-  background: #fff;
-  color: #402817;
-  font-size: 1.5rem;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #ddc7a9;
+  border-radius: 11px;
+  background: #fffdf8;
+  color: var(--ck-import-brown);
+  font-size: 1.42rem;
+  line-height: 1;
   cursor: pointer;
+  transition: .18s ease;
 }
 
-.ck-import-body { padding: 22px 24px 10px; }
+.ck-import-close:hover {
+  transform: translateY(-1px);
+  border-color: #c9a881;
+  background: #fff1df;
+}
+
+.ck-import-body { padding: 22px 24px 12px; }
+
 .ck-import-note {
   margin: 0 0 18px;
-  padding: 14px 16px;
-  border: 1px solid #ead6c0;
-  border-radius: 14px;
-  background: #fff3e4;
-  line-height: 1.5;
+  padding: 15px 17px;
+  border: 1px solid #edcf9b;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #fff2d3, #fff8e8);
+  color: #5a3c25;
+  line-height: 1.55;
 }
+
+.ck-import-note b { color: #3f2818; }
 
 .ck-import-input-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .ck-import-box {
-  min-height: 160px;
+  min-height: 205px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 18px;
-  border: 1px solid #e3cfbb;
-  border-radius: 18px;
-  background: #fff;
+  gap: 9px;
+  padding: 17px;
+  border: 1px solid #e6d3b9;
+  border-radius: 17px;
+  background: var(--ck-import-card);
+  box-shadow: 0 5px 16px rgba(80, 54, 32, .04);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 
-.ck-import-box strong { font-size: 1rem; }
-.ck-import-box span { color: #7a6553; font-size: .88rem; line-height: 1.45; }
-.ck-import-box input[type="file"] { width: 100%; margin-top: auto; }
+.ck-import-box:hover {
+  transform: translateY(-1px);
+  border-color: #ceb18c;
+  box-shadow: 0 9px 22px rgba(80, 54, 32, .08);
+}
+
+.ck-import-box strong {
+  color: #412918;
+  font-size: .98rem;
+  font-weight: 900;
+}
+
+.ck-import-box > span {
+  color: var(--ck-import-muted);
+  font-size: .84rem;
+  line-height: 1.45;
+}
+
+.ck-import-box input[type="file"] {
+  width: 100%;
+  margin-top: auto;
+  padding: 11px;
+  box-sizing: border-box;
+  border: 1px dashed #d7b790;
+  border-radius: 12px;
+  background: #fff8ec;
+  color: #745a42;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ck-import-box input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 9px 13px;
+  border: 1px solid var(--ck-import-green);
+  border-radius: 9px;
+  background: var(--ck-import-green);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.ck-import-box input[type="file"]::file-selector-button:hover {
+  border-color: var(--ck-import-green-dark);
+  background: var(--ck-import-green-dark);
+}
+
+.ck-import-file-summary {
+  display: block;
+  margin-top: 0;
+  color: #806a54;
+  font-size: .76rem;
+}
 
 .ck-import-template-btn,
 .ck-import-preview-btn,
 .ck-import-start-btn,
 .ck-import-cancel-btn {
-  min-height: 42px;
-  border-radius: 12px;
-  padding: 0 16px;
-  font-weight: 800;
+  min-height: 43px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: .9rem;
+  font-weight: 850;
   cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 
 .ck-import-template-btn,
 .ck-import-preview-btn,
-.ck-import-cancel-btn {
-  border: 1px solid #d8c3ae;
-  background: #fff;
-  color: #4b2d18;
+.ck-import-start-btn {
+  border: 1px solid var(--ck-import-green);
+  background: var(--ck-import-green);
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(79, 155, 105, .16);
 }
 
-.ck-import-preview-btn { margin-top: 16px; }
-.ck-import-start-btn {
-  border: 0;
-  background: #6c3b1e;
-  color: #fff;
+.ck-import-template-btn:hover,
+.ck-import-preview-btn:hover,
+.ck-import-start-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--ck-import-green-dark);
+  background: var(--ck-import-green-dark);
 }
+
+.ck-import-template-btn { width: 100%; }
+.ck-import-preview-btn { display: block; margin: 16px 0 0 auto; }
+
+.ck-import-cancel-btn {
+  border: 1px solid #d8bea0;
+  background: #fffaf1;
+  color: #4c321e;
+}
+
+.ck-import-cancel-btn:hover {
+  transform: translateY(-1px);
+  background: #f7ead8;
+}
+
 .ck-import-start-btn:disabled,
-.ck-import-preview-btn:disabled { opacity: .55; cursor: not-allowed; }
+.ck-import-preview-btn:disabled {
+  border-color: #a9c7b3;
+  background: #a9c7b3;
+  color: #f7fff9;
+  box-shadow: none;
+  opacity: .75;
+  cursor: not-allowed;
+  transform: none;
+}
 
 .ck-import-summary {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin: 18px 0 14px;
+  margin: 17px 0 13px;
 }
 
 .ck-import-stat {
-  padding: 13px 14px;
-  border-radius: 14px;
-  background: #f6eadf;
-  border: 1px solid #ead6c3;
+  padding: 12px 13px;
+  border: 1px solid var(--ck-import-border);
+  border-radius: 13px;
+  background: linear-gradient(180deg, #fffdf9, #f9efe1);
 }
-.ck-import-stat b { display: block; font-size: 1.25rem; }
-.ck-import-stat span { font-size: .78rem; color: #7a6553; }
+
+.ck-import-stat b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ck-import-green-dark);
+  font-size: 1.22rem;
+  font-weight: 900;
+}
+
+.ck-import-stat span { color: #806b56; font-size: .76rem; }
 
 .ck-import-preview-wrap {
+  max-height: 300px;
   overflow: auto;
-  border: 1px solid #e2cfbd;
-  border-radius: 15px;
-  background: #fff;
+  border: 1px solid #e3d2bd;
+  border-radius: 14px;
+  background: #fffdfa;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ck-import-green) #f1e5d4;
 }
-.ck-import-preview-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+
+.ck-import-preview-wrap::-webkit-scrollbar { width: 8px; height: 8px; }
+.ck-import-preview-wrap::-webkit-scrollbar-thumb { background: var(--ck-import-green); border-radius: 999px; }
+
+.ck-import-preview-table { width: 100%; min-width: 760px; border-collapse: collapse; }
 .ck-import-preview-table th,
-.ck-import-preview-table td { padding: 11px 12px; border-bottom: 1px solid #f0e4d8; text-align: left; font-size: .84rem; vertical-align: top; }
-.ck-import-preview-table th { background: #f8eee5; color: #5d3c25; position: sticky; top: 0; }
-.ck-import-status-ok { color: #1d7c4c; font-weight: 800; }
-.ck-import-status-warn { color: #a65b11; font-weight: 800; }
-.ck-import-status-error { color: #b63838; font-weight: 800; }
+.ck-import-preview-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #efe2d2;
+  text-align: left;
+  vertical-align: top;
+  font-size: .82rem;
+}
+
+.ck-import-preview-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8eddf;
+  color: #5b3a23;
+  font-weight: 900;
+}
+
+.ck-import-status-ok { color: #27794d; font-weight: 850; }
+.ck-import-status-warn { color: #9b5a17; font-weight: 850; }
+.ck-import-status-error { color: #b13a35; font-weight: 850; }
 
 .ck-import-errors {
-  margin-top: 12px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #efc4bf;
+  margin-top: 11px;
+  padding: 11px 13px;
+  border: 1px solid #efc3bd;
+  border-radius: 11px;
   background: #fff0ed;
   color: #8b2e28;
   line-height: 1.45;
   white-space: pre-wrap;
 }
+
 .ck-import-errors:empty { display: none; }
 
-.ck-import-progress { margin-top: 18px; }
+.ck-import-progress { margin-top: 16px; }
 .ck-import-progress[hidden] { display: none; }
-.ck-import-progress-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: .85rem; }
-.ck-import-progress-track { height: 10px; overflow: hidden; border-radius: 999px; background: #eadfd3; }
-.ck-import-progress-bar { width: 0%; height: 100%; background: #7c4727; transition: width .2s ease; }
+.ck-import-progress-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: .83rem; }
+.ck-import-progress-track { height: 9px; overflow: hidden; border-radius: 999px; background: #e7ddcf; }
+.ck-import-progress-bar { width: 0%; height: 100%; background: var(--ck-import-green); transition: width .2s ease; }
 
 .ck-import-footer {
   position: sticky;
   bottom: 0;
-  z-index: 4;
-  background: rgba(255, 250, 244, .97);
-  border-top: 1px solid #ead9c8;
+  z-index: 5;
   justify-content: flex-end;
+  border-top: 1px solid var(--ck-import-border);
+  background: rgba(255, 250, 240, .98);
+  backdrop-filter: blur(12px);
 }
 
 @media (max-width: 900px) {
@@ -180,8 +375,10 @@
 
 @media (max-width: 620px) {
   .ck-import-backdrop { padding: 0; align-items: end; }
-  .ck-import-modal { max-height: 94vh; border-radius: 22px 22px 0 0; }
-  .ck-import-header, .ck-import-footer, .ck-import-body { padding-left: 16px; padding-right: 16px; }
+  .ck-import-modal { width: 100%; max-height: 95vh; border-radius: 20px 20px 0 0; }
+  .ck-import-header, .ck-import-footer, .ck-import-body { padding-left: 15px; padding-right: 15px; }
+  .ck-import-header > div:first-child { padding-left: 0; }
+  .ck-import-header > div:first-child::before { display: none; }
   .ck-import-summary { grid-template-columns: 1fr 1fr; }
   .product-toolbar { flex-wrap: wrap; }
   .bulk-import-trigger, .product-toolbar .add-item { flex: 1 1 150px; }
