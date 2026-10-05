@@ -98,7 +98,15 @@ router.post('/login', systemAdminLoginLimiter, async (req, res) => {
   const expectedUser = configuredUser || 'systemadmin';
   const expectedPassword = configuredPassword || 'CafeMonitor_2026!';
   const username = text(req.body?.username);
-  const password = String(req.body?.password || '');
+  const rawPassword = String(req.body?.password || '');
+  // Passwords remain case-sensitive. For tablet copy/paste only, tolerate
+  // accidental leading/trailing whitespace when the configured password itself
+  // does not intentionally contain edge spaces.
+  const password = safeEqual(rawPassword, expectedPassword)
+    ? rawPassword
+    : (expectedPassword === expectedPassword.trim() && safeEqual(rawPassword.trim(), expectedPassword)
+      ? rawPassword.trim()
+      : rawPassword);
   const sourceIp = clientIp(req) || 'unknown';
   const guardKey = `${sourceIp}|${username.toLowerCase() || 'unknown'}`;
   const now = Date.now();

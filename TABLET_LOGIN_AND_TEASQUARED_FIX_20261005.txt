@@ -1,0 +1,16 @@
+CafeKiosk tablet login + TeaSquared compatibility fix — 2026-10-05
+
+Changes in this build:
+1. Login cards are centered in the real visible viewport on Android/Chrome tablets, including landscape mode.
+2. Admin/Manager/Staff login is same-origin and does not rely on a browser's saved cafe ID.
+3. Account lookup now matches both User ID and email consistently on a fresh device.
+4. Older owner rows stored with role "Owner" are accepted by the Admin login and normalized to Admin after authentication.
+5. Login can still resolve duplicate User IDs across different cafes by checking the submitted password first.
+6. A missing legacy cafe join no longer makes an otherwise valid user invisible during credential lookup.
+7. Login requests use no-store so a tablet does not reuse stale authentication responses.
+8. System Administrator login remains tied to the configured Railway SYSTEM_ADMIN_USER / SYSTEM_ADMIN_PASSWORD. The code does not reset or replace those credentials.
+9. System Administrator tablet copy/paste tolerates accidental leading/trailing spaces only when the configured password itself has no edge spaces.
+
+IMPORTANT FOR RAILWAY:
+- Keep the existing SYSTEM_ADMIN_USER and SYSTEM_ADMIN_PASSWORD variables unchanged if those are the credentials you already use.
+- Deploy this project to the same Railway service connected to the existing MySQL database. Do not create a new database if you want to keep TeaSquared and other cafe accounts.

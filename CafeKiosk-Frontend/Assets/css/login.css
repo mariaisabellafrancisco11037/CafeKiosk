@@ -1170,3 +1170,67 @@ html { min-height: 100%; background: var(--bg); }
   .login-card { width: 470px; }
   .role-card { width: 480px; }
 }
+
+/* =========================================================
+   2026-10-05 TABLET LOGIN CENTERING V2
+   Keep authentication cards centered inside the actual visible browser
+   viewport. The project footer remains below the first screen and does not
+   push the login UI toward the top on Android/Chrome tablets.
+========================================================= */
+body.auth-body.uniform-auth {
+  margin: 0 !important;
+  min-height: 100svh !important;
+  min-height: 100dvh !important;
+}
+
+body.auth-body.uniform-auth > .role-page,
+body.auth-body.uniform-auth > .login-page {
+  width: 100% !important;
+  min-height: 100svh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  align-content: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+body.auth-body.uniform-auth .role-card,
+body.auth-body.uniform-auth .login-card {
+  margin: 0 auto !important;
+  justify-self: center !important;
+  align-self: center !important;
+}
+
+/* Tablet landscape is still centered. The page itself may scroll if a very
+   short split-screen viewport cannot fit the full form. */
+@media (max-height: 760px) and (orientation: landscape) {
+  body.auth-body.uniform-auth > .role-page,
+  body.auth-body.uniform-auth > .login-page {
+    min-height: 100svh !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    place-items: center !important;
+    align-content: center !important;
+    overflow: visible !important;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  body.auth-body.uniform-auth .role-card,
+  body.auth-body.uniform-auth .login-card {
+    margin: auto !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1100px) {
+  body.auth-body.uniform-auth .role-card {
+    width: min(500px, calc(100vw - 64px)) !important;
+  }
+
+  body.auth-body.uniform-auth .login-card,
+  body.auth-body.uniform-auth .system-admin-login-card {
+    width: min(500px, calc(100vw - 64px)) !important;
+  }
+}

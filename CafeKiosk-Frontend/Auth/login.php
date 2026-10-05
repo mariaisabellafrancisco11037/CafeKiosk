@@ -8,7 +8,7 @@
 
   <link
     rel="stylesheet"
-    href="../Assets/css/login.css?v=20261005-tablet-auth-v1"
+    href="../Assets/css/login.css?v=20261005-tablet-auth-v2"
   >
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">

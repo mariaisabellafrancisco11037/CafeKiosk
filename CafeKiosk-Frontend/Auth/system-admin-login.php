@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - System Administrator Login</title>
-  <link rel="stylesheet" href="../Assets/css/login.css?v=20261005-tablet-auth-v1">
+  <link rel="stylesheet" href="../Assets/css/login.css?v=20261005-tablet-auth-v2">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/system-monitor.css?v=1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
@@ -32,7 +32,7 @@
       </form>
     </section>
   </main>
-  <script src="../Assets/js/system-admin-login.js?v=20261005-tablet-auth-v1"></script>
+  <script src="../Assets/js/system-admin-login.js?v=20261005-tablet-auth-v2"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
   <script src="/Assets/js/message-dialog.js?v=logout-confirm-v2"></script>
 <script src="/Assets/js/responsive-navigation.js?v=20261001-mobile-shell-v7"></script>

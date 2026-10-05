@@ -694,8 +694,13 @@ async function handleLogin(
                     credentials:
                         "include",
 
+                    cache:
+                        "no-store",
+
                     headers: {
                         "Content-Type":
+                            "application/json",
+                        "Accept":
                             "application/json"
                     },
 

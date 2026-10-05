@@ -426,20 +426,21 @@ function getFallbackAccounts() {
 
 function mapDbAccountRow(row) {
   if (!row) return null;
+  const normalizedRole = normalizeRole(row.role) || safeText(row.role);
   return {
     userId: row.user_id,
     username: row.username,
     email: row.email,
     passwordHash: row.password_hash,
     displayName: row.full_name,
-    role: row.role,
+    role: normalizedRole,
     cafeId: row.cafe_id,
-    cafeName: row.cafe_name || row.cafe_id,
-    isOwner: Boolean(row.is_owner),
-    status: row.status,
+    cafeName: row.cafe_name || row.cafe_id || 'CafeKiosk',
+    isOwner: Boolean(row.is_owner) || String(row.role || '').toLowerCase() === 'owner',
+    status: row.status || 'Active',
     failedAttempts: Number(row.failed_attempts || 0),
     lockUntil: row.lock_until || null,
-    cafeStatus: row.cafe_status,
+    cafeStatus: row.cafe_status || 'Active',
     approvalStatus: row.approval_status || 'Approved',
     rejectionReason: row.rejection_reason || ''
   };
@@ -457,29 +458,35 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole, passwor
            COALESCE(c.approval_status, 'Approved') AS approval_status,
            c.rejection_reason
       FROM users u
-      JOIN cafes c ON c.cafe_id = u.cafe_id`;
+      LEFT JOIN cafes c ON c.cafe_id = u.cafe_id`;
 
-  // Login must be portable between browsers/devices. A fresh tablet does not
-  // have the desktop browser's localStorage cafeId, so cafeId is only metadata
-  // after authentication and is never used as an authority for finding the user.
-  const roleFilter = requestedRole ? ' AND u.role=?' : '';
-  const params = requestedRole ? [id, requestedRole] : [id];
-  const identityColumn = id.includes('@') ? 'LOWER(u.email)' : 'LOWER(u.username)';
+  // A login must work the same way on desktop, tablet and phone. Never require
+  // browser-local cafeId to locate an account. Match either User ID or email,
+  // then resolve the tenant using the submitted password.
+  let roleFilter = '';
+  const roleParams = [];
+  if (requestedRole === 'Admin') {
+    // Compatibility with older databases that stored cafe owners as "Owner".
+    roleFilter = " AND LOWER(TRIM(u.role)) IN ('admin','owner')";
+  } else if (requestedRole) {
+    roleFilter = ' AND LOWER(TRIM(u.role))=LOWER(?)';
+    roleParams.push(requestedRole);
+  }
 
   const [rows] = await pool.execute(
     `${selectFields}
-     WHERE ${identityColumn}=?${roleFilter}
-     LIMIT 20`,
-    params
+     WHERE (
+       LOWER(TRIM(u.username))=?
+       OR LOWER(TRIM(COALESCE(u.email,'')))=?
+     )${roleFilter}
+     ORDER BY u.user_id ASC
+     LIMIT 50`,
+    [id, id, ...roleParams]
   );
 
   if (!rows.length) return null;
   if (rows.length === 1) return mapDbAccountRow(rows[0]);
 
-  // User IDs are unique only inside a cafe. If the same User ID is used by
-  // multiple cafes, resolve it by the supplied password instead of trusting a
-  // browser-specific cafeId. This is what makes TeaSquared/other tenants work
-  // on a new tablet as well as on the original desktop.
   const passwordMatches = [];
   for (const row of rows) {
     try {
@@ -492,6 +499,14 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole, passwor
   if (passwordMatches.length === 1) return mapDbAccountRow(passwordMatches[0]);
 
   if (passwordMatches.length > 1) {
+    // A remembered cafeId may be used only as a tie-breaker after the password
+    // has already authenticated more than one otherwise-identical account.
+    const requested = safeText(requestedCafeId);
+    if (requested) {
+      const sameCafe = passwordMatches.filter(row => String(row.cafe_id || '') === requested);
+      if (sameCafe.length === 1) return mapDbAccountRow(sameCafe[0]);
+    }
+
     const error = new Error('This User ID and password match more than one cafe. Please sign in using the account email address so CafeKiosk can identify the correct cafe.');
     error.statusCode = 409;
     throw error;

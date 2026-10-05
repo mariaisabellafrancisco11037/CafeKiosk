@@ -38,10 +38,14 @@
     showMessage('Connecting to System Monitor...');
 
     try {
-      const response = await fetch('/api/system-admin/login', {
+      const response = await fetch(`${window.location.origin}/api/system-admin/login`, {
         method: 'POST',
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ username, password })
       });
 
