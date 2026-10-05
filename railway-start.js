@@ -36,7 +36,7 @@ async function start() {
       console.log('🔐 Railway JWT authentication secret initialized for this deployment.');
     }
     if (isRailway() && !process.env.SYSTEM_ADMIN_PASSWORD) {
-      console.log('ℹ️  Railway System Monitor is using the project-fixed System Administrator credential.');
+      console.warn('⚠️  SYSTEM_ADMIN_PASSWORD is not set. Set a private Railway variable before production use.');
     }
     console.log(`🟢 Database configuration found: ${safeDescription(config)}`);
     try {

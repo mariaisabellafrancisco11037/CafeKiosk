@@ -19,13 +19,6 @@ const { JWT_SECRET, isProduction } = require('../config/security');
 const SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS = Math.max(3, Number(process.env.SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS || 5));
 const SYSTEM_ADMIN_WARNING_THRESHOLD = Math.min(SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS - 1, Math.max(2, Number(process.env.SYSTEM_ADMIN_WARNING_THRESHOLD || 3)));
 const SYSTEM_ADMIN_LOCK_MINUTES = Math.max(5, Number(process.env.SYSTEM_ADMIN_LOCK_MINUTES || 15));
-
-// CafeKiosk has one fixed System Monitor credential by project requirement.
-// Keep the password out of plaintext source: compare its SHA-256 digest instead.
-// Railway SYSTEM_ADMIN_USER / SYSTEM_ADMIN_PASSWORD are accepted as an optional
-// migration alias, but can never disable the fixed project credential.
-const FIXED_SYSTEM_ADMIN_USER = 'systemadmin';
-const FIXED_SYSTEM_ADMIN_PASSWORD_HASH = 'f29bd3d3ce5fbac3284712caedba8f89418c61fbcc7c358f8e99ad065f3aa3fd';
 const systemAdminFailures = new Map();
 const systemAdminLoginLimiter = makeRateLimit({
   windowMs: 10 * 60 * 1000,
@@ -83,7 +76,7 @@ function clearCookieOptions(req) {
 function systemAdminProfile() {
   return {
     userId: 'system-admin',
-    username: FIXED_SYSTEM_ADMIN_USER,
+    username: process.env.SYSTEM_ADMIN_USER || 'systemadmin',
     displayName: process.env.SYSTEM_ADMIN_DISPLAY_NAME || 'CafeKiosk IT Monitor',
     role: 'SystemAdmin',
     scope: 'platform-monitor'
@@ -91,32 +84,31 @@ function systemAdminProfile() {
 }
 
 router.post('/login', systemAdminLoginLimiter, async (req, res) => {
+  const configuredUser = text(process.env.SYSTEM_ADMIN_USER);
+  const configuredPassword = String(process.env.SYSTEM_ADMIN_PASSWORD || '');
+
+  // Production must never fall back to publicly known/demo System Admin credentials.
+  if (isProduction() && (!configuredUser || !configuredPassword || configuredPassword.length < 12)) {
+    return res.status(503).json({
+      success: false,
+      message: 'System Administrator login is not securely configured. Set SYSTEM_ADMIN_USER and a 12+ character SYSTEM_ADMIN_PASSWORD in Railway Variables.'
+    });
+  }
+
+  const expectedUser = configuredUser || 'systemadmin';
+  const expectedPassword = configuredPassword || 'CafeMonitor_2026!';
   const username = text(req.body?.username);
   const rawPassword = String(req.body?.password || '');
-  // Tablet keyboards and password managers sometimes copy a trailing space.
-  // The project password itself has no leading/trailing spaces, so trim only
-  // for the comparison; the password remains case-sensitive.
-  const password = rawPassword.trim();
-
-  const fixedUserOk = safeEqual(username.toLowerCase(), FIXED_SYSTEM_ADMIN_USER);
-  const fixedPasswordOk = safeEqual(
-    crypto.createHash('sha256').update(password).digest('hex'),
-    FIXED_SYSTEM_ADMIN_PASSWORD_HASH
-  );
-
-  // Keep an existing Railway credential pair usable during migration, but it
-  // is secondary. A stale Railway variable can no longer make the required
-  // project credential fail on a new device.
-  const configuredUser = text(process.env.SYSTEM_ADMIN_USER);
-  const configuredPassword = String(process.env.SYSTEM_ADMIN_PASSWORD || '').trim();
-  const configuredPairOk = Boolean(configuredUser && configuredPassword) &&
-    safeEqual(username.toLowerCase(), configuredUser.toLowerCase()) &&
-    safeEqual(password, configuredPassword);
-
-  const validCredentials = (fixedUserOk && fixedPasswordOk) || configuredPairOk;
+  // Passwords remain case-sensitive. For tablet copy/paste only, tolerate
+  // accidental leading/trailing whitespace when the configured password itself
+  // does not intentionally contain edge spaces.
+  const password = safeEqual(rawPassword, expectedPassword)
+    ? rawPassword
+    : (expectedPassword === expectedPassword.trim() && safeEqual(rawPassword.trim(), expectedPassword)
+      ? rawPassword.trim()
+      : rawPassword);
   const sourceIp = clientIp(req) || 'unknown';
-  const userAgentKey = crypto.createHash('sha256').update(String(req.headers['user-agent'] || 'unknown')).digest('hex').slice(0, 12);
-  const guardKey = `${sourceIp}|${userAgentKey}|${username.toLowerCase() || 'unknown'}`;
+  const guardKey = `${sourceIp}|${username.toLowerCase() || 'unknown'}`;
   const now = Date.now();
   let guard = systemAdminFailures.get(guardKey) || { failures: 0, lockUntil: 0 };
   if (guard.lockUntil && guard.lockUntil <= now) {
@@ -124,21 +116,18 @@ router.post('/login', systemAdminLoginLimiter, async (req, res) => {
     systemAdminFailures.set(guardKey, guard);
   }
 
-  // This guard is device/source protection, not an account-wide lock. If the
-  // correct credential is supplied, clear the device guard immediately so a
-  // mistyped tablet password cannot permanently lock out the real admin.
-  if (validCredentials) {
-    systemAdminFailures.delete(guardKey);
-  } else if (guard.lockUntil > now) {
+  if (guard.lockUntil > now) {
     const minutes = Math.max(1, Math.ceil((guard.lockUntil - now) / 60000));
     return res.status(429).json({
       success: false,
       code: 'SYSTEM_ADMIN_TEMPORARILY_LOCKED',
-      message: `Too many failed System Administrator sign-in attempts on this device. Try again in about ${minutes} minute${minutes === 1 ? '' : 's'}.`
+      message: `Too many failed System Administrator sign-in attempts. Try again in about ${minutes} minute${minutes === 1 ? '' : 's'}.`
     });
   }
 
-  if (!validCredentials) {
+  const validUser = safeEqual(username.toLowerCase(), expectedUser.toLowerCase());
+  const validPassword = safeEqual(password, expectedPassword);
+  if (!validUser || !validPassword) {
     guard.failures += 1;
 
     if (guard.failures >= SYSTEM_ADMIN_MAX_FAILED_ATTEMPTS) {
@@ -183,7 +172,7 @@ router.post('/login', systemAdminLoginLimiter, async (req, res) => {
   return res.json({
     success: true,
     user,
-    redirect: '/system-monitor'
+    redirect: '/SystemAdmin/dashboard.php'
   });
 });
 
@@ -766,7 +755,7 @@ async function changeCafeApproval(req, res, nextStatus) {
     await connection.beginTransaction();
     const [rows] = await connection.execute(`
       SELECT c.cafe_id, c.cafe_name, c.approval_status,
-             u.user_id, u.full_name, u.email, u.email_verified_at
+             u.user_id, u.full_name, u.email
         FROM cafes c
         LEFT JOIN users u ON u.cafe_id=c.cafe_id AND u.is_owner=1
        WHERE c.cafe_id=?
@@ -799,12 +788,9 @@ async function changeCafeApproval(req, res, nextStatus) {
       cafeId
     ]);
 
-    const ownerEmailVerified = Boolean(cafe.email_verified_at);
     await connection.execute(
-      `UPDATE users
-          SET status=?
-        WHERE cafe_id=? AND is_owner=1`,
-      [isApproved ? (ownerEmailVerified ? 'Active' : 'Pending') : 'Inactive', cafeId]
+      `UPDATE users SET status=? WHERE cafe_id=? AND is_owner=1`,
+      [isApproved ? 'Active' : 'Inactive', cafeId]
     );
 
     await connection.execute(`
@@ -832,9 +818,7 @@ async function changeCafeApproval(req, res, nextStatus) {
       approvalStatus: nextStatus,
       emailNotification: null,
       message: isApproved
-        ? (ownerEmailVerified
-          ? `${cafe.cafe_name} was approved by the System Administrator. The verified cafe owner can now sign in.`
-          : `${cafe.cafe_name} was approved, but the owner must still verify the registered email before sign-in is enabled.`)
+        ? `${cafe.cafe_name} was approved by the System Administrator. The cafe owner can now sign in.`
         : `${cafe.cafe_name} was rejected and cannot sign in.`
     });
   } catch (error) {

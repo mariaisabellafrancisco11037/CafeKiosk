@@ -1,0 +1,20 @@
+CafeKiosk Universal New Account Login
+=====================================
+
+This build applies the cross-device login flow to ALL cafe accounts, including TeaSquared and future registered/provisioned cafes.
+
+Rules:
+- Login identifies a database account by User ID/email + password + requested role.
+- A browser's cached cafeId is NOT required to authenticate a fresh device.
+- The authenticated database account supplies cafeId and cafeName after login.
+- The same current credentials work on laptop, tablet, and phone against the same deployment/database.
+- System Administrator project credential: systemadmin / CafeMonitor2026!
+- System Administrator approval and email verification remain separate security checks.
+- Role email-verification routes are included for Owner/Admin, Manager, and Staff.
+- Existing account passwords are NOT reset by this package.
+- Temporary credentials remain whatever is stored for that account until changed.
+
+TeaSquared example supplied by project owner:
+User ID: Tea_Squared
+Temporary password: TSquared
+These work only if that password is still the current password stored for TeaSquared and the account is not currently locked/inactive/pending.
