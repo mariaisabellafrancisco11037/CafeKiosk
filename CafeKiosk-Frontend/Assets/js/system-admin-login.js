@@ -46,7 +46,12 @@
       });
 
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.message || 'Unable to log in.');
+      if (!response.ok) {
+        const fallback = response.status === 401
+          ? 'Invalid System Administrator credentials for this CafeKiosk server. Make sure the tablet is using the same CafeKiosk URL/server as the computer.'
+          : 'Unable to log in.';
+        throw new Error(data.message || fallback);
+      }
 
       showMessage('Login successful.', true);
       window.location.href = data.redirect || '/system-monitor';

@@ -352,6 +352,7 @@ function publicUser(user) {
     displayName: user.displayName,
     role: user.role,
     cafeId: user.cafeId,
+    cafeName: user.cafeName || '',
     isOwner: Boolean(user.isOwner)
   };
 }
@@ -407,6 +408,7 @@ function getFallbackAccounts() {
       displayName: process.env.ADMIN_DISPLAY_NAME || 'CafeKiosk Administrator',
       role: 'Admin',
       cafeId: process.env.CAFE_ID || 'cafe-1',
+      cafeName: process.env.CAFE_NAME || 'CafeKiosk Demo Cafe',
       isOwner: true
     },
     {
@@ -416,60 +418,14 @@ function getFallbackAccounts() {
       displayName: process.env.STAFF_DISPLAY_NAME || 'CafeKiosk Staff',
       role: 'Staff',
       cafeId: process.env.CAFE_ID || 'cafe-1',
+      cafeName: process.env.CAFE_NAME || 'CafeKiosk Demo Cafe',
       isOwner: false
     }
   ];
 }
 
-async function findDbAccount(identifier, requestedCafeId, requestedRole) {
-  const id = safeText(identifier).toLowerCase();
-  if (!id) return null;
-
-  const selectFields = `
-    SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email,
-           u.password_hash, u.role, u.is_owner, u.status,
-           u.failed_attempts, u.lock_until,
-           c.cafe_name, c.status AS cafe_status,
-           COALESCE(c.approval_status, 'Approved') AS approval_status,
-           c.rejection_reason
-      FROM users u
-      JOIN cafes c ON c.cafe_id = u.cafe_id`;
-
-  let rows;
-  if (id.includes('@')) {
-    [rows] = await pool.execute(
-      `${selectFields}
-       WHERE LOWER(u.email)=?
-       LIMIT 2`,
-      [id]
-    );
-  } else {
-    const roleFilter = requestedRole ? ' AND u.role=?' : '';
-    const params = requestedRole ? [id, requestedCafeId, requestedRole] : [id, requestedCafeId];
-    [rows] = await pool.execute(
-      `${selectFields}
-       WHERE LOWER(u.username)=? AND u.cafe_id=?${roleFilter}
-       LIMIT 2`,
-      params
-    );
-
-    if (!rows.length) {
-      [rows] = await pool.execute(
-        `${selectFields}
-         WHERE LOWER(u.username)=?${requestedRole ? ' AND u.role=?' : ''}
-         LIMIT 3`,
-        requestedRole ? [id, requestedRole] : [id]
-      );
-      if (rows.length > 1) {
-        const error = new Error('This User ID exists in more than one cafe. Log in using your email address instead.');
-        error.statusCode = 409;
-        throw error;
-      }
-    }
-  }
-
-  if (!rows.length) return null;
-  const row = rows[0];
+function mapDbAccountRow(row) {
+  if (!row) return null;
   return {
     userId: row.user_id,
     username: row.username,
@@ -487,6 +443,65 @@ async function findDbAccount(identifier, requestedCafeId, requestedRole) {
     approvalStatus: row.approval_status || 'Approved',
     rejectionReason: row.rejection_reason || ''
   };
+}
+
+async function findDbAccount(identifier, requestedCafeId, requestedRole, password = '') {
+  const id = safeText(identifier).toLowerCase();
+  if (!id) return null;
+
+  const selectFields = `
+    SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email,
+           u.password_hash, u.role, u.is_owner, u.status,
+           u.failed_attempts, u.lock_until,
+           c.cafe_name, c.status AS cafe_status,
+           COALESCE(c.approval_status, 'Approved') AS approval_status,
+           c.rejection_reason
+      FROM users u
+      JOIN cafes c ON c.cafe_id = u.cafe_id`;
+
+  // Login must be portable between browsers/devices. A fresh tablet does not
+  // have the desktop browser's localStorage cafeId, so cafeId is only metadata
+  // after authentication and is never used as an authority for finding the user.
+  const roleFilter = requestedRole ? ' AND u.role=?' : '';
+  const params = requestedRole ? [id, requestedRole] : [id];
+  const identityColumn = id.includes('@') ? 'LOWER(u.email)' : 'LOWER(u.username)';
+
+  const [rows] = await pool.execute(
+    `${selectFields}
+     WHERE ${identityColumn}=?${roleFilter}
+     LIMIT 20`,
+    params
+  );
+
+  if (!rows.length) return null;
+  if (rows.length === 1) return mapDbAccountRow(rows[0]);
+
+  // User IDs are unique only inside a cafe. If the same User ID is used by
+  // multiple cafes, resolve it by the supplied password instead of trusting a
+  // browser-specific cafeId. This is what makes TeaSquared/other tenants work
+  // on a new tablet as well as on the original desktop.
+  const passwordMatches = [];
+  for (const row of rows) {
+    try {
+      if (await bcrypt.compare(String(password || ''), row.password_hash || '')) {
+        passwordMatches.push(row);
+      }
+    } catch (_) {}
+  }
+
+  if (passwordMatches.length === 1) return mapDbAccountRow(passwordMatches[0]);
+
+  if (passwordMatches.length > 1) {
+    const error = new Error('This User ID and password match more than one cafe. Please sign in using the account email address so CafeKiosk can identify the correct cafe.');
+    error.statusCode = 409;
+    throw error;
+  }
+
+  // Do not fall through to a demo account when a real database identity exists
+  // but the password is wrong.
+  const error = new Error('Invalid User ID/email or password.');
+  error.statusCode = 401;
+  throw error;
 }
 
 async function recordLoginAttempt(username, userId, status, req, cafeId) {
@@ -950,7 +965,9 @@ exports.login = async (req, res) => {
   const username = safeText(req.body?.username || req.body?.userId);
   const password = String(req.body?.password || '');
   const requestedRole = normalizeRole(req.body?.role);
-  const requestedCafeId = safeText(req.body?.cafeId) || 'cafe-1';
+  // A browser/device cafeId is never trusted for login tenant selection.
+  // It may be absent on a fresh tablet and stale on a shared device.
+  const requestedCafeId = safeText(req.body?.cafeId);
 
   if (!username || !password) {
     return res.status(400).json({ success: false, message: 'User ID/email and password are required.' });
@@ -960,7 +977,7 @@ exports.login = async (req, res) => {
   let dbAvailable = true;
 
   try {
-    account = await findDbAccount(username, requestedCafeId, requestedRole);
+    account = await findDbAccount(username, requestedCafeId, requestedRole, password);
   } catch (error) {
     if (error.statusCode) {
       return res.status(error.statusCode).json({ success: false, message: error.message });

@@ -50,9 +50,9 @@
 
     function resolveApiOrigin() {
         if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-            const port = window.location.port;
-            if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
-            return `${window.location.protocol}//${window.location.hostname}:5000`;
+            // Authentication is same-origin so LAN tablets, Railway HTTPS and
+            // reverse proxies all use the exact server that rendered the page.
+            return window.location.origin;
         }
         const saved = String(localStorage.getItem("cafeBackendUrl") || "").trim();
         if (saved) return saved.replace(/\/$/, "");

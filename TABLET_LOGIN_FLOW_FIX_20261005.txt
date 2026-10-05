@@ -1,0 +1,37 @@
+CafeKiosk - Cross-Device / Tablet Login Flow Fix
+Date: 2026-10-05
+
+What was fixed
+--------------
+1. Login no longer uses a browser's saved cafeId (or cafe-1) to decide which cafe account is authenticating.
+   A fresh tablet therefore does not accidentally try to sign a TeaSquared user into the demo cafe context.
+
+2. Duplicate User IDs across different cafes are resolved by the submitted password when possible.
+   If the same User ID + same password exists in more than one cafe, CafeKiosk safely asks the user to sign in using the registered email address.
+
+3. The login response now includes cafeName.
+   A fresh device receives and stores the correct cafe identity immediately after successful login.
+
+4. Login/auth API requests now stay on the same origin that rendered CafeKiosk.
+   This removes browser/device problems caused by forcing another port and improves LAN, Railway, proxy, and tablet behavior.
+
+5. Login pages were reworked for phones, tablets, landscape screens, split-screen widths, safe areas, and short-height devices.
+   Inputs use a 16px mobile font to prevent iPad/iPhone focus zoom, and short landscape layouts scroll instead of clipping.
+
+6. Auth assets were cache-busted so tablets do not keep an older login script after deployment.
+
+7. System Administrator login now includes clearer cross-device guidance and tablet-safe input behavior.
+
+Important testing note
+----------------------
+A local CafeKiosk server and the Railway deployment are two different running environments unless they point to the same MySQL database and use the same System Administrator environment variables.
+
+For a valid comparison, open the SAME CafeKiosk base URL on both the computer and tablet:
+- Railway: use the Railway HTTPS URL on both devices, or
+- LAN: use the laptop's printed http://<LAN-IP>:5000 URL on the tablet and the same server on the computer.
+
+System Administrator credentials on Railway come from SYSTEM_ADMIN_USER and SYSTEM_ADMIN_PASSWORD. Local development may use local fallback credentials when those variables are not configured. Do not weaken the Railway security fallback just to make local credentials work online.
+
+Validation
+----------
+The project's npm test command passes after these changes.

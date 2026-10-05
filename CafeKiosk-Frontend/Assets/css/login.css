@@ -1078,3 +1078,95 @@ and (orientation: landscape) {
   color: var(--brown-dark);
   text-decoration: underline;
 }
+
+/* =========================================================
+   2026-10-05 CROSS-DEVICE LOGIN FLOW
+   Phone / tablet / desktop share the same stable auth layout.
+========================================================= */
+html { min-height: 100%; background: var(--bg); }
+.auth-body {
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding: 0;
+  overscroll-behavior-y: contain;
+}
+.role-page,
+.login-page {
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding:
+    max(20px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
+}
+.role-card,
+.login-card { max-width: 100%; }
+.login-card { margin: auto; }
+.login-form input,
+.login-button,
+.forgot-button,
+.role-button { touch-action: manipulation; }
+.line-input-wrap input { font-size: 16px; } /* prevents iOS zoom on focus */
+
+/* Most tablets: keep the card compact, centered, and fully reachable. */
+@media (min-width: 601px) and (max-width: 1100px) {
+  .role-page,
+  .login-page { padding: 28px clamp(24px, 6vw, 64px); }
+  .role-card { width: min(520px, 86vw); }
+  .login-card {
+    width: min(520px, 82vw);
+    padding: 36px clamp(34px, 6vw, 48px) 30px;
+  }
+  .auth-logo-large { width: 172px; height: 172px; }
+  .auth-logo { width: 116px; height: 116px; }
+  .role-actions { width: min(320px, 72vw); }
+  .role-button { min-height: 58px; }
+  .line-input-wrap input { min-height: 52px; }
+  .login-button, .forgot-button { min-height: 50px; }
+}
+
+/* Phones and narrow split-screen tablet windows. */
+@media (max-width: 600px) {
+  .role-page,
+  .login-page {
+    align-items: flex-start;
+    padding-top: max(18px, env(safe-area-inset-top));
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+  }
+  .role-card,
+  .login-card { width: 100%; }
+  .login-card {
+    padding: 26px 18px 22px;
+    border-radius: 18px;
+  }
+  .auth-logo-large { width: min(148px, 38vw); height: min(148px, 38vw); }
+  .auth-logo { width: min(106px, 28vw); height: min(106px, 28vw); }
+  .role-actions { width: 100%; max-width: 330px; }
+  .role-button { min-height: 54px; }
+  .back-link { width: 42px; height: 42px; }
+  .signup-links { max-width: 100%; text-align: center; }
+}
+
+/* Short landscape tablets/phones: scroll vertically instead of clipping. */
+@media (max-height: 760px) and (orientation: landscape) {
+  .role-page,
+  .login-page {
+    min-height: 100dvh;
+    height: auto;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+  .login-card { margin: 0 auto; }
+  .auth-logo { width: 76px; height: 76px; }
+  .auth-logo-large { width: 104px; height: 104px; }
+  .login-card h1 { margin-bottom: 10px; }
+  .role-title { margin-bottom: 12px; }
+  .login-hint { margin-top: 12px; }
+}
+
+/* Large desktop screens: avoid an oversized floating form. */
+@media (min-width: 1440px) {
+  .login-card { width: 470px; }
+  .role-card { width: 480px; }
+}

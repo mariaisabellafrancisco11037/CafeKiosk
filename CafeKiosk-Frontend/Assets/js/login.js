@@ -66,11 +66,10 @@ const LOGIN_CONFIG = {
 };
 
 
-const CAFE_ID =
-    localStorage.getItem(
-        "cafeId"
-    ) ||
-    "cafe-1";
+// Authentication is intentionally device-independent. The correct cafe is
+// resolved by the server from the submitted account credentials. A cached
+// cafeId from another cafe/browser session must never decide who can log in.
+const CAFE_ID = String(localStorage.getItem("cafeId") || "").trim();
 
 
 // ============================================================
@@ -79,9 +78,10 @@ const CAFE_ID =
 
 function getBackendOrigin() {
     if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-        const port = window.location.port;
-        if (!port || port === "80" || port === "443" || port === "5000") return window.location.origin;
-        return `${window.location.protocol}//${window.location.hostname}:5000`;
+        // CafeKiosk serves its pages and API from the same Node origin. Keeping
+        // auth same-origin avoids tablet/reverse-proxy/LAN port mismatches and
+        // ensures HttpOnly cookies are sent to the server that rendered the page.
+        return window.location.origin;
     }
     const saved = String(localStorage.getItem("cafeBackendUrl") || "").trim();
     if (saved) return saved.replace(/\/$/, "");
@@ -707,10 +707,7 @@ async function handleLogin(
                             password,
 
                             role:
-                                config.role,
-
-                            cafeId:
-                                CAFE_ID
+                                config.role
                         })
 
                 }
@@ -796,7 +793,7 @@ async function handleLogin(
         window.location.href =
             getRoleRedirect(
                 formRole,
-                config.redirect
+                data.redirect || config.redirect
             );
 
 
@@ -811,7 +808,7 @@ async function handleLogin(
         showMessage(
             formRole,
             error.message ||
-            "Unable to connect to the server."
+            "Unable to connect to CafeKiosk. Make sure this device is opening the same CafeKiosk server as the computer."
         );
 
 

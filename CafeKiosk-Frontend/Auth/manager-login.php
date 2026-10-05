@@ -13,7 +13,7 @@
 
   <link
     rel="stylesheet"
-    href="../Assets/css/login.css"
+    href="../Assets/css/login.css?v=20261005-tablet-auth-v1"
   >
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="/Assets/css/message-dialog.css?v=logout-confirm-v2">
@@ -70,7 +70,7 @@
             name="userId"
             type="text"
             placeholder="Enter your User ID"
-            autocomplete="username"
+            autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"
             maxlength="80"
             required
           >
@@ -137,7 +137,7 @@
 
   </main>
 
-  <script src="../Assets/js/login.js?v=server-auth-cookie-v2"></script>
+  <script src="../Assets/js/login.js?v=20261005-tablet-auth-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/password-visibility.js?v=1"></script>
