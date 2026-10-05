@@ -375,7 +375,7 @@
       return;
     }
 
-    if (submit) { submit.disabled = true; submit.textContent = 'Updating...'; }
+    if (submit) { submit.disabled = true; submit.textContent = 'Sending...'; }
     try {
       const response = await window.CafeAuth.apiFetch(`${window.CafeAuth.API_ORIGIN}/api/auth/change-user-id`, {
         method: 'POST',
@@ -423,11 +423,11 @@
           <label>Current Email<input name="currentEmail" type="email" readonly></label>
           <label>New Email<input name="newEmail" type="email" maxlength="190" autocomplete="email" placeholder="name@example.com" required></label>
           <label>Current Password<input name="currentPassword" type="password" autocomplete="current-password" required></label>
-          <p class="ckp-password-note">This becomes your login and password-recovery email. Make sure it is an address you can access. Your current CafeKiosk session will stay signed in.</p>
+          <p class="ckp-password-note">CafeKiosk will send a one-time role-based verification link to the new address. Your current email remains active until verification succeeds.</p>
           <div class="ckp-form-message" id="ckpEmailMessage" aria-live="polite"></div>
           <div class="ckp-dialog-actions">
             <button type="button" class="ckp-secondary" data-ckp-close-email>Cancel</button>
-            <button type="submit" class="ckp-primary">Update Email</button>
+            <button type="submit" class="ckp-primary">Send Verification</button>
           </div>
         </form>
       </section>`;
@@ -495,7 +495,7 @@
       return;
     }
 
-    if (submit) { submit.disabled = true; submit.textContent = 'Updating...'; }
+    if (submit) { submit.disabled = true; submit.textContent = 'Sending...'; }
     if (message) { message.textContent = ''; message.className = 'ckp-form-message'; }
 
     try {
@@ -507,25 +507,27 @@
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || !payload.success) throw new Error(payload.message || 'Unable to change email address.');
 
-      if (payload.user) {
+      if (payload.user && !payload.pendingVerification) {
         detailedProfile = { ...(detailedProfile || {}), ...payload.user };
         updateStoredEmail(payload.user);
         renderProfileEverywhere();
       }
       if (message) {
-        message.textContent = payload.message || 'Email address updated successfully.';
+        message.textContent = payload.message || (payload.pendingVerification
+          ? 'Verification email sent. Your current email remains unchanged until you confirm the new address.'
+          : 'Email address updated successfully.');
         message.className = 'ckp-form-message success';
       }
       const passwordInput = form.querySelector('[name="currentPassword"]');
       if (passwordInput) passwordInput.value = '';
       const current = form.querySelector('[name="currentEmail"]');
-      if (current) current.value = payload.user?.email || newEmail;
+      if (current && !payload.pendingVerification) current.value = payload.user?.email || newEmail;
       const newInput = form.querySelector('[name="newEmail"]');
       if (newInput) newInput.value = '';
     } catch (error) {
       if (message) { message.textContent = error.message || 'Unable to change email address.'; message.className = 'ckp-form-message error'; }
     } finally {
-      if (submit) { submit.disabled = false; submit.textContent = 'Update Email'; }
+      if (submit) { submit.disabled = false; submit.textContent = 'Send Verification'; }
     }
   }
 
@@ -611,7 +613,7 @@
       return;
     }
 
-    if (submit) { submit.disabled = true; submit.textContent = 'Updating...'; }
+    if (submit) { submit.disabled = true; submit.textContent = 'Sending...'; }
     if (msg) { msg.textContent = ''; msg.className = 'ckp-form-message'; }
 
     try {

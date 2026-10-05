@@ -1,0 +1,45 @@
+CafeKiosk authentication + role email verification fix — 2026-10-05
+
+1. System Monitor login
+- The required project System Administrator ID is fixed to: systemadmin
+- The project System Administrator password selected by the owner is accepted on every device/deployment even if Railway still contains older SYSTEM_ADMIN_* variables.
+- The password is not stored as plaintext in routes/systemAdmin.js; the fixed password is checked through a SHA-256 digest.
+- Existing Railway SYSTEM_ADMIN_USER / SYSTEM_ADMIN_PASSWORD can remain as a temporary compatibility alias, but they can no longer override/break the fixed project credential.
+- A correct credential clears that device/source's temporary failure guard.
+- Failed-login guards include a user-agent device key so a tablet typo does not share the same in-memory guard with a laptop on the same Wi-Fi.
+
+2. Owner email verification 404 fixed
+- /api/auth/verify-owner-email now exists again.
+- Old owner verification links created by earlier builds are supported through the legacy users.owner_verify_token_hash fields.
+- New owner signups create a one-time database-backed verification token with a 30-minute expiry.
+- Email verification no longer auto-approves a cafe. Owner email verification and System Administrator approval are two separate requirements.
+
+3. Role-based email verification
+- Generic: /api/auth/verify-email
+- Owner: /api/auth/verify-owner-email
+- Admin: /api/auth/verify-admin-email
+- Manager: /api/auth/verify-manager-email
+- Staff: /api/auth/verify-staff-email
+- Tokens are bound to a user, role scope, purpose, expiry and optional pending email.
+- Tokens are stored hashed and are single-use.
+- A newer token invalidates older unused tokens for the same purpose.
+
+4. Secure email changes for Admin / Owner / Manager / Staff
+- Changing an email no longer changes it immediately.
+- The current password is verified first.
+- CafeKiosk sends a role-specific one-time verification link to the new email.
+- The old email remains active until the new address is verified.
+- After verification, old password-reset links and active sessions are revoked so the user signs in again with the confirmed identity.
+- Owner email changes also synchronize the cafe/store contact email.
+
+5. Owner approval interaction
+- If System Admin approves before owner email verification, the owner remains Pending until email verification succeeds.
+- If owner email verification happens first, the cafe still remains Pending until System Admin approval.
+- Only after both requirements are satisfied does the owner become Active.
+
+6. Recovery endpoints
+- POST /api/auth/email-verification/resend
+- POST /api/auth/email-verification/request (authenticated account)
+
+Validation
+- npm test passes after these changes.

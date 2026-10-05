@@ -5,7 +5,7 @@ const { ensureApprovalPinSchema, getUserApprovalPinStatus, verifyUserApprovalPin
 const pool = require('../config/dbPool');
 const { addAuditLog } = require('../services/auditLogStore');
 const kioskAccessStore = require('../services/kioskAccessStore');
-const { sendStaffInvitation, sendPasswordResetEmail, sendCafeRegistrationNotification, getEmailConfig } = require('../services/emailService');
+const { sendStaffInvitation, sendPasswordResetEmail, sendCafeRegistrationNotification, sendOwnerVerificationEmail, sendRoleVerificationEmail, getEmailConfig } = require('../services/emailService');
 const { buildPublicUrl } = require('../services/publicUrlService');
 const { createSecurityAlert, clientIp } = require('../services/securityAlertService');
 const { ensureSessionSchema, createSession, attachTokenHash, revokeSession, revokeAllUserSessions, SESSION_HOURS } = require('../services/authSessionService');
@@ -46,6 +46,88 @@ function cookieNameForRole(value) {
 
 function sha256(value) {
   return crypto.createHash('sha256').update(String(value ?? '')).digest('hex');
+}
+
+const EMAIL_VERIFICATION_EXPIRES_MINUTES = Math.max(10, Number(process.env.EMAIL_VERIFICATION_EXPIRES_MINUTES) || 30);
+
+function verificationScopeForUser(user = {}) {
+  if (Number(user.is_owner ?? 0) === 1 || user.isOwner === true) return 'Owner';
+  const role = normalizeRole(user.role);
+  return role || 'Staff';
+}
+
+function verificationRouteForScope(scope) {
+  const normalized = safeText(scope).toLowerCase();
+  if (normalized === 'owner') return '/api/auth/verify-owner-email';
+  if (normalized === 'admin') return '/api/auth/verify-admin-email';
+  if (normalized === 'manager') return '/api/auth/verify-manager-email';
+  if (normalized === 'staff') return '/api/auth/verify-staff-email';
+  return '/api/auth/verify-email';
+}
+
+function verificationLoginUrl(scope) {
+  const normalized = safeText(scope).toLowerCase();
+  if (normalized === 'owner' || normalized === 'admin') return '/admin-login';
+  if (normalized === 'manager') return '/manager-login';
+  if (normalized === 'staff') return '/staff-login';
+  return '/login';
+}
+
+function htmlEscape(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderEmailVerificationPage(res, { ok, title, message, scope, statusCode, showLogin = true }) {
+  const loginUrl = verificationLoginUrl(scope);
+  const safeTitle = htmlEscape(title || (ok ? 'Email verified' : 'Verification failed'));
+  const safeMessage = htmlEscape(message || '');
+  const roleText = htmlEscape(scope || 'Account');
+  const button = ok && showLogin
+    ? `<a href="${loginUrl}" style="display:inline-block;margin-top:18px;background:#4f9872;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700">Continue to ${roleText} Login</a>`
+    : '<a href="/login" style="display:inline-block;margin-top:18px;color:#356f55;font-weight:700">Back to CafeKiosk Login</a>';
+  return res.status(statusCode || (ok ? 200 : 400)).send(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title></head><body style="margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f1e8;color:#2f2a24;display:grid;place-items:center;min-height:100vh;padding:18px;box-sizing:border-box"><main style="width:min(560px,92vw);background:#fff;border:1px solid #e4dac8;border-radius:18px;padding:34px;text-align:center;box-shadow:0 12px 35px rgba(0,0,0,.08);box-sizing:border-box"><div style="width:60px;height:60px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:${ok ? '#e9f5ee' : '#fdeceb'};font-size:28px">${ok ? '✓' : '!'}</div><h1 style="margin:0 0 12px;color:#234a3b">${safeTitle}</h1><p style="line-height:1.65;margin:0;color:#5f574e">${safeMessage}</p>${button}<p style="margin-top:28px;font-size:12px;color:#7a6e61">Powered by CafeKiosk</p></main></body></html>`);
+}
+
+async function issueEmailVerificationToken(connection, { userId, roleScope, purpose = 'account-verification', pendingEmail = null }) {
+  const token = crypto.randomBytes(32).toString('hex');
+  const tokenHash = sha256(token);
+  const expiresAt = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRES_MINUTES * 60 * 1000);
+
+  // Only the newest unused token for the same user/purpose should remain valid.
+  await connection.execute(
+    `DELETE FROM email_verification_tokens WHERE user_id=? AND purpose=? AND verified_at IS NULL`,
+    [userId, purpose]
+  );
+  await connection.execute(
+    `INSERT INTO email_verification_tokens
+       (user_id, token_hash, expires_at, verified_at, role_scope, purpose, pending_email)
+     VALUES (?, ?, ?, NULL, ?, ?, ?)`,
+    [userId, tokenHash, expiresAt, roleScope, purpose, pendingEmail || null]
+  );
+  return { token, tokenHash, expiresAt };
+}
+
+async function sendVerificationTokenEmail(req, user, tokenInfo, options = {}) {
+  const scope = safeText(options.scope || verificationScopeForUser(user));
+  const targetEmail = safeText(options.pendingEmail || user.email).toLowerCase();
+  const route = verificationRouteForScope(scope);
+  const verifyUrl = buildPublicUrl(req, `${route}?token=${encodeURIComponent(tokenInfo.token)}`);
+  const sender = scope === 'Owner' ? sendOwnerVerificationEmail : sendRoleVerificationEmail;
+  return sender({
+    to: targetEmail,
+    cafeName: safeText(user.cafe_name || user.cafeName) || 'CafeKiosk',
+    ownerName: safeText(user.full_name || user.displayName || user.username),
+    fullName: safeText(user.full_name || user.displayName || user.username),
+    role: scope,
+    verifyUrl,
+    expiresMinutes: EMAIL_VERIFICATION_EXPIRES_MINUTES,
+    pendingEmail: options.pendingEmail || null
+  });
 }
 
 
@@ -206,6 +288,11 @@ async function ensureAuthSignupSchema(connection) {
       KEY idx_email_verification_user (user_id, expires_at)
     ) ENGINE=InnoDB
   `);
+  // Role-scoped verification keeps one token usable only for the role/purpose
+  // it was issued for. Existing installations are upgraded in-place.
+  await addColumnIfMissing(connection, 'email_verification_tokens', 'role_scope', "VARCHAR(30) NOT NULL DEFAULT 'Admin'");
+  await addColumnIfMissing(connection, 'email_verification_tokens', 'purpose', "VARCHAR(40) NOT NULL DEFAULT 'account-verification'");
+  await addColumnIfMissing(connection, 'email_verification_tokens', 'pending_email', 'VARCHAR(190) NULL');
 
   await connection.query(`
     CREATE TABLE IF NOT EXISTS password_reset_tokens (
@@ -1472,6 +1559,18 @@ exports.ownerSignup = async (req, res) => {
       [cafeId, fullName, username, email, phone || null, passwordHash]
     );
 
+    const verificationToken = await issueEmailVerificationToken(connection, {
+      userId: userResult.insertId,
+      roleScope: 'Owner',
+      purpose: 'owner-signup'
+    });
+    // Keep the legacy owner token columns synchronized so verification links
+    // already sent by older CafeKiosk builds remain compatible with this build.
+    await connection.execute(
+      `UPDATE users SET owner_verify_token_hash=?, owner_verify_expires_at=? WHERE user_id=?`,
+      [verificationToken.tokenHash, verificationToken.expiresAt, userResult.insertId]
+    );
+
     // A newly registered cafe intentionally starts with an empty catalog.
     // The CafeKiosk Demo Cafe (cafe-1) keeps its seeded demo categories/items,
     // but real cafe owners create categories and products that match their own menu.
@@ -1494,11 +1593,41 @@ exports.ownerSignup = async (req, res) => {
 
     await connection.commit();
 
+    const verificationEmail = await sendVerificationTokenEmail(req, {
+      user_id: userResult.insertId,
+      cafe_id: cafeId,
+      cafe_name: cafeName,
+      full_name: fullName,
+      username,
+      email,
+      role: 'Admin',
+      is_owner: 1
+    }, verificationToken, { scope: 'Owner' }).catch(error => ({
+      sent: false,
+      configured: true,
+      error: error?.message || 'Verification email failed.'
+    }));
+
+    // System Administrator approval and owner email verification are separate
+    // requirements. Sending this notification never auto-approves the cafe.
+    const systemAdminNotification = await sendCafeRegistrationNotification({
+      cafeName,
+      cafeId,
+      ownerName: fullName,
+      ownerEmail: email,
+      ownerPhone: phone
+    }).catch(error => ({ sent: false, error: error?.message || 'System Administrator notification failed.' }));
+
     return res.status(201).json({
       success: true,
       pendingApproval: true,
-      emailVerificationRequired: false,
-      message: 'Registration submitted for System Administrator approval. You can sign in after the System Administrator approves your cafe account.',
+      emailVerificationRequired: true,
+      verificationEmailSent: Boolean(verificationEmail?.sent),
+      systemAdminNotificationSent: Boolean(systemAdminNotification?.sent),
+      message: verificationEmail?.sent
+        ? 'Registration submitted. Verify the owner email using the secure link, then wait for System Administrator approval.'
+        : 'Registration submitted, but the owner verification email could not be delivered. Use Resend Verification or contact the System Administrator.',
+      emailError: verificationEmail?.sent ? undefined : verificationEmail?.error,
       cafeId,
       userId: userResult.insertId,
       kioskSlug,
@@ -1513,6 +1642,366 @@ exports.ownerSignup = async (req, res) => {
       return res.status(409).json({ success: false, message: 'The username or email is already in use.' });
     }
     return res.status(500).json({ success: false, message: 'Unable to create the cafe account.' });
+  } finally {
+    connection.release();
+  }
+};
+
+
+exports.verifyEmail = async (req, res) => {
+  const token = safeText(req.query?.token);
+  const expectedScope = safeText(req.emailVerificationScope || '');
+  if (!/^[a-f0-9]{64}$/i.test(token)) {
+    return renderEmailVerificationPage(res, {
+      ok: false,
+      title: 'Invalid verification link',
+      message: 'This CafeKiosk email-verification link is incomplete or invalid.',
+      scope: expectedScope || 'Account',
+      statusCode: 400
+    });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) {
+    return renderEmailVerificationPage(res, {
+      ok: false,
+      title: 'Verification unavailable',
+      message: 'CafeKiosk could not connect to the database. Please try the link again shortly.',
+      scope: expectedScope || 'Account',
+      statusCode: 503
+    });
+  }
+
+  let transactionOpen = false;
+  try {
+    await ensureAuthSignupSchema(connection);
+    await connection.beginTransaction();
+    transactionOpen = true;
+    const tokenHash = sha256(token);
+
+    const [rows] = await connection.execute(
+      `SELECT v.verification_id, v.user_id, v.expires_at, v.verified_at,
+              v.role_scope, v.purpose, v.pending_email,
+              u.cafe_id, u.full_name, u.username, u.email, u.role, u.is_owner,
+              u.status AS user_status, u.email_verified_at,
+              c.cafe_name, c.approval_status, c.status AS cafe_status
+         FROM email_verification_tokens v
+         JOIN users u ON u.user_id=v.user_id
+         LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE v.token_hash=?
+        LIMIT 1
+        FOR UPDATE`,
+      [tokenHash]
+    );
+
+    let row = rows[0] || null;
+    let legacyOwnerToken = false;
+
+    // Backward compatibility: older CafeKiosk versions stored the owner token
+    // directly on users.owner_verify_token_hash. This makes links already sent
+    // before this fix usable instead of producing a 404/invalid result.
+    if (!row && (!expectedScope || expectedScope.toLowerCase() === 'owner')) {
+      const [legacyRows] = await connection.execute(
+        `SELECT NULL AS verification_id, u.user_id, u.owner_verify_expires_at AS expires_at,
+                NULL AS verified_at, 'Owner' AS role_scope, 'owner-signup' AS purpose,
+                NULL AS pending_email, u.cafe_id, u.full_name, u.username, u.email,
+                u.role, u.is_owner, u.status AS user_status, u.email_verified_at,
+                c.cafe_name, c.approval_status, c.status AS cafe_status
+           FROM users u
+           LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+          WHERE u.is_owner=1 AND u.owner_verify_token_hash=?
+          LIMIT 1
+          FOR UPDATE`,
+        [tokenHash]
+      );
+      row = legacyRows[0] || null;
+      legacyOwnerToken = Boolean(row);
+    }
+
+    if (!row) {
+      await connection.rollback();
+      transactionOpen = false;
+      return renderEmailVerificationPage(res, {
+        ok: false,
+        title: 'Verification link not found',
+        message: 'This verification link is invalid, expired, or has already been replaced by a newer link.',
+        scope: expectedScope || 'Account',
+        statusCode: 404
+      });
+    }
+
+    const actualScope = verificationScopeForUser({ role: row.role, is_owner: row.is_owner });
+    const tokenScope = safeText(row.role_scope || actualScope);
+    const scopeMatches = !expectedScope || expectedScope.toLowerCase() === actualScope.toLowerCase();
+    const tokenMatchesRole = tokenScope.toLowerCase() === actualScope.toLowerCase();
+    if (!scopeMatches || !tokenMatchesRole) {
+      await connection.rollback();
+      transactionOpen = false;
+      return renderEmailVerificationPage(res, {
+        ok: false,
+        title: 'Role verification mismatch',
+        message: `This secure link was not issued for the ${expectedScope || actualScope} role.`,
+        scope: expectedScope || actualScope,
+        statusCode: 403
+      });
+    }
+
+    if (row.verified_at) {
+      await connection.rollback();
+      transactionOpen = false;
+      return renderEmailVerificationPage(res, {
+        ok: false,
+        title: 'Link already used',
+        message: 'This email-verification link has already been used. Sign in normally or request a new verification link if needed.',
+        scope: actualScope,
+        statusCode: 410
+      });
+    }
+
+    const expiresAt = row.expires_at ? new Date(row.expires_at) : null;
+    if (!expiresAt || !Number.isFinite(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+      await connection.rollback();
+      transactionOpen = false;
+      return renderEmailVerificationPage(res, {
+        ok: false,
+        title: 'Verification link expired',
+        message: 'This secure verification link has expired. Request a new verification email and use the newest link.',
+        scope: actualScope,
+        statusCode: 410
+      });
+    }
+
+    const pendingEmail = safeText(row.pending_email).toLowerCase();
+    const isEmailChange = safeText(row.purpose).toLowerCase() === 'email-change' && Boolean(pendingEmail);
+
+    if (isEmailChange) {
+      const [duplicates] = await connection.execute(
+        `SELECT user_id FROM users WHERE LOWER(email)=LOWER(?) AND user_id<>? LIMIT 1 FOR UPDATE`,
+        [pendingEmail, row.user_id]
+      );
+      if (duplicates.length) {
+        await connection.rollback();
+        transactionOpen = false;
+        return renderEmailVerificationPage(res, {
+          ok: false,
+          title: 'Email already in use',
+          message: 'That email address is already linked to another CafeKiosk account. Your current login email was not changed.',
+          scope: actualScope,
+          statusCode: 409
+        });
+      }
+
+      await connection.execute(
+        `UPDATE users SET email=?, email_verified_at=NOW(), updated_at=NOW() WHERE user_id=?`,
+        [pendingEmail, row.user_id]
+      );
+      if (actualScope === 'Owner') {
+        try { await connection.execute(`UPDATE cafes SET email=?, updated_at=NOW() WHERE cafe_id=?`, [pendingEmail, row.cafe_id]); } catch (_) {}
+        try { await connection.execute(`UPDATE store_settings SET email=? WHERE cafe_id=?`, [pendingEmail, row.cafe_id]); } catch (_) {}
+      }
+      try {
+        await connection.execute('DELETE FROM password_reset_tokens WHERE user_id=?', [row.user_id]);
+      } catch (_) {}
+      try {
+        await revokeAllUserSessions(row.user_id, connection);
+      } catch (_) {}
+    } else {
+      const approvedCafe = String(row.approval_status || 'Approved').toLowerCase() === 'approved' &&
+        String(row.cafe_status || 'Active').toLowerCase() === 'active';
+      if (actualScope === 'Owner') {
+        await connection.execute(
+          `UPDATE users
+              SET email_verified_at=NOW(),
+                  status=CASE WHEN ? THEN 'Active' ELSE status END,
+                  owner_verify_token_hash=NULL,
+                  owner_verify_expires_at=NULL,
+                  updated_at=NOW()
+            WHERE user_id=?`,
+          [approvedCafe ? 1 : 0, row.user_id]
+        );
+      } else {
+        await connection.execute(
+          `UPDATE users SET email_verified_at=NOW(), updated_at=NOW() WHERE user_id=?`,
+          [row.user_id]
+        );
+      }
+    }
+
+    if (!legacyOwnerToken && row.verification_id) {
+      await connection.execute(
+        `UPDATE email_verification_tokens SET verified_at=NOW() WHERE verification_id=?`,
+        [row.verification_id]
+      );
+    }
+    // Invalidate every other outstanding verification for the same account and
+    // purpose; a one-time token must not remain reusable after success.
+    await connection.execute(
+      `DELETE FROM email_verification_tokens
+        WHERE user_id=? AND purpose=? AND verified_at IS NULL`,
+      [row.user_id, row.purpose || 'account-verification']
+    );
+
+    await connection.commit();
+    transactionOpen = false;
+
+    const approvalPending = actualScope === 'Owner' && String(row.approval_status || 'Approved').toLowerCase() !== 'approved';
+    const message = isEmailChange
+      ? `The new email address has been verified for your ${actualScope} account. For security, existing login sessions were revoked; sign in again using the verified email or your User ID.`
+      : approvalPending
+        ? 'Your owner email is verified. The cafe is still waiting for System Administrator approval; email verification does not approve the cafe automatically.'
+        : `Your ${actualScope} email has been verified successfully. You can now continue to the correct role login.`;
+
+    try {
+      addAuditLog({
+        cafeId: row.cafe_id,
+        user: row.full_name || row.username || 'CafeKiosk User',
+        userId: String(row.user_id),
+        role: actualScope === 'Owner' ? 'Admin' : actualScope,
+        action: isEmailChange ? 'Verify New Email' : 'Verify Email',
+        category: 'Authentication',
+        details: `${actualScope} email verification completed using a one-time role-scoped token.`,
+        entityId: String(row.user_id),
+        source: 'Email Verification',
+        method: req.method,
+        path: req.path,
+        ip: req.ip || '',
+        statusCode: 200,
+        success: true
+      });
+    } catch (_) {}
+
+    return renderEmailVerificationPage(res, {
+      ok: true,
+      title: isEmailChange ? 'New email verified' : 'Email verified',
+      message,
+      scope: actualScope,
+      statusCode: 200,
+      showLogin: !approvalPending
+    });
+  } catch (error) {
+    if (transactionOpen) {
+      try { await connection.rollback(); } catch (_) {}
+    }
+    console.error('Email verification error:', error);
+    return renderEmailVerificationPage(res, {
+      ok: false,
+      title: 'Verification failed',
+      message: 'CafeKiosk could not verify this link. Please request a new verification email and try again.',
+      scope: expectedScope || 'Account',
+      statusCode: 500
+    });
+  } finally {
+    connection.release();
+  }
+};
+
+exports.resendEmailVerification = async (req, res) => {
+  const email = safeText(req.body?.email).toLowerCase();
+  const requestedScope = safeText(req.body?.role || req.body?.scope);
+  const genericMessage = 'If an unverified CafeKiosk account matches those details, a new secure verification link has been sent.';
+
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(200).json({ success: true, message: genericMessage });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return res.status(503).json({ success: false, message: 'Email verification is temporarily unavailable.' });
+
+  try {
+    await ensureAuthSignupSchema(connection);
+    const [rows] = await connection.execute(
+      `SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email, u.role, u.is_owner,
+              u.email_verified_at, c.cafe_name
+         FROM users u
+         LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE LOWER(u.email)=LOWER(?)
+        ORDER BY u.user_id ASC
+        LIMIT 5`,
+      [email]
+    );
+
+    const account = rows.find(row => {
+      const scope = verificationScopeForUser({ role: row.role, is_owner: row.is_owner });
+      return !requestedScope || scope.toLowerCase() === requestedScope.toLowerCase() ||
+        (requestedScope.toLowerCase() === 'admin' && scope === 'Owner');
+    });
+
+    if (!account || account.email_verified_at) {
+      return res.json({ success: true, message: genericMessage });
+    }
+
+    const scope = verificationScopeForUser({ role: account.role, is_owner: account.is_owner });
+    const tokenInfo = await issueEmailVerificationToken(connection, {
+      userId: account.user_id,
+      roleScope: scope,
+      purpose: scope === 'Owner' ? 'owner-signup' : 'account-verification'
+    });
+    if (scope === 'Owner') {
+      await connection.execute(
+        `UPDATE users SET owner_verify_token_hash=?, owner_verify_expires_at=? WHERE user_id=?`,
+        [tokenInfo.tokenHash, tokenInfo.expiresAt, account.user_id]
+      );
+    }
+
+    const delivery = await sendVerificationTokenEmail(req, account, tokenInfo, { scope });
+    return res.json({
+      success: true,
+      message: genericMessage,
+      emailSent: Boolean(delivery?.sent)
+    });
+  } catch (error) {
+    console.error('Resend email verification error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to send a new verification email right now.' });
+  } finally {
+    connection.release();
+  }
+};
+
+exports.requestCurrentEmailVerification = async (req, res) => {
+  const userId = Number(req.user?.userId);
+  const cafeId = safeText(req.user?.cafeId);
+  if (!Number.isFinite(userId) || userId <= 0) {
+    return res.status(400).json({ success: false, message: 'A database-backed account is required.' });
+  }
+
+  const connection = await pool.getConnection().catch(() => null);
+  if (!connection) return res.status(503).json({ success: false, message: 'Email verification is temporarily unavailable.' });
+
+  try {
+    await ensureAuthSignupSchema(connection);
+    const [rows] = await connection.execute(
+      `SELECT u.user_id, u.cafe_id, u.full_name, u.username, u.email, u.role, u.is_owner,
+              u.email_verified_at, c.cafe_name
+         FROM users u
+         LEFT JOIN cafes c ON c.cafe_id=u.cafe_id
+        WHERE u.user_id=? AND u.cafe_id=? LIMIT 1`,
+      [userId, cafeId]
+    );
+    if (!rows.length) return res.status(404).json({ success: false, message: 'Account was not found.' });
+    const account = rows[0];
+    if (!account.email) return res.status(400).json({ success: false, message: 'This account does not have an email address.' });
+    if (account.email_verified_at) return res.json({ success: true, alreadyVerified: true, message: 'This role account email is already verified.' });
+
+    const scope = verificationScopeForUser({ role: account.role, is_owner: account.is_owner });
+    const tokenInfo = await issueEmailVerificationToken(connection, {
+      userId: account.user_id,
+      roleScope: scope,
+      purpose: scope === 'Owner' ? 'owner-signup' : 'account-verification'
+    });
+    if (scope === 'Owner') {
+      await connection.execute(
+        `UPDATE users SET owner_verify_token_hash=?, owner_verify_expires_at=? WHERE user_id=?`,
+        [tokenInfo.tokenHash, tokenInfo.expiresAt, account.user_id]
+      );
+    }
+    const delivery = await sendVerificationTokenEmail(req, account, tokenInfo, { scope });
+    if (!delivery?.sent) {
+      return res.status(502).json({ success: false, message: 'A secure token was created, but the verification email could not be delivered.', emailError: delivery?.error });
+    }
+    return res.json({ success: true, role: scope, message: `A one-time ${scope} email-verification link was sent to your registered email.` });
+  } catch (error) {
+    console.error('Request current email verification error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to send the verification email right now.' });
   } finally {
     connection.release();
   }
@@ -2023,16 +2512,11 @@ exports.changeEmail = async (req, res) => {
   const numericUserId = Number(req.user?.userId);
   const cafeId = safeText(req.user?.cafeId) || 'cafe-1';
   if (!Number.isFinite(numericUserId) || numericUserId <= 0) {
-    return res.status(400).json({
-      success: false,
-      message: 'A database-backed CafeKiosk account is required to change the login email.'
-    });
+    return res.status(400).json({ success: false, message: 'A database-backed CafeKiosk account is required to change the login email.' });
   }
 
   const connection = await pool.getConnection().catch(() => null);
-  if (!connection) {
-    return res.status(503).json({ success: false, message: 'Database is unavailable. Please try again shortly.' });
-  }
+  if (!connection) return res.status(503).json({ success: false, message: 'Database is unavailable. Please try again shortly.' });
 
   let transactionOpen = false;
   try {
@@ -2050,59 +2534,54 @@ exports.changeEmail = async (req, res) => {
         FOR UPDATE`,
       [numericUserId, cafeId]
     );
-
     if (!rows.length) {
-      await connection.rollback();
-      transactionOpen = false;
+      await connection.rollback(); transactionOpen = false;
       return res.status(404).json({ success: false, message: 'Account was not found.' });
     }
 
     const account = rows[0];
     const passwordOk = await bcrypt.compare(currentPassword, account.password_hash || '');
     if (!passwordOk) {
-      await connection.rollback();
-      transactionOpen = false;
+      await connection.rollback(); transactionOpen = false;
       return res.status(401).json({ success: false, message: 'Current password is incorrect.' });
     }
-
     if (String(account.email || '').toLowerCase() === newEmail) {
-      await connection.rollback();
-      transactionOpen = false;
+      await connection.rollback(); transactionOpen = false;
       return res.status(400).json({ success: false, message: 'Enter an email address that is different from your current email.' });
     }
 
-    // Email login is global in CafeKiosk, so an email address may belong to only
-    // one user across all cafes.
     const [duplicates] = await connection.execute(
-      `SELECT user_id FROM users
-        WHERE LOWER(email)=LOWER(?) AND user_id<>?
-        LIMIT 1`,
+      `SELECT user_id FROM users WHERE LOWER(email)=LOWER(?) AND user_id<>? LIMIT 1`,
       [newEmail, numericUserId]
     );
     if (duplicates.length) {
-      await connection.rollback();
-      transactionOpen = false;
+      await connection.rollback(); transactionOpen = false;
       return res.status(409).json({ success: false, message: 'That email address is already being used by another CafeKiosk account.' });
     }
 
-    const oldEmail = account.email || '';
-    await connection.execute(
-      `UPDATE users
-          SET email=?, updated_at=NOW()
-        WHERE user_id=? AND cafe_id=?`,
-      [newEmail, numericUserId, cafeId]
-    );
-
-    // A password-reset link issued before the email change should no longer be
-    // usable after the login/recovery address changes.
-    try {
-      if (await tableExists(connection, 'password_reset_tokens')) {
-        await connection.execute('DELETE FROM password_reset_tokens WHERE user_id=?', [numericUserId]);
-      }
-    } catch (_) {}
+    const scope = verificationScopeForUser({ role: account.role, is_owner: account.is_owner });
+    const tokenInfo = await issueEmailVerificationToken(connection, {
+      userId: numericUserId,
+      roleScope: scope,
+      purpose: 'email-change',
+      pendingEmail: newEmail
+    });
 
     await connection.commit();
     transactionOpen = false;
+
+    const delivery = await sendVerificationTokenEmail(req, account, tokenInfo, {
+      scope,
+      pendingEmail: newEmail
+    });
+    if (!delivery?.sent) {
+      return res.status(502).json({
+        success: false,
+        pendingVerification: true,
+        message: 'The email change was not applied. CafeKiosk created a secure verification request, but the verification email could not be delivered.',
+        emailError: delivery?.error
+      });
+    }
 
     try {
       addAuditLog({
@@ -2110,9 +2589,9 @@ exports.changeEmail = async (req, res) => {
         user: account.full_name || account.username || 'CafeKiosk User',
         userId: numericUserId,
         role: account.role || req.user?.role || '',
-        action: 'Change Email',
+        action: 'Request Email Change',
         category: 'Users',
-        details: `Updated the account login/recovery email from ${oldEmail || 'not set'} to ${newEmail}.`,
+        details: `Requested a role-scoped verification link before changing the login/recovery email to ${newEmail}.`,
         entityId: String(numericUserId),
         source: 'Profile',
         method: req.method,
@@ -2125,27 +2604,16 @@ exports.changeEmail = async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Email address updated successfully. Use the new email for login and password recovery.',
-      user: publicUser({
-        userId: numericUserId,
-        username: account.username,
-        email: newEmail,
-        displayName: account.full_name,
-        role: account.role,
-        cafeId,
-        cafeName: account.cafe_name || '',
-        isOwner: Boolean(account.is_owner)
-      })
+      pendingVerification: true,
+      role: scope,
+      pendingEmail: newEmail,
+      currentEmail: account.email || '',
+      message: `A secure ${scope} verification link was sent to ${newEmail}. Your current email stays unchanged until that link is verified.`
     });
   } catch (error) {
-    if (transactionOpen) {
-      try { await connection.rollback(); } catch (_) {}
-    }
-    console.error('Change email error:', error);
-    if (error?.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ success: false, message: 'That email address is already being used by another CafeKiosk account.' });
-    }
-    return res.status(500).json({ success: false, message: 'Unable to update the email address right now.' });
+    if (transactionOpen) { try { await connection.rollback(); } catch (_) {} }
+    console.error('Request email change error:', error);
+    return res.status(500).json({ success: false, message: 'Unable to prepare the email verification right now.' });
   } finally {
     connection.release();
   }

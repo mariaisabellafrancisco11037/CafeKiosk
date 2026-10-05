@@ -32,6 +32,17 @@ router.get('/password-reset/validate', controller.validatePasswordReset);
 router.post('/password-reset', recoveryLimiter, controller.resetPassword);
 
 router.post('/signup/owner', signupLimiter, controller.ownerSignup);
+
+// One-time role-scoped email verification. Keep /verify-owner-email as a
+// permanent compatibility route because older verification emails already use it.
+router.get('/verify-email', controller.verifyEmail);
+router.get('/verify-owner-email', (req, res, next) => { req.emailVerificationScope = 'Owner'; return controller.verifyEmail(req, res, next); });
+router.get('/verify-admin-email', (req, res, next) => { req.emailVerificationScope = 'Admin'; return controller.verifyEmail(req, res, next); });
+router.get('/verify-manager-email', (req, res, next) => { req.emailVerificationScope = 'Manager'; return controller.verifyEmail(req, res, next); });
+router.get('/verify-staff-email', (req, res, next) => { req.emailVerificationScope = 'Staff'; return controller.verifyEmail(req, res, next); });
+router.post('/email-verification/resend', recoveryLimiter, controller.resendEmailVerification);
+router.post('/email-verification/request', recoveryLimiter, verifyToken, controller.requestCurrentEmailVerification);
+
 router.get('/invites/validate', inviteCheckLimiter, controller.validateInvite);
 router.post('/signup/staff', signupLimiter, controller.staffSignup);
 router.post('/invites', requireRole('Admin'), controller.createInvite);
