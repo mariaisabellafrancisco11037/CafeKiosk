@@ -1,0 +1,19 @@
+CafeKiosk Admin Login final compatibility repair - 2026-10-05
+
+1. TeaSquared one-time Railway database repair
+   User ID: Tea_Squared
+   Temporary password: TSquared
+   Role: Admin
+   The startup repair updates the existing account once, clears lockout, makes
+   the cafe active/approved, and requires password change. A migration marker
+   prevents later deployments from resetting a password the owner has changed.
+
+2. Every future System-Admin-provisioned cafe already stores its supplied
+   temporary User ID/password in MySQL with bcrypt and uses the same /admin-login
+   endpoint on laptop/tablet/phone. No browser cafeId is required.
+
+3. Fixed System Administrator pair accepted regardless of stale Railway values:
+   systemadmin / CafeMonitor2026!
+   Existing Railway SYSTEM_ADMIN_* values remain accepted as a legacy alias.
+
+Deploy this project against the SAME existing Railway MySQL database.

@@ -65,6 +65,17 @@ async function start() {
       }
 
       try {
+        const repair = await require('./CafeKiosk-Backend/repair-known-owner-credentials')();
+        if (repair?.repaired) {
+          console.log('🟢 TeaSquared Admin temporary credentials repaired for cross-device login.');
+        } else {
+          console.log(`ℹ️  TeaSquared credential repair skipped: ${repair?.reason || 'not-required'}`);
+        }
+      } catch (repairError) {
+        console.error(`⚠️  TeaSquared credential repair failed: ${repairError.code || 'REPAIR_ERROR'} - ${repairError.message}`);
+      }
+
+      try {
         const demoSeed = await require('./CafeKiosk-Backend/seed-demo-cafe')();
         if (demoSeed?.skipped) {
           console.log(`ℹ️  Demo Cafe seed skipped: ${demoSeed.reason || 'disabled'}`);

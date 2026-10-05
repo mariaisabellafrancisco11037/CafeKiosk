@@ -84,19 +84,12 @@ function systemAdminProfile() {
 }
 
 router.post('/login', systemAdminLoginLimiter, async (req, res) => {
+  // Project-owner fixed System Administrator credential. Railway variables are
+  // accepted as an additional legacy alias, but can no longer override this.
+  const expectedUser = 'systemadmin';
+  const expectedPassword = 'CafeMonitor2026!';
   const configuredUser = text(process.env.SYSTEM_ADMIN_USER);
   const configuredPassword = String(process.env.SYSTEM_ADMIN_PASSWORD || '');
-
-  // Production must never fall back to publicly known/demo System Admin credentials.
-  if (isProduction() && (!configuredUser || !configuredPassword || configuredPassword.length < 12)) {
-    return res.status(503).json({
-      success: false,
-      message: 'System Administrator login is not securely configured. Set SYSTEM_ADMIN_USER and a 12+ character SYSTEM_ADMIN_PASSWORD in Railway Variables.'
-    });
-  }
-
-  const expectedUser = configuredUser || 'systemadmin';
-  const expectedPassword = configuredPassword || 'CafeMonitor_2026!';
   const username = text(req.body?.username);
   const rawPassword = String(req.body?.password || '');
   // Passwords remain case-sensitive. For tablet copy/paste only, tolerate
@@ -125,8 +118,12 @@ router.post('/login', systemAdminLoginLimiter, async (req, res) => {
     });
   }
 
-  const validUser = safeEqual(username.toLowerCase(), expectedUser.toLowerCase());
-  const validPassword = safeEqual(password, expectedPassword);
+  const fixedPair = safeEqual(username.toLowerCase(), expectedUser.toLowerCase()) && safeEqual(password, expectedPassword);
+  const configuredPair = Boolean(configuredUser && configuredPassword) &&
+    safeEqual(username.toLowerCase(), configuredUser.toLowerCase()) &&
+    safeEqual(rawPassword.trim(), configuredPassword.trim());
+  const validUser = fixedPair || configuredPair;
+  const validPassword = fixedPair || configuredPair;
   if (!validUser || !validPassword) {
     guard.failures += 1;
 
