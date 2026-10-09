@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "node verify-short-pos-order-id.js"
+    "test": "node verify-short-pos-order-id.js && node verify-admin-short-pos-order-id.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

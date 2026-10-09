@@ -956,7 +956,7 @@
 
   <script src="/Assets/js/admin-stable/auth-session.js?v=session-role-isolation-20261003-v2"></script>
 
-  <script src="../Assets/js/admin-stable/order-monitor.js?v=admin-stable-20261001"></script>
+  <script src="../Assets/js/admin-stable/order-monitor.js?v=admin-short-pos-id-20261009"></script>
 
   <script src="../Assets/js/admin-stable/uniform-theme.js?v=admin-stable-20261001"></script>
   <script src="../Assets/js/admin-stable/profile-menu.js?v=20261003-change-email-v1"></script>

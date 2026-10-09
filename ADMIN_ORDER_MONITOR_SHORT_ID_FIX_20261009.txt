@@ -1,0 +1,8 @@
+CafeKiosk Admin Order Monitor short POS ID fix - 2026-10-09
+
+- The Admin Order Monitor no longer displays the collision-safe raw POS ID such as POS-20261009-201951-157230.
+- POS orders now display in the familiar compact format such as #POS-1005, #POS-1006, and #POS-1007.
+- The raw unique order number remains internal for database lookups and duplicate safety.
+- Kiosk order ID display is unchanged.
+- No Admin Order Monitor layout or CSS changes were made.
+- Asset version updated so browsers load the corrected script after deployment.

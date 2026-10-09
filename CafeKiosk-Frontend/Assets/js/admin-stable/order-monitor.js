@@ -280,12 +280,29 @@ function convertOrder(order, index = 0) {
   const items = Array.isArray(order.items) ? order.items.map(convertItem) : [];
   const source = formatSource(order.source);
   const orderNumber = String(order.orderNumber || order.id || order.orderId || `${Date.now()}-${index}`);
+
+  // Keep the collision-safe backend order number for lookups, but never show
+  // the long POS timestamp identifier in the Admin Order Monitor. The backend
+  // exposes displayOrderNumber for POS orders (for example 1005). Kiosk order
+  // IDs keep their existing display format.
+  const compactOrderNumber = String(
+    order.displayOrderNumber ??
+    order.display_order_number ??
+    orderNumber
+  ).trim();
+
+  const displayId =
+    source === "Kiosk"
+      ? orderNumber
+      : `POS-${compactOrderNumber.replace(/^POS-|^#/, "")}`;
+
   const subtotal = Number(order.subtotal ?? calculateSubtotal(items)) || 0;
   const discount = Number(order.discountAmount ?? order.discount ?? 0) || 0;
   const total = Number(order.total ?? Math.max(0, subtotal - discount)) || 0;
 
   return {
     id: orderNumber,
+    displayId,
     backendId: String(order.id || order.orderId || order.orderNumber || orderNumber),
     cafeId: order.cafeId || CAFE_ID,
     customer: order.customerName || order.customer || (source === "Kiosk" ? "Kiosk #1" : "Walk-in Customer"),
@@ -1387,7 +1404,7 @@ function getFilteredOrders() {
     if (service !== "ALL" && order.serving.toUpperCase() !== service) return false;
 
     if (search) {
-      const haystack = `${order.id} ${order.customer} ${order.source} ${order.sourceLabel || ""} ${order.serving} ${order.status}`.toLowerCase();
+      const haystack = `${order.displayId || order.id} ${order.id} ${order.customer} ${order.source} ${order.sourceLabel || ""} ${order.serving} ${order.status}`.toLowerCase();
       if (!haystack.includes(search)) return false;
     }
     return true;
@@ -1447,7 +1464,7 @@ function renderTable() {
 
   tbody.innerHTML = pageRows.map(order => `
     <tr>
-      <td class="order-id-cell">#${escapeHTML(order.id)}</td>
+      <td class="order-id-cell">#${escapeHTML(order.displayId || order.id)}</td>
       <td>${escapeHTML(order.customer)}</td>
       <td>${escapeHTML(order.time)}</td>
       <td>${escapeHTML(order.sourceLabel || order.source)}</td>
@@ -1563,7 +1580,7 @@ function renderDetail() {
       <div class="order-detail-content">
 
         <div class="detail-title">
-          Order #${escapeHTML(order.id)}
+          Order #${escapeHTML(order.displayId || order.id)}
         </div>
 
 
@@ -1835,7 +1852,7 @@ function defaultActionForOrder(order) {
 
 function openOrderModal(order) {
   currentModalOrder = order;
-  $("modal-order-id").textContent = `#${order.id}`;
+  $("modal-order-id").textContent = `#${order.displayId || order.id}`;
   $("modal-order-date").textContent = `${order.date} ${order.time}`.trim();
   $("modal-item-count").textContent = `${order.items.length} ${order.items.length === 1 ? "Item" : "Items"}`;
   $("modal-subtotal").textContent = peso(order.subtotal);
@@ -2024,7 +2041,7 @@ async function processVoidRefund() {
           "refund"
             ? "Refund"
             : "Void"
-        } recorded for Order #${order.id}.`
+        } recorded for Order #${order.displayId || order.id}.`
       );
 
 
@@ -2289,7 +2306,7 @@ async function processVoidRefund() {
           "refund"
             ? "Refund"
             : "Void"
-        } payment recorded for Order #${order.id}.`
+        } payment recorded for Order #${order.displayId || order.id}.`
       );
     }
 
