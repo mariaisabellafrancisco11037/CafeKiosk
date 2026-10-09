@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CafeKiosk - Order Queue</title>
-  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=station-layout-v4">
+  <link rel="stylesheet" href="../Assets/css/order-queue.css?v=20261009-forward-confirmation-v1">
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
   <link rel="stylesheet" href="../Assets/css/profile-menu.css?v=20261003-change-email-v1">
@@ -39,6 +39,14 @@
         <div class="live-indicator" aria-label="Live connection status">
           <span class="live-dot"></span>
           <span id="liveStatusText">Live</span>
+        </div>
+      </div>
+
+      <div id="queueForwardStatus" class="queue-forward-status" aria-live="polite">
+        <span class="queue-forward-status-icon" aria-hidden="true">✓</span>
+        <div>
+          <strong id="queueForwardStatusTitle">POS Order Queue Ready</strong>
+          <small id="queueForwardStatusText">New Kiosk and POS orders will appear here automatically.</small>
         </div>
       </div>
 
@@ -296,8 +304,16 @@
     </section>
   </div>
 
+  <div id="queueReceiveToast" class="queue-receive-toast" role="status" aria-live="assertive" aria-atomic="true" hidden>
+    <span class="queue-receive-toast-icon" aria-hidden="true">✓</span>
+    <div>
+      <strong id="queueReceiveToastTitle">New order received</strong>
+      <span id="queueReceiveToastText">Added to the POS Order Queue.</span>
+    </div>
+  </div>
+
   <script src="../Assets/js/auth-session.js?v=pos-order-receive-20261007-v1"></script>
-  <script src="../Assets/js/order-queue.js?v=pos-order-receive-20261007-v1"></script>
+  <script src="../Assets/js/order-queue.js?v=20261009-forward-confirmation-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/profile-menu.js?v=20261003-change-email-v1"></script>

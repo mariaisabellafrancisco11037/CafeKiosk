@@ -1,0 +1,21 @@
+CafeKiosk - POS Order Queue Forward Confirmation Fix
+Date: 2026-10-09
+
+VISIBLE CHANGES
+1. Kiosk receipt shows: "Forwarded to POS Order Queue ✓".
+2. POS Order Queue displays a persistent "POS Order Queue Ready" confirmation bar.
+3. When a new Kiosk/POS order arrives, the POS Order Queue shows a green toast:
+   "Order #... received - ... order was forwarded to the POS Order Queue."
+4. POS-created orders explicitly confirm that they were forwarded to the queue.
+
+RELIABILITY CHANGES
+1. POST /api/orders now returns a forwarding object confirming server persistence,
+   cafe-specific queue forwarding, realtime broadcast status, and connected receivers.
+2. Kiosk does not continue to the receipt page when backend submission fails.
+   It explicitly says the order was NOT forwarded and keeps the cart for retry.
+3. The Order Queue still uses Socket.IO plus REST polling. If Socket.IO is missed,
+   the polling path also shows the receive confirmation when the new order appears.
+
+"Forwarded" means the backend successfully stored the order for the correct cafe and
+published the cafe-specific real-time queue event. If the POS is not open at that exact
+moment, the stored order appears automatically the next time the authorized queue syncs.

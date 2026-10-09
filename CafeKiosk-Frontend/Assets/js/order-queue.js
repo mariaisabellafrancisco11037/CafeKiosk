@@ -685,6 +685,234 @@ const recentRealtimeOrders =
   new Map();
 
 
+const recentQueueConfirmations =
+  new Map();
+
+let queueInitialSyncComplete =
+  false;
+
+let queueReceiveToastTimer =
+  null;
+
+
+function orderConfirmationKey(
+  order
+) {
+
+  return normalizeOrderLookupKey(
+    order?.orderNumber ||
+    order?.apiId ||
+    order?.id
+  );
+
+}
+
+
+function showOrderQueueReceiveConfirmation(
+  order,
+  via = "realtime"
+) {
+
+  if (
+    !order
+  ) {
+    return;
+  }
+
+
+  const normalized =
+    normalizeOrder(
+      order
+    );
+
+  const key =
+    orderConfirmationKey(
+      normalized
+    );
+
+
+  if (
+    !key
+  ) {
+    return;
+  }
+
+
+  const now =
+    Date.now();
+
+  const previous =
+    Number(
+      recentQueueConfirmations.get(
+        key
+      ) ||
+      0
+    );
+
+
+  if (
+    previous &&
+    now - previous <
+      15000
+  ) {
+    return;
+  }
+
+
+  recentQueueConfirmations.set(
+    key,
+    now
+  );
+
+
+  for (
+    const [
+      savedKey,
+      savedAt
+    ] of recentQueueConfirmations
+  ) {
+
+    if (
+      now - savedAt >
+      60000
+    ) {
+      recentQueueConfirmations.delete(
+        savedKey
+      );
+    }
+
+  }
+
+
+  const orderNumber =
+    String(
+      normalized.orderNumber ||
+      normalized.id ||
+      "Order"
+    )
+      .replace(
+        /^#/,
+        ""
+      )
+      .trim();
+
+  const source =
+    String(
+      normalized.source ||
+      "POS"
+    );
+
+
+  const statusTitle =
+    $("queueForwardStatusTitle");
+
+  const statusText =
+    $("queueForwardStatusText");
+
+  const statusBox =
+    $("queueForwardStatus");
+
+
+  if (statusTitle) {
+
+    statusTitle.textContent =
+      `Order #${orderNumber} received in POS Order Queue ✓`;
+
+  }
+
+
+  if (statusText) {
+
+    statusText.textContent =
+      `${source} order confirmed ${via === "polling" ? "by server sync" : "in real time"}.`;
+
+  }
+
+
+  if (statusBox) {
+
+    statusBox.classList.add(
+      "has-new-order"
+    );
+
+    window.setTimeout(
+      () =>
+        statusBox.classList.remove(
+          "has-new-order"
+        ),
+      5000
+    );
+
+  }
+
+
+  const toast =
+    $("queueReceiveToast");
+
+  const toastTitle =
+    $("queueReceiveToastTitle");
+
+  const toastText =
+    $("queueReceiveToastText");
+
+
+  if (
+    !toast ||
+    !toastTitle ||
+    !toastText
+  ) {
+    return;
+  }
+
+
+  toastTitle.textContent =
+    `Order #${orderNumber} received`;
+
+  toastText.textContent =
+    `${source} order was forwarded to the POS Order Queue.`;
+
+  toast.hidden =
+    false;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  if (
+    queueReceiveToastTimer
+  ) {
+
+    window.clearTimeout(
+      queueReceiveToastTimer
+    );
+
+  }
+
+
+  queueReceiveToastTimer =
+    window.setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+        window.setTimeout(
+          () => {
+            toast.hidden =
+              true;
+          },
+          220
+        );
+
+      },
+      5200
+    );
+
+}
+
+
 function normalizeOrderLookupKey(
   value
 ) {
@@ -1755,6 +1983,49 @@ async function fetchOrders() {
     }
 
 
+    if (
+      queueInitialSyncComplete
+    ) {
+
+      const existingKeys =
+        new Set(
+          orders
+            .flatMap(
+              getOrderLookupKeys
+            )
+        );
+
+
+      const newlyArrived =
+        nextOrders
+          .filter(
+            order =>
+              getOrderLookupKeys(
+                order
+              )
+                .every(
+                  key =>
+                    !existingKeys.has(
+                      key
+                    )
+                )
+          );
+
+
+      if (
+        newlyArrived.length
+      ) {
+
+        showOrderQueueReceiveConfirmation(
+          newlyArrived[0],
+          "polling"
+        );
+
+      }
+
+    }
+
+
     const changed =
       queueSnapshot(
         nextOrders
@@ -1766,6 +2037,9 @@ async function fetchOrders() {
 
     orders =
       nextOrders;
+
+    queueInitialSyncComplete =
+      true;
 
 
     if (
@@ -2059,6 +2333,11 @@ function bindSocketEvents(socket) {
         backendOrder
       );
 
+      showOrderQueueReceiveConfirmation(
+        backendOrder,
+        "realtime"
+      );
+
       scheduleQueueSync(
         50
       );
@@ -2082,6 +2361,11 @@ function bindSocketEvents(socket) {
         }
         rememberRealtimeOrder(
           backendOrder
+        );
+
+        showOrderQueueReceiveConfirmation(
+          backendOrder,
+          "realtime"
         );
       }
 

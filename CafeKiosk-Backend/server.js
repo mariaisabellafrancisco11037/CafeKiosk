@@ -1119,6 +1119,9 @@ io.on(
                 socket.data.cafeId =
                     normalizedCafeId;
 
+                socket.data.presenceSurface =
+                    "orderqueue";
+
                 console.log(
                     `📋 Order Queue joined ${room}`
                 );

@@ -1861,6 +1861,32 @@ async function ensureKioskOrderSaved() {
             )
         );
 
+        sessionStorage.setItem(
+            "cafekioskQueueForwardConfirmation",
+            JSON.stringify({
+                ...(data.forwarding || {
+                    forwardedToOrderQueue:
+                        true,
+                    persisted:
+                        true,
+                    connectedReceivers:
+                        0,
+                    message:
+                        "Order forwarded to POS Order Queue."
+                }),
+                orderNumber:
+                    data.order.orderNumber ||
+                    orderPayload.orderNumber,
+                cafeId:
+                    data.order.cafeId ||
+                    orderPayload.cafeId,
+                source:
+                    "Kiosk",
+                confirmedAt:
+                    Date.now()
+            })
+        );
+
 
         if (
             data.order.orderNumber
@@ -2097,6 +2123,136 @@ function clearCurrentOrder() {
 
 
 /* =========================================================
+   POS ORDER QUEUE FORWARD CONFIRMATION
+   ========================================================= */
+
+function renderOrderQueueForwardConfirmation() {
+
+    const box =
+        document.getElementById(
+            "queueForwardMessage"
+        );
+
+    const title =
+        document.getElementById(
+            "queueForwardTitle"
+        );
+
+    const detail =
+        document.getElementById(
+            "queueForwardText"
+        );
+
+
+    if (
+        !box ||
+        !title ||
+        !detail
+    ) {
+        return;
+    }
+
+
+    let confirmation =
+        null;
+
+
+    try {
+
+        confirmation =
+            JSON.parse(
+                sessionStorage.getItem(
+                    "cafekioskQueueForwardConfirmation"
+                ) ||
+                "null"
+            );
+
+    } catch (_) {
+
+        confirmation =
+            null;
+
+    }
+
+
+    const backendOrder =
+        getSavedBackendOrder();
+
+    const orderNumber =
+        String(
+            confirmation?.orderNumber ||
+            backendOrder?.orderNumber ||
+            getOrderNumber() ||
+            ""
+        )
+            .replace(
+                /^#/,
+                ""
+            )
+            .trim();
+
+
+    const forwarded =
+        confirmation?.forwardedToOrderQueue !==
+        false &&
+        Boolean(
+            confirmation ||
+            backendOrder
+        );
+
+
+    if (
+        forwarded
+    ) {
+
+        box.classList.remove(
+            "queue-forward-error"
+        );
+
+        box.classList.add(
+            "queue-forward-confirmed"
+        );
+
+        title.textContent =
+            "Forwarded to POS Order Queue ✓";
+
+        const receiverCount =
+            Number(
+                confirmation?.connectedReceivers ||
+                0
+            );
+
+        detail.textContent =
+            `${orderNumber ? `Order #${orderNumber} ` : "Your order "}` +
+            "was saved on the server and is now available in the POS Order Queue." +
+            (
+                receiverCount > 0
+                    ? ` ${receiverCount} live POS connection${receiverCount === 1 ? "" : "s"} detected.`
+                    : ""
+            );
+
+        return;
+    }
+
+
+    box.classList.remove(
+        "queue-forward-confirmed"
+    );
+
+    box.classList.add(
+        "queue-forward-error"
+    );
+
+    title.textContent =
+        "POS Order Queue confirmation unavailable";
+
+    detail.textContent =
+        "This receipt does not have a server confirmation. Please ask the staff to verify the order before leaving.";
+
+}
+
+
+/* =========================================================
    INITIALIZE RECEIPT
    ========================================================= */
 
@@ -2110,6 +2266,9 @@ function initializeReceipt() {
     console.log(
         "☕ CafeKiosk Digital Receipt Initialized"
     );
+
+
+    renderOrderQueueForwardConfirmation();
 
 
     /* -----------------------------------------------------

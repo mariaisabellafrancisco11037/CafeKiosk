@@ -221,6 +221,79 @@ function emitToCafe(
 }
 
 
+async function getOrderQueueForwardingStatus(
+    req,
+    order,
+    created
+) {
+
+    const io =
+        req.app.get(
+            "io"
+        );
+
+    const cafeId =
+        normalizeCafeId(
+            order?.cafeId
+        );
+
+    const queueRoom =
+        `order-queue-${cafeId}`;
+
+    let connectedReceivers =
+        0;
+
+
+    if (io) {
+
+        try {
+
+            connectedReceivers =
+                (
+                    await io.in(
+                        queueRoom
+                    ).fetchSockets()
+                ).length;
+
+        } catch (error) {
+
+            console.warn(
+                "Unable to count connected POS Order Queue receivers:",
+                error.message
+            );
+
+        }
+
+    }
+
+
+    return {
+        forwardedToOrderQueue:
+            true,
+
+        persisted:
+            true,
+
+        realtimeBroadcast:
+            Boolean(
+                created &&
+                io
+            ),
+
+        connectedReceivers,
+
+        cafeId,
+
+        queueRoom,
+
+        message:
+            created
+                ? "Order forwarded to POS Order Queue."
+                : "Order already exists in the POS Order Queue."
+    };
+}
+
+
 function emitChanged(
     req,
     order,
@@ -512,6 +585,14 @@ exports.createOrder =
             );
 
 
+            const forwarding =
+                await getOrderQueueForwardingStatus(
+                    req,
+                    savedOrder,
+                    created
+                );
+
+
             return res
                 .status(
                     created
@@ -527,8 +608,10 @@ exports.createOrder =
 
                     message:
                         created
-                            ? "Order received successfully."
-                            : "Order already exists.",
+                            ? "Order received and forwarded to the POS Order Queue."
+                            : "Order already exists in the POS Order Queue.",
+
+                    forwarding,
 
                     order:
                         savedOrder

@@ -7,7 +7,7 @@
 
     <title>CafeKiosk - Digital Receipt</title>
 
-    <link rel="stylesheet" href="/Assets/css/checkout.css">
+    <link rel="stylesheet" href="/Assets/css/checkout.css?v=20261009-order-queue-confirmation-v1">
 <link rel="stylesheet" href="/Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="/Assets/css/payment-modal.css?v=payment-modal-v1">
   <link rel="stylesheet" href="/Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -136,12 +136,12 @@
                 <strong id="receiptChange">₱0.00</strong>
             </div>
 
-            <div class="payment-message">
+            <div class="payment-message" id="queueForwardMessage" aria-live="polite">
                 <span class="check-icon">✓</span>
 
                 <div>
-                    <strong>Order Received!</strong>
-                    <p>Your order has been sent to the staff.</p>
+                    <strong id="queueForwardTitle">Forwarded to POS Order Queue ✓</strong>
+                    <p id="queueForwardText">Your order is now available in the staff POS Order Queue.</p>
                 </div>
             </div>
 
@@ -189,7 +189,7 @@
 
 
     <script src="/Assets/js/kiosk-tenant.js?v=1"></script>
-<script src="/Assets/js/checkout.js?v=20261003-checkout-image-sync-v1"></script>
+<script src="/Assets/js/checkout.js?v=20261009-order-queue-confirmation-v1"></script>
 
 <script src="/Assets/js/checkout-discount.js"></script>
   <script src="/Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>

@@ -3354,6 +3354,48 @@ async function confirmOrder() {
     }
 
 
+    const forwardedOrder =
+      result.order ||
+      orderPayload;
+
+    const forwarding =
+      result.forwarding ||
+      {
+        forwardedToOrderQueue:
+          true,
+        persisted:
+          true,
+        realtimeBroadcast:
+          true,
+        connectedReceivers:
+          0,
+        message:
+          "Order forwarded to POS Order Queue."
+      };
+
+    sessionStorage.setItem(
+      "cafekioskQueueForwardConfirmation",
+      JSON.stringify({
+        ...forwarding,
+        orderNumber:
+          forwardedOrder.orderNumber ||
+          orderPayload.orderNumber,
+        cafeId:
+          forwardedOrder.cafeId ||
+          orderPayload.cafeId,
+        source:
+          "Kiosk",
+        confirmedAt:
+          Date.now()
+      })
+    );
+
+    console.log(
+      "✅ FORWARDED TO POS ORDER QUEUE:",
+      forwarding
+    );
+
+
     // =============================================
     // CLOSE CONFIRMATION MODAL
     // =============================================
@@ -3398,19 +3440,27 @@ async function confirmOrder() {
       return;
     }
 
-    console.warn(
-      "Backend did not receive the Kiosk order, " +
-      "but the order was saved locally for the POS queue."
+    console.error(
+      "Order was NOT forwarded to the POS Order Queue.",
+      error
+    );
+
+    removeLocalOrderSnapshot(
+      orderPayload.orderNumber
+    );
+
+    sessionStorage.removeItem(
+      "cafekioskQueueForwardConfirmation"
     );
 
     alert(
-      "Order saved. The POS Order Queue can receive it locally."
+      "Order was NOT forwarded to the POS Order Queue.\n\n" +
+      (error?.message || "The server could not receive the order.") +
+      "\n\nPlease try again. Your cart is still available."
     );
 
-    goToKioskPage(
-      "checkout.php",
-      "/checkout"
-    );
+    // Stay on the menu so the customer can retry. Do not show the
+    // receipt page unless the backend has confirmed the order.
 
   }
 }

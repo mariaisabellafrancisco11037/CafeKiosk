@@ -755,3 +755,33 @@ body.uniform-kiosk.kiosk-receipt .cash-receipt-card[hidden] {
 }
 
 .item-note{margin-top:8px;padding:8px 10px;border-radius:12px;background:#fff7ec;color:#5f412d;font-size:.92rem;line-height:1.35}.item-note strong{color:#4d3422}
+
+
+/* =========================================================
+   POS ORDER QUEUE FORWARD CONFIRMATION - 2026-10-09
+   ========================================================= */
+.payment-message.queue-forward-confirmed {
+    border: 2px solid rgba(37, 132, 84, 0.22);
+    box-shadow: 0 10px 30px rgba(37, 132, 84, 0.10);
+}
+
+.payment-message.queue-forward-confirmed .check-icon {
+    transform: scale(1.06);
+}
+
+.payment-message.queue-forward-confirmed strong {
+    font-weight: 800;
+}
+
+.payment-message.queue-forward-error {
+    border: 2px solid rgba(190, 63, 63, 0.26);
+}
+
+.payment-message.queue-forward-error .check-icon {
+    background: #b93f3f;
+}
+
+.payment-message.queue-forward-error strong,
+.payment-message.queue-forward-error p {
+    color: #8d2e2e;
+}

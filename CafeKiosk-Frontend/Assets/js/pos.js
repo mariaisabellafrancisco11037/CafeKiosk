@@ -3221,11 +3221,29 @@ async function confirmPOSOrder() {
         }
 
 
+        const forwarding =
+            data.forwarding ||
+            {
+                forwardedToOrderQueue:
+                    true,
+                connectedReceivers:
+                    0
+            };
+
+
         alert(
             `${
                 savedOrder.orderNumber ||
                 orderPayload.orderNumber
-            } received successfully.`
+            } received and forwarded to the POS Order Queue.` +
+            (
+                Number(
+                    forwarding.connectedReceivers ||
+                    0
+                ) > 0
+                    ? `\n\nLive queue connection detected.`
+                    : `\n\nThe order is stored on the server and will appear in the queue automatically.`
+            )
         );
 
 
