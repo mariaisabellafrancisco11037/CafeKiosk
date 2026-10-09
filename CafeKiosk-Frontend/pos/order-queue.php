@@ -296,8 +296,8 @@
     </section>
   </div>
 
-  <script src="../Assets/js/auth-session.js?v=session-role-isolation-20261003-v2"></script>
-  <script src="../Assets/js/order-queue.js?v=live-cookie-realtime-v1"></script>
+  <script src="../Assets/js/auth-session.js?v=pos-order-receive-20261007-v1"></script>
+  <script src="../Assets/js/order-queue.js?v=pos-order-receive-20261007-v1"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20261001-mobile-shell-v7"></script>
   <script src="../Assets/js/profile-menu.js?v=20261003-change-email-v1"></script>

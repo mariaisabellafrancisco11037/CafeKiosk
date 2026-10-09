@@ -139,10 +139,15 @@ function orderRooms(
     cafeId
 ) {
 
+    // The auth room is a reliability fallback for every authenticated
+    // Admin/Manager/Staff socket in this cafe.  The POS and Order Queue
+    // rooms remain for page-specific listeners, while Socket.IO de-duplicates
+    // sockets that belong to more than one target room.
     return [
         `order-queue-${cafeId}`,
         `pos-${cafeId}`,
         `admin-${cafeId}`,
+        `auth-${cafeId}`,
         `kiosk-${cafeId}`
     ];
 }
@@ -176,20 +181,17 @@ function emitToCafe(
         );
 
 
-    for (
-        const room
-        of orderRooms(
+    // Emit to the union of cafe rooms in one operation.  A POS/Queue socket
+    // normally belongs to multiple rooms; using one Socket.IO target prevents
+    // duplicate new-order callbacks on that client.
+    io.to(
+        orderRooms(
             cafeId
         )
-    ) {
-
-        io.to(
-            room
-        ).emit(
-            eventName,
-            payload
-        );
-    }
+    ).emit(
+        eventName,
+        payload
+    );
 
 
     if (

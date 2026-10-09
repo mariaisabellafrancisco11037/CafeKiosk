@@ -1,0 +1,16 @@
+CafeKiosk POS Order Receiving Fix - 2026-10-07
+
+Reworked the POS/Order Queue receiving path without removing existing features.
+
+Changes:
+- Authenticated Admin/Manager/Staff sockets automatically join their cafe POS and Order Queue rooms.
+- Order broadcasts also target the authenticated cafe room.
+- Socket.IO union-room broadcast prevents duplicate callbacks.
+- Order Queue uses authenticated /api/orders as the canonical source (no stale browser cafeId query).
+- REST fallback polling reduced to 1.5 seconds.
+- Queue refreshes immediately on new-order, order:created, orders:changed, orders:ready, focus, online, storage and BroadcastChannel signals.
+- Auth session now publishes cafe:auth-ready for reliable socket handoff.
+- POS and Kiosk publish a same-browser order wake-up signal after successful server save.
+- Queue/auth JS cache version updated so deployed browsers load the fixed scripts.
+
+Important: Railway/MySQL remain the source of truth. The browser cache is only a display/recovery aid.

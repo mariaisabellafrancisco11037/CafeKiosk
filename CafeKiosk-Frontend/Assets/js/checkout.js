@@ -1882,6 +1882,28 @@ async function ensureKioskOrderSaved() {
         data
     );
 
+    try {
+        const saved = data.order || orderPayload;
+        localStorage.setItem(
+            "cafekioskOrderSignal",
+            JSON.stringify({
+                cafeId: saved.cafeId || orderPayload.cafeId,
+                orderNumber: saved.orderNumber || orderPayload.orderNumber,
+                at: Date.now()
+            })
+        );
+
+        const orderChannel = new BroadcastChannel("cafekiosk-orders");
+        orderChannel.postMessage({
+            cafeId: saved.cafeId || orderPayload.cafeId,
+            orderNumber: saved.orderNumber || orderPayload.orderNumber,
+            source: "Kiosk"
+        });
+        orderChannel.close();
+    } catch (_) {
+        // Optional same-browser acceleration only.
+    }
+
 
     return data;
 

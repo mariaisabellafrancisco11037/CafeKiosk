@@ -3147,6 +3147,29 @@ async function confirmPOSOrder() {
             savedOrder
         );
 
+        // Wake any Order Queue tab in this browser immediately. Cross-device
+        // delivery is handled by Socket.IO + the queue's REST polling fallback.
+        try {
+            localStorage.setItem(
+                "cafekioskOrderSignal",
+                JSON.stringify({
+                    cafeId: savedOrder.cafeId || orderPayload.cafeId,
+                    orderNumber: savedOrder.orderNumber || orderPayload.orderNumber,
+                    at: Date.now()
+                })
+            );
+
+            const orderChannel = new BroadcastChannel("cafekiosk-orders");
+            orderChannel.postMessage({
+                cafeId: savedOrder.cafeId || orderPayload.cafeId,
+                orderNumber: savedOrder.orderNumber || orderPayload.orderNumber,
+                source: "POS"
+            });
+            orderChannel.close();
+        } catch (_) {
+            // Optional same-browser acceleration only.
+        }
+
 
         /*
          * Local storage is only a cache AFTER the backend

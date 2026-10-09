@@ -817,6 +817,23 @@ io.on(
                 );
 
 
+                // POS ORDER RECEIVE RELIABILITY FIX (2026-10-07)
+                // Every authenticated operational user is placed in the cafe's
+                // POS + Order Queue rooms immediately.  Page scripts may still
+                // call join-pos/join-order-queue, but order delivery no longer
+                // depends on those calls winning an async Socket.IO race.
+                if (
+                    ["admin", "manager", "staff"].includes(role)
+                ) {
+                    socket.join(`pos-${cafeId}`);
+                    socket.join(`order-queue-${cafeId}`);
+                }
+
+                if (role === "admin") {
+                    socket.join(`admin-${cafeId}`);
+                }
+
+
                 const result = {
                     success:
                         true,
@@ -831,6 +848,16 @@ io.on(
                 socket.emit(
                     "auth:ready",
                     result
+                );
+
+                socket.emit(
+                    "orders:ready",
+                    {
+                        success: true,
+                        cafeId,
+                        role,
+                        connectedAt: new Date().toISOString()
+                    }
                 );
 
 

@@ -657,6 +657,25 @@
 
 
         socket.on(
+            "auth:ready",
+            payload => {
+                if (payload?.cafeId) {
+                    try {
+                        localStorage.setItem("cafeId", String(payload.cafeId));
+                    } catch (_) {}
+                }
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "cafe:auth-ready",
+                        { detail: payload || {} }
+                    )
+                );
+            }
+        );
+
+
+        socket.on(
             "auth:force-logout",
             async payload => {
 

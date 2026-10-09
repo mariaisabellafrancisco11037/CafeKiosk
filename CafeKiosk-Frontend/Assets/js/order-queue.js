@@ -667,7 +667,7 @@ const PAGE_SIZE = 8;
 // If Socket.IO misses an event, this page still reloads the shared
 // /api/orders list every 3 seconds.
 const QUEUE_SYNC_INTERVAL =
-  3000;
+  1500;
 
 const REALTIME_ORDER_TTL =
   20000;
@@ -1632,7 +1632,7 @@ async function fetchOrders() {
 
     const response =
       await authenticatedFetch(
-        `${API_URL}/api/orders?cafeId=${encodeURIComponent(activeCafeId)}`,
+        `${API_URL}/api/orders?limit=250`,
         {
           method:
             "GET",
@@ -2025,6 +2025,18 @@ function bindSocketEvents(socket) {
     }
   );
 
+  socket.on(
+    "orders:ready",
+    payload => {
+      if (payload?.cafeId) {
+        syncAuthenticatedCafeId(payload.cafeId);
+      }
+      socketConnected = true;
+      updateConnectionIndicator();
+      fetchOrders();
+    }
+  );
+
   // ----------------------------------------------------------
   // NEW ORDERS FROM BOTH POS + KIOSK
   // ----------------------------------------------------------
@@ -2037,12 +2049,18 @@ function bindSocketEvents(socket) {
         backendOrder
       );
 
+      // The server only sends this event to rooms for the authenticated cafe.
+      // Prefer its canonical cafeId over stale browser storage before filtering.
+      if (backendOrder?.cafeId) {
+        syncAuthenticatedCafeId(backendOrder.cafeId);
+      }
+
       rememberRealtimeOrder(
         backendOrder
       );
 
       scheduleQueueSync(
-        120
+        50
       );
     }
   );
@@ -2059,13 +2077,16 @@ function bindSocketEvents(socket) {
       );
 
       if (backendOrder) {
+        if (backendOrder?.cafeId) {
+          syncAuthenticatedCafeId(backendOrder.cafeId);
+        }
         rememberRealtimeOrder(
           backendOrder
         );
       }
 
       scheduleQueueSync(
-        120
+        50
       );
     }
   );
@@ -2119,6 +2140,10 @@ function bindSocketEvents(socket) {
   socket.on(
     "orders:changed",
     payload => {
+      if (payload?.cafeId) {
+        syncAuthenticatedCafeId(payload.cafeId);
+      }
+
       if (
         !eventBelongsToThisCafe(
           payload
@@ -3074,8 +3099,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event => {
 
       if (
-        event.key ===
-        "cafe_orders"
+        event.key === "cafe_orders" ||
+        event.key === "cafekioskOrderSignal"
       ) {
         fetchOrders();
       }
@@ -3094,15 +3119,9 @@ document.addEventListener("DOMContentLoaded", () => {
       "message",
       event => {
 
-        if (
-          !event.data?.cafeId ||
-          String(
-            event.data.cafeId
-          ).trim() ===
-          String(CAFE_ID).trim()
-        ) {
-          fetchOrders();
-        }
+        // BroadcastChannel is only a wake-up signal.  The authenticated
+        // /api/orders response is the canonical tenant filter.
+        fetchOrders();
       }
     );
 
@@ -3119,6 +3138,14 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener(
     "focus",
     () => {
+      fetchOrders();
+    }
+  );
+
+  window.addEventListener(
+    "online",
+    () => {
+      joinRealtimeRooms();
       fetchOrders();
     }
   );
