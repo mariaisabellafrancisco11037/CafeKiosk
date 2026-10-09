@@ -1,0 +1,7 @@
+CafeKiosk short POS Order ID fix
+
+- Keeps the long collision-safe order_number internally for duplicate prevention.
+- Shows a short staff-facing POS Order ID like #1002 in the confirmation and Order Queue.
+- Old POS-1002 style orders keep their original short number.
+- New POS orders derive the visible number from the immutable database order_id, avoiding Incognito/localStorage collisions.
+- Order Queue layout was not changed.

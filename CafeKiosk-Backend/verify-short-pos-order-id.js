@@ -1,0 +1,10 @@
+const fs=require('fs');
+const assert=(ok,msg)=>{if(!ok){throw new Error(msg)}};
+const store=fs.readFileSync(__dirname+'/services/orderStore.js','utf8');
+const queue=fs.readFileSync(__dirname+'/../CafeKiosk-Frontend/Assets/js/order-queue.js','utf8');
+const pos=fs.readFileSync(__dirname+'/../CafeKiosk-Frontend/Assets/js/pos.js','utf8');
+assert(/displayOrderNumber/.test(store),'Backend does not expose displayOrderNumber.');
+assert(/1000\+Number\(r\.order_id\|\|0\)/.test(store),'Compact POS display number is not DB-id based.');
+assert(/order\.displayOrderNumber/.test(queue),'Order Queue does not prefer compact displayOrderNumber.');
+assert(/savedOrder\?\.displayOrderNumber/.test(pos),'POS confirmation does not use compact displayOrderNumber.');
+console.log('Short POS order ID wiring verified.');

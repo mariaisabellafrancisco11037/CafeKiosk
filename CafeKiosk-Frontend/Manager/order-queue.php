@@ -294,7 +294,7 @@
   </div>
 
   <script src="../Assets/js/auth-session.js?v=20261009-order-receive-v2"></script>
-  <script src="../Assets/js/order-queue.js?v=20261009-order-receive-layoutsafe-v2"></script>
+  <script src="../Assets/js/order-queue.js?v=20261009-short-order-id-v3"></script>
 
   <script src="../Assets/js/uniform-theme.js?v=20261001-profile-single-v8"></script>
   <script src="../Assets/js/profile-menu.js?v=20261003-change-email-v1"></script>

@@ -2829,9 +2829,10 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
 
     const orderNumber =
         String(
+            savedOrder?.displayOrderNumber ||
             savedOrder?.orderNumber ||
             "Order"
-        ).trim();
+        ).replace(/^POS-|^#/, "").trim();
 
     const modal = $("posOrderSentModal");
     const numberEl = $("posOrderSentNumber");
@@ -2853,7 +2854,7 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
     // alert/message component, so it is guaranteed to appear after a
     // successful Confirm & Send Order action.
     if (modal && okButton) {
-        if (numberEl) numberEl.textContent = orderNumber;
+        if (numberEl) numberEl.textContent = `#${orderNumber}`;
         if (messageEl) messageEl.textContent = message;
 
         modal.classList.add("active");
@@ -2889,7 +2890,7 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
 
     // Last-resort fallback only if the modal markup was not loaded.
     window.alert(
-        `${orderNumber} was saved and forwarded to the POS Order Queue.`
+        `Order #${orderNumber} was saved and forwarded to the POS Order Queue.`
     );
 
 }

@@ -360,6 +360,7 @@ function normalizeOrder(order, index = 0) {
   const rawItems = order.items || order.orderItems || order.order_items || [];
 
   const idValue =
+    order.displayOrderNumber ?? order.display_order_number ??
     order.orderNumber ?? order.order_number ?? order.orderId ?? order.order_id ?? order.id ?? (1100 + index);
 
   return {
@@ -369,6 +370,10 @@ function normalizeOrder(order, index = 0) {
       order.orderNumber ??
       order.order_number ??
       idValue,
+    displayOrderNumber:
+      order.displayOrderNumber ??
+      order.display_order_number ??
+      String(idValue).replace(/^POS-|^KIOSK-|^#/, ""),
     cafeId:
       order.cafeId ??
       order.cafe_id ??

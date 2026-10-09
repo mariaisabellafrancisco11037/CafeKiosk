@@ -106,8 +106,22 @@ async function hydrateRows(rows){
             ? 'Staff POS'
             : 'POS';
 
+    const rawOrderNumber=String(r.order_number||'').trim();
+    let displayOrderNumber=rawOrderNumber;
+
+    // Keep the collision-safe database order_number internally, but expose a
+    // short staff-facing number for POS orders. Old POS-1002 style records
+    // keep their original visible number; newer timestamp-safe IDs are shown
+    // as a compact sequential-looking number derived from the immutable DB id.
+    if(!source.toLowerCase().includes('kiosk')){
+      const legacyPosMatch=rawOrderNumber.match(/^POS-(\d{3,8})$/i);
+      displayOrderNumber=legacyPosMatch
+        ? legacyPosMatch[1]
+        : String(1000+Number(r.order_id||0));
+    }
+
     return {
-      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentMethodLabel:r.payment_method_label||r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),taxAmount:num(r.tax_amount),serviceChargeAmount:num(r.service_charge_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[],stations:stationsForItems(itemMap.get(r.order_id)||[]),stationStatuses:stationMap.get(r.order_id)||{}
+      id:String(r.order_id),cafeId:r.cafe_id,source,sourceLabel,createdByRole:creatorRole||undefined,createdByUserId:creatorUserId,orderNumber:r.order_number,displayOrderNumber,customerName:r.customer_name,customerEligibility:String(r.customer_eligibility||'General').toLowerCase(),serviceType:r.service_type,paymentMethod:r.payment_method,paymentMethodLabel:r.payment_method_label||r.payment_method,paymentStatus:r.payment_status,paymentAmount:num(r.payment_amount),cashReceived:num(r.cash_received),change:num(r.change_amount),subtotal:num(r.subtotal),discountAmount:num(r.discount_amount),discount:num(r.discount_amount),taxAmount:num(r.tax_amount),serviceChargeAmount:num(r.service_charge_amount),total:num(r.total_amount),status:r.status,promotionId:r.promotion_id||undefined,promotionName:r.promotion_name_snapshot||undefined,createdAt:iso(r.created_at),updatedAt:iso(r.updated_at),completedAt:iso(r.completed_at),items:itemMap.get(r.order_id)||[],stations:stationsForItems(itemMap.get(r.order_id)||[]),stationStatuses:stationMap.get(r.order_id)||{}
     };
   });
 }
