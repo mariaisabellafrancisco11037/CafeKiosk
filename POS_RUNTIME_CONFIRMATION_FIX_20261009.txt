@@ -1,0 +1,20 @@
+CafeKiosk POS runtime confirmation fix - 2026-10-09
+
+ROOT CAUSE FIXED:
+The POS submit function referenced #checkoutButton even though the current Staff and Manager POS pages do not contain that element. Clicking Confirm & Send Order therefore threw a runtime TypeError before POST /api/orders. Syntax-only node --check tests could not detect this.
+
+FIXED FLOW:
+1. Staff/Manager completes payment.
+2. Final Check appears.
+3. User clicks Confirm & Send Order.
+4. The actual posReviewConfirm button shows Sending Order... while POST /api/orders runs.
+5. Only after a successful backend response, Final Check closes.
+6. Order Forwarded confirmation dialog appears with the order number.
+7. User clicks OK, then the cart resets.
+8. On failure, Final Check stays available and the cart is kept for retry.
+
+ORDER QUEUE:
+No Order Queue layout markup or CSS was changed in this runtime fix.
+
+TESTING:
+Added verify-pos-runtime-wiring.js and included it in npm test so this missing-element runtime dependency is caught in future builds.

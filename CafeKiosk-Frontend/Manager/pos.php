@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=20261009-pos-send-confirm-v3"
+        href="../Assets/css/pos.css?v=20261009-runtime-send-fix-v4"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -495,7 +495,7 @@
 </div>
 
 <script src="../Assets/js/auth-session.js?v=session-role-isolation-20261003-v2"></script>
-<script src="/Assets/js/pos.js?v=20261009-pos-send-confirm-v3"></script>
+<script src="/Assets/js/pos.js?v=20261009-runtime-send-fix-v4"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>

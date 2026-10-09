@@ -2847,12 +2847,23 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
+        // Inline visibility is intentional as a cache-safe fallback. The normal
+        // appearance still comes from pos.css, but this guarantees the dialog
+        // cannot remain invisible because an older stylesheet was cached.
+        modal.style.display = "grid";
+        modal.style.opacity = "1";
+        modal.style.visibility = "visible";
+        modal.style.pointerEvents = "auto";
         document.body.classList.add("ck-pos-sent-open");
 
         await new Promise(resolve => {
             const close = () => {
                 modal.classList.remove("active");
                 modal.setAttribute("aria-hidden", "true");
+                modal.style.display = "";
+                modal.style.opacity = "";
+                modal.style.visibility = "";
+                modal.style.pointerEvents = "";
                 document.body.classList.remove("ck-pos-sent-open");
                 okButton.removeEventListener("click", close);
                 resolve();
@@ -2872,7 +2883,7 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
 
 }
 
-async function confirmPOSOrder() {
+async function confirmPOSOrder(triggerButton = null) {
 
     if (
         cart.length ===
@@ -3111,19 +3122,23 @@ async function confirmPOSOrder() {
     );
 
 
-    const checkoutButton =
-        $("checkoutButton");
-
+    // The previous implementation referenced #checkoutButton, but that
+    // element does not exist in the current Staff/Manager POS markup.
+    // That runtime TypeError stopped execution before POST /api/orders.
+    const actionButton =
+        triggerButton ||
+        $("posReviewConfirm") ||
+        null;
 
     const originalText =
-        checkoutButton.textContent;
+        actionButton?.textContent ||
+        "Confirm & Send Order";
 
-
-    checkoutButton.disabled =
-        true;
-
-    checkoutButton.textContent =
-        "Sending...";
+    if (actionButton) {
+        actionButton.disabled = true;
+        actionButton.textContent = "Sending Order...";
+        actionButton.setAttribute("aria-busy", "true");
+    }
 
 
     try {
@@ -3290,6 +3305,10 @@ async function confirmPOSOrder() {
             };
 
 
+        // Keep the final-check dialog visible while the request is being sent.
+        // Only close it after the backend has accepted/persisted the order.
+        closePOSOrderReview();
+
         await showPOSOrderForwardedDialog(
             savedOrder,
             forwarding
@@ -3348,11 +3367,11 @@ async function confirmPOSOrder() {
 
     } finally {
 
-        checkoutButton.disabled =
-            false;
-
-        checkoutButton.textContent =
-            originalText;
+        if (actionButton) {
+            actionButton.disabled = false;
+            actionButton.textContent = originalText;
+            actionButton.removeAttribute("aria-busy");
+        }
 
     }
 
@@ -3530,24 +3549,9 @@ function setupEvents() {
     $("posReviewClose")?.addEventListener("click", closePOSOrderReview);
     $("posReviewBack")?.addEventListener("click", closePOSOrderReview);
     $("posReviewConfirm")?.addEventListener("click", async event => {
-        const button = event.currentTarget;
-        const originalText = button?.textContent || "Confirm & Send Order";
-
-        if (button) {
-            button.disabled = true;
-            button.textContent = "Sending Order...";
-        }
-
-        closePOSOrderReview();
-
-        try {
-            await confirmPOSOrder();
-        } finally {
-            if (button) {
-                button.disabled = false;
-                button.textContent = originalText;
-            }
-        }
+        // Pass the real button into the submit routine. Do not close the
+        // review modal until the backend confirms that the order was saved.
+        await confirmPOSOrder(event.currentTarget);
     });
     $("posReviewModal")?.addEventListener("click", event => {
         if (event.target === $("posReviewModal")) closePOSOrderReview();
