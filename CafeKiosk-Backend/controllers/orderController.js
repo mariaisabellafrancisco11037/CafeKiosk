@@ -440,7 +440,8 @@ exports.createOrder =
 
             const existingBeforeCreate =
                 await orderStore
-                    .findOrder(
+                    .findOrderForCafe(
+                        order.cafeId,
                         order.orderNumber
                     );
 
@@ -592,6 +593,37 @@ exports.createOrder =
                     created
                 );
 
+            // Confirm the exact order can be read back from the same cafe that
+            // the Order Queue GET endpoint uses. Do not claim "forwarded" from
+            // only a successful INSERT/realtime emit.
+            const queueVerifiedOrder =
+                await orderStore.findOrderForCafe(
+                    savedOrder.cafeId,
+                    savedOrder.orderNumber
+                );
+
+            forwarding.queueVerified = Boolean(
+                queueVerifiedOrder &&
+                String(queueVerifiedOrder.cafeId) === String(savedOrder.cafeId) &&
+                String(queueVerifiedOrder.orderNumber) === String(savedOrder.orderNumber)
+            );
+
+            forwarding.forwardedToOrderQueue = forwarding.queueVerified;
+            forwarding.queueStatus = queueVerifiedOrder?.status || null;
+            forwarding.message = forwarding.queueVerified
+                ? "Order is persisted and available to the POS Order Queue."
+                : "Order could not be verified in the POS Order Queue.";
+
+
+            if (!forwarding.queueVerified) {
+                return res.status(500).json({
+                    success: false,
+                    code: "ORDER_QUEUE_VERIFICATION_FAILED",
+                    message: "The order could not be verified in the POS Order Queue.",
+                    forwarding,
+                    order: savedOrder
+                });
+            }
 
             return res
                 .status(

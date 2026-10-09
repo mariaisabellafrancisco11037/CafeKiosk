@@ -2787,24 +2787,35 @@ function closePOSOrderReview() {
 
 function generateOrderNumber() {
 
-    let sequence =
-        Number(
-            localStorage.getItem(
-                "posOrderCounter"
-            )
-        ) || 1000;
+    // Do not use a browser-only sequence (POS-1001, POS-1002, ...).
+    // Incognito windows and different POS devices start that sequence over,
+    // which caused valid new orders to be mistaken for old completed orders.
+    const now = new Date();
+    const pad = value => String(value).padStart(2, "0");
+    const datePart =
+        `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+    const timePart =
+        `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
 
+    let randomPart = "";
 
-    sequence++;
+    try {
+        if (window.crypto?.getRandomValues) {
+            const bytes = new Uint32Array(1);
+            window.crypto.getRandomValues(bytes);
+            randomPart = (bytes[0] % 1000000).toString().padStart(6, "0");
+        }
+    } catch (_) {
+        // Fall through to Math.random below.
+    }
 
+    if (!randomPart) {
+        randomPart = Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, "0");
+    }
 
-    localStorage.setItem(
-        "posOrderCounter",
-        sequence
-    );
-
-
-    return `POS-${sequence}`;
+    return `POS-${datePart}-${timePart}-${randomPart}`;
 
 }
 
@@ -3297,12 +3308,20 @@ async function confirmPOSOrder(triggerButton = null) {
 
         const forwarding =
             data.forwarding ||
-            {
-                forwardedToOrderQueue:
-                    true,
-                connectedReceivers:
-                    0
-            };
+            {};
+
+        // A 2xx response is not enough. The backend must confirm that the
+        // exact order is persisted under this cafe and therefore available to
+        // GET /api/orders, which is the POS Order Queue's source of truth.
+        if (
+            forwarding.forwardedToOrderQueue !== true ||
+            forwarding.queueVerified !== true
+        ) {
+            throw new Error(
+                forwarding.message ||
+                "The order was saved but could not be verified in the POS Order Queue. Please retry."
+            );
+        }
 
 
         // Keep the final-check dialog visible while the request is being sent.

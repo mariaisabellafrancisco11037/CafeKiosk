@@ -119,6 +119,17 @@ async function listOrders({cafeId,source,status,limit}={}){
   const [rows]=await pool.execute(sql,params);return hydrateRows(rows);
 }
 async function findOrder(identifier){const wanted=String(identifier||'');const [rows]=await pool.execute('SELECT * FROM orders WHERE CAST(order_id AS CHAR)=? OR order_number=? OR order_uuid=? LIMIT 1',[wanted,wanted,wanted]);const out=await hydrateRows(rows);return out[0]||null;}
+async function findOrderForCafe(cafeId,identifier){
+  const cafe=String(cafeId||'').trim();
+  const wanted=String(identifier||'').trim();
+  if(!cafe||!wanted)return null;
+  const [rows]=await pool.execute(
+    'SELECT * FROM orders WHERE cafe_id=? AND (CAST(order_id AS CHAR)=? OR order_number=? OR order_uuid=?) ORDER BY order_id DESC LIMIT 1',
+    [cafe,wanted,wanted,wanted]
+  );
+  const out=await hydrateRows(rows);
+  return out[0]||null;
+}
 
 async function insertItems(conn,orderId,items=[]){
   for(const item of items||[]){
@@ -132,7 +143,7 @@ async function insertItems(conn,orderId,items=[]){
 
 async function createOrder(order){
   await ensureChargeSchema();
-  const existing=await findOrder(order.orderNumber);if(existing)return {order:existing,created:false};
+  const existing=await findOrderForCafe(order.cafeId,order.orderNumber);if(existing)return {order:existing,created:false};
   const conn=await pool.getConnection();try{await conn.beginTransaction();
     const uuid=(order.id&&/^[0-9a-f-]{36}$/i.test(String(order.id)))?String(order.id):null;
     const [r]=await conn.execute(`INSERT INTO orders (order_uuid,cafe_id,order_number,source,created_by_user_id,customer_name,customer_eligibility,service_type,status,promotion_id,promotion_name_snapshot,subtotal,discount_amount,tax_amount,service_charge_amount,total_amount,payment_method,payment_method_label,payment_status,payment_amount,cash_received,change_amount,created_at,updated_at,completed_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,[
@@ -171,4 +182,4 @@ async function updateStationStatus(identifier,station,status,userId=null){
 async function resetOrders(){await pool.execute('DELETE FROM orders');return [];}
 async function readOrders(){return listOrders({});}
 async function ensureStore(){return true;}
-module.exports={ensureStore,readOrders,listOrders,findOrder,createOrder,updateOrder,updateStationStatus,classifyPrepStation,stationsForItems,ensureStationSchema,ensureChargeSchema,resetOrders};
+module.exports={ensureStore,readOrders,listOrders,findOrder,findOrderForCafe,createOrder,updateOrder,updateStationStatus,classifyPrepStation,stationsForItems,ensureStationSchema,ensureChargeSchema,resetOrders};
