@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="../Assets/css/pos.css?v=20261001-workflow-responsive"
+        href="../Assets/css/pos.css?v=20261009-pos-send-confirm-v3"
     >
 <link rel="stylesheet" href="../Assets/css/feature-upgrade.css">
   <link rel="stylesheet" href="../Assets/css/uniform-theme.css?v=20260928-mobile-v1">
@@ -310,6 +310,18 @@
   </section>
 </div>
 
+<!-- POS ORDER SENT CONFIRMATION -->
+<div id="posOrderSentModal" class="ck-pos-sent-overlay" aria-hidden="true">
+  <section class="ck-pos-sent-dialog" role="dialog" aria-modal="true" aria-labelledby="posOrderSentTitle" aria-describedby="posOrderSentMessage">
+    <div class="ck-pos-sent-icon" aria-hidden="true">✓</div>
+    <div class="ck-pos-sent-kicker">ORDER FORWARDED</div>
+    <h2 id="posOrderSentTitle">Order sent successfully</h2>
+    <p id="posOrderSentMessage">The order was forwarded to the POS Order Queue.</p>
+    <div class="ck-pos-sent-order"><span>Order Number</span><strong id="posOrderSentNumber">—</strong></div>
+    <button type="button" id="posOrderSentOk" class="ck-pos-sent-ok">OK</button>
+  </section>
+</div>
+
 <!-- =========================================================
      ITEM CUSTOMIZATION MODAL
 ========================================================= -->
@@ -483,7 +495,7 @@
 </div>
 
 <script src="../Assets/js/auth-session.js?v=session-role-isolation-20261003-v2"></script>
-<script src="/Assets/js/pos.js?v=20261009-forward-dialog-v2"></script>
+<script src="/Assets/js/pos.js?v=20261009-pos-send-confirm-v3"></script>
 
 <script src="../Assets/js/menu-runtime-config.js"></script>
 <script src="../Assets/js/discount-client.js?v=dynamic-promotions-v1"></script>

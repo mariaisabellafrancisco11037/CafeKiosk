@@ -2822,6 +2822,11 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
             "Order"
         ).trim();
 
+    const modal = $("posOrderSentModal");
+    const numberEl = $("posOrderSentNumber");
+    const messageEl = $("posOrderSentMessage");
+    const okButton = $("posOrderSentOk");
+
     const connectedReceivers =
         Number(
             forwarding?.connectedReceivers ||
@@ -2829,46 +2834,43 @@ async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
         );
 
     const message =
-        `${orderNumber} was saved successfully and forwarded to the POS Order Queue.` +
-        (
-            connectedReceivers > 0
-                ? "\n\nThe Order Queue is connected and will receive the order automatically."
-                : "\n\nThe order is saved on the server and will appear in the Order Queue automatically."
-        );
+        connectedReceivers > 0
+            ? "The order was saved and forwarded to the POS Order Queue. The queue is connected and can receive it automatically."
+            : "The order was saved and forwarded to the POS Order Queue. It will appear from the server sync even if the queue is opened on another device.";
 
+    // Dedicated POS confirmation dialog. This does not depend on the shared
+    // alert/message component, so it is guaranteed to appear after a
+    // successful Confirm & Send Order action.
+    if (modal && okButton) {
+        if (numberEl) numberEl.textContent = orderNumber;
+        if (messageEl) messageEl.textContent = message;
 
-    if (
-        window.CafeMessageDialog &&
-        typeof window.CafeMessageDialog.show === "function"
-    ) {
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("ck-pos-sent-open");
 
-        await window.CafeMessageDialog.show(
-            message,
-            {
-                type:
-                    "success",
+        await new Promise(resolve => {
+            const close = () => {
+                modal.classList.remove("active");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("ck-pos-sent-open");
+                okButton.removeEventListener("click", close);
+                resolve();
+            };
 
-                title:
-                    "Order Forwarded Successfully",
-
-                buttonText:
-                    "OK"
-            }
-        );
+            okButton.addEventListener("click", close, { once: true });
+            setTimeout(() => okButton.focus(), 20);
+        });
 
         return;
-
     }
 
-
-    // Fallback for pages where the shared CafeKiosk message dialog
-    // has not loaded yet.
+    // Last-resort fallback only if the modal markup was not loaded.
     window.alert(
-        message
+        `${orderNumber} was saved and forwarded to the POS Order Queue.`
     );
 
 }
-
 
 async function confirmPOSOrder() {
 
@@ -3527,9 +3529,25 @@ function setupEvents() {
     $("paymentModalAmount")?.addEventListener("input", updatePOSPaymentModalUI);
     $("posReviewClose")?.addEventListener("click", closePOSOrderReview);
     $("posReviewBack")?.addEventListener("click", closePOSOrderReview);
-    $("posReviewConfirm")?.addEventListener("click", async () => {
+    $("posReviewConfirm")?.addEventListener("click", async event => {
+        const button = event.currentTarget;
+        const originalText = button?.textContent || "Confirm & Send Order";
+
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Sending Order...";
+        }
+
         closePOSOrderReview();
-        await confirmPOSOrder();
+
+        try {
+            await confirmPOSOrder();
+        } finally {
+            if (button) {
+                button.disabled = false;
+                button.textContent = originalText;
+            }
+        }
     });
     $("posReviewModal")?.addEventListener("click", event => {
         if (event.target === $("posReviewModal")) closePOSOrderReview();

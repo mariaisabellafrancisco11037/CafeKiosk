@@ -1,0 +1,10 @@
+CafeKiosk POS confirmation fix - 2026-10-09
+
+What changed:
+1. The Staff and Manager POS now contain a dedicated success modal.
+2. It appears only after Confirm & Send Order receives a successful response from POST /api/orders.
+3. The success modal shows the saved order number and confirms forwarding to the POS Order Queue.
+4. The cart is cleared only after the user presses OK on the success modal.
+5. The Confirm & Send Order button shows Sending Order... while the request is in progress.
+6. No visual elements were added to the Order Queue page.
+7. Existing Socket.IO / REST queue receiving behavior remains in place.
