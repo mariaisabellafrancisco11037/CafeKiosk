@@ -2813,6 +2813,63 @@ function generateOrderNumber() {
 // CONFIRM ORDER
 // =========================================================
 
+
+async function showPOSOrderForwardedDialog(savedOrder, forwarding) {
+
+    const orderNumber =
+        String(
+            savedOrder?.orderNumber ||
+            "Order"
+        ).trim();
+
+    const connectedReceivers =
+        Number(
+            forwarding?.connectedReceivers ||
+            0
+        );
+
+    const message =
+        `${orderNumber} was saved successfully and forwarded to the POS Order Queue.` +
+        (
+            connectedReceivers > 0
+                ? "\n\nThe Order Queue is connected and will receive the order automatically."
+                : "\n\nThe order is saved on the server and will appear in the Order Queue automatically."
+        );
+
+
+    if (
+        window.CafeMessageDialog &&
+        typeof window.CafeMessageDialog.show === "function"
+    ) {
+
+        await window.CafeMessageDialog.show(
+            message,
+            {
+                type:
+                    "success",
+
+                title:
+                    "Order Forwarded Successfully",
+
+                buttonText:
+                    "OK"
+            }
+        );
+
+        return;
+
+    }
+
+
+    // Fallback for pages where the shared CafeKiosk message dialog
+    // has not loaded yet.
+    window.alert(
+        message
+    );
+
+}
+
+
 async function confirmPOSOrder() {
 
     if (
@@ -3231,19 +3288,9 @@ async function confirmPOSOrder() {
             };
 
 
-        alert(
-            `${
-                savedOrder.orderNumber ||
-                orderPayload.orderNumber
-            } received and forwarded to the POS Order Queue.` +
-            (
-                Number(
-                    forwarding.connectedReceivers ||
-                    0
-                ) > 0
-                    ? `\n\nLive queue connection detected.`
-                    : `\n\nThe order is stored on the server and will appear in the queue automatically.`
-            )
+        await showPOSOrderForwardedDialog(
+            savedOrder,
+            forwarding
         );
 
 

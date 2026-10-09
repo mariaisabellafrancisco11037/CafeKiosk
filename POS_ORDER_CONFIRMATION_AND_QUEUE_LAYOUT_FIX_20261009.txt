@@ -1,0 +1,19 @@
+CAFEKIOSK FIX - 2026-10-09
+
+1. Restored the original Staff and Manager Order Queue page layout.
+   - Removed the inserted "POS Order Queue Ready" banner.
+   - Removed the inserted Order Queue toast markup.
+   - Restored the original order-queue.css layout exactly.
+
+2. Kept the background order receiving reliability fixes.
+   - Authenticated Staff/Manager/Admin sockets join the correct cafe rooms.
+   - Order Queue keeps real-time Socket.IO receiving plus REST sync fallback.
+   - Queue fetching uses the authenticated cafe context to avoid stale browser cafeId problems.
+
+3. Changed Staff/Manager POS confirmation behavior.
+   - The confirmation appears only AFTER "Confirm & Send Order" succeeds.
+   - Dialog title: "Order Forwarded Successfully"
+   - Confirms the order was saved and forwarded to the POS Order Queue.
+   - If the POST fails, the success dialog is never shown and the cart is retained for retry.
+
+4. Added cache-busting versions to the changed POS and Order Queue assets so deployed browsers load the fixed files immediately.
